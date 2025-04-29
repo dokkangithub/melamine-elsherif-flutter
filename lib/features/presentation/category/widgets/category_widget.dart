@@ -44,7 +44,7 @@ class _CategoryWidgetState extends State<CategoryWidget> with SingleTickerProvid
         ),
         title: Text(
           'Categories',
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          style: context.headlineSmall
         ),
         actions: [
           IconButton(
