@@ -7,9 +7,7 @@ import 'package:melamine_elsherif/core/utils/constants/app_assets.dart';
 import 'package:melamine_elsherif/core/utils/extension/text_theme_extension.dart';
 import 'package:melamine_elsherif/core/utils/extension/translate_extension.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_cached_image.dart';
-import 'package:melamine_elsherif/core/utils/widgets/custom_form_field.dart';
 import 'package:melamine_elsherif/features/domain/category/entities/category.dart';
-import 'category_card_widget.dart';
 
 class CategoryWidget extends StatefulWidget {
   final List<Category> categories;
@@ -20,17 +18,14 @@ class CategoryWidget extends StatefulWidget {
   State<CategoryWidget> createState() => _CategoryWidgetState();
 }
 
-class _CategoryWidgetState extends State<CategoryWidget> {
+class _CategoryWidgetState extends State<CategoryWidget> with SingleTickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-        statusBarColor: AppTheme.primaryColor,
-        statusBarIconBrightness: Brightness.light,
-        statusBarBrightness: Brightness.dark,
-      ));
-    });
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor: Colors.white,
+      statusBarIconBrightness: Brightness.dark,
+    ));
   }
 
   @override
@@ -40,147 +35,213 @@ class _CategoryWidgetState extends State<CategoryWidget> {
     }
 
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios, color: Colors.black),
+          onPressed: () => Navigator.pop(context),
+        ),
+        title: Text(
+          'Categories',
+          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+        ),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.search, color: Colors.black),
+            onPressed: () {
+              AppRoutes.navigateTo(context, AppRoutes.searchScreen);
+            },
+          ),
+        ],
+      ),
       body: Column(
-        spacing: 15,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Stack(
-            children: [
-              Container(
-                height: 220,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [
-                        AppTheme.primaryColor,
-                        AppTheme.primaryColor.withValues(alpha: 0.95),
-                      ],
-                    )
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    spacing: 6,
-                    children: [
-                      const SizedBox(height: 10),
-                      CustomImage(
-                        assetPath: AppSvgs.category_star,
+          // Category Grid
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Grid Categories
+                  Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: GridView.builder(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 14,
+                        mainAxisSpacing: 14,
+                        childAspectRatio: 1,
                       ),
-                      Text(
-                        AppConfig().appName.toUpperCase(),
-                        style: context.displayMedium?.copyWith(color: AppTheme.white),
-                      ),
-                      Text(
-                        'ancient_beauty_rituals'.tr(context),
-                        style: context.titleMedium?.copyWith(color: AppTheme.lightDividerColor),
-                      ),
-                      const SizedBox(height: 10),
-                      InkWell(
-                        onTap: (){
-                          AppRoutes.navigateTo(context, AppRoutes.searchScreen);
-                        },
-                        child: Container(
-                          margin: EdgeInsets.symmetric(horizontal: 10),
-                          padding: EdgeInsets.symmetric(horizontal: 15,vertical: 10),
-                          width: double.infinity,
-                          height: 50,
-                          decoration: BoxDecoration(
-                            color: AppTheme.white,
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          child: Row(
-                            spacing: 10,
-                            children: [
-                              CustomImage(
-                                assetPath: AppSvgs.category_search_icon,
-                              ),
-                              Text(
-                                'search_skin_care_products'.tr(context),
-                                style: context.bodySmall?.copyWith(color: AppTheme.primaryColor),
-                              ),
-                            ],
+                      itemCount: widget.categories.length > 4 ? 4 : widget.categories.length,
+                      itemBuilder: (context, index) {
+                        final category = widget.categories[index];
+                        return _buildCategoryCard(context, category);
+                      },
+                    ),
+                  ),
+                  
+                  // Popular Categories
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Popular Categories',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
-                      ),
-                    ],
+                        SizedBox(height: 16),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            _buildPopularCategoryItem('ROUND', Icons.circle_outlined),
+                            _buildPopularCategoryItem('SQUARE', Icons.crop_square_outlined),
+                            _buildPopularCategoryItem('OVAL', Icons.panorama_horizontal_outlined),
+                            _buildPopularCategoryItem('OCT...', Icons.stop_outlined),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ),
-              Positioned(
-                top: 50,
-                right: 50,
-                child: Opacity(
-                  opacity: 0.2,
-                  child: CustomImage(
-                    assetPath: AppSvgs.category_1,
+                  
+                  // Category List
+                  ListView.builder(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount: widget.categories.length > 5 ? 5 : widget.categories.length,
+                    itemBuilder: (context, index) {
+                      final category = widget.categories[index];
+                      return _buildCategoryListItem(context, category);
+                    },
                   ),
-                ),
-              ),
-              Positioned(
-                top: 50,
-                right: 50,
-                child: Opacity(
-                  opacity: 0.2,
-                  child: CustomImage(
-                    assetPath: AppSvgs.category_1,
-                  ),
-                ),
-              ),
-              Positioned(
-                top: 30,
-                left: 30,
-                child: Opacity(
-                  opacity: 0.2,
-                  child: CustomImage(
-                    assetPath: AppSvgs.category_2,
-                  ),
-                ),
-              ),
-              Positioned(
-                top: 50,
-                right: 100,
-                child: Opacity(
-                  opacity: 0.2,
-                  child: CustomImage(
-                    assetPath: AppSvgs.category_3,
-                  ),
-                ),
-              ),
-              Positioned(
-                top: 110,
-                left: 20,
-                child: Opacity(
-                  opacity: 0.2,
-                  child: CustomImage(
-                    assetPath: AppSvgs.category_4,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: GridView.builder(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 14,
-                  mainAxisSpacing: 14,
-                  childAspectRatio: 1,
-                ),
-                itemCount: widget.categories.length,
-                itemBuilder: (context, index) {
-                  final category = widget.categories[index];
-                  return CategoryCardInCategoryScreen(
-                    category: category,
-                  );
-                },
+                ],
               ),
             ),
           ),
         ],
       ),
+    );
+  }
+  
+  Widget _buildCategoryCard(BuildContext context, Category category) {
+    return GestureDetector(
+      onTap: () {
+        AppRoutes.navigateTo(
+          context,
+          AppRoutes.allCategoryProductsScreen,
+          arguments: {
+            'category': category,
+          },
+        );
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          image: DecorationImage(
+            image: NetworkImage(category.banner ?? ''),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: Stack(
+          children: [
+            // Gradient overlay
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Colors.transparent,
+                    Colors.black.withOpacity(0.5),
+                  ],
+                ),
+              ),
+            ),
+            // Text overlay
+            Positioned(
+              bottom: 16,
+              left: 16,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    category.name?.toUpperCase() ?? '',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
+                  Text(
+                    '${category.productCount ?? 0} items',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 12,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+  
+  Widget _buildPopularCategoryItem(String title, IconData icon) {
+    return Column(
+      children: [
+        Container(
+          padding: EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: Colors.grey.shade200,
+            shape: BoxShape.circle,
+          ),
+          child: Icon(icon, color: AppTheme.primaryColor),
+        ),
+        SizedBox(height: 8),
+        Text(
+          title,
+          style: TextStyle(fontSize: 12),
+        ),
+      ],
+    );
+  }
+  
+  Widget _buildCategoryListItem(BuildContext context, Category category) {
+    IconData getCategoryIcon() {
+      final name = category.name?.toLowerCase() ?? '';
+      if (name.contains('round')) return Icons.circle_outlined;
+      if (name.contains('square')) return Icons.crop_square_outlined;
+      if (name.contains('oval')) return Icons.panorama_horizontal_outlined;
+      if (name.contains('octagon')) return Icons.stop_outlined;
+      return Icons.category_outlined;
+    }
+    
+    return ListTile(
+      leading: Icon(getCategoryIcon(), color: AppTheme.primaryColor),
+      title: Text(
+        category.name?.toUpperCase() ?? '',
+        style: TextStyle(fontWeight: FontWeight.w500),
+      ),
+      trailing: Icon(Icons.arrow_forward_ios, size: 16),
+      onTap: () {
+        AppRoutes.navigateTo(
+          context,
+          AppRoutes.allCategoryProductsScreen,
+          arguments: {
+            'category': category,
+          },
+        );
+      },
     );
   }
 }

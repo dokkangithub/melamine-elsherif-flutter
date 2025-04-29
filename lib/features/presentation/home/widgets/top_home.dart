@@ -68,10 +68,11 @@ class _TopHomeWidgetState extends State<TopHomeWidget> {
               ),
               Text(
                 'up_to_30%_off_on_selected_premium_appliances'.tr(context),
-                style: context.titleSmall!.copyWith(
+                style: context.bodyLarge!.copyWith(
                     color: AppTheme.white
                 ),
               ),
+              SizedBox(height: 15),
               CustomButton(
                 backgroundColor: AppTheme.accentColor,
                 splashColor: AppTheme.accentColor,
