@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "455164135628",
+    "project_id": "new-ecommerce-395d1",
+    "storage_bucket": "new-ecommerce-395d1.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:455164135628:android:11dad7d72a817f6ee5da69",
+        "android_client_info": {
+          "package_name": "com.melamine_elsherif"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "455164135628-p1f2k30cff10ku5pg8dr8tp9nvlv0skg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDNSC7IYQHfHz--fRDBO2Wc7bk6aY0Ca8w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "455164135628-p1f2k30cff10ku5pg8dr8tp9nvlv0skg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

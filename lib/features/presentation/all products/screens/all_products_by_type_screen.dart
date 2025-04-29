@@ -1,0 +1,352 @@
+import 'package:flutter/material.dart';
+import 'package:melamine_elsherif/core/config/themes.dart/theme.dart';
+import 'package:melamine_elsherif/core/utils/constants/app_assets.dart';
+import 'package:melamine_elsherif/core/utils/enums/products_type.dart';
+import 'package:melamine_elsherif/core/utils/extension/text_theme_extension.dart';
+import 'package:melamine_elsherif/core/utils/extension/translate_extension.dart';
+import 'package:melamine_elsherif/core/utils/widgets/custom_cached_image.dart';
+import 'package:melamine_elsherif/core/utils/widgets/custom_empty_widgets.dart';
+import 'package:melamine_elsherif/core/utils/widgets/custom_form_field.dart';
+import 'package:melamine_elsherif/core/utils/widgets/custom_loading.dart';
+import 'package:melamine_elsherif/features/domain/product/entities/product.dart';
+import 'package:provider/provider.dart';
+import '../../../../core/config/routes.dart/routes.dart';
+import '../../../../core/utils/enums/loading_state.dart';
+import '../../../../core/utils/widgets/custom_appBar.dart';
+import '../../home/controller/home_provider.dart';
+import '../widgets/products_grid.dart';
+import '../widgets/shimmer/products_grid_shimmer.dart';
+
+class AllProductsByTypeScreen extends StatefulWidget {
+  final ProductType productType;
+  final String title;
+
+  const AllProductsByTypeScreen({
+    super.key,
+    required this.productType,
+    required this.title,
+  });
+
+  @override
+  _AllProductsByTypeScreenState createState() =>
+      _AllProductsByTypeScreenState();
+}
+
+class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
+  final TextEditingController _searchController = TextEditingController();
+  bool _isLoading = false;
+  final ScrollController _scrollController = ScrollController();
+  ProductType _selectedProductType = ProductType.all;
+
+  final Map<ProductType, String> _productTypeNames = {
+    ProductType.all: 'all_products',
+    ProductType.bestSelling: 'best_selling_products',
+    ProductType.featured: 'feature_products',
+    ProductType.newArrival: 'new_arrival_products',
+    ProductType.todaysDeal: 'today_deals',
+  };
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_scrollListener);
+    _selectedProductType = widget.productType;
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final homeProvider = Provider.of<HomeProvider>(context, listen: false);
+      _fetchProducts(homeProvider, refresh: true);
+    });
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _scrollListener() {
+    // Add a small threshold so it triggers slightly before hitting the very bottom
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 200) {
+      _loadMoreProducts();
+    }
+  }
+  Future<void> _loadMoreProducts() async {
+    if (_isLoading) return;
+    final provider = Provider.of<HomeProvider>(context, listen: false);
+
+    if (!_hasMoreProducts(provider)) return;
+
+    setState(() => _isLoading = true);
+
+    // Add a print statement to confirm the state change
+    print("Loading more products, _isLoading: $_isLoading");
+
+    try {
+      await _fetchProducts(provider);
+    } finally {
+      // Make sure this runs even if there's an error
+      if (mounted) {
+        setState(() => _isLoading = false);
+        // Add another print statement to see when it's set back to false
+        print("Finished loading, _isLoading: $_isLoading");
+      }
+    }
+  }
+
+  Future<void> _fetchProducts(
+      HomeProvider provider, {
+        bool refresh = false,
+      }) async {
+    switch (_selectedProductType) {
+      case ProductType.all:
+        await provider.fetchAllProducts(refresh: refresh);
+        break;
+      case ProductType.bestSelling:
+        await provider.fetchBestSellingProducts(refresh: refresh);
+        break;
+      case ProductType.featured:
+        await provider.fetchFeaturedProducts(refresh: refresh);
+        break;
+      case ProductType.newArrival:
+        await provider.fetchNewProducts(refresh: refresh);
+        break;
+      case ProductType.todaysDeal:
+        await provider.fetchTodaysDealProducts();
+        break;
+    }
+  }
+
+  bool _hasMoreProducts(HomeProvider provider) {
+    switch (_selectedProductType) {
+      case ProductType.all:
+        return provider.hasMoreAllProducts;
+      case ProductType.bestSelling:
+        return provider.hasMoreBestSellingProducts;
+      case ProductType.featured:
+        return provider.hasMoreFeaturedProducts;
+      case ProductType.newArrival:
+        return provider.hasMoreNewProducts;
+      case ProductType.todaysDeal:
+        return false; // No pagination for today's deal
+    }
+  }
+
+  List<Product> _getProducts(HomeProvider provider) {
+    switch (_selectedProductType) {
+      case ProductType.all:
+        return provider.allProducts;
+      case ProductType.bestSelling:
+        return provider.bestSellingProducts;
+      case ProductType.featured:
+        return provider.featuredProducts;
+      case ProductType.newArrival:
+        return provider.newProducts;
+      case ProductType.todaysDeal:
+        return provider.todaysDealProducts;
+    }
+  }
+
+  LoadingState _getLoadingState(HomeProvider provider) {
+    switch (_selectedProductType) {
+      case ProductType.all:
+        return provider.allProductsState;
+      case ProductType.bestSelling:
+        return provider.bestSellingProductsState;
+      case ProductType.featured:
+        return provider.featuredProductsState;
+      case ProductType.newArrival:
+        return provider.newProductsState;
+      case ProductType.todaysDeal:
+        return provider.todaysDealProductsState;
+    }
+  }
+
+  String _getErrorMessage(HomeProvider provider) {
+    switch (_selectedProductType) {
+      case ProductType.all:
+        return provider.allProductsError;
+      case ProductType.bestSelling:
+        return provider.bestSellingProductsError;
+      case ProductType.featured:
+        return provider.featuredProductsError;
+      case ProductType.newArrival:
+        return provider.newProductsError;
+      case ProductType.todaysDeal:
+        return provider.todaysDealProductsError;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<HomeProvider>(
+      builder: (context, homeProvider, child) {
+        final products = _getProducts(homeProvider);
+        final state = _getLoadingState(homeProvider);
+        final error = _getErrorMessage(homeProvider);
+
+        return Scaffold(
+          backgroundColor: Colors.white,
+          body: SafeArea(
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
+                  child: Row(
+                    children: [
+                      SizedBox(width: 6),
+                      InkWell(
+                        onTap: () => Navigator.pop(context),
+                        child: const Icon(Icons.arrow_back_ios, size: 20,color: AppTheme.accentColor),
+                      ),
+                      const Spacer(),
+                      Text(
+                        _productTypeNames[_selectedProductType]!.tr(context),
+                        style: context.headlineSmall,
+                      ),
+                      const Spacer(),
+                      const Icon(Icons.filter_list_rounded,color: AppTheme.accentColor),
+                      SizedBox(width: 6),
+                    ],
+                  ),
+                ),
+                // Search bar
+                InkWell(
+                  onTap: (){
+                    AppRoutes.navigateTo(context, AppRoutes.searchScreen);
+                  },
+                  child: Container(
+                    margin: EdgeInsets.symmetric(horizontal: 15,vertical: 10),
+                    padding: EdgeInsets.symmetric(horizontal: 15,vertical: 15),
+                    width: double.infinity,
+                    height: 50,
+                    decoration: BoxDecoration(
+                        color: AppTheme.white,
+                        borderRadius: BorderRadius.circular(15),
+                        border: Border.all(width: 1,color: AppTheme.primaryColor)
+                    ),
+                    child: Row(
+                      spacing: 10,
+                      children: [
+                        CustomImage(
+                          assetPath: AppSvgs.category_search_icon,
+                        ),
+                        Text(
+                          'search_skin_care_products'.tr(context),
+                          style: context.bodySmall?.copyWith(color: AppTheme.primaryColor),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+
+                // Product type tabs
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                  child: Row(
+                    children: ProductType.values.map((type) {
+                      bool isSelected = _selectedProductType == type;
+                      return Padding(
+                        padding: const EdgeInsets.only(right: 8.0),
+                        child: InkWell(
+                          onTap: () {
+                            setState(() {
+                              _selectedProductType = type;
+                              // Fetch products for the selected type
+                              _fetchProducts(homeProvider, refresh: true);
+                            });
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                            decoration: BoxDecoration(
+                              color: isSelected ? Colors.amber[100] : Colors.white,
+                              borderRadius: BorderRadius.circular(20),
+                              border: Border.all(
+                                color: isSelected ? Colors.amber : Colors.grey.shade300,
+                              ),
+                            ),
+                            child: Text(
+                              _productTypeNames[type]!.tr(context),
+                              style: TextStyle(
+                                color: isSelected ? Colors.amber[800] : Colors.grey,
+                                fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                ),
+
+                // Products grid
+                Expanded(
+                  child: _buildProductsGrid(products, state, error, homeProvider, error),
+                ),
+
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildProductsGrid(List<Product> products, LoadingState state, String errorMessage, HomeProvider homeProvider, String error) {
+
+    if (state == LoadingState.loading && products.isEmpty) {
+      return const Center(child: ProductsGridShimmer());
+    }
+
+    if (state == LoadingState.error && products.isEmpty) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(errorMessage),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () => _fetchProducts(
+                Provider.of<HomeProvider>(context, listen: false),
+                refresh: true,
+              ),
+              child: const Text('Retry'),
+            ),
+          ],
+        ),
+      );
+    }
+
+    if (products.isEmpty) {
+      return const Center(child: CustomEmptyWidget());
+    }
+    List<Product> filteredProducts=products;
+    if(_selectedProductType!=ProductType.newArrival){
+      filteredProducts = products.where((product) => product.published == 1).toList();
+    }
+    return Column(
+      children: [
+        Expanded(
+          child: ProductsGrid(
+            products: filteredProducts,
+            state: state,
+            error: error,
+            isLoading: _isLoading,
+            scrollController: _scrollController,
+            onRetry: () => _fetchProducts(homeProvider, refresh: true),
+          ),
+        ),
+        if (_isLoading)
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16.0),
+            child: Text(
+              'loading_more_products'.tr(context),
+              style: context.titleSmall?.copyWith(color: AppTheme.accentColor),
+            ),
+          ),
+      ],
+    );
+  }
+}

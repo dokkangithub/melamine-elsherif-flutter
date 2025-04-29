@@ -1,0 +1,12 @@
+flutter_native_splash:
+  color: "#FFFFFF"  # White background for light mode
+  image: assets/images/melamine_elsherif_logo.png  # Your centered logo
+  color_dark: "#FFFFFF"  # White background for dark mode
+  image_dark: assets/images/melamine_elsherif_logo.png  # Same logo for dark mode
+
+  android_12:
+    image: assets/images/melamine_elsherif_logo.png  # Same logo for Android 12
+    icon_background_color: "#FFFFFF"  # White background for Android 12
+
+  ios: true  # Enable for iOS
+  web: false  # Disable for web
