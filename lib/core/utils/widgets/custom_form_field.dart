@@ -7,9 +7,6 @@ import '../vaidation/phone_validator.dart';
 
 
 class CustomTextFormField extends StatefulWidget {
-  static const Color primaryColor = Color(0xFF133453);
-  static const Color secondaryColor = Color(0xFF2B5893);
-  static const Color accentColor = Color(0xFF876421);
 
   final TextEditingController controller;
   final String? label;
@@ -110,10 +107,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
         maxLines: widget.maxLines,
         minLines: widget.minLines,
         maxLength: widget.maxLength,
-        style: widget.textStyle ?? const TextStyle(
-          color: CustomTextFormField.primaryColor,
-          fontSize: 16,
-        ),
+        style: widget.textStyle ?? context.bodyMedium,
         inputFormatters: widget.isMobileNumber
             ? [FilteringTextInputFormatter.digitsOnly]
             : null,
@@ -134,14 +128,14 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(widget.borderRadius),
             borderSide: BorderSide(
-              color: CustomTextFormField.secondaryColor.withValues(alpha: 0.3),
+              color: AppTheme.primaryColor.withValues(alpha: 0.3),
               width: 1.5,
             ),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(widget.borderRadius),
             borderSide: const BorderSide(
-              color: CustomTextFormField.secondaryColor,
+              color: AppTheme.primaryColor,
               width: 2,
             ),
           ),
