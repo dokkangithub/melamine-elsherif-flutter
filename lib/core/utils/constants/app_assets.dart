@@ -48,6 +48,7 @@ class AppSvgs {
   static const String success_icon = '$svgPath/success_icon.svg';
   static const String cart = '$svgPath/cart.svg';
   static const String cart_white = '$svgPath/cart_white.svg';
+  static const String delete_icon = '$svgPath/delete.svg';
   static const String search_icon = '$svgPath/search_icon.svg';
   static const String home_icon = '$svgPath/home.svg';
   static const String category_icon = '$svgPath/category.svg';

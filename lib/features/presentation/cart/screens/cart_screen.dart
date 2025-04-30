@@ -4,6 +4,8 @@ import 'package:melamine_elsherif/core/utils/extension/translate_extension.dart'
 import 'package:melamine_elsherif/core/utils/widgets/custom_button.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_cached_image.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_form_field.dart';
+import 'package:melamine_elsherif/features/domain/cart/entities/cart.dart';
+import 'package:melamine_elsherif/features/presentation/cart/widgets/custom_product_in_cart.dart';
 import 'package:provider/provider.dart';
 import '../../../../core/config/routes.dart/routes.dart';
 import '../../../../core/config/themes.dart/theme.dart';
@@ -114,14 +116,11 @@ class _CartScreenState extends State<CartScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[50],
+      backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios, color: Colors.black),
-          onPressed: () => Navigator.pop(context),
-        ),
+        scrolledUnderElevation: 0,
         title: Consumer<CartProvider>(
           builder: (context, cartProvider, _) {
             final itemCount = cartProvider.cartItems.length;
@@ -142,394 +141,235 @@ class _CartScreenState extends State<CartScreen> {
             return const EmptyCartWidget();
           }
 
-          return ListView(
-            padding: const EdgeInsets.symmetric(vertical: 8),
+          return Column(
             children: [
-              // Cart items
-              ...cartProvider.cartItems
-                  .map(
-                    (item) => Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 6,
+              // Cart items in an expandable list
+              Expanded(
+                child: ListView.separated(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  separatorBuilder:
+                      (context, index) => Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                        child: Divider(color: Colors.grey[300]),
                       ),
-                      child: Container(
-                        height: 150,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(8),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.1),
-                              spreadRadius: 1,
-                              blurRadius: 2,
-                            ),
-                          ],
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(12),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              // Product image
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(4),
-                                child: CustomImage(
-                                  imageUrl: item.thumbnailImage,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                              const SizedBox(width: 12),
+                  itemCount: cartProvider.cartItems.length,
+                  itemBuilder: (context, index) {
+                    final CartItem item = cartProvider.cartItems[index];
+                    return ProductItemInCart(
+                      item: item,
+                      index: index,
+                      onQuantityChanged: (int quntity) {
+                        _updateQuantity(cartProvider, item.id, quntity);
+                      },
+                    );
+                  },
+                ),
+              ),
 
-                              // Product details
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+              // Bottom sections container with a scrollable area if needed
+              Column(
+                children: [
+                  // Order Summary
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(height: 15),
+                        Text(
+                          'Order summary',
+                          style: context.titleMedium!.copyWith(
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                        SizedBox(height: 8),
+                        _buildSummaryRow(
+                          'Subtotal',
+                          '${((cartProvider.cartSummary?.subtotal ?? 0.0) - (cartProvider.cartSummary?.discount ?? 0.0)).toStringAsFixed(2)}'
+                              ' ${cartProvider.cartSummary?.currencySymbol ?? ''}',
+                        ),
+
+                        _buildSummaryRow(
+                          'Shipping Fee',
+                          '${cartProvider.cartSummary?.shippingCost.toStringAsFixed(2) ?? '0.00'} ${cartProvider.cartSummary?.currencySymbol ?? ''}',
+                        ),
+                        if (cartProvider.cartSummary?.couponApplied == true)
+                          _buildSummaryRow(
+                            'Discount',
+                            '- ${cartProvider.cartSummary?.discount.toStringAsFixed(2) ?? '0.00'} ${cartProvider.cartSummary?.currencySymbol ?? ''}',
+                            textColor: AppTheme.errorColor,
+                          ),
+                        _buildSummaryRow(
+                          'Total',
+                          '${cartProvider.cartSummary?.total.toStringAsFixed(2) ?? '0.00'} ${cartProvider.cartSummary?.currencySymbol ?? ''}',
+                          isBold: true,
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  // Discount Coupon Section
+                  Consumer<CouponProvider>(
+                    builder: (context, couponProvider, _) {
+                      final bool hasCoupon =
+                          couponProvider.appliedCoupon?.success == true ||
+                          cartProvider.cartSummary?.couponApplied == true;
+                      final String? couponCode =
+                          couponProvider.appliedCoupon?.couponCode ??
+                          cartProvider.cartSummary?.couponCode;
+
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 8,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            if (hasCoupon && couponCode != null)
+                              // Applied coupon UI
+                              Container(
+                                padding: EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                  color: Colors.green.shade50,
+                                  borderRadius: BorderRadius.circular(8),
+                                  border: Border.all(
+                                    color: Colors.green.shade200,
+                                  ),
+                                ),
+                                child: Row(
                                   children: [
+                                    Icon(
+                                      Icons.check_circle,
+                                      color: Colors.green,
+                                    ),
+                                    SizedBox(width: 8),
                                     Expanded(
-                                      child: Row(
+                                      child: Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          // Product name and model
-                                          Expanded(
-                                            child: Text(
-                                              item.productName,
-                                              style: context.titleMedium,
-                                            ),
+                                          Text(
+                                            couponCode,
+                                            style: context.titleMedium,
                                           ),
-
-                                          // Delete button
-                                          InkWell(
-                                            onTap: () {
-                                              cartProvider.deleteCartItem(
-                                                item.id,
-                                              );
-                                            },
-                                            child: Icon(
-                                              Icons.delete_outline,
-                                              color: Colors.red[400],
-                                              size: 22,
-                                            ),
+                                          Text(
+                                            'Coupon applied successfully',
+                                            style: context.titleSmall,
                                           ),
                                         ],
                                       ),
                                     ),
-
-                                    SizedBox(height: 12),
-
-                                    // Quantity selector and price
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        // Quantity controls
-                                        Row(
-                                          children: [
-                                            // Minus button
-                                            InkWell(
-                                              onTap:
-                                                  item.quantity >
-                                                          item.lowerLimit
-                                                      ? () {
-                                                        _updateQuantity(
-                                                          cartProvider,
-                                                          item.id,
-                                                          item.quantity - 1,
-                                                        );
-                                                      }
-                                                      : null,
-                                              child: Container(
-                                                width: 28,
-                                                height: 28,
-                                                alignment: Alignment.center,
-                                                decoration: BoxDecoration(
-                                                  border: Border.all(
-                                                    width: 1,
-                                                    color:
-                                                        AppTheme.primaryColor,
-                                                  ),
-                                                  borderRadius:
-                                                      BorderRadius.circular(10),
-                                                ),
-                                                child: Icon(
-                                                  Icons.remove,
-                                                  color: AppTheme.accentColor,
-                                                  size: 16,
-                                                ),
-                                              ),
-                                            ),
-
-                                            // Quantity value
-                                            Container(
-                                              width: 32,
-                                              height: 28,
-                                              alignment: Alignment.center,
-                                              child: Text(
-                                                '${item.quantity}',
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.w600,
-                                                ),
-                                              ),
-                                            ),
-                                            // Plus button
-                                            InkWell(
-                                              onTap:
-                                                  item.quantity <
-                                                          item.upperLimit
-                                                      ? () {
-                                                        _updateQuantity(
-                                                          cartProvider,
-                                                          item.id,
-                                                          item.quantity + 1,
-                                                        );
-                                                      }
-                                                      : null,
-                                              child: Container(
-                                                width: 28,
-                                                height: 28,
-                                                alignment: Alignment.center,
-                                                decoration: BoxDecoration(
-                                                  border: Border.all(
-                                                    width: 1,
-                                                    color:
-                                                        AppTheme.primaryColor,
-                                                  ),
-                                                  borderRadius:
-                                                      BorderRadius.circular(10),
-                                                ),
-                                                child: Icon(
-                                                  Icons.add,
-                                                  color: AppTheme.accentColor,
-                                                  size: 16,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
+                                    TextButton(
+                                      onPressed:
+                                          _isApplyingCoupon
+                                              ? null
+                                              : () =>
+                                                  _removeCoupon(couponProvider),
+                                      style: TextButton.styleFrom(
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: 8,
                                         ),
-
-                                        // Price
-                                        Text(
-                                          '\$${item.discountedPrice}',
-                                          style: context.titleMedium,
+                                        foregroundColor: Colors.black87,
+                                      ),
+                                      child: Text(
+                                        'Remove',
+                                        style: context.titleSmall!.copyWith(
+                                          color: AppTheme.primaryColor,
+                                          fontWeight: FontWeight.w800,
                                         ),
-                                      ],
+                                      ),
                                     ),
                                   ],
                                 ),
+                              )
+                            else
+                              // Coupon input
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: CustomTextFormField(
+                                      controller: _promoCodeController,
+                                      hint: 'Enter promo code',
+                                    ),
+                                  ),
+                                  SizedBox(width: 10),
+                                  TextButton(
+                                    onPressed:
+                                        _isApplyingCoupon
+                                            ? null
+                                            : () =>
+                                                _applyCoupon(couponProvider),
+                                    child:
+                                        _isApplyingCoupon
+                                            ? SizedBox(
+                                              width: 20,
+                                              height: 20,
+                                              child: CircularProgressIndicator(
+                                                strokeWidth: 2,
+                                                valueColor:
+                                                    AlwaysStoppedAnimation<
+                                                      Color
+                                                    >(Colors.white),
+                                              ),
+                                            )
+                                            : Text(
+                                              'Apply',
+                                              style: context.titleMedium!
+                                                  .copyWith(
+                                                    color:
+                                                        AppTheme.primaryColor,
+                                                    fontWeight: FontWeight.w800,
+                                                  ),
+                                            ),
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
+                          ],
                         ),
-                      ),
-                    ),
-                  )
-                  .toList(),
-
-              SizedBox(height: 16),
-
-              // Order Summary
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Container(
-                  padding: EdgeInsets.all(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Order summary', style: context.titleMedium),
-                      SizedBox(height: 12),
-                      _buildSummaryRow(
-                        'Subtotal',
-                        '${cartProvider.cartSummary?.currencySymbol ?? ''}'
-                            '${((cartProvider.cartSummary?.subtotal ?? 0.0) - (cartProvider.cartSummary?.discount ?? 0.0)).toStringAsFixed(2)}',
-                      ),
-
-                      _buildSummaryRow(
-                        'Shipping Fee',
-                        '${cartProvider.cartSummary?.currencySymbol ?? ''}${cartProvider.cartSummary?.shippingCost.toStringAsFixed(2) ?? '0.00'}',
-                      ),
-                      if (cartProvider.cartSummary?.couponApplied == true)
-                        _buildSummaryRow(
-                          'Discount',
-                          '- ${cartProvider.cartSummary?.currencySymbol ?? ''}${cartProvider.cartSummary?.discount.toStringAsFixed(2) ?? '0.00'}',
-                          isBold: true,
-                        ),
-                      _buildSummaryRow(
-                        'Total',
-                        '${cartProvider.cartSummary?.currencySymbol ?? ''}${cartProvider.cartSummary?.total.toStringAsFixed(2) ?? '0.00'}',
-                        isBold: true,
-                      ),
-                    ],
+                      );
+                    },
                   ),
-                ),
-              ),
 
-              SizedBox(height: 16),
+                  // Checkout Button
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 18,
+                      vertical: 8,
+                    ),
+                    child: CustomButton(
+                      text: 'Proceed to Checkout',
+                      isGradient: true,
+                      fullWidth: true,
+                      borderRadius: 10,
+                      padding: EdgeInsets.all(2),
+                      onPressed: () {
+                        AppRoutes.navigateTo(
+                          context,
+                          AppRoutes.newCheckoutScreen,
+                        );
+                      },
+                    ),
+                  ),
 
-              // Discount Coupon Section
-              Consumer<CouponProvider>(
-                builder: (context, couponProvider, _) {
-                  final bool hasCoupon =
-                      couponProvider.appliedCoupon?.success == true ||
-                      cartProvider.cartSummary?.couponApplied == true;
-                  final String? couponCode =
-                      couponProvider.appliedCoupon?.couponCode ??
-                      cartProvider.cartSummary?.couponCode;
-
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                  // Secure Checkout Text
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text(
-                          'Discount Coupon',
-                          style: context.titleMedium?.copyWith(
-                            color: AppTheme.primaryColor,
-                          ),
+                        Icon(
+                          Icons.lock_outline,
+                          size: 14,
+                          color: Colors.grey[600],
                         ),
-                        SizedBox(height: 12),
-
-                        if (hasCoupon && couponCode != null)
-                          // Applied coupon UI
-                          Container(
-                            padding: EdgeInsets.all(16),
-                            decoration: BoxDecoration(
-                              color: Colors.green.shade50,
-                              borderRadius: BorderRadius.circular(8),
-                              border: Border.all(color: Colors.green.shade200),
-                            ),
-                            child: Row(
-                              children: [
-                                Icon(Icons.check_circle, color: Colors.green),
-                                SizedBox(width: 8),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        couponCode,
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 16,
-                                        ),
-                                      ),
-                                      Text(
-                                        'Coupon applied successfully',
-                                        style: TextStyle(
-                                          color: Colors.grey[600],
-                                          fontSize: 14,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                TextButton(
-                                  onPressed:
-                                      _isApplyingCoupon
-                                          ? null
-                                          : () => _removeCoupon(couponProvider),
-                                  style: TextButton.styleFrom(
-                                    padding: EdgeInsets.symmetric(
-                                      horizontal: 8,
-                                    ),
-                                    foregroundColor: Colors.black87,
-                                  ),
-                                  child: Text(
-                                    'Remove',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      color: Colors.black87,
-                                      fontSize: 14,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          )
-                        else
-                          // Coupon input
-                          Row(
-                            children: [
-                              Expanded(
-                                child: CustomTextFormField(
-                                  controller: _promoCodeController,
-                                  hint: 'Enter promo code',
-                                ),
-                              ),
-                              SizedBox(width: 8),
-                              CustomButton(
-                                onPressed:
-                                    _isApplyingCoupon
-                                        ? null
-                                        : () => _applyCoupon(couponProvider),
-                                isOutlined: true,
-                                child:
-                                    _isApplyingCoupon
-                                        ? SizedBox(
-                                          width: 20,
-                                          height: 20,
-                                          child: CircularProgressIndicator(
-                                            strokeWidth: 2,
-                                            valueColor:
-                                                AlwaysStoppedAnimation<Color>(
-                                                  Colors.white,
-                                                ),
-                                          ),
-                                        )
-                                        : Text(
-                                          'Apply',
-                                          style: context.titleSmall,
-                                        ),
-                              ),
-                            ],
-                          ),
+                        SizedBox(width: 6),
+                        Text('Secure Checkout', style: context.bodySmall),
                       ],
                     ),
-                  );
-                },
-              ),
-
-              SizedBox(height: 24),
-
-              // Checkout Button
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, AppRoutes.newCheckoutScreen);
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppTheme.accentColor,
-                    foregroundColor: Colors.white,
-                    padding: EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
                   ),
-                  child: Text(
-                    'Proceed to Checkout',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                  ),
-                ),
+                ],
               ),
-
-              // Secure Checkout Text
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.lock_outline, size: 14, color: Colors.grey[600]),
-                    SizedBox(width: 6),
-                    Text(
-                      'Secure Checkout',
-                      style: context.bodyMedium,
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(height: 16),
             ],
           );
         },
@@ -555,26 +395,23 @@ class _CartScreenState extends State<CartScreen> {
     cartProvider.updateCartQuantities(cartIds, quantitiesStr);
   }
 
-  Widget _buildSummaryRow(String label, String value, {bool isBold = false}) {
+  Widget _buildSummaryRow(
+    String label,
+    String value, {
+    bool isBold = false,
+    Color? textColor,
+  }) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
-              color: Colors.black87,
-            ),
-          ),
+          Text(label, style: context.titleSmall),
           Text(
             value,
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
-              color: Colors.black87,
+            style: context.titleSmall!.copyWith(
+              color: textColor ?? AppTheme.black,
+              fontWeight: isBold ? FontWeight.w800 : FontWeight.w400,
             ),
           ),
         ],

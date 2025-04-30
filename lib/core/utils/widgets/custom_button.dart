@@ -20,6 +20,8 @@ class CustomButton extends StatelessWidget {
   final double? loadingIndicatorSize;
   final bool isOutlined;
   final bool fullWidth; // Added parameter for full width
+  final bool isGradient; // New parameter for gradient style
+  final List<Color>? gradientColors; // Allow custom gradient colors
 
   const CustomButton({
     super.key,
@@ -38,6 +40,8 @@ class CustomButton extends StatelessWidget {
     this.icon,
     this.isOutlined = false,
     this.fullWidth = false,
+    this.isGradient = false,
+    this.gradientColors,
   }) : assert(text != null || child != null, 'Either text or child must be provided');
 
   @override
@@ -48,6 +52,54 @@ class CustomButton extends StatelessWidget {
         : textColor ?? AppTheme.white;
     final borderColor = isOutlined ? AppTheme.accentColor : buttonColor;
 
+    // Default gradient colors if not provided
+    final colors = gradientColors ?? [
+      Color(0xFFB85959), // Darker reddish color
+      Color(0xFFE9A2A2), // Lighter pinkish color
+    ];
+
+    if (isGradient) {
+      // Return gradient style button
+      return Container(
+        width: fullWidth ? double.infinity : null,
+        height: 50,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(borderRadius ?? 10.0),
+          gradient: LinearGradient(
+            colors: colors,
+            begin: Alignment.centerLeft,
+            end: Alignment.centerRight,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 4,
+              offset: Offset(0, 2),
+            ),
+          ],
+        ),
+        child: MaterialButton(
+          padding: padding ?? const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(borderRadius ?? 10.0),
+          ),
+          onPressed: isLoading ? null : onPressed,
+          splashColor: splashColor ?? colors[0].withOpacity(0.3),
+          child: isLoading
+              ? SizedBox(
+                  width: loadingIndicatorSize,
+                  height: loadingIndicatorSize,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                  ),
+                )
+              : _buildContent(context, effectiveTextColor),
+        ),
+      );
+    }
+
+    // Return original button style if not gradient
     return Material(
       color: isOutlined ? Colors.transparent : buttonColor,
       elevation: isOutlined ? 0 : (elevation ?? 4.0),
@@ -57,7 +109,7 @@ class CustomButton extends StatelessWidget {
       ),
       child: InkWell(
         onTap: isLoading ? null : onPressed,
-        splashColor: splashColor ?? AppTheme.primaryColor.withValues(alpha: 0.3),
+        splashColor: splashColor ?? AppTheme.primaryColor.withOpacity(0.3),
         borderRadius: BorderRadius.circular(borderRadius ?? 10.0),
         child: Container(
           width: fullWidth ? double.infinity : null,
@@ -66,19 +118,19 @@ class CustomButton extends StatelessWidget {
             gradient: isOutlined
                 ? null
                 : LinearGradient(
-              colors: [
-                buttonColor,
-                buttonColor.withValues(alpha: 0.8),
-              ],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
+                    colors: [
+                      buttonColor,
+                      buttonColor.withOpacity(0.8),
+                    ],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
             borderRadius: BorderRadius.circular(borderRadius ?? 25.0),
           ),
           child: isLoading
               ? Center(
-            child: CustomLoadingWidget(),
-          )
+                  child: CustomLoadingWidget(),
+                )
               : _buildContent(context, effectiveTextColor),
         ),
       ),
