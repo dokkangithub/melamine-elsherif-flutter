@@ -23,10 +23,10 @@ class _AddEditAddressScreenState extends State<AddEditAddressScreen> {
 
   final TextEditingController _addressController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
+  final TextEditingController _cityNameController = TextEditingController();
 
   int? _selectedCountryId;
   int? _selectedStateId;
-  int? _selectedCityId;
 
   bool _isLoading = false;
 
@@ -38,10 +38,10 @@ class _AddEditAddressScreenState extends State<AddEditAddressScreen> {
     if (widget.address != null) {
       _addressController.text = widget.address!.address;
       _phoneController.text = widget.address!.phone;
+      _cityNameController.text = widget.address!.cityName;
 
       _selectedCountryId = widget.address!.countryId;
       _selectedStateId = widget.address!.stateId;
-      _selectedCityId = widget.address!.cityId;
     }
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -53,6 +53,7 @@ class _AddEditAddressScreenState extends State<AddEditAddressScreen> {
   void dispose() {
     _addressController.dispose();
     _phoneController.dispose();
+    _cityNameController.dispose();
     super.dispose();
   }
 
@@ -60,13 +61,9 @@ class _AddEditAddressScreenState extends State<AddEditAddressScreen> {
     final addressProvider = context.read<AddressProvider>();
     await addressProvider.fetchCountries();
 
-    // If editing, load states and cities
+    // If editing, load states
     if (widget.address != null && _selectedCountryId != null) {
       await addressProvider.fetchStatesByCountry(_selectedCountryId!);
-
-      if (_selectedStateId != null) {
-        await addressProvider.fetchCitiesByState(_selectedStateId!);
-      }
     }
   }
 
@@ -100,9 +97,9 @@ class _AddEditAddressScreenState extends State<AddEditAddressScreen> {
                       : AddressFormFields(
                         addressController: _addressController,
                         phoneController: _phoneController,
+                        cityNameController: _cityNameController,
                         selectedCountryId: _selectedCountryId,
                         selectedStateId: _selectedStateId,
-                        selectedCityId: _selectedCityId,
                         countries:
                             addressProvider.countries
                                 .map((location) => location.toMap())
@@ -111,17 +108,12 @@ class _AddEditAddressScreenState extends State<AddEditAddressScreen> {
                             addressProvider.states
                                 .map((location) => location.toMap())
                                 .toList(),
-                        cities:
-                            addressProvider.cities
-                                .map((location) => location.toMap())
-                                .toList(),
                         isLoading: _isLoading,
                         onCountryChanged: (value) async {
                           if (value != null) {
                             setState(() {
                               _selectedCountryId = value;
                               _selectedStateId = null;
-                              _selectedCityId = null;
                             });
                             await addressProvider.fetchStatesByCountry(value);
                           }
@@ -130,15 +122,8 @@ class _AddEditAddressScreenState extends State<AddEditAddressScreen> {
                           if (value != null) {
                             setState(() {
                               _selectedStateId = value;
-                              _selectedCityId = null;
                             });
-                            await addressProvider.fetchCitiesByState(value);
                           }
-                        },
-                        onCityChanged: (value) {
-                          setState(() {
-                            _selectedCityId = value;
-                          });
                         },
                       ),
 
@@ -167,6 +152,7 @@ class _AddEditAddressScreenState extends State<AddEditAddressScreen> {
 
       try {
         final addressProvider = context.read<AddressProvider>();
+        final cityName = _cityNameController.text.trim();
 
         if (widget.address == null) {
           // Add new address
@@ -174,7 +160,7 @@ class _AddEditAddressScreenState extends State<AddEditAddressScreen> {
             address: _addressController.text,
             countryId: _selectedCountryId!,
             stateId: _selectedStateId!,
-            cityId: _selectedCityId!,
+            cityName: cityName,
             phone: _phoneController.text,
           );
 
@@ -191,7 +177,7 @@ class _AddEditAddressScreenState extends State<AddEditAddressScreen> {
             address: _addressController.text,
             countryId: _selectedCountryId!,
             stateId: _selectedStateId!,
-            cityId: _selectedCityId!,
+            cityName: cityName,
             phone: _phoneController.text,
           );
 

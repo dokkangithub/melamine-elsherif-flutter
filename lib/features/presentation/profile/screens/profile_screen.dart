@@ -44,8 +44,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
       backgroundColor: Colors.grey[50],
       body: SafeArea(
         child: SingleChildScrollView(
-          child: Column(
-            children: [
+        child: Column(
+          children: [
               // User Header
               Container(
                 alignment: Alignment.center,

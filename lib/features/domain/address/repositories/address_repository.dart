@@ -7,7 +7,7 @@ abstract class AddressRepository {
     required String address,
     required int countryId,
     required int stateId,
-    required int cityId,
+    required String cityName,
     required String phone,
   });
   Future<Address> updateAddress({
@@ -15,7 +15,7 @@ abstract class AddressRepository {
     required String address,
     required int countryId,
     required int stateId,
-    required int cityId,
+    required String cityName,
     required String phone,
   });
   Future<void> updateAddressLocation(int id, double latitude, double longitude);

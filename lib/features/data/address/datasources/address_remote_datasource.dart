@@ -13,6 +13,7 @@ abstract class AddressRemoteDataSource {
     required int stateId,
     required int cityId,
     required String phone,
+    String? cityName,
   });
   Future<AddressModel> updateAddress({
     required int id,
@@ -22,6 +23,7 @@ abstract class AddressRemoteDataSource {
     required int cityId,
     required String phone,
     String? title,
+    String? cityName,
   });
   Future<void> updateAddressLocation(int id, double latitude, double longitude);
   Future<void> makeAddressDefault(int id);
@@ -70,16 +72,25 @@ class AddressRemoteDataSourceImpl implements AddressRemoteDataSource {
     required int stateId,
     required int cityId,
     required String phone,
+    String? cityName,
   }) async {
+    final Map<String, String> data = {
+      'address': address,
+      'country_id': countryId.toString(),
+      'state_id': stateId.toString(),
+      'phone': phone,
+    };
+    
+    // Use city_name instead of city_id if provided
+    if (cityName != null && cityName.isNotEmpty) {
+      data['city_name'] = cityName;
+    } else {
+      data['city_id'] = cityId.toString();
+    }
+
     final response = await apiProvider.post(
       LaravelApiEndPoint.userShippingCreate,
-      data: {
-        'address': address,
-        'country_id': countryId.toString(),
-        'state_id': stateId.toString(),
-        'city_id': cityId.toString(),
-        'phone': phone,
-      },
+      data: data,
     );
 
     // Since the API doesn't return the created address object, we need to fetch addresses again
@@ -106,7 +117,7 @@ class AddressRemoteDataSourceImpl implements AddressRemoteDataSource {
         cityId: cityId,
         countryName: '',  // We don't have this info
         stateName: '',    // We don't have this info
-        cityName: '',     // We don't have this info
+        cityName: cityName ?? '',  // Use provided cityName if available
         phone: phone,
         isDefault: false,
         locationAvailable: false, postalCode: '',
@@ -124,18 +135,30 @@ class AddressRemoteDataSourceImpl implements AddressRemoteDataSource {
     required int cityId,
     required String phone,
     String? title,
+    String? cityName,
   }) async {
+    final Map<String, String> data = {
+      'id': id.toString(),
+      'address': address,
+      'country_id': countryId.toString(),
+      'state_id': stateId.toString(),
+      'phone': phone,
+    };
+    
+    // Use city_name instead of city_id if provided
+    if (cityName != null && cityName.isNotEmpty) {
+      data['city_name'] = cityName;
+    } else {
+      data['city_id'] = cityId.toString();
+    }
+    
+    if (title != null) {
+      data['title'] = title;
+    }
+
     final response = await apiProvider.post(
       LaravelApiEndPoint.userShippingUpdate,
-      data: {
-        'id': id.toString(),
-        'address': address,
-        'country_id': countryId.toString(),
-        'state_id': stateId.toString(),
-        'city_id': cityId.toString(),
-        'phone': phone,
-        if (title != null) 'title': title,
-      },
+      data: data,
     );
 
     if (response.data != null && response.data['result'] == true) {
@@ -161,7 +184,7 @@ class AddressRemoteDataSourceImpl implements AddressRemoteDataSource {
         cityId: cityId,
         countryName: '',  // We don't have this info
         stateName: '',    // We don't have this info
-        cityName: '',     // We don't have this info
+        cityName: cityName ?? '',  // Use provided cityName if available
         phone: phone,
         isDefault: false, // We don't know
         locationAvailable: false, postalCode: '', // We don't know

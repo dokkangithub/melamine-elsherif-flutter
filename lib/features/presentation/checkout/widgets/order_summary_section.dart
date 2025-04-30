@@ -1,25 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:melamine_elsherif/core/config/themes.dart/theme.dart';
+import 'package:melamine_elsherif/core/utils/extension/text_theme_extension.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../../../core/utils/extension/translate_extension.dart';
+import '../../../../core/utils/widgets/custom_form_field.dart';
 import '../../../domain/cart/entities/cart.dart';
+import './checkout_cart_item.dart';
 
 class OrderSummarySection extends StatelessWidget {
   final CartSummary cartSummary;
+  final List<CartItem> cartItems;
   final bool isUpdatingShipping;
   final String? shippingError;
-  final bool isInitialLoading; // Added for initial loading state
+  final bool isInitialLoading;
+  final TextEditingController noteController;
 
   const OrderSummarySection({
     super.key,
     required this.cartSummary,
+    required this.cartItems,
     this.isUpdatingShipping = false,
     this.shippingError,
-    this.isInitialLoading = false, // Default to false
+    this.isInitialLoading = false,
+    required this.noteController,
   });
 
   @override
   Widget build(BuildContext context) {
-    final bool hasCoupon = !isInitialLoading &&
+    final bool hasCoupon =
+        !isInitialLoading &&
         cartSummary.couponApplied &&
         cartSummary.couponCode != null &&
         cartSummary.couponCode!.isNotEmpty;
@@ -32,14 +41,26 @@ class OrderSummarySection extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Price Details',
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-              color: Colors.black,
-            ),
+            'Order Summary',
+            style: context.titleMedium!.copyWith(fontWeight: FontWeight.w600),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 10),
+
+          // Cart Items List
+          if (isInitialLoading)
+            _buildItemsShimmer()
+          else
+            ...cartItems.map(
+              (item) => Column(
+                children: [
+                  CheckoutCartItem(item: item),
+                  Divider(color: AppTheme.lightDividerColor),
+                ],
+              ),
+            ),
+
+          SizedBox(height: 10),
+          // Price Summary
           if (isInitialLoading)
             _buildShimmerEffect(context)
           else
@@ -49,23 +70,36 @@ class OrderSummarySection extends StatelessWidget {
                   context: context,
                   label: 'Subtotal',
                   value:
-                  '${cartSummary.currencySymbol}${cartSummary.subtotal.toStringAsFixed(2)}',
+                      '${(cartSummary.subtotal + cartSummary.discount - cartSummary.tax).toStringAsFixed(2)} ${cartSummary.currencySymbol}',
                 ),
                 const SizedBox(height: 12),
                 _buildPriceRow(
                   context: context,
-                  label: 'Shipping fee',
+                  label: 'Shipping',
                   value:
-                  '${cartSummary.currencySymbol}${cartSummary.shippingCost.toStringAsFixed(2)}',
+                      cartSummary.shippingCost > 0
+                          ? '${cartSummary.shippingCost.toStringAsFixed(2)} ${cartSummary.currencySymbol}'
+                          : 'Free',
                   isLoading: isUpdatingShipping,
+                  color: AppTheme.successColor,
                 ),
+                if (hasCoupon)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 12),
+                    child: _buildPriceRow(
+                      context: context,
+                      label: 'Discount',
+                      value:
+                          '-${cartSummary.discount.toStringAsFixed(2)} ${cartSummary.currencySymbol}',
+                      color: AppTheme.errorColor,
+                    ),
+                  ),
                 const SizedBox(height: 12),
                 _buildPriceRow(
                   context: context,
-                  label: 'Discount',
-                  value: hasCoupon
-                      ? '${cartSummary.currencySymbol}${cartSummary.discount.toStringAsFixed(2)}'
-                      : '${cartSummary.currencySymbol}0.00',
+                  label: 'Tax',
+                  value:
+                      '${cartSummary.tax.toStringAsFixed(2)} ${cartSummary.currencySymbol}',
                 ),
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 12),
@@ -75,12 +109,93 @@ class OrderSummarySection extends StatelessWidget {
                   context: context,
                   label: 'Total',
                   value:
-                  '${cartSummary.currencySymbol}${cartSummary.total.toStringAsFixed(2)}',
-                  isTotal: true,
+                      '${cartSummary.total.toStringAsFixed(2)} ${cartSummary.currencySymbol}',
                 ),
               ],
             ),
+          const SizedBox(height: 10),
+          // Add note to order section
+          Container(
+            color: Colors.white,
+            margin: const EdgeInsets.only(bottom: 12),
+            child: CustomTextFormField(
+              controller: noteController,
+              maxLines: 2,
+              hint: 'Add a note to order',
+            ),
+          ),
+          const SizedBox(height: 10),
+          // Secure Checkout Benefits
+          _buildSecureCheckoutBenefits(context),
         ],
+      ),
+    );
+  }
+
+  Widget _buildSecureCheckoutBenefits(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        _buildBenefitItem(icon: Icons.lock_outline, label: 'Secure SSL'),
+        _buildBenefitItem(
+          icon: Icons.local_shipping_outlined,
+          label: 'Free Shipping',
+        ),
+        _buildBenefitItem(icon: Icons.access_time, label: '30-Day Returns'),
+        _buildBenefitItem(icon: Icons.payment, label: 'Secure Payment'),
+      ],
+    );
+  }
+
+  Widget _buildBenefitItem({required IconData icon, required String label}) {
+    return Column(
+      children: [
+        Icon(icon, size: 20, color: Colors.grey[600]),
+        const SizedBox(height: 4),
+        Text(
+          label,
+          style: TextStyle(fontSize: 10, color: Colors.grey[600]),
+          textAlign: TextAlign.center,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildItemsShimmer() {
+    return Column(
+      children: List.generate(
+        2,
+        (index) => Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: Shimmer.fromColors(
+            baseColor: Colors.grey[300]!,
+            highlightColor: Colors.grey[100]!,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(width: 60, height: 60, color: Colors.white),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        width: double.infinity,
+                        height: 16,
+                        color: Colors.white,
+                      ),
+                      const SizedBox(height: 8),
+                      Container(width: 100, height: 12, color: Colors.white),
+                      const SizedBox(height: 8),
+                      Container(width: 80, height: 14, color: Colors.white),
+                    ],
+                  ),
+                ),
+                Container(width: 40, height: 20, color: Colors.white),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -110,16 +225,8 @@ class OrderSummarySection extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Container(
-          width: 80,
-          height: isTotal ? 16 : 14,
-          color: Colors.white,
-        ),
-        Container(
-          width: 60,
-          height: isTotal ? 16 : 14,
-          color: Colors.white,
-        ),
+        Container(width: 80, height: isTotal ? 16 : 14, color: Colors.white),
+        Container(width: 60, height: isTotal ? 16 : 14, color: Colors.white),
       ],
     );
   }
@@ -129,20 +236,12 @@ class OrderSummarySection extends StatelessWidget {
     required String label,
     required String value,
     bool isLoading = false,
-    bool isGreen = false,
-    bool isTotal = false,
+    Color color = Colors.black,
   }) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(
-          label,
-          style: TextStyle(
-            color: Colors.black87,
-            fontSize: isTotal ? 16 : 14,
-            fontWeight: isTotal ? FontWeight.w600 : FontWeight.normal,
-          ),
-        ),
+        Text(label, style: context.titleSmall!.copyWith(color: AppTheme.black)),
         if (isLoading)
           const SizedBox(
             width: 20,
@@ -153,14 +252,7 @@ class OrderSummarySection extends StatelessWidget {
             ),
           )
         else
-          Text(
-            value,
-            style: TextStyle(
-              fontWeight: isTotal ? FontWeight.w600 : FontWeight.w500,
-              fontSize: isTotal ? 16 : 14,
-              color: isTotal ? Colors.black : Colors.black87,
-            ),
-          ),
+          Text(value, style: context.titleSmall!.copyWith(color: color)),
       ],
     );
   }

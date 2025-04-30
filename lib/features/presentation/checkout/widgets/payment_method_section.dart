@@ -24,7 +24,7 @@ class PaymentMethodSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: Colors.white,
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -32,7 +32,7 @@ class PaymentMethodSection extends StatelessWidget {
             padding: const EdgeInsets.only(bottom: 16),
             child: Text(
               'payment_method'.tr(context),
-              style: context.headlineSmall?.copyWith(color: AppTheme.primaryColor),
+              style: context.titleLarge?.copyWith(fontWeight: FontWeight.w600),
             ),
           ),
           if (isLoading)
@@ -111,8 +111,7 @@ class PaymentMethodSection extends StatelessWidget {
     );
 
     return Card(
-      elevation: 2,
-      shadowColor: AppTheme.primaryColor,
+      elevation: 0.5,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
       margin: const EdgeInsets.only(bottom: 8),
       child: Padding(
@@ -127,7 +126,7 @@ class PaymentMethodSection extends StatelessWidget {
             ),
             paymentIcon,
             const SizedBox(width: 12),
-            Text(paymentType.name, style: context.titleMedium),
+            Text(paymentType.name, style: context.titleSmall),
           ],
         ),
       ),

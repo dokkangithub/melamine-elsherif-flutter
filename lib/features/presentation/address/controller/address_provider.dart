@@ -80,7 +80,7 @@ class AddressProvider extends ChangeNotifier {
     required String address,
     required int countryId,
     required int stateId,
-    required int cityId,
+    required String cityName,
     required String phone,
   }) async {
     try {
@@ -88,7 +88,7 @@ class AddressProvider extends ChangeNotifier {
         address: address,
         countryId: countryId,
         stateId: stateId,
-        cityId: cityId,
+        cityName: cityName,
         phone: phone,
       );
       addresses.add(newAddress);
@@ -104,7 +104,7 @@ class AddressProvider extends ChangeNotifier {
     required String address,
     required int countryId,
     required int stateId,
-    required int cityId,
+    required String cityName,
     required String phone,
   }) async {
     try {
@@ -113,7 +113,7 @@ class AddressProvider extends ChangeNotifier {
         address: address,
         countryId: countryId,
         stateId: stateId,
-        cityId: cityId,
+        cityName: cityName,
         phone: phone,
       );
       final index = addresses.indexWhere((addr) => addr.id == id);

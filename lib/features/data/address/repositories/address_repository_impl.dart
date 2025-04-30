@@ -24,15 +24,16 @@ class AddressRepositoryImpl implements AddressRepository {
     required String address,
     required int countryId,
     required int stateId,
-    required int cityId,
+    required String cityName,
     required String phone,
   }) async {
     final model = await remoteDataSource.addAddress(
       address: address,
       countryId: countryId,
       stateId: stateId,
-      cityId: cityId,
+      cityId: 0,
       phone: phone,
+      cityName: cityName,
     );
     return model.toEntity();
   }
@@ -43,7 +44,7 @@ class AddressRepositoryImpl implements AddressRepository {
     required String address,
     required int countryId,
     required int stateId,
-    required int cityId,
+    required String cityName,
     required String phone,
   }) async {
     final model = await remoteDataSource.updateAddress(
@@ -51,8 +52,9 @@ class AddressRepositoryImpl implements AddressRepository {
       address: address,
       countryId: countryId,
       stateId: stateId,
-      cityId: cityId,
+      cityId: 0,
       phone: phone,
+      cityName: cityName,
     );
     return model.toEntity();
   }

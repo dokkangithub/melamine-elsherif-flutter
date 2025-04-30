@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:melamine_elsherif/core/config/themes.dart/theme.dart';
+import 'package:melamine_elsherif/core/utils/constants/app_assets.dart';
 import 'package:melamine_elsherif/core/utils/extension/text_theme_extension.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_button.dart';
+import 'package:melamine_elsherif/core/utils/widgets/custom_cached_image.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_form_field.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_loading.dart';
 import 'package:provider/provider.dart';
@@ -14,12 +16,10 @@ import '../../address/controller/address_provider.dart';
 import '../../address/screens/address_list_screen.dart';
 import '../../address/screens/add_edit_address_screen.dart';
 import '../../cart/controller/cart_provider.dart';
-import '../../coupon/controller/coupon_provider.dart';
 import '../controller/payment_provider.dart';
 import '../widgets/geust_address_form.dart';
 import '../widgets/shipping_address_section.dart';
 import '../widgets/payment_method_section.dart';
-import '../widgets/coupon_section.dart';
 import '../widgets/order_summary_section.dart';
 
 class CheckoutScreen extends StatefulWidget {
@@ -32,9 +32,7 @@ class CheckoutScreen extends StatefulWidget {
 class _CheckoutScreenState extends State<CheckoutScreen> {
   Address? _selectedAddress;
   bool _isProcessingPayment = false;
-  final _couponController = TextEditingController();
-  bool _isApplyingCoupon = false;
-
+  
   bool get _isGuestUser => AppStrings.token == null;
 
   final TextEditingController _noteController = TextEditingController();
@@ -107,7 +105,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   @override
   void dispose() {
     _noteController.dispose();
-    _couponController.dispose();
     super.dispose();
   }
 
@@ -188,76 +185,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     }
   }
 
-  Future<void> _applyCoupon(CouponProvider couponProvider) async {
-    final couponCode = _couponController.text.trim();
-    if (couponCode.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('please_enter_coupon_code'.tr(context))),
-      );
-      return;
-    }
-
-    setState(() {
-      _isApplyingCoupon = true;
-    });
-
-    try {
-      await couponProvider.applyCoupon(couponCode);
-      await context.read<CartProvider>().fetchCartSummary();
-
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(couponProvider.appliedCoupon?.message ?? '')),
-        );
-      }
-
-      if (couponProvider.appliedCoupon?.success == true) {
-        _couponController.clear();
-      }
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text(e.toString())));
-      }
-    } finally {
-      if (mounted) {
-        setState(() {
-          _isApplyingCoupon = false;
-        });
-      }
-    }
-  }
-
-  Future<void> _removeCoupon(CouponProvider couponProvider) async {
-    setState(() {
-      _isApplyingCoupon = true;
-    });
-
-    try {
-      await couponProvider.removeCoupon();
-      await context.read<CartProvider>().fetchCartSummary();
-
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('coupon_removed_successfully'.tr(context))),
-        );
-      }
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text(e.toString())));
-      }
-    } finally {
-      if (mounted) {
-        setState(() {
-          _isApplyingCoupon = false;
-        });
-      }
-    }
-  }
-
   Future<void> _processPayment() async {
     if (_selectedAddress == null) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -332,16 +259,20 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color(0xFF0D2037),
+        backgroundColor: AppTheme.white,
         elevation: 0,
+        scrolledUnderElevation: 0,
         title: Text(
           'checkout'.tr(context),
-          style: context.headlineMedium?.copyWith(color: AppTheme.white),
+          style: context.headlineSmall!.copyWith(fontWeight: FontWeight.w600),
         ),
         centerTitle: true,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
-          onPressed: () => Navigator.pop(context),
+        leading: InkWell(
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: CustomImage(assetPath: AppSvgs.back),
+          ),
+          onTap: () => Navigator.pop(context),
         ),
       ),
       body: Consumer3<AddressProvider, PaymentProvider, CartProvider>(
@@ -357,7 +288,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               Expanded(
                 child: ListView(
                   children: [
-                    const SizedBox(height: 20),
                     // Shipping Address Section
                     ShippingAddressSection(
                       selectedAddress: _selectedAddress,
@@ -382,45 +312,17 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       isLoading: isLoading,
                     ),
 
-                    // Coupon Section
-                    Consumer<CouponProvider>(
-                      builder: (context, couponProvider, _) {
-                        return CouponSection(
-                          couponController: _couponController,
-                          isInitialLoading: isLoading,
-                          hasCoupon:
-                              cartProvider.cartSummary?.couponApplied == true,
-                          appliedCouponCode:
-                              cartProvider.cartSummary?.couponCode,
-                          isLoading: _isApplyingCoupon,
-                          errorMessage: couponProvider.couponError,
-                          onApply: () => _applyCoupon(couponProvider),
-                          onRemove: () => _removeCoupon(couponProvider),
-                        );
-                      },
-                    ),
-
-                    // Order Summary Section
+                    // Remove Coupon Section and directly show Order Summary
                     OrderSummarySection(
                       cartSummary: cartProvider.cartSummary!,
+                      cartItems: cartProvider.cartItems,
                       isUpdatingShipping:
                           paymentProvider.shippingUpdateState ==
                           LoadingState.loading,
                       shippingError: paymentProvider.errorMessage,
-                      isInitialLoading: isLoading,
+                      isInitialLoading: isLoading, noteController: _noteController,
                     ),
 
-                    // Add note to order section
-                    Container(
-                      color: Colors.white,
-                      margin: const EdgeInsets.only(bottom: 12),
-                      padding: const EdgeInsets.all(16),
-                      child: CustomTextFormField(
-                        controller: _noteController,
-                        maxLines: 2,
-                        hint: 'Add a note to order',
-                      ),
-                    ),
                   ],
                 ),
               ),
@@ -443,14 +345,14 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                         ],
                       ),
                       child: CustomButton(
-                        borderRadius: 15,
+                        isGradient: true,
                         onPressed:
                             _isProcessingPayment ? null : _processPayment,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              'Checkout • L.E.45.00',
+                              'Place Order',
                               style: context.titleLarge?.copyWith(
                                 color: AppTheme.white,
                               ),
@@ -465,4 +367,5 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       ),
     );
   }
+
 }

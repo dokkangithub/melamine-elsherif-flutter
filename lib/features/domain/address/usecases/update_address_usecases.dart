@@ -9,7 +9,7 @@ class UpdateAddressUseCase {
     required String address,
     required int countryId,
     required int stateId,
-    required int cityId,
+    required String cityName,
     required String phone,
   }) async {
     return await repository.updateAddress(
@@ -17,7 +17,7 @@ class UpdateAddressUseCase {
       address: address,
       countryId: countryId,
       stateId: stateId,
-      cityId: cityId,
+      cityName: cityName,
       phone: phone,
     );
   }

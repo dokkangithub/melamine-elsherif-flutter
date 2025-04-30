@@ -6,18 +6,16 @@ import '../../../../core/utils/widgets/custom_dropdown.dart';
 class AddressFormFields extends StatelessWidget {
   final TextEditingController addressController;
   final TextEditingController phoneController;
+  final TextEditingController cityNameController;
 
   final int? selectedCountryId;
   final int? selectedStateId;
-  final int? selectedCityId;
 
   final List<Map<String, dynamic>> countries;
   final List<Map<String, dynamic>> states;
-  final List<Map<String, dynamic>> cities;
 
   final Function(int?) onCountryChanged;
   final Function(int?) onStateChanged;
-  final Function(int?) onCityChanged;
 
   final bool isLoading;
 
@@ -25,15 +23,13 @@ class AddressFormFields extends StatelessWidget {
     super.key,
     required this.addressController,
     required this.phoneController,
+    required this.cityNameController,
     this.selectedCountryId,
     this.selectedStateId,
-    this.selectedCityId,
     required this.countries,
     required this.states,
-    required this.cities,
     required this.onCountryChanged,
     required this.onStateChanged,
-    required this.onCityChanged,
     this.isLoading = false,
   });
 
@@ -88,24 +84,15 @@ class AddressFormFields extends StatelessWidget {
           },
         ),
 
-        // City dropdown
-        CustomDropdown<int>(
+        // City text field (replacing dropdown)
+        CustomTextFormField(
+          controller: cityNameController,
           label: 'city'.tr(context),
-          hint: 'select_city'.tr(context),
-          value: selectedCityId,
+          hint: 'enter_city_name'.tr(context),
           prefixIcon: const Icon(Icons.location_city),
-          items:
-              cities.map((city) {
-                return DropdownMenuItem<int>(
-                  value: city['id'] as int,
-                  child: Text(city['name'] as String),
-                );
-              }).toList(),
-          onChanged: onCityChanged,
-          isLoading: isLoading,
           validator: (value) {
-            if (value == null) {
-              return 'please_select_city'.tr(context);
+            if (value == null || value.isEmpty) {
+              return 'please_enter_city_name'.tr(context);
             }
             return null;
           },

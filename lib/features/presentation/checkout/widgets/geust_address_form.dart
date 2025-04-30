@@ -26,13 +26,12 @@ class _GuestAddressFormScreenState extends State<GuestAddressFormScreen> {
   final _nameController = TextEditingController();
   final _phoneController = TextEditingController();
   final _addressController = TextEditingController();
+  final _cityNameController = TextEditingController();
 
   int _selectedCountryId = 0;
   int _selectedStateId = 0;
-  int _selectedCityId = 0;
   String _selectedCountryName = '';
   String _selectedStateName = '';
-  String _selectedCityName = '';
 
   bool _isLoading = false;
 
@@ -43,12 +42,11 @@ class _GuestAddressFormScreenState extends State<GuestAddressFormScreen> {
     if (widget.initialAddress != null) {
       _phoneController.text = widget.initialAddress!.phone;
       _addressController.text = widget.initialAddress!.address;
+      _cityNameController.text = widget.initialAddress!.cityName;
       _selectedCountryId = widget.initialAddress!.countryId;
       _selectedStateId = widget.initialAddress!.stateId;
-      _selectedCityId = widget.initialAddress!.cityId;
       _selectedCountryName = widget.initialAddress!.countryName;
       _selectedStateName = widget.initialAddress!.stateName;
-      _selectedCityName = widget.initialAddress!.cityName;
       _nameController.text = AppStrings.userName!;
     }
 
@@ -70,10 +68,6 @@ class _GuestAddressFormScreenState extends State<GuestAddressFormScreen> {
       if (_selectedCountryId > 0) {
         await addressProvider.fetchStatesByCountry(_selectedCountryId);
       }
-
-      if (_selectedStateId > 0) {
-        await addressProvider.fetchCitiesByState(_selectedStateId);
-      }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -94,6 +88,7 @@ class _GuestAddressFormScreenState extends State<GuestAddressFormScreen> {
     _nameController.dispose();
     _phoneController.dispose();
     _addressController.dispose();
+    _cityNameController.dispose();
     super.dispose();
   }
 
@@ -116,9 +111,10 @@ class _GuestAddressFormScreenState extends State<GuestAddressFormScreen> {
       return;
     }
 
-    if (_selectedCityId == 0) {
+    final cityName = _cityNameController.text.trim();
+    if (cityName.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('please_select_city'.tr(context))),
+        SnackBar(content: Text('please_enter_city_name'.tr(context))),
       );
       return;
     }
@@ -133,10 +129,10 @@ class _GuestAddressFormScreenState extends State<GuestAddressFormScreen> {
         address: _addressController.text,
         countryId: _selectedCountryId,
         stateId: _selectedStateId,
-        cityId: _selectedCityId,
+        cityId: 0,
         countryName: _selectedCountryName,
         stateName: _selectedStateName,
-        cityName: _selectedCityName,
+        cityName: cityName,
         postalCode: '',
         phone: _phoneController.text,
         latitude: 0.0,
@@ -194,7 +190,6 @@ class _GuestAddressFormScreenState extends State<GuestAddressFormScreen> {
                       setState(() {
                         _selectedCountryId = value;
                         _selectedStateId = 0;
-                        _selectedCityId = 0;
                         _selectedCountryName = addressProvider.countries
                             .firstWhere((country) => country.id == value)
                             .name;
@@ -226,43 +221,24 @@ class _GuestAddressFormScreenState extends State<GuestAddressFormScreen> {
                     if (value != null) {
                       setState(() {
                         _selectedStateId = value;
-                        _selectedCityId = 0;
                         _selectedStateName = addressProvider.states
                             .firstWhere((state) => state.id == value)
                             .name;
                       });
-
-                      await addressProvider.fetchCitiesByState(value);
                     }
                   },
                 ),
                 const SizedBox(height: 16),
 
-                // City Dropdown
-                DropdownButtonFormField<int>(
-                  decoration: InputDecoration(
-                    labelText: 'city'.tr(context),
-                    border: const OutlineInputBorder(),
-                  ),
-                  value: _selectedCityId > 0 ? _selectedCityId : null,
-                  hint: Text('select_city'.tr(context)),
-                  items: addressProvider.cities.map((city) {
-                    return DropdownMenuItem<int>(
-                      value: city.id,
-                      child: Text(city.name),
-                    );
-                  }).toList(),
-                  onChanged: addressProvider.cities.isEmpty
-                      ? null
-                      : (value) {
-                    if (value != null) {
-                      setState(() {
-                        _selectedCityId = value;
-                        _selectedCityName = addressProvider.cities
-                            .firstWhere((city) => city.id == value)
-                            .name;
-                      });
+                // City Text Field (replacing dropdown)
+                CustomTextFormField(
+                  controller: _cityNameController,
+                  hint: 'enter_city_name'.tr(context),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'please_enter_city_name'.tr(context);
                     }
+                    return null;
                   },
                 ),
                 const SizedBox(height: 16),
