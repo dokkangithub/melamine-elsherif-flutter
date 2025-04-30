@@ -21,6 +21,7 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
       backgroundColor: AppTheme.white,
       elevation: 0,
       leadingWidth: double.infinity,
+      scrolledUnderElevation: 0,
       leading: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
