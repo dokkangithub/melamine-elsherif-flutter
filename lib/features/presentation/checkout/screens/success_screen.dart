@@ -168,12 +168,12 @@ class SuccessScreen extends StatelessWidget {
                 },
                 isOutlined: true,
                 borderRadius: 8,
-                backgroundColor: const Color(0xFFBD5B4D), // This controls the border color when isOutlined is true
+                backgroundColor: const Color(0xFFBD5B4D),
                 child: Center(
                   child: Text(
                     "Continue Shopping",
                     style: context.headlineSmall?.copyWith(
-                      color: const Color(0xFFBD5B4D), // Updated to match check icon
+                      color: const Color(0xFFBD5B4D),
                       fontWeight: FontWeight.w500,
                     ),
                   ),
