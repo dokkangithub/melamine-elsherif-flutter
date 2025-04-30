@@ -10,7 +10,7 @@ import '../../../domain/cart/entities/cart.dart';
 class ProductItemInCart extends StatelessWidget {
   final CartItem item;
   final int index;
-  final Function? onDelete;
+  final Function(int) onDelete;
   final bool isFavorite;
   final Function(int)? onQuantityChanged;
 
@@ -18,7 +18,7 @@ class ProductItemInCart extends StatelessWidget {
     super.key,
     required this.item,
     required this.index,
-    this.onDelete,
+    required this.onDelete,
     this.isFavorite = false,
     this.onQuantityChanged,
   });
@@ -111,7 +111,7 @@ class ProductItemInCart extends StatelessWidget {
                     //delete item
                     InkWell(
                       onTap: (){
-                        onDelete!();
+                        onDelete(item.id);
                       },
                       child: CustomImage(assetPath: AppSvgs.delete_icon),
                     ),

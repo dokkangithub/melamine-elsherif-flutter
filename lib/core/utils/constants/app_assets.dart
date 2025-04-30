@@ -60,6 +60,20 @@ class AppSvgs {
   static const String active_cart_icon = '$svgPath/active_cart_icon.svg';
   static const String active_wishlist_icon = '$svgPath/active_wishlist_icon.svg';
   static const String active_profile_icon = '$svgPath/active_profile_icon.svg';
+  static const String profile_bag = '$svgPath/profile_bag.svg';
+  static const String profile_star = '$svgPath/profile_star.svg';
+  static const String profile_fav = '$svgPath/profile_fav.svg';
+  static const String profile_coin = '$svgPath/profile_coin.svg';
+  static const String profile_location = '$svgPath/profile_location.svg';
+  static const String profile_about_us = '$svgPath/profile_about_us.svg';
+  static const String profile_person = '$svgPath/profile_person.svg';
+  static const String profile_privacy = '$svgPath/profile_privacy.svg';
+  static const String profile_language = '$svgPath/profile_language.svg';
+  static const String profile_notifications = '$svgPath/profile_notifications.svg';
+  static const String profile_help = '$svgPath/profile_help.svg';
+  static const String profile_back = '$svgPath/profile_back.svg';
+  static const String back = '$svgPath/back.svg';
+
 
 
   // Social media icons

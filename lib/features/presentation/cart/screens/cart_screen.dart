@@ -161,6 +161,9 @@ class _CartScreenState extends State<CartScreen> {
                       onQuantityChanged: (int quntity) {
                         _updateQuantity(cartProvider, item.id, quntity);
                       },
+                      onDelete: (itemId) {
+                        cartProvider.deleteCartItem(itemId);
+                      },
                     );
                   },
                 ),

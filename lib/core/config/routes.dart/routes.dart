@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:melamine_elsherif/core/utils/enums/products_type.dart';
 import 'package:melamine_elsherif/features/presentation/category/screens/category_screen.dart';
+import 'package:melamine_elsherif/features/presentation/profile/screens/edit_profile_screen.dart';
 import 'package:melamine_elsherif/features/presentation/profile/screens/profile_screen.dart';
 import 'package:melamine_elsherif/features/presentation/wishlist/screens/wishlist_screen.dart';
 import '../../../features/domain/category/entities/category.dart';
@@ -19,7 +20,6 @@ import '../../../features/presentation/onboarding/screens/onboarding_screen.dart
 import '../../../features/presentation/order/screens/order_screen.dart';
 import '../../../features/presentation/order/screens/orders_list_screen.dart';
 import '../../../features/presentation/checkout/screens/checkout_screen.dart';
-import '../../../features/presentation/checkout/screens/success_screen.dart';
 import '../../../features/presentation/product details/screens/product_screen.dart';
 import '../../../features/presentation/splash/splash_screen.dart';
 import '../../../features/presentation/search/screens/search_screen.dart';
@@ -36,6 +36,7 @@ class AppRoutes {
   static const String categoryScreen = '/category';
   static const String wishListScreen = '/wishList';
   static const String profileScreen = '/profile';
+  static const String editProfileScreen = '/editProfileScreen';
   static const String mainLayoutScreen = '/mainLayout';
   static const String cartScreen = '/cart';
   static const String productDetailScreen = '/product-details';
@@ -87,6 +88,9 @@ class AppRoutes {
         break;
       case profileScreen:
         page = ProfileScreen();
+        break;
+      case editProfileScreen:
+        page = EditProfileScreen();
         break;
       case mainLayoutScreen:
         page = MainLayoutScreen();

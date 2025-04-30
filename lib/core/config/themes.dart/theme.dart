@@ -145,7 +145,7 @@ class AppTheme {
         elevation: 2,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        textStyle: GoogleFonts.playfairDisplay(
+        textStyle: GoogleFonts.inter(
           textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
         ),
       ),
@@ -157,7 +157,7 @@ class AppTheme {
         side: const BorderSide(color: primaryColor),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        textStyle: GoogleFonts.playfairDisplay(
+        textStyle: GoogleFonts.inter(
           textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
         ),
       ),
@@ -167,7 +167,7 @@ class AppTheme {
       style: TextButton.styleFrom(
         foregroundColor: primaryColor,
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        textStyle: GoogleFonts.playfairDisplay(
+        textStyle: GoogleFonts.inter(
           textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
         ),
       ),
@@ -198,13 +198,13 @@ class AppTheme {
         borderRadius: BorderRadius.circular(8),
         borderSide: const BorderSide(color: errorColor, width: 2),
       ),
-      labelStyle: GoogleFonts.playfairDisplay(
+      labelStyle: GoogleFonts.inter(
         textStyle: const TextStyle(color: lightSecondaryTextColor, fontSize: 16),
       ),
-      hintStyle: GoogleFonts.playfairDisplay(
+      hintStyle: GoogleFonts.inter(
         textStyle: const TextStyle(color: lightSecondaryTextColor, fontSize: 16),
       ),
-      errorStyle: GoogleFonts.playfairDisplay(
+      errorStyle: GoogleFonts.inter(
         textStyle: const TextStyle(color: errorColor, fontSize: 12),
       ),
     ),
@@ -222,7 +222,7 @@ class AppTheme {
       color: primaryColor,
       elevation: 0,
       centerTitle: true,
-      titleTextStyle: GoogleFonts.playfairDisplay(
+      titleTextStyle: GoogleFonts.inter(
         textStyle: const TextStyle(
           color: Colors.white,
           fontSize: 20,
@@ -237,10 +237,10 @@ class AppTheme {
       backgroundColor: lightCardColor,
       selectedItemColor: primaryColor,
       unselectedItemColor: lightSecondaryTextColor,
-      selectedLabelStyle: GoogleFonts.playfairDisplay(
+      selectedLabelStyle: GoogleFonts.inter(
         textStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
       ),
-      unselectedLabelStyle: GoogleFonts.playfairDisplay(
+      unselectedLabelStyle: GoogleFonts.inter(
         textStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
       ),
       elevation: 8,
