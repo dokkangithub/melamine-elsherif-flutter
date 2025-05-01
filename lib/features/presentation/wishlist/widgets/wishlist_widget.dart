@@ -25,10 +25,7 @@ class WishlistWidget extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios, color: Colors.black),
-          onPressed: () => Navigator.pop(context),
-        ),
+        scrolledUnderElevation: 0,
         title: Text(
           'My Wishlist',
           style: context.headlineSmall,

@@ -5,6 +5,7 @@ import 'package:melamine_elsherif/core/utils/extension/text_style_extension.dart
 import 'package:melamine_elsherif/core/utils/extension/translate_extension.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_button.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_cached_image.dart';
+import 'package:melamine_elsherif/features/presentation/main%20layout/controller/layout_provider.dart';
 import 'package:provider/provider.dart';
 import '../../../../features/domain/product/entities/product.dart';
 import '../../../features/presentation/wishlist/controller/wishlist_provider.dart';
@@ -14,8 +15,9 @@ import '../helpers.dart';
 class ProductCard extends StatelessWidget {
   final Product product;
   final bool? isOutlinedAddToCart;
+  final bool? isBuyNow;
 
-  const ProductCard({super.key, required this.product, this.isOutlinedAddToCart=false});
+  const ProductCard({super.key, required this.product, this.isOutlinedAddToCart=false, this.isBuyNow=false});
 
   @override
   Widget build(BuildContext context) {
@@ -32,19 +34,18 @@ class ProductCard extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: SizedBox(
-          width: 200,
+          width: 160,
           child: Stack(
             children: [
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(height: 8),
                   // Product image
                   Expanded(
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(15),
                       child: AspectRatio(
-                        aspectRatio: 1,
+                        aspectRatio: 1.3,
                         child: CustomImage(
                           imageUrl: product.thumbnailImage,
                           fit: BoxFit.cover,
@@ -54,56 +55,50 @@ class ProductCard extends StatelessWidget {
                   ),
 
                   // Product details
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Rating stars
-                        Row(
-                          children: List.generate(
-                            5,
-                                (index) =>
-                                Icon(Icons.star_outline_sharp, color: Colors.amber, size: 14),
-                          ),
+                  Column(
+                    spacing: 4,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Rating stars
+                      !isBuyNow! ?SizedBox.shrink():Row(
+                        children: List.generate(
+                          5,
+                              (index) =>
+                              Icon(Icons.star_outline_sharp, color: Colors.amber, size: 14),
                         ),
-                        const SizedBox(height: 4),
-                        // Product name
-                        Text(
-                          product.name,
-                          style: context.titleSmall,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
+                      ),
+                      // Product name
+                      Text(
+                        product.name,
+                        style: context.bodyMedium.copyWith(color: AppTheme.black,fontWeight: FontWeight.w700),
+                        maxLines: 1,
+                      ),
 
-                        const SizedBox(height: 4),
+                      // Price
+                      Text(
+                        '${product.discountedPrice}',
+                        style: context.titleMedium.copyWith(color: AppTheme.primaryColor),
+                      ),
 
-                        // Price
-                        Text(
-                          '${product.discountedPrice}',
-                          style: context.titleMedium.copyWith(color: AppTheme.primaryColor),
-                        ),
-
-                        const SizedBox(height: 4),
-
-                        CustomButton(
-                          text: 'add_to_cart'.tr(context),
-                          textStyle: context.bodyMedium.copyWith(color: isOutlinedAddToCart! ?AppTheme.primaryColor:AppTheme.white),
-                          fullWidth: true,
-                          isOutlined: isOutlinedAddToCart!,
-                          onPressed: (){
-                            AppFunctions.addProductToCart(
-                                context: context,
-                                productId: product.id,
-                                productName: product.name,
-                                productSlug: product.slug,
-                                hasVariation: product.hasVariation
-                            );
-                          },
-                        )
-
-                      ],
-                    ),
+                      CustomButton(
+                        text: isBuyNow! ? 'buy_now'.tr(context): 'add_to_cart'.tr(context),
+                        textStyle: context.bodyMedium.copyWith(color: isOutlinedAddToCart! ?AppTheme.primaryColor:AppTheme.white),
+                        fullWidth: true,
+                        isOutlined: isOutlinedAddToCart!,
+                        padding: EdgeInsets.all(8),
+                        onPressed: () async {
+                          await AppFunctions.addProductToCart(
+                              context: context,
+                              productId: product.id,
+                              productName: product.name,
+                              productSlug: product.slug,
+                              hasVariation: product.hasVariation
+                          );
+                          isBuyNow! ? AppRoutes.navigateTo(context, AppRoutes.mainLayoutScreen):null;
+                          isBuyNow! ? Provider.of<LayoutProvider>(context,listen: false).currentIndex=3:null;
+                        },
+                      )
+                    ],
                   ),
                 ],
               ),

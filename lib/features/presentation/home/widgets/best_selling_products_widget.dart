@@ -59,12 +59,12 @@ class BestSellingProductsWidget extends StatelessWidget {
               },
             ),
             SizedBox(
-              height: 340,
+              height: 270,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
                 itemCount: filteredProducts.length,
                 itemBuilder:
-                    (context, index) => ProductCard(product: filteredProducts[index]),
+                    (context, index) => ProductCard(product: filteredProducts[index],isBuyNow: true,),
               ),
             ),
           ],

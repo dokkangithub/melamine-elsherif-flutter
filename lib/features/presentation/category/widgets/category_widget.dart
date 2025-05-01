@@ -37,11 +37,8 @@ class _CategoryWidgetState extends State<CategoryWidget> with SingleTickerProvid
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
+        scrolledUnderElevation: 0,
         elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios, color: Colors.black),
-          onPressed: () => Navigator.pop(context),
-        ),
         title: Text(
           'Categories',
           style: context.headlineSmall

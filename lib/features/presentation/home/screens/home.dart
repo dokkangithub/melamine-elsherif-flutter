@@ -81,9 +81,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     const CategoriesWidget(),
                     const PlatesWidgets(),
-                    const BestSellingProductsWidget(),
-                    const SimpleBannerCarousel(),
                     const NewProductsWidget(),
+                    const SimpleBannerCarousel(),
+                    const BestSellingProductsWidget(),
                     const SecondHomeImageWidget(),
                     const FeaturedProductsWidget(),
                     const TodayDealsProductsWidget(),

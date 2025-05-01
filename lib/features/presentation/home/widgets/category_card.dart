@@ -20,14 +20,11 @@ class CategoryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ClipRRect(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Expanded(
+            child: ClipRRect(
               borderRadius: BorderRadius.circular(25),
               child: CustomImage(
                imageUrl:  imageUrl,
@@ -36,16 +33,16 @@ class CategoryCard extends StatelessWidget {
                 fit: BoxFit.contain,
               ),
             ),
-            const SizedBox(height: 8),
-            Text(
-              name,
-              style: context.bodySmall,
-              textAlign: TextAlign.center,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ],
-        ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            name,
+            style: context.bodySmall!.copyWith(fontWeight: FontWeight.w600),
+            textAlign: TextAlign.center,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ],
       ),
     );
   }

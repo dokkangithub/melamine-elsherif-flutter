@@ -67,22 +67,19 @@ class ProductGridCard extends StatelessWidget {
 
                   // Product details
                   Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(4.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         // Product name
                         Text(
                           product.name,
-                          style: context.titleSmall,
+                          style: context.titleSmall!.copyWith(fontWeight: FontWeight.w600,color: AppTheme.black),
                           maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
                         ),
-
                         const SizedBox(height: 6),
-
                         // Price
-                        Text('${product.mainPrice}', style: context.titleMedium),
+                        Text('${product.mainPrice}', style: context.titleSmall!.copyWith(fontWeight: FontWeight.w600,color: AppTheme.primaryColor)),
                       ],
                     ),
                   ),
@@ -163,7 +160,7 @@ class ProductGridCard extends StatelessWidget {
                                 fontWeight: FontWeight.w900,
                               ),
                             )
-                            : CustomImage(assetPath: AppSvgs.cart_icon),
+                            : CustomImage(assetPath: AppSvgs.active_cart_icon),
                   ),
                 ),
               ),

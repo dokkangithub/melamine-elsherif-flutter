@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:melamine_elsherif/core/config/routes.dart/routes.dart';
 import 'package:melamine_elsherif/core/config/themes.dart/theme.dart';
+import 'package:melamine_elsherif/core/utils/extension/text_theme_extension.dart';
+import 'package:melamine_elsherif/core/utils/widgets/custom_button.dart';
 import 'package:provider/provider.dart';
 import '../../../../core/utils/constants/app_assets.dart';
 import '../../../../core/utils/enums/loading_state.dart';
@@ -268,12 +270,9 @@ class _OrdersListScreenState extends State<OrdersListScreen> with SingleTickerPr
     return orders.where((order) => order.deliveryStatus.toLowerCase() == status).toList();
   }
   
-  // Build a styled order card
   Widget _buildOrderCard(BuildContext context, dynamic order) {
-    // Get status label and color
     final status = getStatusInfo(order.deliveryStatus);
-    
-    // Format order number like ORD-YYYYMMDD-XXXXXXXX
+
     String formattedOrderNumber = '';
     try {
       // Get current date components for demo
@@ -282,21 +281,11 @@ class _OrdersListScreenState extends State<OrdersListScreen> with SingleTickerPr
       final month = now.month.toString().padLeft(2, '0');
       final day = now.day.toString().padLeft(2, '0');
       
-      // Combine with the order id/code to fake the format from the image
       String randomPart = (10000000 + (order.id * 9876) % 90000000).toString();
       formattedOrderNumber = 'ORD-$year$month$day-$randomPart';
     } catch (e) {
       // Fallback
       formattedOrderNumber = 'ORD-${order.code}';
-    }
-    
-    // Format date as dd-mm-yyyy
-    String formattedDate = '';
-    try {
-      // For demo, just use a fixed date matching the image
-      formattedDate = '30-04-2025';
-    } catch (e) {
-      formattedDate = order.date;
     }
     
     // Calculate the number of items
@@ -342,26 +331,16 @@ class _OrdersListScreenState extends State<OrdersListScreen> with SingleTickerPr
                   Expanded(
                     child: Text(
                       formattedOrderNumber,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: context.titleSmall!.copyWith(color: AppTheme.black,fontWeight: FontWeight.w800),
                     ),
                   ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFF9E5E5),
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: const Text(
+                  CustomButton(
+                    onPressed: (){},
+                    child: Text(
                       'Processing',
-                      style: TextStyle(
-                        color: Color(0xFFBD5B4D),
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                      ),
+                      style: context.titleSmall!.copyWith(color: AppTheme.white),
                     ),
+                    padding: EdgeInsets.all(6),
                   ),
                 ],
               ),
@@ -372,18 +351,12 @@ class _OrdersListScreenState extends State<OrdersListScreen> with SingleTickerPr
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    formattedDate,
-                    style: TextStyle(
-                      color: Colors.grey[600],
-                      fontSize: 14,
-                    ),
+                    order.date,
+                    style: context.bodyMedium!.copyWith(color: AppTheme.darkDividerColor),
                   ),
                   Text(
                     '$price L.E',
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                    ),
+                    style: context.titleSmall!.copyWith(fontWeight: FontWeight.w800,color: AppTheme.black),
                   ),
                 ],
               ),
@@ -393,46 +366,46 @@ class _OrdersListScreenState extends State<OrdersListScreen> with SingleTickerPr
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  // Bag icon with grey background
-                  Container(
-                    width: 40,
-                    height: 40,
-                    decoration: BoxDecoration(
-                      color: Colors.grey[200],
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                    child: Icon(
-                      Icons.shopping_bag_outlined,
-                      size: 24,
-                      color: Colors.grey[600],
-                    ),
-                  ),
-                  
-                  if (itemCount > 1)
-                    Container(
-                      width: 40,
-                      height: 40,
-                      margin: const EdgeInsets.only(left: 8),
-                      decoration: BoxDecoration(
-                        color: Colors.grey[200],
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                      child: Icon(
-                        Icons.watch,
-                        size: 24,
-                        color: Colors.grey[600],
-                      ),
-                    ),
-                  
-                  const SizedBox(width: 12),
-                  // Item count
-                  Text(
-                    '$itemCount items',
-                    style: TextStyle(
-                      color: Colors.grey[600],
-                      fontSize: 14,
-                    ),
-                  ),
+                  // // Bag icon with grey background
+                  // Container(
+                  //   width: 40,
+                  //   height: 40,
+                  //   decoration: BoxDecoration(
+                  //     color: Colors.grey[200],
+                  //     borderRadius: BorderRadius.circular(4),
+                  //   ),
+                  //   child: Icon(
+                  //     Icons.shopping_bag_outlined,
+                  //     size: 24,
+                  //     color: Colors.grey[600],
+                  //   ),
+                  // ),
+                  //
+                  // if (itemCount > 1)
+                  //   Container(
+                  //     width: 40,
+                  //     height: 40,
+                  //     margin: const EdgeInsets.only(left: 8),
+                  //     decoration: BoxDecoration(
+                  //       color: Colors.grey[200],
+                  //       borderRadius: BorderRadius.circular(4),
+                  //     ),
+                  //     child: Icon(
+                  //       Icons.watch,
+                  //       size: 24,
+                  //       color: Colors.grey[600],
+                  //     ),
+                  //   ),
+                  //
+                  // const SizedBox(width: 12),
+                  // // Item count
+                  // Text(
+                  //   '$itemCount items',
+                  //   style: TextStyle(
+                  //     color: Colors.grey[600],
+                  //     fontSize: 14,
+                  //   ),
+                  // ),
                   
                   const Spacer(),
                   
@@ -441,16 +414,13 @@ class _OrdersListScreenState extends State<OrdersListScreen> with SingleTickerPr
                     children: [
                       Text(
                         'View Details',
-                        style: TextStyle(
-                          color: const Color(0xFFBD5B4D),
-                          fontWeight: FontWeight.w500,
-                        ),
+                        style: context.titleSmall!.copyWith(color: AppTheme.primaryColor,fontWeight: FontWeight.w800),
                       ),
                       const SizedBox(width: 4),
                       Icon(
                         Icons.arrow_forward_ios,
                         size: 14,
-                        color: const Color(0xFFBD5B4D),
+                        color: AppTheme.primaryColor,
                       ),
                     ],
                   ),

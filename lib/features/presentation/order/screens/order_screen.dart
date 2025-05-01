@@ -604,7 +604,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
     final bgColor = paymentStatus == 'Paid' ? Colors.green[50] : Colors.orange[50];
     
     return Container(
-      padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.grey[50],
         borderRadius: BorderRadius.circular(8),

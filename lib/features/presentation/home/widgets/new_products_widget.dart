@@ -11,6 +11,7 @@ import 'package:melamine_elsherif/features/presentation/home/controller/home_pro
 import 'package:melamine_elsherif/features/presentation/home/widgets/shimmer/new_products_shimmer.dart';
 
 import '../../../../core/utils/product cards/custom_gridview_prodcut.dart';
+import '../../../../core/utils/product cards/custom_product_card.dart';
 import '../../../../core/utils/product cards/custom_product_row.dart';
 
 class NewProductsWidget extends StatelessWidget {
@@ -42,46 +43,49 @@ class NewProductsWidget extends StatelessWidget {
         }
 
         // Show products carousel
-        return Container(
-          padding: EdgeInsets.all(10),
-          decoration: BoxDecoration(
-            color: AppTheme.accentColor.withValues(alpha: 0.1),
-            borderRadius: BorderRadius.circular(15)
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SeeAllWidget(
-                title: 'new_arrival'.tr(context),
-                onTap: () {
-                  AppRoutes.navigateTo(
-                    context,
-                    AppRoutes.allProductsByTypeScreen,
-                    arguments: {
-                      'productType': ProductType.newArrival,
-                      'title': 'new_arrival_products'.tr(context),
-                    },
-                  );
-                },
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SeeAllWidget(
+              title: 'new_arrival'.tr(context),
+              onTap: () {
+                AppRoutes.navigateTo(
+                  context,
+                  AppRoutes.allProductsByTypeScreen,
+                  arguments: {
+                    'productType': ProductType.newArrival,
+                    'title': 'new_arrival_products'.tr(context),
+                  },
+                );
+              },
+            ),
+            const SizedBox(height: 12),
+            SizedBox(
+              height: 270,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: products.length,
+                itemBuilder:
+                    (context, index) => ProductCard(product: products[index],isOutlinedAddToCart: true),
               ),
-              const SizedBox(height: 12),
-              GridView.builder(
-                physics: const NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  childAspectRatio: 0.75,
-                  crossAxisSpacing: 16,
-                  mainAxisSpacing: 16,
-                ),
-                itemCount: products.length > 8 ? 8 : products.length,
-                itemBuilder: (context, index) {
-                  final product = products[index];
-                  return ProductGridCard(product: product);
-                },
-              ),
-            ],
-          ),
+            ),
+            ///gridView
+            // GridView.builder(
+            //   physics: const NeverScrollableScrollPhysics(),
+            //   shrinkWrap: true,
+            //   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            //     crossAxisCount: 2,
+            //     childAspectRatio: 0.75,
+            //     crossAxisSpacing: 16,
+            //     mainAxisSpacing: 16,
+            //   ),
+            //   itemCount: products.length > 8 ? 8 : products.length,
+            //   itemBuilder: (context, index) {
+            //     final product = products[index];
+            //     return ProductGridCard(product: product);
+            //   },
+            // ),
+          ],
         );
       },
     );

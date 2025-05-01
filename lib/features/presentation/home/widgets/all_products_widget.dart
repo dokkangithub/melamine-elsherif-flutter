@@ -8,6 +8,7 @@ import 'package:melamine_elsherif/core/utils/enums/products_type.dart';
 import 'package:melamine_elsherif/features/presentation/home/controller/home_provider.dart';
 import 'package:melamine_elsherif/features/presentation/home/widgets/shimmer/all_products_shimmer.dart';
 
+import '../../../../core/config/themes.dart/theme.dart';
 import '../../../../core/utils/product cards/custom_gridview_prodcut.dart';
 
 class AllProductsWidget extends StatelessWidget {
@@ -55,50 +56,57 @@ class AllProductsWidget extends StatelessWidget {
         }
 
         // Show products grid
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SeeAllWidget(
-              title: 'all_products'.tr(context),
-              onTap: () {
-                AppRoutes.navigateTo(
-                  context,
-                  AppRoutes.allProductsByTypeScreen,
-                  arguments: {
-                    'productType': ProductType.all,
-                    'title': 'all_products'.tr(context),
-                  },
-                );
-              },
-            ),
-            const SizedBox(height: 12),
-            GridView.builder(
-              physics: const NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                childAspectRatio: 0.75,
-                crossAxisSpacing: 16,
-                mainAxisSpacing: 16,
+        return Container(
+          padding: EdgeInsets.all(10),
+          decoration: BoxDecoration(
+              color: AppTheme.accentColor.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(15)
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SeeAllWidget(
+                title: 'all_products'.tr(context),
+                onTap: () {
+                  AppRoutes.navigateTo(
+                    context,
+                    AppRoutes.allProductsByTypeScreen,
+                    arguments: {
+                      'productType': ProductType.all,
+                      'title': 'all_products'.tr(context),
+                    },
+                  );
+                },
               ),
-              itemCount: filteredProducts.length > 8 ? 8 : filteredProducts.length,
-              itemBuilder: (context, index) {
-                final product = filteredProducts[index];
-                return ProductGridCard(product: product,availableAddToCart: true);
-              },
-            ),
-            // If we have less than 8 published products and more data available, load more
-            if (filteredProducts.length < 8 && homeProvider.hasMoreAllProducts)
-              Padding(
-                padding: const EdgeInsets.only(top: 16.0),
-                child: Center(
-                  child: ElevatedButton(
-                    onPressed: () => homeProvider.fetchAllProducts(),
-                    child: Text('load_more'.tr(context)),
+              const SizedBox(height: 12),
+              GridView.builder(
+                physics: const NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  childAspectRatio: 0.75,
+                  crossAxisSpacing: 16,
+                  mainAxisSpacing: 16,
+                ),
+                itemCount: filteredProducts.length > 8 ? 8 : filteredProducts.length,
+                itemBuilder: (context, index) {
+                  final product = filteredProducts[index];
+                  return ProductGridCard(product: product,availableAddToCart: true);
+                },
+              ),
+              // If we have less than 8 published products and more data available, load more
+              if (filteredProducts.length < 8 && homeProvider.hasMoreAllProducts)
+                Padding(
+                  padding: const EdgeInsets.only(top: 16.0),
+                  child: Center(
+                    child: ElevatedButton(
+                      onPressed: () => homeProvider.fetchAllProducts(),
+                      child: Text('load_more'.tr(context)),
+                    ),
                   ),
                 ),
-              ),
-          ],
+            ],
+          ),
         );
       },
     );
