@@ -326,7 +326,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           children: [
             CustomImage(assetPath: icon),
             const SizedBox(width: 10),
-            Expanded(child: Text(label, style: context.titleMedium)),
+            Expanded(child: Text(label, style: context.bodyMedium.copyWith(fontWeight: FontWeight.w800))),
           ],
         ),
       ),

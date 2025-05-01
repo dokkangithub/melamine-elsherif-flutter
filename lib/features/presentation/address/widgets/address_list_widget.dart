@@ -33,6 +33,7 @@ class AddressListWidget extends StatelessWidget {
           isSelectable: isSelectable,
           onEdit: () => onEdit(address.id),
           onDelete: () => onDelete(address.id),
+          index: index,
           onSetDefault: () => onSetDefault(address.id),
           onSelect: isSelectable && onSelect != null
               ? () => onSelect!(address)

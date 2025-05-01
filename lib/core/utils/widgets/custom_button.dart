@@ -72,7 +72,7 @@ class CustomButton extends StatelessWidget {
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.1),
+              color: Colors.black.withValues(alpha: 0.1),
               blurRadius: 4,
               offset: Offset(0, 2),
             ),
@@ -84,7 +84,7 @@ class CustomButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(borderRadius ?? 10.0),
           ),
           onPressed: isLoading ? null : onPressed,
-          splashColor: splashColor ?? colors[0].withOpacity(0.3),
+          splashColor: splashColor ?? colors[0].withValues(alpha: 0.3),
           child: isLoading
               ? SizedBox(
                   width: loadingIndicatorSize,
@@ -109,7 +109,7 @@ class CustomButton extends StatelessWidget {
       ),
       child: InkWell(
         onTap: isLoading ? null : onPressed,
-        splashColor: splashColor ?? AppTheme.primaryColor.withOpacity(0.3),
+        splashColor: splashColor ?? AppTheme.primaryColor.withValues(alpha: 0.3),
         borderRadius: BorderRadius.circular(borderRadius ?? 10.0),
         child: Container(
           width: fullWidth ? double.infinity : null,
@@ -120,7 +120,7 @@ class CustomButton extends StatelessWidget {
                 : LinearGradient(
                     colors: [
                       buttonColor,
-                      buttonColor.withOpacity(0.8),
+                      buttonColor.withValues(alpha: 0.8),
                     ],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,

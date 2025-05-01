@@ -1,28 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:melamine_elsherif/core/utils/constants/app_assets.dart';
+import 'package:melamine_elsherif/core/utils/widgets/custom_cached_image.dart';
 
 class CustomBackButton extends StatelessWidget {
   const CustomBackButton({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        SizedBox(width: 15),
-        InkWell(
-          onTap: () {
-            Navigator.pop(context);
-          },
-          child: SvgPicture.asset(
-            AppIcons.backButton,
-            fit: BoxFit.cover,
-            height: 40,
-            width: 40,
-          )
+    return Padding(
+      padding: const EdgeInsets.all(20.0),
+      child: InkWell(
+        onTap: () {
+          Navigator.pop(context);
+        },
+        child: CustomImage(
+          assetPath:  AppSvgs.back,
+          fit: BoxFit.cover,
+        )
 
-        ),
-      ],
+      ),
     );
   }
 }

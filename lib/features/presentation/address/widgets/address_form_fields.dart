@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:melamine_elsherif/core/config/themes.dart/theme.dart';
+import 'package:melamine_elsherif/core/config/themes.dart/theme.dart';
+import 'package:melamine_elsherif/core/config/themes.dart/theme.dart';
+import 'package:melamine_elsherif/core/utils/constants/app_assets.dart';
+import 'package:melamine_elsherif/core/utils/extension/text_theme_extension.dart';
 import 'package:melamine_elsherif/core/utils/extension/translate_extension.dart';
 import '../../../../core/utils/widgets/custom_form_field.dart';
 import '../../../../core/utils/widgets/custom_dropdown.dart';
@@ -7,6 +12,7 @@ class AddressFormFields extends StatelessWidget {
   final TextEditingController addressController;
   final TextEditingController phoneController;
   final TextEditingController cityNameController;
+  final TextEditingController fullNameController;
 
   final int? selectedCountryId;
   final int? selectedStateId;
@@ -31,6 +37,7 @@ class AddressFormFields extends StatelessWidget {
     required this.onCountryChanged,
     required this.onStateChanged,
     this.isLoading = false,
+    required this.fullNameController,
   });
 
   @override
@@ -38,88 +45,27 @@ class AddressFormFields extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        // Country dropdown
-        CustomDropdown<int>(
-          label: 'country'.tr(context),
-          hint: 'select_country'.tr(context),
-          value: selectedCountryId,
-          prefixIcon: const Icon(Icons.public),
-          items:
-              countries.map((country) {
-                return DropdownMenuItem<int>(
-                  value: country['id'] as int,
-                  child: Text(country['name'] as String),
-                );
-              }).toList(),
-          onChanged: onCountryChanged,
-          isLoading: isLoading,
-          validator: (value) {
-            if (value == null) {
-              return 'please_select_country'.tr(context);
-            }
-            return null;
-          },
-        ),
-
-        // State dropdown
-        CustomDropdown<int>(
-          label: 'state_province'.tr(context),
-          hint: 'select_state'.tr(context),
-          value: selectedStateId,
-          prefixIcon: const Icon(Icons.map),
-          items:
-              states.map((state) {
-                return DropdownMenuItem<int>(
-                  value: state['id'] as int,
-                  child: Text(state['name'] as String),
-                );
-              }).toList(),
-          onChanged: onStateChanged,
-          isLoading: isLoading,
-          validator: (value) {
-            if (value == null) {
-              return 'please_select_state'.tr(context);
-            }
-            return null;
-          },
-        ),
-
-        // City text field (replacing dropdown)
+        //full name
+        customText('full name', context),
         CustomTextFormField(
-          controller: cityNameController,
-          label: 'city'.tr(context),
-          hint: 'enter_city_name'.tr(context),
-          prefixIcon: const Icon(Icons.location_city),
+          controller: fullNameController,
+          hint: 'Enter your full name',
+          maxLines: 1,
           validator: (value) {
             if (value == null || value.isEmpty) {
-              return 'please_enter_city_name'.tr(context);
+              return 'please Enter your name';
             }
             return null;
           },
         ),
-
-        // Address field
-        CustomTextFormField(
-          controller: addressController,
-          label: 'address'.tr(context),
-          hint: 'address_hint'.tr(context),
-          prefixIcon: const Icon(Icons.home),
-          maxLines: 3,
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return 'please_enter_address'.tr(context);
-            }
-            return null;
-          },
-        ),
+        SizedBox(height: 20),
 
         // Phone field
+        customText('phone number', context),
         CustomTextFormField(
           controller: phoneController,
-          label: 'phone'.tr(context),
-          hint: 'phone_hint'.tr(context),
+          hint: 'Enter Your Phone number',
           isMobileNumber: true,
-          prefixIcon: const Icon(Icons.phone),
           keyboardType: TextInputType.phone,
           validator: (value) {
             if (value == null || value.isEmpty) {
@@ -128,7 +74,138 @@ class AddressFormFields extends StatelessWidget {
             return null;
           },
         ),
+        SizedBox(height: 20),
+
+        // Address field
+        customText('address', context),
+        CustomTextFormField(
+          controller: addressController,
+          hint: 'Enter your address',
+          maxLines: 3,
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'please_enter_address'.tr(context);
+            }
+            return null;
+          },
+        ),
+        SizedBox(height: 20),
+
+        // Country dropdown
+        customText('country', context),
+        DropdownButtonFormField<int>(
+          value: selectedCountryId,
+          hint: Text('Select your country'),
+          isExpanded: true,
+          decoration: InputDecoration(
+            contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+            border: OutlineInputBorder(
+              borderSide: BorderSide(color: AppTheme.darkDividerColor, width: 1.0),
+              borderRadius: BorderRadius.circular(4),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: AppTheme.darkDividerColor, width: 1.0),
+              borderRadius: BorderRadius.circular(4),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: AppTheme.primaryColor, width: 1.0),
+              borderRadius: BorderRadius.circular(4),
+            ),
+            errorBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: AppTheme.errorColor, width: 1.0),
+              borderRadius: BorderRadius.circular(4),
+            ),
+            filled: false,
+          ),
+          validator: (value) {
+            if (value == null) {
+              return 'please_select_country'.tr(context);
+            }
+            return null;
+          },
+          items: countries.map((country) {
+            return DropdownMenuItem<int>(
+              value: country['id'] as int,
+              child: Text(country['name'] as String),
+            );
+          }).toList(),
+          onChanged: (value) {
+            if (value != null) {
+              onCountryChanged(value);
+            }
+          },
+          icon: Icon(Icons.keyboard_arrow_down, color: Colors.black54),
+        ),
+        SizedBox(height: 20),
+
+        // State dropdown
+        customText('state', context),
+        DropdownButtonFormField<int>(
+          value: selectedStateId,
+          hint: Text('select_state'.tr(context)),
+          isExpanded: true,
+          decoration: InputDecoration(
+            contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+            border: OutlineInputBorder(
+              borderSide: BorderSide(color: AppTheme.darkDividerColor, width: 1.0),
+              borderRadius: BorderRadius.circular(4),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: AppTheme.darkDividerColor, width: 1.0),
+              borderRadius: BorderRadius.circular(4),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: AppTheme.primaryColor, width: 1.0),
+              borderRadius: BorderRadius.circular(4),
+            ),
+            errorBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: AppTheme.errorColor, width: 1.0),
+              borderRadius: BorderRadius.circular(4),
+            ),
+            filled: false,
+          ),
+          validator: (value) {
+            if (value == null) {
+              return 'please_select_state'.tr(context);
+            }
+            return null;
+          },
+          items: states.map((state) {
+            return DropdownMenuItem<int>(
+              value: state['id'] as int,
+              child: Text(state['name'] as String),
+            );
+          }).toList(),
+          onChanged: (value) {
+            if (value != null) {
+              onStateChanged(value);
+            }
+          },
+          icon: Icon(Icons.keyboard_arrow_down, color: Colors.black54),
+        ),
+        SizedBox(height: 20),
+
+        // City text field (replacing dropdown)
+        customText('city', context),
+        CustomTextFormField(
+          controller: cityNameController,
+          hint: 'Enter your city',
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Enter your city name';
+            }
+            return null;
+          },
+        ),
+
+
       ],
+    );
+  }
+  Text customText(String title,BuildContext context){
+    return Text(
+      title,
+      style: context.titleSmall!.copyWith(fontWeight: FontWeight.w600),
     );
   }
 }

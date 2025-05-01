@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:melamine_elsherif/core/utils/extension/text_style_extension.dart';
 import 'package:melamine_elsherif/core/utils/extension/translate_extension.dart';
 import 'package:provider/provider.dart';
+import '../../../../core/config/themes.dart/theme.dart';
 import '../../../../core/utils/enums/loading_state.dart';
+import '../../../../core/utils/widgets/custom_back_button.dart';
 import '../../../domain/address/entities/address.dart';
 import '../controller/address_provider.dart';
 import '../widgets/address_form_fields.dart';
@@ -24,6 +27,7 @@ class _AddEditAddressScreenState extends State<AddEditAddressScreen> {
   final TextEditingController _addressController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _cityNameController = TextEditingController();
+  final TextEditingController _fullNameController = TextEditingController();
 
   int? _selectedCountryId;
   int? _selectedStateId;
@@ -71,12 +75,11 @@ class _AddEditAddressScreenState extends State<AddEditAddressScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          widget.address == null
-              ? 'add_new_address'.tr(context)
-              : 'edit_address'.tr(context),
-        ),
-        elevation: 0,
+        leading: CustomBackButton(),
+        backgroundColor: AppTheme.white,
+        title: Text(widget.address == null
+            ? 'add_new_address'.tr(context)
+            : 'edit_address'.tr(context),style: context.titleMedium.copyWith(fontWeight: FontWeight.w800)),
       ),
       body: Consumer<AddressProvider>(
         builder: (context, addressProvider, child) {
@@ -100,6 +103,7 @@ class _AddEditAddressScreenState extends State<AddEditAddressScreen> {
                         cityNameController: _cityNameController,
                         selectedCountryId: _selectedCountryId,
                         selectedStateId: _selectedStateId,
+                    fullNameController: _fullNameController,
                         countries:
                             addressProvider.countries
                                 .map((location) => location.toMap())
