@@ -36,6 +36,9 @@ dependencies:
   flutter_localizations:
     sdk: flutter
 
+  # Add this for easy translations
+  easy_localization: ^3.0.3
+
   # Your other dependencies
   cupertino_icons: ^1.0.2
   dio: ^5.8.0+1
