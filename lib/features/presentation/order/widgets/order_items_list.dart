@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:melamine_elsherif/core/utils/extension/translate_extension.dart';
 import '../../../domain/order/entities/order_item.dart';
 
 class OrderItemsList extends StatelessWidget {
@@ -12,7 +13,7 @@ class OrderItemsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (orderItems.isEmpty) {
-      return const Center(child: Text('No items found'));
+      return Center(child: Text('no_items_found'.tr(context)));
     }
 
     return ListView.builder(
@@ -52,8 +53,7 @@ class OrderItemsList extends StatelessWidget {
                       ),
                       if (item.variation.isNotEmpty) ...[
                         const SizedBox(height: 4),
-                        Text(
-                          'Variation: ${item.variation}',
+                        Text('Variation: ${item.variation}'.tr(context),
                           style: TextStyle(
                             color: Colors.grey.shade600,
                             fontSize: 12,
@@ -71,8 +71,7 @@ class OrderItemsList extends StatelessWidget {
                               color: Theme.of(context).primaryColor,
                             ),
                           ),
-                          Text(
-                            'Qty: ${item.quantity}',
+                          Text('Qty: ${item.quantity}'.tr(context),
                             style: const TextStyle(
                               fontWeight: FontWeight.w500,
                             ),

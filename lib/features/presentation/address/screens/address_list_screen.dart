@@ -54,8 +54,7 @@ class _AddressListScreenState extends State<AddressListScreen> {
                 children: [
                   const Icon(Icons.error_outline, size: 64, color: Colors.red),
                   const SizedBox(height: 16),
-                  Text(
-                    'Error: ${addressProvider.addressError}',
+                  Text('Error: ${addressProvider.addressError}',
                     style: const TextStyle(color: Colors.red),
                     textAlign: TextAlign.center,
                   ),
@@ -93,7 +92,7 @@ class _AddressListScreenState extends State<AddressListScreen> {
                       children: [
                         Icon(Icons.add,color: AppTheme.white,size: 24),
                         SizedBox(width: 10),
-                        Text('Add new Address',style: context.titleMedium!.copyWith(color: AppTheme.white)),
+                        Text('add_new_address'.tr(context),style: context.titleMedium!.copyWith(color: AppTheme.white)),
                         Spacer(),
                         Icon(Icons.arrow_forward_ios,color: AppTheme.white,size: 24),
 

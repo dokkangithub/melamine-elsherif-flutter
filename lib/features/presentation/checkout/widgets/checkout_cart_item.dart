@@ -41,8 +41,7 @@ class CheckoutCartItem extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(height: 4),
-                item.variant == '' ? SizedBox.shrink() : Text(
-                  'Model: ${item.variant}',
+                item.variant == '' ? SizedBox.shrink() : Text('Model: ${item.variant}',
                   style: Theme
                       .of(context)
                       .textTheme
@@ -55,8 +54,7 @@ class CheckoutCartItem extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      "${item.currencySymbol}${item.discountedPrice}",
+                    Text('${item.currencySymbol}${item.discountedPrice}',
                       style: context.titleSmall.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
@@ -68,8 +66,7 @@ class CheckoutCartItem extends StatelessWidget {
                         color: Colors.grey[200],
                         borderRadius: BorderRadius.circular(4),
                       ),
-                      child: Text(
-                        'Qty: ${item.quantity}',
+                      child: Text('Qty: ${item.quantity}',
                         style: Theme.of(context).textTheme.bodySmall,
                       ),
                     ),

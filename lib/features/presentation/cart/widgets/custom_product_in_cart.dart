@@ -55,8 +55,7 @@ class ProductItemInCart extends StatelessWidget {
                     if (item.variant.isNotEmpty)
                       Padding(
                         padding: const EdgeInsets.only(top: 4.0),
-                        child: Text(
-                          '${item.variant}',
+                        child: Text('${item.variant}',
                           style: context.bodySmall.copyWith(color: Colors.grey[600]),
                         ),
                       ),
@@ -78,8 +77,7 @@ class ProductItemInCart extends StatelessWidget {
                         SizedBox(
                           width: 40,
                           child: Center(
-                            child: Text(
-                              '${item.quantity}',
+                            child: Text('${item.quantity}',
                               style: context.titleMedium.copyWith(
                                 fontWeight: FontWeight.w600,
                               ),
@@ -116,8 +114,7 @@ class ProductItemInCart extends StatelessWidget {
                       child: CustomImage(assetPath: AppSvgs.delete_icon),
                     ),
                     Spacer(),
-                    Text(
-                      '${item.currencySymbol}${item.discountedPrice}',
+                    Text('${item.currencySymbol}${item.discountedPrice}',
                       style: context.titleSmall.copyWith(
                         color: AppTheme.black,
                         fontWeight: FontWeight.bold,

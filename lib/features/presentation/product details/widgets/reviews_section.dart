@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:melamine_elsherif/core/utils/extension/translate_extension.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/utils/enums/loading_state.dart';
@@ -37,8 +38,7 @@ class _ReviewsSectionWidgetState extends State<ReviewsSectionWidget> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
-                    'Customer Reviews',
+                   Text('customer_reviews'.tr(context),
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -46,7 +46,7 @@ class _ReviewsSectionWidgetState extends State<ReviewsSectionWidget> {
                   ),
                   TextButton(
                     onPressed: () => _showReviewDialog(context, widget.productId),
-                    child: const Text('Write a Review'),
+                    child: Text('write_review'.tr(context)),
                   ),
                 ],
               ),
@@ -56,10 +56,10 @@ class _ReviewsSectionWidgetState extends State<ReviewsSectionWidget> {
               if (reviewProvider.reviewState == LoadingState.loading)
                 const Center(child: CircularProgressIndicator())
               else if (reviewProvider.reviews.isEmpty)
-                const Center(
+                 Center(
                   child: Padding(
                     padding: EdgeInsets.all(16.0),
-                    child: Text('No reviews yet. Be the first to review this product details!'),
+                    child: Text('no_reviews_yet_be'.tr(context)),
                   ),
                 )
               else
@@ -167,12 +167,12 @@ class _ReviewsSectionWidgetState extends State<ReviewsSectionWidget> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Write a Review'),
+        title: const Text('write_review'),
         content: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Text('Rate this product details'),
+              Text('rate_this_product_details'.tr(context)),
               const SizedBox(height: 8),
               RatingBar.builder(
                 initialRating: 0,
@@ -192,9 +192,9 @@ class _ReviewsSectionWidgetState extends State<ReviewsSectionWidget> {
               const SizedBox(height: 16),
               TextField(
                 controller: _reviewController,
-                decoration: const InputDecoration(
-                  labelText: 'Your Review',
-                  hintText: 'Share your experience with this product details',
+                decoration:  InputDecoration(
+                  labelText: 'your_review'.tr(context),
+                  hintText: 'share_your_experience_with'.tr(context),
                   border: OutlineInputBorder(),
                 ),
                 maxLines: 5,
@@ -209,7 +209,7 @@ class _ReviewsSectionWidgetState extends State<ReviewsSectionWidget> {
               _reviewController.clear();
               _rating = 0.0;
             },
-            child: const Text('Cancel'),
+            child: Text('cancel'.tr(context)),
           ),
           ElevatedButton(
             onPressed: () async {
@@ -218,25 +218,25 @@ class _ReviewsSectionWidgetState extends State<ReviewsSectionWidget> {
                     .submitNewReview(productId, _rating, _reviewController.text);
                 if (success) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Review submitted successfully!')),
+                     SnackBar(content: Text('review_submitted_successfully'.tr(context))),
                   );
                   Navigator.pop(context);
                   _reviewController.clear();
                   _rating = 0.0;
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Failed to submit review. Please try again.')),
+                    SnackBar(content: Text('failed_to_submit_review'.tr(context))),
                   );
                 }
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Please rate the product details and write a review'),
+                   SnackBar(
+                    content: Text('please_rate_the_product'.tr(context)),
                   ),
                 );
               }
             },
-            child: const Text('Submit'),
+            child: Text('submit'.tr(context)),
           ),
         ],
       ),

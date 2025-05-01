@@ -37,7 +37,7 @@ class ProductsGrid extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('Error: $error'),
+            Text('Error: $error'.tr(context)),
             ElevatedButton(
               onPressed: onRetry,
               child: Text('retry'.tr(context)),

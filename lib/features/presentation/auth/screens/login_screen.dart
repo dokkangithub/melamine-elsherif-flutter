@@ -70,8 +70,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       
                       // Welcome back text
-                      Text(
-                        'Welcome back!',
+                      Text('Welcome back!'.tr(context),
                         style: context.headlineMedium.copyWith(
                           fontWeight: FontWeight.bold,
                           color: Colors.black,
@@ -100,7 +99,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       TextField(
                         controller: emailController,
                         decoration: InputDecoration(
-                          hintText: 'Enter your email',
+                          hintText: 'Enter your email'.tr(context),
                           hintStyle: GoogleFonts.inter(
                             fontSize: 14,
                             color: Colors.grey[500],

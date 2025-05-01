@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:melamine_elsherif/core/utils/enums/loading_state.dart';
+import 'package:melamine_elsherif/core/utils/extension/translate_extension.dart';
 import 'package:melamine_elsherif/features/presentation/home/controller/home_provider.dart';
 import 'package:melamine_elsherif/features/presentation/product details/widgets/product_theme.dart';
 import 'package:melamine_elsherif/features/presentation/product details/widgets/shimmers/shimmer_widget.dart';
@@ -18,8 +19,7 @@ class RelatedProductsWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'Related Products',
+          Text('related_products'.tr(context),
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
           if (provider.relatedProductsState == LoadingState.loading)
@@ -29,7 +29,7 @@ class RelatedProductsWidget extends StatelessWidget {
                 child: Text('Error: ${provider.relatedProductsError}',
                     style: const TextStyle(color: ProductTheme.errorColor)))
           else if (provider.relatedProducts.isEmpty)
-              const Center(child: Text('No related products available'))
+               Center(child: Text('no_related_products_available'.tr(context)))
             else
               GridView.builder(
                 shrinkWrap: true,

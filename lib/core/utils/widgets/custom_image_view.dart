@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:melamine_elsherif/core/utils/extension/translate_extension.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 
@@ -99,8 +100,7 @@ class _GalleryImagePreviewState extends State<GalleryImagePreview> {
                   color: Colors.black54,
                   borderRadius: BorderRadius.circular(16),
                 ),
-                child: Text(
-                  '${currentIndex + 1}/${widget.imageUrls.length}',
+                child: Text('${currentIndex + 1}/${widget.imageUrls.length}'.tr(context),
                   style: const TextStyle(color: Colors.white),
                 ),
               ),

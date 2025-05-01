@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:melamine_elsherif/core/utils/enums/loading_state.dart';
+import 'package:melamine_elsherif/core/utils/extension/translate_extension.dart';
 import 'package:melamine_elsherif/features/presentation/all%20products/widgets/shimmer/subcategory_list_shimmer.dart';
 import 'package:melamine_elsherif/features/presentation/category/controller/provider.dart';
 
@@ -24,7 +25,7 @@ class SubCategoryList extends StatelessWidget {
     if (categoryProvider.subCategoriesState == LoadingState.error) {
       return SizedBox(
         height: 50,
-        child: Center(child: Text('Error: ${categoryProvider.errorMessage}')),
+        child: Center(child: Text('Error: ${categoryProvider.errorMessage}'.tr(context))),
       );
     }
 

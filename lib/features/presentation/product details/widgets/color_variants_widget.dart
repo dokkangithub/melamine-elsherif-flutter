@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:melamine_elsherif/core/utils/extension/translate_extension.dart';
 import 'package:melamine_elsherif/features/domain/product%20details/entities/product_details.dart';
 import 'package:melamine_elsherif/features/presentation/product%20details/controller/product_provider.dart';
 import 'package:provider/provider.dart';
@@ -27,8 +28,7 @@ class ColorVariantsWidget extends StatelessWidget {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Available Colors',
+            Text('available_colors'.tr(context),
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,

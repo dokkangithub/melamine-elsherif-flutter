@@ -28,8 +28,7 @@ class OrderCard extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    'Order #${order.code}',
+                  Text('Order #${order.code}',
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                   Text(

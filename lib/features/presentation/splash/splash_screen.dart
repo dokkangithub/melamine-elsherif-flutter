@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:melamine_elsherif/core/config/app_config.dart/app_config.dart';
 import 'package:melamine_elsherif/core/config/themes.dart/theme.dart';
 import 'package:melamine_elsherif/core/utils/extension/text_style_extension.dart';
+import 'package:melamine_elsherif/core/utils/extension/translate_extension.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_cached_image.dart';
 import '../../../core/config/routes.dart/routes.dart';
 import '../../../core/di/injection_container.dart';
@@ -56,8 +57,7 @@ class _SplashScreenState extends State<SplashScreen> {
                       height: 180,
                     ),
                     const SizedBox(height: 16),
-                    Text(
-                      'Your Ultimate Shopping Destination',
+                    Text('your_ultimate_shopping_destination'.tr(context),
                       style: context.titleSmall.copyWith(
                         color: Colors.grey[700],
                       ),
@@ -76,8 +76,7 @@ class _SplashScreenState extends State<SplashScreen> {
               padding: const EdgeInsets.only(bottom: 24.0),
               child: Column(
                 children: [
-                  Text(
-                    '© 2025 Powered by Dokkan Agency',
+                  Text('2025_powered_by_dokkan_agency'.tr(context),
                     style: context.bodySmall.copyWith(
                       color: Colors.grey[500],
                     ),

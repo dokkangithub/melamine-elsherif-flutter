@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:melamine_elsherif/core/utils/extension/text_theme_extension.dart';
+import 'package:melamine_elsherif/core/utils/extension/translate_extension.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_cached_image.dart';
 import '../../../../core/config/themes.dart/theme.dart';
 import '../../../../core/utils/constants/app_assets.dart';
@@ -109,8 +110,7 @@ class AddressItemWidget extends StatelessWidget {
                 const Icon(Icons.map, color: Colors.grey, size: 20),
                 const SizedBox(width: 8),
                 Expanded(
-                  child: Text(
-                    '${address.cityName}, ${address.stateName}, ${address.countryName}',
+                  child: Text('${address.cityName}, ${address.stateName}, ${address.countryName}'.tr(context),
                     style: const TextStyle(fontSize: 14, color: Colors.grey),
                   ),
                 ),
@@ -146,7 +146,7 @@ class AddressItemWidget extends StatelessWidget {
             //           vertical: 12,
             //         ),
             //       ),
-            //       child: const Text('Use This Address'),
+            //       child: const Text('Use This Address'.tr(context)),
             //     ),
             //   ),
             // ],

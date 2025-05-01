@@ -53,8 +53,7 @@ class _QuantitySelectorWidgetState extends State<QuantitySelectorWidget> {
             ),
           ],
         ),
-        Text(
-          '\$${(price * quantity).toStringAsFixed(2)}',
+        Text('\$${(price * quantity).toStringAsFixed(2)}',
           style: ProductTheme.titleLarge(context),
         ),
       ],

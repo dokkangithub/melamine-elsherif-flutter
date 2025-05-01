@@ -81,8 +81,7 @@ class ProductItemInWishList extends StatelessWidget {
                       ),
 
                       // Price
-                      Text(
-                        '${wishlistItem.price}',
+                      Text('${wishlistItem.price}',
                         style: context.titleSmall,
                       ),
 

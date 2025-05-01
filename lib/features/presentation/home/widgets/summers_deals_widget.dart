@@ -38,15 +38,13 @@ class SummerDealsWidgets extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Text(
-                        'Summer Sale',
+                      Text('Summer Sale'.tr(context),
                         style: context.headlineMedium.copyWith(
                           color: AppTheme.white,
                         ),
                       ),
                       SizedBox(height: 10),
-                      Text(
-                        'Up to 40% off',
+                      Text('Up to 40% off'.tr(context),
                         style: context.titleSmall.copyWith(
                           color: AppTheme.white,
                           fontWeight: FontWeight.w200,

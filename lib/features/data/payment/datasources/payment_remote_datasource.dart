@@ -225,7 +225,7 @@ class PaymentRemoteDataSourceImpl implements PaymentRemoteDataSource {
 
         return OrderResponseModel(
           result: true,
-          message: "Cash order created successfully",
+          message: 'Cash order created successfully',
           status: 'success',
           combinedOrder: orderResponse.combinedOrder as CombinedOrderModel?,
         );
@@ -241,7 +241,7 @@ class PaymentRemoteDataSourceImpl implements PaymentRemoteDataSource {
       print("Error in createCashOrder: $e");
       return OrderResponseModel(
         result: false,
-        message: "An error occurred while creating cash order: $e",
+        message: 'An error occurred while creating cash order: $e',
         status: 'error',
       );
     }

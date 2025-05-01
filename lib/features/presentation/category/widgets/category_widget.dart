@@ -39,8 +39,7 @@ class _CategoryWidgetState extends State<CategoryWidget> with SingleTickerProvid
         backgroundColor: Colors.white,
         scrolledUnderElevation: 0,
         elevation: 0,
-        title: Text(
-          'Categories',
+        title: Text('Categories'.tr(context),
           style: context.headlineSmall
         ),
         actions: [
@@ -87,8 +86,7 @@ class _CategoryWidgetState extends State<CategoryWidget> with SingleTickerProvid
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          'Popular Categories',
+                        Text('Popular Categories'.tr(context),
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
@@ -177,8 +175,7 @@ class _CategoryWidgetState extends State<CategoryWidget> with SingleTickerProvid
                       fontSize: 16,
                     ),
                   ),
-                  Text(
-                    '${category.productCount ?? 0} items',
+                  Text('${category.productCount ?? 0} items'.tr(context),
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 12,

@@ -135,25 +135,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       _buildStatItem(
                         context,
                         counters.orderCount.toString(),
-                        'Orders',
+                        'orders'.tr(context),
                         AppSvgs.profile_bag,
                       ),
                       _buildStatItem(
                         context,
                         counters.wishlistItemCount.toString(),
-                        'Saved',
+                        'saved'.tr(context),
                         AppSvgs.profile_fav,
                       ),
                       _buildStatItem(
                         context,
                         '${counters.cartItemCount + counters.wishlistItemCount * 5}',
-                        'Points',
+                        'points'.tr(context),
                         AppSvgs.profile_coin,
                       ),
                       _buildStatItem(
                         context,
                         '${counters.orderCount }',
-                        'Reviews',
+                        'reviews'.tr(context),
                         AppSvgs.profile_star,
                       ),
                     ],
@@ -174,7 +174,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       child: _buildQuickAccessItem(
                         context,
                         AppSvgs.profile_bag,
-                        'My Orders',
+                        'my_orders'.tr(context),
                         () => AppRoutes.navigateTo(
                           context,
                           AppRoutes.allOrdersListScreen,
@@ -186,8 +186,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       child: _buildQuickAccessItem(
                         context,
                         AppSvgs.profile_location,
-                        'Shipping Address',
-                        () => Navigator.pushNamed(
+                        'shipping_address'.tr(context),
+                        () => AppRoutes.navigateTo(
                           context,
                           AppRoutes.addressListScreen,
                         ),
@@ -206,7 +206,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   children: [
                     ProfileMenuItem(
                       icon: AppSvgs.profile_person,
-                      title: 'Personal Information',
+                      title: 'personal_information'.tr(context),
                       onTap: () {
                         AppRoutes.navigateTo(
                           context,
@@ -216,35 +216,35 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                     ProfileMenuItem(
                       icon: AppSvgs.profile_notifications,
-                      title: 'Notifications',
+                      title: 'notifications'.tr(context),
                       onTap: () {
                         // Navigate to notifications
                       },
                     ),
                     ProfileMenuItem(
                       icon: AppSvgs.profile_privacy,
-                      title: 'Privacy & Security',
+                      title: 'privacy_security'.tr(context),
                       onTap: () {
                         // Navigate to privacy
                       },
                     ),
                     ProfileMenuItem(
                       icon: AppSvgs.profile_language,
-                      title: 'Language & Region',
+                      title: 'language_region'.tr(context),
                       onTap: () {
                         // Show language selection
                       },
                     ),
                     ProfileMenuItem(
                       icon: AppSvgs.profile_help,
-                      title: 'Help & Support',
+                      title: 'help_support'.tr(context),
                       onTap: () {
                         // Navigate to help
                       },
                     ),
                     ProfileMenuItem(
                       icon: AppSvgs.profile_about_us,
-                      title: 'About Us',
+                      title: 'about_us'.tr(context),
                       onTap: () {
                         // Navigate to about
                       },
@@ -271,8 +271,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     children: [
                       Icon(Icons.logout, color: AppTheme.primaryColor),
                       SizedBox(width: 6),
-                      Text(
-                        'Sign Out',
+                      Text('sign_out'.tr(context),
                         style: context.titleMedium.copyWith(color: AppTheme.primaryColor),
                       ),
                     ],

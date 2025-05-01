@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:melamine_elsherif/core/config/themes.dart/theme.dart';
 import 'package:melamine_elsherif/core/utils/extension/text_style_extension.dart';
+import 'package:melamine_elsherif/core/utils/extension/translate_extension.dart';
 import '../../../../core/utils/widgets/custom_button.dart';
 
 enum ContentType {
@@ -182,14 +183,14 @@ class OnboardingContent extends StatelessWidget {
               ),
               const SizedBox(height: 24),
               CustomButton(
-                text: 'Sign Up',
+                text: 'sign_up'.tr(context),
                 onPressed: onSignUp,
                 backgroundColor: AppTheme.primaryColor,
                 fullWidth: true,
               ),
               const SizedBox(height: 16),
               CustomButton(
-                text: 'Log In',
+                text: 'log_in'.tr(context),
                 onPressed: onLogin,
                 isOutlined: true,
                 fullWidth: true,

@@ -79,7 +79,7 @@ class ProductGridCard extends StatelessWidget {
                         ),
                         const SizedBox(height: 6),
                         // Price
-                        Text('${product.mainPrice}', style: context.titleSmall!.copyWith(fontWeight: FontWeight.w600,color: AppTheme.primaryColor)),
+                        Text('${product.mainPrice}'.tr(context), style: context.titleSmall!.copyWith(fontWeight: FontWeight.w600,color: AppTheme.primaryColor)),
                       ],
                     ),
                   ),

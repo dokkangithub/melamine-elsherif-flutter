@@ -53,8 +53,7 @@ class ShippingAddressSection extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                'Saved Addresses',
+              Text('Saved Addresses'.tr(context),
                 style: context.titleLarge?.copyWith(
                   fontWeight: FontWeight.w600,
                 ),

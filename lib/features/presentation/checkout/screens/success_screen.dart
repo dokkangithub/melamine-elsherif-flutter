@@ -60,8 +60,7 @@ class SuccessScreen extends StatelessWidget {
 
               // Thank you heading
               Center(
-                child: Text(
-                  "Thank You!",
+                child: Text('Thank You!'.tr(context),
                   style: context.displaySmall?.copyWith(
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
@@ -72,8 +71,7 @@ class SuccessScreen extends StatelessWidget {
 
               // Order confirmation message
               Center(
-                child: Text(
-                  "Your order has been successfully placed",
+                child: Text('Your order has been successfully placed'.tr(context),
                   style: context.titleMedium?.copyWith(
                     color: Colors.grey[600],
                   ),
@@ -96,8 +94,7 @@ class SuccessScreen extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          "Order number",
+                        Text('Order number'.tr(context),
                           style: context.titleSmall?.copyWith(
                             color: Colors.grey[600],
                           ),
@@ -117,8 +114,7 @@ class SuccessScreen extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          "Estimated delivery",
+                        Text('Estimated delivery'.tr(context),
                           style: context.titleSmall?.copyWith(
                             color: Colors.grey[600],
                           ),

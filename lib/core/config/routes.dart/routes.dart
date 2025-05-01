@@ -113,7 +113,7 @@ class AppRoutes {
         if (args == null ||
             args['productType'] == null ||
             args['title'] == null) {
-          page = const Scaffold(
+          page = Scaffold(
             body: Center(child: Text('Invalid product details type')),
           );
         } else {

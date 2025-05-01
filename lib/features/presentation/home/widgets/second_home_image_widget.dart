@@ -52,13 +52,12 @@ class _SecondHomeImageWidgetState extends State<SecondHomeImageWidget> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          'Transform Your Home With Smart Appliances',
+                        Text('Transform Your Home With Smart Appliances'.tr(context),
                           style: context.titleLarge?.copyWith(color: AppTheme.white),
                         ),
                         SizedBox(height: 20),
                         CustomButton(
-                          text: 'Learn more',
+                          text: 'Learn more'.tr(context),
                         )
                       ],
                     ),

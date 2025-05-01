@@ -46,14 +46,14 @@ class AddressFormFields extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         //full name
-        customText('full name', context),
+        customText('full_name'.tr(context), context),
         CustomTextFormField(
           controller: fullNameController,
-          hint: 'Enter your full name',
+          hint: 'enter_your_full_name'.tr(context),
           maxLines: 1,
           validator: (value) {
             if (value == null || value.isEmpty) {
-              return 'please Enter your name';
+              return 'enter_your_full_name'.tr(context);
             }
             return null;
           },
@@ -61,10 +61,10 @@ class AddressFormFields extends StatelessWidget {
         SizedBox(height: 20),
 
         // Phone field
-        customText('phone number', context),
+        customText('phone_number'.tr(context), context),
         CustomTextFormField(
           controller: phoneController,
-          hint: 'Enter Your Phone number',
+          hint: 'enter_your_phone_number'.tr(context),
           isMobileNumber: true,
           keyboardType: TextInputType.phone,
           validator: (value) {
@@ -77,10 +77,10 @@ class AddressFormFields extends StatelessWidget {
         SizedBox(height: 20),
 
         // Address field
-        customText('address', context),
+        customText('address'.tr(context), context),
         CustomTextFormField(
           controller: addressController,
-          hint: 'Enter your address',
+          hint: 'please_enter_address'.tr(context),
           maxLines: 3,
           validator: (value) {
             if (value == null || value.isEmpty) {
@@ -92,10 +92,10 @@ class AddressFormFields extends StatelessWidget {
         SizedBox(height: 20),
 
         // Country dropdown
-        customText('country', context),
+        customText('country'.tr(context), context),
         DropdownButtonFormField<int>(
           value: selectedCountryId,
-          hint: Text('Select your country'),
+          hint: Text('select_your_country'.tr(context)),
           isExpanded: true,
           decoration: InputDecoration(
             contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
@@ -139,7 +139,7 @@ class AddressFormFields extends StatelessWidget {
         SizedBox(height: 20),
 
         // State dropdown
-        customText('state', context),
+        customText('state'.tr(context), context),
         DropdownButtonFormField<int>(
           value: selectedStateId,
           hint: Text('select_state'.tr(context)),
@@ -186,13 +186,13 @@ class AddressFormFields extends StatelessWidget {
         SizedBox(height: 20),
 
         // City text field (replacing dropdown)
-        customText('city', context),
+        customText('city'.tr(context), context),
         CustomTextFormField(
           controller: cityNameController,
-          hint: 'Enter your city',
+          hint: 'select_city'.tr(context),
           validator: (value) {
             if (value == null || value.isEmpty) {
-              return 'Enter your city name';
+              return 'please_select_city'.tr(context);
             }
             return null;
           },

@@ -72,8 +72,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         elevation: 0,
         scrolledUnderElevation: 0,
         centerTitle: true,
-        title: Text(
-          'Edit Profile',
+        title: Text('edit_profile'.tr(context),
           style: context.titleLarge,
         ),
         leading: InkWell(
@@ -174,7 +173,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 const SizedBox(height: 16),
                 
                 _buildFormField(
-                  label: 'Username',
+                  label: 'username'.tr(context),
                   readOnly: true,
                   controller: _fullNameController,
                   prefix: '@',
@@ -182,15 +181,15 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 const SizedBox(height: 16),
                 
                 _buildFormField(
-                  label: 'Bio',
+                  label: 'bio'.tr(context),
                   controller: _bioController,
                   maxLines: 4,
-                  hintText: 'Write something about yourself',
+                  hintText: 'write_something_about_yourself'.tr(context),
                 ),
                 const SizedBox(height: 16),
                 
                 _buildFormField(
-                  label: 'Email',
+                  label: 'email'.tr(context),
                   controller: _emailController,
                   readOnly: true,
                   keyboardType: TextInputType.emailAddress,
@@ -198,7 +197,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 const SizedBox(height: 16),
                 
                 _buildFormField(
-                  label: 'Phone Number',
+                  label: 'phone_number'.tr(context),
                   controller: _phoneController,
                   keyboardType: TextInputType.phone,
                 ),
@@ -211,8 +210,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     _showLogoutConfirmation(context);
                   },
                   isOutlined: true,
-                  child: Text(
-                    'Delete Account',
+                  child: Text('delete_account'.tr(context),
                     style: context.titleMedium.copyWith(color: AppTheme.primaryColor),
                   ),
                 ),
@@ -284,7 +282,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       if (!success) {
         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to update profile image')),
+          SnackBar(content: Text('failed_update_profile_image'.tr(context))),
         );
         return;
       }
@@ -305,12 +303,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       }
 
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Profile updated successfully')),
+        SnackBar(content: Text('profile_updated_successfully'.tr(context))),
       );
       Navigator.pop(context);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to update profile')),
+        SnackBar(content: Text('failed_update_profile'.tr(context))),
       );
     }
   }
@@ -322,8 +320,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       context: context,
       builder:
           (dialogContext) => AlertDialog(
-        title: Text('Delete account'),
-        content: Text('Are you Sure you need to delete this account ?'),
+        title: Text('delete_account'.tr(context)),
+        content: Text('are_you_sure_you'.tr(context)),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dialogContext),

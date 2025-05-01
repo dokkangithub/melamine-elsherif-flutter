@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:melamine_elsherif/core/config/themes.dart/theme.dart';
 import 'package:melamine_elsherif/core/utils/constants/app_assets.dart';
 import 'package:melamine_elsherif/core/utils/extension/text_theme_extension.dart';
+import 'package:melamine_elsherif/core/utils/extension/translate_extension.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_cached_image.dart';
 import 'package:provider/provider.dart';
 import '../../../../core/utils/enums/loading_state.dart';
@@ -70,7 +71,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
 
           final orderDetails = provider.selectedOrderDetails;
           if (orderDetails == null) {
-            return const Center(child: Text('Order details not found'));
+            return Center(child: Text('order_details_not_found'.tr(context)));
           }
 
           DateTime? orderDate;
@@ -109,8 +110,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                                 style: context.titleSmall!.copyWith(fontWeight: FontWeight.w600),
                               ),
                               const SizedBox(height: 4),
-                              Text(
-                                '#ORD-2023-12-001',
+                              Text('#ORD-2023-12-001'.tr(context),
                                 style: context.titleMedium!.copyWith(fontWeight: FontWeight.w600),
                               ),
                             ],
@@ -178,8 +178,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            'Order Items (${provider.orderItems.length})',
+                          Text('Order Items (${provider.orderItems.length})'.tr(context),
                             style: context.titleMedium!.copyWith(fontWeight: FontWeight.w800),
                           ),
                         ],
@@ -463,8 +462,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                   style: context.titleSmall
                 ),
                 const SizedBox(height: 8),
-                Text(
-                  '${address.address}, ${address.city}, ${address.state}, ${address.country} ${address.postalCode}',
+                Text('${address.address}, ${address.city}, ${address.state}, ${address.country} ${address.postalCode}'.tr(context),
                   style: context.titleSmall!.copyWith(fontWeight: FontWeight.w600),
                 ),
                 const SizedBox(height: 8),
@@ -518,13 +516,11 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                 if (item.variation.isNotEmpty)
                   Padding(
                     padding: const EdgeInsets.only(bottom: 4),
-                    child: Text(
-                      'Variation: ${item.variation}',
+                    child: Text('Variation: ${item.variation}'.tr(context),
                       style: context.titleSmall!.copyWith(fontWeight: FontWeight.w600),
                     ),
                   ),
-                Text(
-                  'Quantity: ${item.quantity}',
+                Text('Quantity: ${item.quantity}'.tr(context),
                   style: context.titleSmall!.copyWith(fontWeight: FontWeight.w600,color: AppTheme.black),
                 ),
                 const SizedBox(height: 8),
@@ -630,8 +626,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                Text(
-                  'Date: ${orderDetails.date}',
+                Text('Date: ${orderDetails.date}'.tr(context),
                   style: TextStyle(
                     color: Colors.grey[600],
                     fontSize: 14,

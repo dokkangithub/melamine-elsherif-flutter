@@ -75,8 +75,7 @@ class ProductCard extends StatelessWidget {
                       ),
 
                       // Price
-                      Text(
-                        '${product.discountedPrice}',
+                      Text('${product.discountedPrice}'.tr(context),
                         style: context.titleMedium.copyWith(color: AppTheme.primaryColor),
                       ),
 

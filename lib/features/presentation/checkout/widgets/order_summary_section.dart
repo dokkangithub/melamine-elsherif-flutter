@@ -40,8 +40,7 @@ class OrderSummarySection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'Order Summary',
+          Text('Order Summary'.tr(context),
             style: context.titleMedium!.copyWith(fontWeight: FontWeight.w600),
           ),
           const SizedBox(height: 10),
@@ -136,13 +135,13 @@ class OrderSummarySection extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        _buildBenefitItem(icon: Icons.lock_outline, label: 'Secure SSL'),
+        _buildBenefitItem(icon: Icons.lock_outline, label: 'secure_ssl'.tr(context)),
         _buildBenefitItem(
           icon: Icons.local_shipping_outlined,
-          label: 'Free Shipping',
+          label: 'Free Shipping'.tr(context),
         ),
-        _buildBenefitItem(icon: Icons.access_time, label: '30-Day Returns'),
-        _buildBenefitItem(icon: Icons.payment, label: 'Secure Payment'),
+        _buildBenefitItem(icon: Icons.access_time, label: '30_day_returns'.tr(context)),
+        _buildBenefitItem(icon: Icons.payment, label: 'secure_payment'.tr(context)),
       ],
     );
   }

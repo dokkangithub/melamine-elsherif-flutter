@@ -26,8 +26,7 @@ class WishlistWidget extends StatelessWidget {
         backgroundColor: Colors.white,
         elevation: 0,
         scrolledUnderElevation: 0,
-        title: Text(
-          'My Wishlist',
+        title: Text('My Wishlist'.tr(context),
           style: context.headlineSmall,
         ),
         actions: [
@@ -164,8 +163,7 @@ class WishlistWidget extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           // Price
-                          Text(
-                            '${wishlistItem.price}',
+                          Text('${wishlistItem.price}'.tr(context),
                             style: context.titleSmall,
                           ),
                           // Add to cart button

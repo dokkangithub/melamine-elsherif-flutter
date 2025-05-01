@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:melamine_elsherif/core/config/routes.dart/routes.dart';
 import 'package:melamine_elsherif/core/config/themes.dart/theme.dart';
 import 'package:melamine_elsherif/core/utils/extension/text_theme_extension.dart';
+import 'package:melamine_elsherif/core/utils/extension/translate_extension.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_button.dart';
 import 'package:provider/provider.dart';
 import '../../../../core/utils/constants/app_assets.dart';
@@ -174,8 +175,7 @@ class _OrdersListScreenState extends State<OrdersListScreen> with SingleTickerPr
                             ),
                           ),
                           const SizedBox(height: 20),
-                          Text(
-                            'No $tabName Orders',
+                          Text('No $tabName Orders',
                             style: const TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
@@ -336,8 +336,7 @@ class _OrdersListScreenState extends State<OrdersListScreen> with SingleTickerPr
                   ),
                   CustomButton(
                     onPressed: (){},
-                    child: Text(
-                      'Processing',
+                    child: Text('processing'.tr(context),
                       style: context.titleSmall!.copyWith(color: AppTheme.white),
                     ),
                     padding: EdgeInsets.all(6),
@@ -354,8 +353,7 @@ class _OrdersListScreenState extends State<OrdersListScreen> with SingleTickerPr
                     order.date,
                     style: context.bodyMedium!.copyWith(color: AppTheme.darkDividerColor),
                   ),
-                  Text(
-                    '$price L.E',
+                  Text('$price L.E',
                     style: context.titleSmall!.copyWith(fontWeight: FontWeight.w800,color: AppTheme.black),
                   ),
                 ],
@@ -412,8 +410,7 @@ class _OrdersListScreenState extends State<OrdersListScreen> with SingleTickerPr
                   // View details with arrow
                   Row(
                     children: [
-                      Text(
-                        'View Details',
+                      Text('View Details'.tr(context),
                         style: context.titleSmall!.copyWith(color: AppTheme.primaryColor,fontWeight: FontWeight.w800),
                       ),
                       const SizedBox(width: 4),
@@ -472,17 +469,12 @@ class _OrdersListScreenState extends State<OrdersListScreen> with SingleTickerPr
               ),
             ),
             const SizedBox(height: 20),
-            const Text(
-              'No Orders Yet',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-              ),
+             Text('no_orders_yet'.tr(context),
+              style: context.titleMedium,
             ),
             const SizedBox(height: 12),
-            const Text(
-              'Looks like you haven\'t placed any orders yet. Start shopping to see your orders here.',
+            Text(
+              'looks_like_you_havent_placed_any_orders_yet_Start_shopping_to_see_your_orders_here'.tr(context),
               style: TextStyle(
                 fontSize: 14,
                 color: Colors.grey,
@@ -506,8 +498,7 @@ class _OrdersListScreenState extends State<OrdersListScreen> with SingleTickerPr
                     borderRadius: BorderRadius.circular(4),
                   ),
                 ),
-                child: const Text(
-                  'Start Shopping',
+                child: Text('start_shopping'.tr(context),
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:melamine_elsherif/core/utils/extension/text_style_extension.dart';
+import 'package:melamine_elsherif/core/utils/extension/translate_extension.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_cached_image.dart';
 import 'package:provider/provider.dart';
 import '../../../../features/domain/product/entities/product.dart';
@@ -61,8 +62,7 @@ class ProductItemInRow1 extends StatelessWidget {
                       const SizedBox(height: 8),
 
                       // Price display
-                      Text(
-                        '\$${product.discountedPrice}',
+                      Text('\$${product.discountedPrice}'.tr(context),
                         style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -72,8 +72,7 @@ class ProductItemInRow1 extends StatelessWidget {
 
                       // Original price (strikethrough) if present
                       if (product.hasDiscount)
-                        Text(
-                          '\$${product.mainPrice}',
+                        Text('\$${product.mainPrice}'.tr(context),
                           style: TextStyle(
                             fontSize: 14,
                             color: Colors.grey.shade400,

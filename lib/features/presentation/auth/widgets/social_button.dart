@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart' show FirebaseAuth, GoogleAuthP
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:melamine_elsherif/core/utils/extension/translate_extension.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:provider/provider.dart';
 import 'dart:convert';
@@ -120,7 +121,7 @@ class SocialButton extends StatelessWidget {
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error signing in with Google: $e'))
+          SnackBar(content: Text('Error signing in with Google: $e'.tr(context)))
       );
     }
   }
@@ -146,7 +147,7 @@ class SocialButton extends StatelessWidget {
       } else {
         // Handle canceled or failed login
         ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Facebook login failed or canceled'))
+            SnackBar(content: Text('facebook_login_failed_or_canceled'.tr(context)))
         );
       }
     } catch (e) {
@@ -200,7 +201,7 @@ class SocialButton extends StatelessWidget {
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error signing in with Apple: $e'))
+          SnackBar(content: Text('Error signing in with Apple: $e'.tr(context)))
       );
     }
   }

@@ -1,5 +1,6 @@
 // lib/features/presentation/order/widgets/order_details_card.dart
 import 'package:flutter/material.dart';
+import 'package:melamine_elsherif/core/utils/extension/translate_extension.dart';
 import '../../../domain/order/entities/order_details.dart';
 
 class OrderDetailsCard extends StatelessWidget {
@@ -19,8 +20,7 @@ class OrderDetailsCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'Order #${orderDetails.code}',
+            Text('Order #${orderDetails.code}',
               style: Theme.of(context).textTheme.titleLarge,
             ),
             const SizedBox(height: 10),
@@ -51,8 +51,7 @@ class OrderDetailsCard extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Status',
+        Text('status'.tr(context),
           style: Theme.of(context).textTheme.titleMedium,
         ),
         const SizedBox(height: 10),
@@ -92,8 +91,7 @@ class OrderDetailsCard extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Payment Details',
+        Text('Payment Details'.tr(context),
           style: Theme.of(context).textTheme.titleMedium,
         ),
         const SizedBox(height: 10),
@@ -139,8 +137,7 @@ class OrderDetailsCard extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Shipping Address',
+        Text('Shipping Address'.tr(context),
           style: Theme.of(context).textTheme.titleMedium,
         ),
         const SizedBox(height: 10),
@@ -148,9 +145,9 @@ class OrderDetailsCard extends StatelessWidget {
         if (orderDetails.shippingAddress.email != null)
           Text(orderDetails.shippingAddress.email!),
         Text(orderDetails.shippingAddress.address),
-        Text('${orderDetails.shippingAddress.city}, ${orderDetails.shippingAddress.state}'),
-        Text('${orderDetails.shippingAddress.country} ${orderDetails.shippingAddress.postalCode}'),
-        Text('Phone: ${orderDetails.shippingAddress.phone}'),
+        Text('${orderDetails.shippingAddress.city}, ${orderDetails.shippingAddress.state}'.tr(context)),
+        Text('${orderDetails.shippingAddress.country} ${orderDetails.shippingAddress.postalCode}'.tr(context)),
+        Text('Phone: ${orderDetails.shippingAddress.phone}'.tr(context)),
       ],
     );
   }

@@ -124,8 +124,7 @@ class _CartScreenState extends State<CartScreen> {
         title: Consumer<CartProvider>(
           builder: (context, cartProvider, _) {
             final itemCount = cartProvider.cartItems.length;
-            return Text(
-              'Shopping Cart (${itemCount} items)',
+            return Text('Shopping Cart (${itemCount} items)'.tr(context),
               style: context.titleMedium,
             );
           },
@@ -179,8 +178,7 @@ class _CartScreenState extends State<CartScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         SizedBox(height: 15),
-                        Text(
-                          'Order summary',
+                        Text('Order summary'.tr(context),
                           style: context.titleMedium!.copyWith(
                             fontWeight: FontWeight.w800,
                           ),
@@ -341,7 +339,7 @@ class _CartScreenState extends State<CartScreen> {
                       vertical: 8,
                     ),
                     child: CustomButton(
-                      text: 'Proceed to Checkout',
+                      text: 'Proceed to Checkout'.tr(context),
                       isGradient: true,
                       fullWidth: true,
                       borderRadius: 10,
@@ -367,7 +365,7 @@ class _CartScreenState extends State<CartScreen> {
                           color: Colors.grey[600],
                         ),
                         SizedBox(width: 6),
-                        Text('Secure Checkout', style: context.bodySmall),
+                        Text('Secure Checkout'.tr(context), style: context.bodySmall),
                       ],
                     ),
                   ),

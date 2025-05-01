@@ -351,8 +351,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text(
-                              'Place Order',
+                            Text('Place Order'.tr(context),
                               style: context.titleLarge?.copyWith(
                                 color: AppTheme.white,
                               ),

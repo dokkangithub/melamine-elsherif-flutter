@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:melamine_elsherif/core/config/themes.dart/theme.dart';
 import 'package:melamine_elsherif/core/utils/extension/text_theme_extension.dart';
+import 'package:melamine_elsherif/core/utils/extension/translate_extension.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_cached_image.dart';
 import '../../../../core/utils/constants/app_assets.dart';
 
@@ -34,14 +35,12 @@ class PlatesWidgets extends StatelessWidget {
             children: [
               Column(
                 children: [
-                  Text(
-                    'PLATES',
+                  Text('plates'.tr(context),
                     style: context.headlineMedium!.copyWith(
                       color: AppTheme.white,
                     ),
                   ),
-                  Text(
-                    '50% OFF',
+                  Text('50_off'.tr(context),
                     style: context.titleMedium!.copyWith(
                       color: AppTheme.white,
                       fontWeight: FontWeight.w200,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:melamine_elsherif/core/config/themes.dart/theme.dart';
 import 'package:melamine_elsherif/core/utils/enums/loading_state.dart';
 import 'package:melamine_elsherif/core/utils/extension/text_style_extension.dart';
+import 'package:melamine_elsherif/core/utils/extension/translate_extension.dart';
 import 'package:melamine_elsherif/core/utils/helpers.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_back_button.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_button.dart';
@@ -84,8 +85,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    'Error: ${productProvider.productDetailsError}',
+                  Text('Error: ${productProvider.productDetailsError}',
                     style: const TextStyle(color: ProductTheme.errorColor),
                   ),
                   ElevatedButton(
@@ -100,8 +100,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         }
 
         if (productProvider.selectedProduct == null) {
-          return const Scaffold(
-            body: Center(child: Text('No product details data available')),
+          return Scaffold(
+            body: Center(child: Text('no_product_details_data_available'.tr(context))),
           );
         }
 

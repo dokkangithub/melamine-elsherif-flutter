@@ -96,7 +96,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         Expanded(
                           child: _buildSocialLoginButton(
                             icon: AppSvgs.google,
-                            text: 'Continue with Google',
+                            text: 'Continue with Google'.tr(context),
                             onTap: () {},
                           ),
                         ),
@@ -108,7 +108,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         Expanded(
                           child: _buildSocialLoginButton(
                             icon: AppSvgs.apple,
-                            text: 'Continue with Apple',
+                            text: 'Continue with Apple'.tr(context),
                             onTap: () {},
                             isApple: true,
                           ),
@@ -169,7 +169,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     TextField(
                       controller: _emailController,
                       decoration: InputDecoration(
-                        hintText: 'Email Address',
+                        hintText: 'Email Address'.tr(context),
                         hintStyle: GoogleFonts.inter(
                           fontSize: 14,
                           color: Colors.grey[500],
@@ -303,31 +303,27 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         Expanded(
                           child: Wrap(
                             children: [
-                              Text(
-                                'I agree to the ',
+                              Text('I agree to the '.tr(context),
                                 style: context.bodySmall,
                               ),
                               GestureDetector(
                                 onTap: () {
                                   // Navigate to Terms of Service
                                 },
-                                child: Text(
-                                  'Terms of Service',
+                                child: Text('Terms of Service'.tr(context),
                                   style: context.bodySmall.copyWith(
                                     color: AppTheme.primaryColor,
                                   ),
                                 ),
                               ),
-                              Text(
-                                ' and ',
+                              Text(' and '.tr(context),
                                 style: context.bodySmall,
                               ),
                               GestureDetector(
                                 onTap: () {
                                   // Navigate to Privacy Policy
                                 },
-                                child: Text(
-                                  'Privacy Policy',
+                                child: Text('Privacy Policy'.tr(context),
                                   style: context.bodySmall.copyWith(
                                     color: AppTheme.primaryColor,
                                   ),
@@ -350,7 +346,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             } else {
                               CustomSnackbar.show(
                                 context,
-                                message: 'Please accept the Terms of Service and Privacy Policy',
+                                message: 'Please accept the Terms of Service and Privacy Policy'.tr(context),
                                 isError: true,
                               );
                             }
@@ -368,16 +364,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text(
-                          "Already have an account? ",
+                        Text('Already have an account? '.tr(context),
                           style: context.bodyMedium.copyWith(color: Colors.grey[700]),
                         ),
                         GestureDetector(
                           onTap: () {
                             Navigator.of(context).pop();
                           },
-                          child: Text(
-                            'Log In',
+                          child: Text('Log In'.tr(context),
                             style: context.bodyMedium.copyWith(
                               color: AppTheme.primaryColor,
                               fontWeight: FontWeight.bold,

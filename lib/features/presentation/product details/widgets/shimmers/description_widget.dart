@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:melamine_elsherif/core/utils/extension/translate_extension.dart';
 import 'package:melamine_elsherif/features/domain/product%20details/entities/product_details.dart';
 import 'package:melamine_elsherif/features/presentation/product details/widgets/shimmers/shimmer_widget.dart';
 import '../product_theme.dart';
@@ -23,7 +24,7 @@ class DescriptionWidget extends StatelessWidget {
       children: [
         isLoading
             ? ShimmerWidget(width: 100, height: 20)
-            : Text('Description', style: ProductTheme.titleMedium(context)),
+            : Text('description'.tr(context), style: ProductTheme.titleMedium(context)),
         const SizedBox(height: 8),
         isLoading
             ? Column(
@@ -46,8 +47,7 @@ class DescriptionWidget extends StatelessWidget {
             ),
           },
         )
-            : const Text(
-          'No description available',
+            :  Text('no_description_available'.tr(context),
           style: TextStyle(color: Colors.grey, fontSize: 14),
         ),
       ],

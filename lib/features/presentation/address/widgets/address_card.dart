@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:melamine_elsherif/core/config/themes.dart/theme.dart';
+import 'package:melamine_elsherif/core/utils/extension/translate_extension.dart';
 import '../../../domain/address/entities/address.dart';
 
 class AddressCard extends StatelessWidget {
@@ -58,8 +59,7 @@ class AddressCard extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                   ),
                   const SizedBox(height: 2),
-                  Text(
-                    '${address.cityName}, ${address.stateName} ${address.postalCode}',
+                  Text('${address.cityName}, ${address.stateName} ${address.postalCode}',
                     style: Theme.of(context).textTheme.bodySmall,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,

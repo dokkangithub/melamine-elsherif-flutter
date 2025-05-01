@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:melamine_elsherif/core/config/routes.dart/routes.dart';
 import 'package:melamine_elsherif/core/utils/constants/app_strings.dart';
+import 'package:melamine_elsherif/core/utils/extension/translate_extension.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_dilog.dart';
 import 'package:melamine_elsherif/core/utils/widgets/cutsom_toast.dart';
 import 'package:provider/provider.dart';
@@ -77,7 +78,7 @@ abstract class AppFunctions {
     String slug,
   ) async {
     if (AppStrings.token == null) {
-      CustomToast.showToast(message: 'please login', type: ToastType.warning);
+      CustomToast.showToast(message: 'please_login'.tr(context), type: ToastType.warning);
     } else {
       final provider = Provider.of<WishlistProvider>(context, listen: false);
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:melamine_elsherif/core/utils/extension/translate_extension.dart';
 
 class CustomDropdown<T> extends StatefulWidget {
   final String? label;
@@ -205,7 +206,7 @@ class _CustomDropdownState<T> extends State<CustomDropdown<T>> {
                   if (_getFilteredItems().isEmpty)
                     Padding(
                       padding: const EdgeInsets.all(16.0),
-                      child: widget.emptyResultWidget ?? const Text('No results found'),
+                      child: widget.emptyResultWidget ?? Text('No results found'.tr(context)),
                     ),
                 ],
               ),
