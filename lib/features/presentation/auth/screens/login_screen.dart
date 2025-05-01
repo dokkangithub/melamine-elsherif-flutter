@@ -70,7 +70,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       
                       // Welcome back text
-                      Text('Welcome back!'.tr(context),
+                      Text('welcome_back_1'.tr(context),
                         style: context.headlineMedium.copyWith(
                           fontWeight: FontWeight.bold,
                           color: Colors.black,
@@ -80,7 +80,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       
                       // Subtitle
                       Text(
-                        'Sign in to continue shopping',
+                        'sign_in_continue'.tr(context),
                         style: context.bodyMedium.copyWith(
                           color: Colors.grey[600],
                         ),
@@ -91,7 +91,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
-                          'Email',
+                          'email'.tr(context),
                           style: context.titleSmall,
                         ),
                       ),
@@ -99,7 +99,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       TextField(
                         controller: emailController,
                         decoration: InputDecoration(
-                          hintText: 'Enter your email'.tr(context),
+                          hintText: 'enter_your_email'.tr(context),
                           hintStyle: GoogleFonts.inter(
                             fontSize: 14,
                             color: Colors.grey[500],
@@ -130,7 +130,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
-                          'Password',
+                          'password'.tr(context),
                           style: context.titleSmall,
                         ),
                       ),
@@ -154,7 +154,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide(color: AppTheme.primaryColor),
+                            borderSide: const BorderSide(color: AppTheme.primaryColor),
                           ),
                           contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                           suffixIcon: IconButton(
@@ -183,7 +183,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             AppRoutes.navigateTo(context, AppRoutes.forgetPassword);
                           },
                           child: Text(
-                            'Forgot Password?',
+                            'forgot_password'.tr(context),
                             style: context.titleSmall.copyWith(
                               color: AppTheme.primaryColor,
                             ),
@@ -224,7 +224,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               style: context.bodySmall.copyWith(color: Colors.grey),
                             ),
                           ),
-                          Expanded(child: Divider()),
+                          const Expanded(child: Divider()),
                         ],
                       ),
                       
@@ -264,7 +264,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            "Don't have an account? ",
+                            "don't_have_an_account?".tr(context),
                             style: context.bodyMedium.copyWith(color: Colors.grey[700]),
                           ),
                           GestureDetector(
@@ -272,7 +272,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               AppRoutes.navigateTo(context, AppRoutes.signUp);
                             },
                             child: Text(
-                              'Sign Up',
+                              'sign_up'.tr(context),
                               style: context.bodyMedium.copyWith(
                                 color: AppTheme.primaryColor,
                                 fontWeight: FontWeight.bold,

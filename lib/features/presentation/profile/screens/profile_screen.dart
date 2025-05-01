@@ -9,10 +9,12 @@ import '../../../../core/config/themes.dart/theme.dart';
 import '../../../../core/utils/constants/app_strings.dart';
 import '../../../../core/utils/enums/loading_state.dart';
 import '../../../../core/utils/extension/text_style_extension.dart';
+import '../../../../core/providers/localization/language_provider.dart';
 import '../../auth/controller/auth_provider.dart';
 import '../../auth/screens/login_screen.dart';
 import '../controller/profile_provider.dart';
 import '../widgets/profile_menu_item.dart';
+import '../widgets/language_selector.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -41,11 +43,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
         profileProvider.countersState == LoadingState.loading;
 
     return Scaffold(
-      backgroundColor: Colors.grey[50],
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(
         child: Column(
           children: [
+            const SizedBox(height: 40),
               // User Header
               Container(
                 alignment: Alignment.center,
@@ -112,7 +115,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       },
                       isOutlined: true,
                       child: Text(
-                        'Edit',
+                        'edit'.tr(context),
                         style: context.titleSmall.copyWith(
                           color: AppTheme.black,
                         ),
@@ -163,6 +166,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               const SizedBox(height: 10),
 
               // Quick Access Section
+            if (isLoggedIn && !isLoadingCounters && counters != null)
               Container(
                 color: Colors.white,
                 height: 100,
@@ -181,7 +185,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                       ),
                     ),
-                    SizedBox(width: 10),
+                    const SizedBox(width: 10),
                     Expanded(
                       child: _buildQuickAccessItem(
                         context,
@@ -233,6 +237,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       title: 'language_region'.tr(context),
                       onTap: () {
                         // Show language selection
+                        LanguageSelector.show(context);
                       },
                     ),
                     ProfileMenuItem(
@@ -369,7 +374,4 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
     );
   }
-
-
-
 }

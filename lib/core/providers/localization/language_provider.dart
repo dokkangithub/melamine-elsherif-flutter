@@ -25,20 +25,20 @@ class LanguageProvider extends ChangeNotifier {
       code: 'ar',
       name: 'العربية',
       languageCode: 'ar',
-      countryCode: 'SA',
+      countryCode: 'Eg',
     ),
-    LanguageModel(
-      code: 'ru',
-      name: 'Русский',
-      languageCode: 'ru',
-      countryCode: 'RU',
-    ),
-    LanguageModel(
-      code: 'de',
-      name: 'Deutsch',
-      languageCode: 'de',
-      countryCode: 'DE',
-    ),
+    // LanguageModel(
+    //   code: 'ru',
+    //   name: 'Русский',
+    //   languageCode: 'ru',
+    //   countryCode: 'RU',
+    // ),
+    // LanguageModel(
+    //   code: 'de',
+    //   name: 'Deutsch',
+    //   languageCode: 'de',
+    //   countryCode: 'DE',
+    // ),
   ];
 
   Locale get locale => _locale;
