@@ -77,11 +77,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   imageUrl: profileProvider.profileImageUrl!,
                                   fit: BoxFit.cover,
                                 )
-                                : const Icon(
-                                  Icons.person,
-                                  size: 40,
-                                  color: Colors.grey,
-                                ),
+                                : isLoggedIn 
+                                  ? const Icon(
+                                    Icons.person,
+                                    size: 40,
+                                    color: Colors.grey,
+                                  )
+                                  : CustomImage(
+                                    assetPath: 'assets/images/app_logo.png',
+                                    fit: BoxFit.cover,
+                                  ),
                       ),
                     ),
                     const SizedBox(width: 16),
@@ -105,22 +110,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                     ),
                     const SizedBox(width: 16),
-                    // Edit Button
-                    CustomButton(
-                      onPressed: () {
-                        AppRoutes.navigateTo(
-                          context,
-                          AppRoutes.editProfileScreen,
-                        );
-                      },
-                      isOutlined: true,
-                      child: Text(
-                        'edit'.tr(context),
-                        style: context.titleSmall.copyWith(
-                          color: AppTheme.black,
+                    // Edit Button - only show for logged in users
+                    if (isLoggedIn)
+                      CustomButton(
+                        onPressed: () {
+                          AppRoutes.navigateTo(
+                            context,
+                            AppRoutes.editProfileScreen,
+                          );
+                        },
+                        isOutlined: true,
+                        child: Text(
+                          'edit'.tr(context),
+                          style: context.titleSmall.copyWith(
+                            color: AppTheme.black,
+                          ),
                         ),
                       ),
-                    ),
                   ],
                 ),
               ),
