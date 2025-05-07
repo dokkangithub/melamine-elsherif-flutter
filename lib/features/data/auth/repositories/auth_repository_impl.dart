@@ -24,8 +24,14 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<AuthResponseModel> socialLogin(String provider, String token) async {
-    return await authRemoteDataSource.socialLogin(provider, token);
+  Future<AuthResponseModel> socialLogin( String socialProvider,
+      String name,
+      String email,
+      String provider, {
+        access_token = "",
+        secret_token = "",
+      }) async {
+    return await authRemoteDataSource.socialLogin(provider,name,email,provider,access_token: access_token,secret_token: secret_token);
   }
 
   @override

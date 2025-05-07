@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import '../../../../core/api/api_provider.dart';
 import '../../../../core/utils/constants/app_endpoints.dart';
@@ -6,7 +8,13 @@ import '../models/auth_response_model.dart';
 
 abstract class AuthRemoteDataSource {
   Future<Result<AuthResponseModel>> login(String email, String password, String loginBy);  Future<Response> signup(Map<String, dynamic> userData);
-  Future<AuthResponseModel> socialLogin(String provider, String token);
+  Future<AuthResponseModel> socialLogin( String socialProvider,
+      String name,
+      String email,
+      String provider, {
+        access_token = "",
+        secret_token = "",
+      });
   Future<void> logout();
   Future<void> forgetPassword(String email);
   Future<void> confirmResetPassword(String email, String code, String password);
@@ -46,10 +54,26 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   }
 
   @override
-  Future<AuthResponseModel> socialLogin(String provider, String token) async {
+  Future<AuthResponseModel> socialLogin(String socialProvider,
+      String name,
+      String email,
+      String provider, {
+        access_token = "",
+        secret_token = "",
+      }) async {
+
+    var postBody = jsonEncode({
+      "name": name,
+      "email": email,
+      "provider": "$provider",
+      "social_provider": "$socialProvider",
+      "access_token": "$access_token",
+      "secret_token": "$secret_token"
+    });
+
     final response = await apiProvider.post(
       LaravelApiEndPoint.socialLogin,
-      data: {'provider': provider, 'token': token},
+      data: postBody,
     );
     return AuthResponseModel.fromJson(response.data);
   }

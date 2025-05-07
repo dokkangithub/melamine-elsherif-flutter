@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' as ToastComponent;
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:melamine_elsherif/core/config/routes.dart/routes.dart';
@@ -17,6 +18,8 @@ import '../../../../core/utils/widgets/custom_loading.dart';
 import '../../../../core/utils/widgets/custom_snackbar.dart';
 import '../controller/auth_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -242,6 +245,66 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
+
+
+  bool isGoogleLoggingIn =false;
+
+  // onPressedGoogleLogin() async {
+  //   setState(() {
+  //     isGoogleLoggingIn = true;
+  //   });
+  //   try {
+  //
+  //     final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+  //     if (googleUser == null) {
+  //       setState(() {
+  //         isGoogleLoggingIn = false;
+  //       });
+  //       return; // Exit early if no account is selected
+  //     }
+  //     print(googleUser.toString());
+  //
+  //     GoogleSignInAuthentication googleSignInAuthentication =
+  //     await googleUser.authentication;
+  //     String? accessToken = googleSignInAuthentication.accessToken;
+  //
+  //     print("accessToken $accessToken");
+  //     print("displayName ${googleUser.displayName}");
+  //     print("email ${googleUser.email}");
+  //     print("googleUser.id ${googleUser.id}");
+  //
+  //     var loginResponse = await Provider.of<AuthProvider>(context,listen: false).completeSocialLogin(
+  //         "google", googleUser.displayName!, googleUser.email, googleUser.id,
+  //         access_token: accessToken);
+  //
+  //     if (loginResponse.result == false) {
+  //       ToastComponent.showDialog(loginResponse.message,
+  //           gravity: Toast.center, duration: Toast.lengthLong);
+  //       setState(() {
+  //         isGoogleLoggingIn = false;
+  //       });
+  //     } else {
+  //       ToastComponent.showDialog(loginResponse.message,
+  //           gravity: Toast.center, duration: Toast.lengthLong);
+  //       print(loginResponse);
+  //       setState(() {
+  //         isGoogleLoggingIn = false;
+  //       });
+  //       AuthHelper().setUserData(loginResponse);
+  //       print('${is_logged_in.$} LOGIN RESPONSE');
+  //       Navigator.pushAndRemoveUntil(context,
+  //           MaterialPageRoute(builder: (context) {
+  //             return Main();
+  //           }), (route) => false);
+  //     }
+  //     GoogleSignIn().disconnect();
+  //   } on Exception catch (e) {
+  //     print("error is ....... $e");
+  //     setState(() {
+  //       isGoogleLoggingIn = false;
+  //     });
+  //   }
+  // }
 
 
 

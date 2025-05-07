@@ -144,10 +144,15 @@ class AuthProvider extends ChangeNotifier {
   }
 
   // Add this method to complete social login flow
-  Future<bool> completeSocialLogin(String provider, String token) async {
+  Future<bool> completeSocialLogin( String name,
+      String email,
+      String provider, {
+        access_token = "",
+        secret_token = "",
+      }) async {
     _setLoading(true);
     try {
-      final authResponse = await socialLoginUseCase(provider, token);
+      final authResponse = await socialLoginUseCase(provider,name,email,provider,access_token: access_token,secret_token: secret_token);
       if (authResponse.result) {
         _user = authResponse;
 
