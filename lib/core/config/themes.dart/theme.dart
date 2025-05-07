@@ -55,84 +55,84 @@ class AppTheme {
         textStyle: const TextStyle(
           color: black,
           fontSize: 32,
-          fontWeight: FontWeight.bold,
+          fontWeight: FontWeight.w300,
         ),
       ),
       displayMedium: GoogleFonts.inter(
         textStyle: const TextStyle(
           color: black,
           fontSize: 28,
-          fontWeight: FontWeight.bold,
+          fontWeight: FontWeight.w300,
         ),
       ),
       displaySmall: GoogleFonts.inter(
         textStyle: const TextStyle(
           color: black,
           fontSize: 24,
-          fontWeight: FontWeight.bold,
+          fontWeight: FontWeight.w300,
         ),
       ),
       headlineMedium: GoogleFonts.inter(
         textStyle: const TextStyle(
           color: black,
           fontSize: 20,
-          fontWeight: FontWeight.w600,
+          fontWeight: FontWeight.w300,
         ),
       ),
       headlineSmall: GoogleFonts.inter(
         textStyle: const TextStyle(
           color: black,
           fontSize: 18,
-          fontWeight: FontWeight.w600,
+          fontWeight: FontWeight.w300,
         ),
       ),
       titleLarge: GoogleFonts.inter(
         textStyle: const TextStyle(
           color: black,
           fontSize: 16,
-          fontWeight: FontWeight.w600,
+          fontWeight: FontWeight.w300,
         ),
       ),
       titleMedium: GoogleFonts.inter(
         textStyle: const TextStyle(
           color: black,
           fontSize: 15,
-          fontWeight: FontWeight.w500,
+          fontWeight: FontWeight.w300,
         ),
       ),
       titleSmall: GoogleFonts.inter(
         textStyle: const TextStyle(
           color: lightSecondaryTextColor,
           fontSize: 14,
-          fontWeight: FontWeight.w500,
+          fontWeight: FontWeight.w300,
         ),
       ),
       bodyLarge: GoogleFonts.inter(
         textStyle: const TextStyle(
           color: black,
           fontSize: 13,
-          fontWeight: FontWeight.normal,
+          fontWeight: FontWeight.w300,
         ),
       ),
       bodyMedium: GoogleFonts.inter(
         textStyle: const TextStyle(
           color: black,
           fontSize: 12,
-          fontWeight: FontWeight.normal,
+          fontWeight: FontWeight.w300,
         ),
       ),
       bodySmall: GoogleFonts.inter(
         textStyle: const TextStyle(
           color: black,
           fontSize: 11,
-          fontWeight: FontWeight.normal,
+          fontWeight: FontWeight.w300,
         ),
       ),
       labelLarge: GoogleFonts.inter(
         textStyle: const TextStyle(
           color: black,
           fontSize: 10,
-          fontWeight: FontWeight.w500,
+          fontWeight: FontWeight.w300,
         ),
       ),
     ),

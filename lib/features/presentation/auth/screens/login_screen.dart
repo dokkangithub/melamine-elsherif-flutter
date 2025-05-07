@@ -9,6 +9,7 @@ import 'package:melamine_elsherif/core/utils/extension/text_style_extension.dart
 import 'package:melamine_elsherif/core/utils/local_storage/local_storage_keys.dart';
 import 'package:melamine_elsherif/core/utils/local_storage/secure_storage.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_button.dart';
+import 'package:melamine_elsherif/core/utils/widgets/custom_cached_image.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_form_field.dart';
 import 'package:provider/provider.dart';
 import '../../../../core/utils/extension/translate_extension.dart';
@@ -61,29 +62,35 @@ class _LoginScreenState extends State<LoginScreen> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       // Logo
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 24.0),
-                        child: Image.asset(
-                          AppImages.appLogo,
-                          height: 80,
-                        ),
+                      const CustomImage(
+                        assetPath: AppImages.appLogo,
+                        height: 160,
+                        width: 160,
                       ),
                       
                       // Welcome back text
-                      Text('welcome_back_1'.tr(context),
-                        style: context.headlineMedium.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
+                      Row(
+                        children: [
+                          Text('welcome_back_1'.tr(context),
+                            style: context.displaySmall.copyWith(
+                              fontWeight: FontWeight.w800,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ],
                       ),
                       const SizedBox(height: 8),
                       
                       // Subtitle
-                      Text(
-                        'sign_in_continue'.tr(context),
-                        style: context.bodyMedium.copyWith(
-                          color: Colors.grey[600],
-                        ),
+                      Row(
+                        children: [
+                          Text(
+                            'sign_in_continue'.tr(context),
+                            style: context.titleMedium.copyWith(
+                              color: Colors.grey[600],
+                            ),
+                          ),
+                        ],
                       ),
                       const SizedBox(height: 32),
                       
@@ -92,37 +99,14 @@ class _LoginScreenState extends State<LoginScreen> {
                         alignment: Alignment.centerLeft,
                         child: Text(
                           'email'.tr(context),
-                          style: context.titleSmall,
+                          style: context.titleMedium.copyWith(fontWeight: FontWeight.w400),
                         ),
                       ),
                       const SizedBox(height: 8),
-                      TextField(
+                      CustomTextFormField(
                         controller: emailController,
-                        decoration: InputDecoration(
-                          hintText: 'enter_your_email'.tr(context),
-                          hintStyle: GoogleFonts.inter(
-                            fontSize: 14,
-                            color: Colors.grey[500],
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide(color: Colors.grey.shade300),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide(color: Colors.grey.shade300),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide(color: AppTheme.primaryColor),
-                          ),
-                          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                        ),
+                        hint: 'enter_your_email'.tr(context),
                         keyboardType: TextInputType.emailAddress,
-                        style: GoogleFonts.inter(
-                          fontSize: 14,
-                          color: Colors.black,
-                        ),
                       ),
                       const SizedBox(height: 16),
                       
@@ -131,48 +115,14 @@ class _LoginScreenState extends State<LoginScreen> {
                         alignment: Alignment.centerLeft,
                         child: Text(
                           'password'.tr(context),
-                          style: context.titleSmall,
+                          style: context.titleMedium.copyWith(fontWeight: FontWeight.w400),
                         ),
                       ),
                       const SizedBox(height: 8),
-                      TextField(
+                      CustomTextFormField(
                         controller: passwordController,
-                        obscureText: _obscurePassword,
-                        decoration: InputDecoration(
-                          hintText: 'enter_password'.tr(context),
-                          hintStyle: GoogleFonts.inter(
-                            fontSize: 14,
-                            color: Colors.grey[500],
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide(color: Colors.grey.shade300),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide(color: Colors.grey.shade300),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: const BorderSide(color: AppTheme.primaryColor),
-                          ),
-                          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                          suffixIcon: IconButton(
-                            icon: Icon(
-                              _obscurePassword ? Icons.visibility_off_outlined : Icons.visibility_outlined,
-                              color: Colors.grey,
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                _obscurePassword = !_obscurePassword;
-                              });
-                            },
-                          ),
-                        ),
-                        style: GoogleFonts.inter(
-                          fontSize: 14,
-                          color: Colors.black,
-                        ),
+                        hint: 'enter_password'.tr(context),
+                        keyboardType: TextInputType.emailAddress,
                       ),
                       
                       // Forgot Password
@@ -191,7 +141,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                       
-                      const SizedBox(height: 24),
+                      const SizedBox(height: 10),
                       
                       // Sign In Button
                       if (authProvider.isLoading)
@@ -216,7 +166,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       // Or continue with
                       Row(
                         children: [
-                          Expanded(child: Divider()),
+                          const Expanded(child: Divider()),
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 16),
                             child: Text(
@@ -292,6 +242,8 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
+
+
 
   Widget _buildSocialButton({required String icon, required VoidCallback onTap}) {
     return InkWell(
