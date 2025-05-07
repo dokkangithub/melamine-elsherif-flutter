@@ -18,27 +18,35 @@ class EmptyCartWidget extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          CustomImage(
-            assetPath: AppImages.emptyCart,
-            height: 150,
-            width: 150,
+          Card(
+            elevation: 4,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(200)),
+            child: const Padding(
+              padding: EdgeInsets.all(50.0),
+              child: CustomImage(
+                assetPath: AppSvgs.emptyCart,
+                height: 100,
+                width: 100,
+
+              ),
+            ),
           ),
           const SizedBox(height: 16),
           Text(
             'your_cart_is_empty'.tr(context),
-            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            style: context.headlineSmall,
           ),
           const SizedBox(height: 8),
           Text(
             'add_items_to_cart'.tr(context),
-            style: const TextStyle(color: Colors.grey),
+            style: context.bodyMedium!.copyWith(color: AppTheme.darkDividerColor),
           ),
           const SizedBox(height: 24),
           CustomButton(
             onPressed: () {
               Provider.of<LayoutProvider>(context,listen: false).currentIndex=0;
             },
-            child: Text('continue_shopping'.tr(context),style: context.titleMedium?.copyWith(color: AppTheme.white)),
+            child: Text('continue_shopping'.tr(context),style: context.titleSmall?.copyWith(color: AppTheme.white)),
           ),
         ],
       ),

@@ -24,7 +24,19 @@ import '../../../features/presentation/product details/screens/product_screen.da
 import '../../../features/presentation/splash/splash_screen.dart';
 import '../../../features/presentation/search/screens/search_screen.dart';
 
+
+// Define transition types for different animations outside the class
+enum PageTransitionType {
+  slide, // Slide from right
+  fade, // Fade in
+  scale, // Scale up
+  slideUp, // Slide from bottom
+  rotation, // Rotate in
+  size, // Grow from center
+}
+
 class AppRoutes {
+
   static const String splash = '/';
   static const String onboarding = '/onboarding';
   static const String login = '/login';
@@ -50,23 +62,30 @@ class AppRoutes {
   static const String orderDetailsScreen = '/order-details';
   static const String searchScreen = '/search-screen';
 
-  static Route<dynamic> generateRoute(RouteSettings settings) {
+
+  static const PageTransitionType defaultTransition = PageTransitionType.scale;
+
+  static Route<dynamic> generateRoute(RouteSettings settings, {PageTransitionType? transitionType}) {
     Widget page;
+
+    // Use provided transition type or default
+    final transition = transitionType ?? defaultTransition;
+
     switch (settings.name) {
       case splash:
         page = const SplashScreen();
         break;
       case onboarding:
-        page = OnboardingScreen();
+        page = const OnboardingScreen();
         break;
       case login:
-        page = LoginScreen();
+        page = const LoginScreen();
         break;
       case signUp:
         page = const SignUpScreen();
         break;
       case forgetPassword:
-        page = ForgotPasswordScreen();
+        page = const ForgotPasswordScreen();
         break;
       case resetPassword:
         page = const ResetPasswordScreen();
@@ -78,25 +97,25 @@ class AppRoutes {
         );
         break;
       case homeScreen:
-        page = HomeScreen();
+        page = const HomeScreen();
         break;
       case categoryScreen:
-        page = CategoryScreen();
+        page = const CategoryScreen();
         break;
       case wishListScreen:
-        page = WishlistScreen();
+        page = const WishlistScreen();
         break;
       case profileScreen:
-        page = ProfileScreen();
+        page = const ProfileScreen();
         break;
       case editProfileScreen:
-        page = EditProfileScreen();
+        page = const EditProfileScreen();
         break;
       case mainLayoutScreen:
-        page = MainLayoutScreen();
+        page = const MainLayoutScreen();
         break;
       case cartScreen:
-        page = CartScreen();
+        page = const CartScreen();
         break;
       case productDetailScreen:
         final args = settings.arguments as Map<String, dynamic>?;
@@ -113,7 +132,7 @@ class AppRoutes {
         if (args == null ||
             args['productType'] == null ||
             args['title'] == null) {
-          page = Scaffold(
+          page = const Scaffold(
             body: Center(child: Text('Invalid product details type')),
           );
         } else {
@@ -141,32 +160,83 @@ class AppRoutes {
         }
         break;
       case searchScreen:
-        return MaterialPageRoute(
-          builder:
-              (_) => SearchScreen(),
-        );
+        page = const SearchScreen();
+        break;
       default:
         page = Scaffold(
           body: Center(child: Text('Route ${settings.name} not found')),
         );
     }
 
+    // Apply appropriate transition animation
     return PageRouteBuilder(
       pageBuilder: (context, animation, secondaryAnimation) => page,
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        return FadeTransition(opacity: animation, child: child);
+        const duration = Duration(milliseconds: 300);
+        const curve = Curves.easeInOut;
+
+        switch (transition) {
+          case PageTransitionType.fade:
+            return FadeTransition(
+              opacity: animation,
+              child: child,
+            );
+
+          case PageTransitionType.scale:
+            return ScaleTransition(
+              scale: Tween<double>(begin: 0.5, end: 1.0)
+                  .animate(CurvedAnimation(parent: animation, curve: curve)),
+              child: child,
+            );
+
+          case PageTransitionType.rotation:
+            return RotationTransition(
+              turns: Tween<double>(begin: 0.5, end: 1.0)
+                  .animate(CurvedAnimation(parent: animation, curve: curve)),
+              child: child,
+            );
+
+          case PageTransitionType.slideUp:
+            return SlideTransition(
+              position: Tween<Offset>(
+                begin: const Offset(0.0, 1.0),
+                end: Offset.zero,
+              ).animate(CurvedAnimation(parent: animation, curve: curve)),
+              child: child,
+            );
+
+          case PageTransitionType.size:
+            return SizeTransition(
+              sizeFactor: animation,
+              child: child,
+            );
+
+          case PageTransitionType.slide:
+          default:
+            return SlideTransition(
+              position: Tween<Offset>(
+                begin: const Offset(1.0, 0.0),
+                end: Offset.zero,
+              ).animate(CurvedAnimation(parent: animation, curve: curve)),
+              child: child,
+            );
+        }
       },
+      transitionDuration: const Duration(milliseconds: 300),
     );
   }
 
+  // Updated navigation methods to accept transition type
   static void navigateTo(
       BuildContext context,
       String route, {
         Object? arguments,
+        PageTransitionType? transitionType,
       }) {
     Navigator.push(
       context,
-      generateRoute(RouteSettings(name: route, arguments: arguments)),
+      generateRoute(RouteSettings(name: route, arguments: arguments),
+          transitionType: transitionType),
     );
   }
 
@@ -174,17 +244,23 @@ class AppRoutes {
       BuildContext context,
       String route, {
         Object? arguments,
+        PageTransitionType? transitionType,
       }) {
     Navigator.pushReplacement(
       context,
-      generateRoute(RouteSettings(name: route, arguments: arguments)),
+      generateRoute(RouteSettings(name: route, arguments: arguments),
+          transitionType: transitionType),
     );
   }
 
-  static void navigateToAndRemoveUntil(BuildContext context, String route) {
+  static void navigateToAndRemoveUntil(
+      BuildContext context,
+      String route, {
+        PageTransitionType? transitionType,
+      }) {
     Navigator.pushAndRemoveUntil(
       context,
-      generateRoute(RouteSettings(name: route)),
+      generateRoute(RouteSettings(name: route), transitionType: transitionType),
           (route) => false,
     );
   }

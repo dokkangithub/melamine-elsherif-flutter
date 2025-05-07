@@ -22,7 +22,7 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
       elevation: 0,
       leadingWidth: double.infinity,
       scrolledUnderElevation: 0,
-      leading: Row(
+      leading: const Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           SizedBox(width: 15),
@@ -37,16 +37,16 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
       ),
       actions: [
         InkWell(
-          child: CustomImage(
+          child: const CustomImage(
             assetPath: AppSvgs.search_icon,
           ),
           onTap: () {
             AppRoutes.navigateTo(context, AppRoutes.searchScreen);
           },
         ),
-        SizedBox(width: 15),
+        const SizedBox(width: 15),
         InkWell(
-          child: CustomImage(
+          child: const CustomImage(
             assetPath: AppSvgs.cart_icon,
           ),
           onTap: () {

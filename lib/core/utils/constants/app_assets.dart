@@ -6,7 +6,6 @@ class AppImages {
   static const String onboarding1 = '$imagesPath/on1.png';
   static const String onboarding2 = '$imagesPath/on2.png';
   static const String onboarding3 = '$imagesPath/on3.png';
-  static const String emptyCart = '$imagesPath/emptyCart.png';
   static const String home_logo = '$imagesPath/home_logo.png';
   static const String home_banner = '$imagesPath/home_banner.png';
   static const String plates_image = '$imagesPath/plates_image.png';
@@ -24,6 +23,7 @@ class AppSvgs {
   static const String svgPath = 'assets/svgs';
   static const String EyeOn = '$svgPath/EyeOn.svg';
   static const String EyeOff = '$svgPath/EyeOff.svg';
+  static const String emptyCart = '$svgPath/emptyCart.svg';
   static const String above_second_home_image = '$svgPath/above_second_home_image.svg';
   static const String category_star = '$svgPath/category_star.svg';
   static const String category_1 = '$svgPath/category_1.svg';

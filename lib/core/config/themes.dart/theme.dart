@@ -96,7 +96,7 @@ class AppTheme {
       titleMedium: GoogleFonts.inter(
         textStyle: const TextStyle(
           color: black,
-          fontSize: 16,
+          fontSize: 15,
           fontWeight: FontWeight.w500,
         ),
       ),
@@ -110,28 +110,28 @@ class AppTheme {
       bodyLarge: GoogleFonts.inter(
         textStyle: const TextStyle(
           color: black,
-          fontSize: 16,
+          fontSize: 13,
           fontWeight: FontWeight.normal,
         ),
       ),
       bodyMedium: GoogleFonts.inter(
         textStyle: const TextStyle(
           color: black,
-          fontSize: 14,
+          fontSize: 12,
           fontWeight: FontWeight.normal,
         ),
       ),
       bodySmall: GoogleFonts.inter(
         textStyle: const TextStyle(
           color: black,
-          fontSize: 12,
+          fontSize: 11,
           fontWeight: FontWeight.normal,
         ),
       ),
       labelLarge: GoogleFonts.inter(
         textStyle: const TextStyle(
           color: black,
-          fontSize: 14,
+          fontSize: 10,
           fontWeight: FontWeight.w500,
         ),
       ),
