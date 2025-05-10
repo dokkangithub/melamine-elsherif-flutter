@@ -50,20 +50,19 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDNSC7IYQHfHz--fRDBO2Wc7bk6aY0Ca8w',
-    appId: '1:455164135628:android:11dad7d72a817f6ee5da69',
-    messagingSenderId: '455164135628',
-    projectId: 'new-ecommerce-395d1',
-    storageBucket: 'new-ecommerce-395d1.firebasestorage.app',
+    apiKey: 'AIzaSyDRJfG7B4GK0jzdUzldAZCdug5Lx1KaeNk',
+    appId: '1:113857629873:android:e1f33b1460991fa04edc90',
+    messagingSenderId: '113857629873',
+    projectId: 'melamine-elsherif',
+    storageBucket: 'melamine-elsherif.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyDMW96NWjwVt977iL_ZZeRi4d1JgdHZeIo',
-    appId: '1:455164135628:ios:a960474d2e38e0a5e5da69',
-    messagingSenderId: '455164135628',
-    projectId: 'new-ecommerce-395d1',
-    storageBucket: 'new-ecommerce-395d1.firebasestorage.app',
-    iosClientId: '455164135628-t7smoe3uk26atn26det3eu4jf059on8r.apps.googleusercontent.com',
+    apiKey: 'AIzaSyDYe692CZY4nJx_NjTtdPXV3g1XoMlWmHU',
+    appId: '1:113857629873:ios:3ac3c2872e1f09b24edc90',
+    messagingSenderId: '113857629873',
+    projectId: 'melamine-elsherif',
+    storageBucket: 'melamine-elsherif.firebasestorage.app',
     iosBundleId: 'com.example.laravelEcommerce',
   );
 }

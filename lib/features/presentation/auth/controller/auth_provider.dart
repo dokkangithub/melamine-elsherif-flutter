@@ -19,7 +19,6 @@ import '../../../domain/auth/usecases/auth/resend_code_use_case.dart';
 import '../../../domain/auth/usecases/auth/signup_use_case.dart';
 import '../../../domain/auth/usecases/auth/social_login_use_case.dart';
 
-
 class AuthProvider extends ChangeNotifier {
   final LoginUseCase loginUseCase;
   final SignupUseCase signupUseCase;
@@ -46,7 +45,9 @@ class AuthProvider extends ChangeNotifier {
   String? _errorMessage;
 
   bool get isLoading => _isLoading;
+
   AuthResponseModel? get user => _user;
+
   String? get errorMessage => _errorMessage;
 
   void _setLoading(bool value) {
@@ -59,7 +60,12 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<bool> login(String email, String password, String loginBy,BuildContext context) async {
+  Future<bool> login(
+    String email,
+    String password,
+    String loginBy,
+    BuildContext context,
+  ) async {
     _setLoading(true);
     bool isSuccess = false;
     try {
@@ -84,7 +90,6 @@ class AuthProvider extends ChangeNotifier {
           _user!.user!.email,
         );
 
-
         final apiProvider = GetIt.instance<ApiProvider>();
         if (apiProvider is RestApiProvider) {
           apiProvider.setAuthToken(_user!.accessToken!);
@@ -106,7 +111,10 @@ class AuthProvider extends ChangeNotifier {
     return isSuccess;
   }
 
-  Future<bool> signup(Map<String, dynamic> userData,BuildContext context) async {
+  Future<bool> signup(
+    Map<String, dynamic> userData,
+    BuildContext context,
+  ) async {
     _setLoading(true);
     bool isSuccess = false;
     try {
@@ -144,15 +152,25 @@ class AuthProvider extends ChangeNotifier {
   }
 
   // Add this method to complete social login flow
-  Future<bool> completeSocialLogin( String name,
-      String email,
-      String provider, {
-        access_token = "",
-        secret_token = "",
-      }) async {
+  Future<bool> completeSocialLogin({
+    required String name,
+
+    required String email,
+    required String socialProvider,
+    required String provider,
+    access_token = "",
+    secret_token = "",
+  }) async {
     _setLoading(true);
     try {
-      final authResponse = await socialLoginUseCase(provider,name,email,provider,access_token: access_token,secret_token: secret_token);
+      final authResponse = await socialLoginUseCase(
+        provider: provider,
+        socialProvider: socialProvider,
+        name: name,
+        email: email,
+        secret_token: secret_token,
+        access_token: access_token,
+      );
       if (authResponse.result) {
         _user = authResponse;
 
@@ -269,12 +287,4 @@ class AuthProvider extends ChangeNotifier {
     }
     _setLoading(false);
   }
-
-
-
 }
-
-
-
-
-

@@ -8,12 +8,13 @@ import '../models/auth_response_model.dart';
 
 abstract class AuthRemoteDataSource {
   Future<Result<AuthResponseModel>> login(String email, String password, String loginBy);  Future<Response> signup(Map<String, dynamic> userData);
-  Future<AuthResponseModel> socialLogin( String socialProvider,
-      String name,
-      String email,
-      String provider, {
-        access_token = "",
-        secret_token = "",
+  Future<AuthResponseModel> socialLogin(
+      { required String socialProvider,
+      required String name,
+        required String email,
+        required String provider,
+        String access_token = "",
+        String secret_token = "",
       });
   Future<void> logout();
   Future<void> forgetPassword(String email);
@@ -54,10 +55,11 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   }
 
   @override
-  Future<AuthResponseModel> socialLogin(String socialProvider,
-      String name,
-      String email,
-      String provider, {
+  Future<AuthResponseModel> socialLogin({
+    required String socialProvider,
+    required String name,
+    required String email,
+    required String provider,
         access_token = "",
         secret_token = "",
       }) async {
@@ -65,12 +67,13 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     var postBody = jsonEncode({
       "name": name,
       "email": email,
-      "provider": "$provider",
-      "social_provider": "$socialProvider",
-      "access_token": "$access_token",
-      "secret_token": "$secret_token"
+      "provider": provider,
+      "social_provider": socialProvider,
+      "access_token": access_token,
+      "secret_token": secret_token
     });
 
+    print('social login post Body${postBody}');
     final response = await apiProvider.post(
       LaravelApiEndPoint.socialLogin,
       data: postBody,

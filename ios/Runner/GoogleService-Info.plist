@@ -3,21 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>455164135628-t7smoe3uk26atn26det3eu4jf059on8r.apps.googleusercontent.com</string>
+	<string>113857629873-9i09rcimdbjrreuajcj199a9fmia41ee.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.455164135628-t7smoe3uk26atn26det3eu4jf059on8r</string>
+	<string>com.googleusercontent.apps.113857629873-9i09rcimdbjrreuajcj199a9fmia41ee</string>
 	<key>API_KEY</key>
-	<string>AIzaSyDMW96NWjwVt977iL_ZZeRi4d1JgdHZeIo</string>
+	<string>AIzaSyDYe692CZY4nJx_NjTtdPXV3g1XoMlWmHU</string>
 	<key>GCM_SENDER_ID</key>
-	<string>455164135628</string>
+	<string>113857629873</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.example.laravelEcommerce</string>
 	<key>PROJECT_ID</key>
-	<string>new-ecommerce-395d1</string>
+	<string>melamine-elsherif</string>
 	<key>STORAGE_BUCKET</key>
-	<string>new-ecommerce-395d1.firebasestorage.app</string>
+	<string>melamine-elsherif.firebasestorage.app</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -29,6 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:455164135628:ios:a960474d2e38e0a5e5da69</string>
+	<string>1:113857629873:ios:3ac3c2872e1f09b24edc90</string>
 </dict>
 </plist>

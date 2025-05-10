@@ -6,13 +6,13 @@ class SocialLoginUseCase {
 
   SocialLoginUseCase(this.authRepository);
 
-  Future<AuthResponseModel> call( String socialProvider,
-      String name,
-      String email,
-      String provider, {
+  Future<AuthResponseModel> call( {required String socialProvider,
+  required String name,
+  required String email,
+  required String provider,
         access_token = "",
         secret_token = "",
       }) async {
-    return await authRepository.socialLogin(provider,name,email,provider,access_token: access_token,secret_token: secret_token);
+    return await authRepository.socialLogin(socialProvider: socialProvider, name: name, email: email, provider: provider,access_token: access_token,secret_token: secret_token);
   }
 }

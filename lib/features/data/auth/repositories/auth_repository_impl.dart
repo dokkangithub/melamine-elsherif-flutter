@@ -10,11 +10,9 @@ class AuthRepositoryImpl implements AuthRepository {
   AuthRepositoryImpl(this.authRemoteDataSource);
 
   @override
-  Future<Result<AuthResponseModel>> login(
-    String email,
-    String password,
-    String loginBy,
-  ) async {
+  Future<Result<AuthResponseModel>> login(String email,
+      String password,
+      String loginBy,) async {
     return await authRemoteDataSource.login(email, password, loginBy);
   }
 
@@ -24,14 +22,20 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<AuthResponseModel> socialLogin( String socialProvider,
-      String name,
-      String email,
-      String provider, {
-        access_token = "",
-        secret_token = "",
-      }) async {
-    return await authRemoteDataSource.socialLogin(provider,name,email,provider,access_token: access_token,secret_token: secret_token);
+  Future<AuthResponseModel> socialLogin({required String socialProvider,
+    required String name,
+    required String email,
+    required String provider,
+    access_token = "",
+    secret_token = "",
+  }) async {
+    return await authRemoteDataSource.socialLogin(
+        socialProvider: socialProvider,
+        name: name,
+        email: email,
+        provider: provider,
+        secret_token: secret_token,
+        access_token: access_token);
   }
 
   @override
@@ -45,11 +49,9 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<void> confirmResetPassword(
-    String email,
-    String code,
-    String password,
-  ) async {
+  Future<void> confirmResetPassword(String email,
+      String code,
+      String password,) async {
     await authRemoteDataSource.confirmResetPassword(email, code, password);
   }
 

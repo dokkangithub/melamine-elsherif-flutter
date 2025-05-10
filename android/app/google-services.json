@@ -1,34 +1,41 @@
 {
   "project_info": {
-    "project_number": "455164135628",
-    "project_id": "new-ecommerce-395d1",
-    "storage_bucket": "new-ecommerce-395d1.firebasestorage.app"
+    "project_number": "113857629873",
+    "project_id": "melamine-elsherif",
+    "storage_bucket": "melamine-elsherif.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:455164135628:android:11dad7d72a817f6ee5da69",
+        "mobilesdk_app_id": "1:113857629873:android:e1f33b1460991fa04edc90",
         "android_client_info": {
           "package_name": "com.melamine_elsherif"
         }
       },
       "oauth_client": [
         {
-          "client_id": "455164135628-p1f2k30cff10ku5pg8dr8tp9nvlv0skg.apps.googleusercontent.com",
+          "client_id": "113857629873-sig138084lrmcodvci7i4ujdkgolrosu.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDNSC7IYQHfHz--fRDBO2Wc7bk6aY0Ca8w"
+          "current_key": "AIzaSyDRJfG7B4GK0jzdUzldAZCdug5Lx1KaeNk"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "455164135628-p1f2k30cff10ku5pg8dr8tp9nvlv0skg.apps.googleusercontent.com",
+              "client_id": "113857629873-sig138084lrmcodvci7i4ujdkgolrosu.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "113857629873-9i09rcimdbjrreuajcj199a9fmia41ee.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.laravelEcommerce"
+              }
             }
           ]
         }
