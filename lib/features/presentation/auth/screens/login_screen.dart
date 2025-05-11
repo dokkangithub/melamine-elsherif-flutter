@@ -1,7 +1,3 @@
-import 'dart:convert';
-import 'dart:math';
-import 'package:sign_in_with_apple/sign_in_with_apple.dart';
-import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart' as ToastComponent;
 import 'package:flutter/services.dart';
@@ -275,131 +271,78 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  bool isSocialLoggingIn = false;
+  bool isGoogleLoggingIn = false;
 
   onPressedGoogleLogin() async {
     setState(() {
-      isSocialLoggingIn = true;
+      isGoogleLoggingIn = true;
     });
     try {
-      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+      print('11111');
+      // Initialize with proper configuration
+      final GoogleSignIn googleSignIn = GoogleSignIn(
+        scopes: ['email', 'profile'],
+        // Add your web client ID from Google Developer Console
+        // clientId: 'YOUR_WEB_CLIENT_ID.apps.googleusercontent.com', // Uncomment and add your client ID if needed
+      );
+      
+      final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
+      print('33333');
+      
       if (googleUser == null) {
+        print('Google Sign-In canceled by user');
         setState(() {
-          isSocialLoggingIn = false;
+          isGoogleLoggingIn = false;
         });
-        return;
+        return; // Exit early if no account is selected
       }
+      
+      print('22222');
+      print(googleUser.toString());
 
       GoogleSignInAuthentication googleSignInAuthentication =
           await googleUser.authentication;
       String? accessToken = googleSignInAuthentication.accessToken;
 
+      print("accessToken $accessToken");
+      print("displayName ${googleUser.displayName}");
+      print("email ${googleUser.email}");
+      print("googleUser.id ${googleUser.id}");
+
       var loginResponse = await Provider.of<AuthProvider>(
         context,
         listen: false,
       ).completeSocialLogin(
-        provider: googleUser.id,
+        provider: "google",
         socialProvider: "google",
-        name: googleUser.displayName!,
+        name: googleUser.displayName ?? "",
         email: googleUser.email,
-        secret_token: '',
+        secret_token: googleUser.id,
         access_token: accessToken,
       );
-      if (!loginResponse) {
-        CustomSnackbar.show(context, message: 'error_signing_in_with_google_e'.tr(context),isError: true);
-        setState(() {
-          isSocialLoggingIn = false;
-        });
-      }
-      else {
-        CustomSnackbar.show(context, message: 'login_successfully'.tr(context));
-        print(loginResponse);
-        setState(() {
-          isSocialLoggingIn = false;
-        });
-
-        AppRoutes.navigateToAndRemoveUntil(context, AppRoutes.mainLayoutScreen);
-      }
-      GoogleSignIn().disconnect();
-    } on Exception catch (e) {
-      print("error is ....... $e");
+      print('sssss${loginResponse}');
+      
+      // Disconnect after completion
+      await googleSignIn.disconnect();
+      
       setState(() {
-        isSocialLoggingIn = false;
+        isGoogleLoggingIn = false;
       });
-    }
-  }
-
-  String generateNonce([int length = 32]) {
-    const charset =
-        '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._';
-    final random = Random.secure();
-    return List.generate(length, (_) => charset[random.nextInt(charset.length)])
-        .join();
-  }
-
-  /// Returns the sha256 hash of [input] in hex notation.
-  String sha256ofString(String input) {
-    final bytes = utf8.encode(input);
-    final digest = sha256.convert(bytes);
-    return digest.toString();
-  }
-
-  signInWithApple() async {
-    setState(() {
-      isSocialLoggingIn = true;
-    });
-    // To prevent replay attacks with the credential returned from Apple, we
-    // include a nonce in the credential request. When signing in with
-    // Firebase, the nonce in the id token returned by Apple, is expected to
-    // match the sha256 hash of `rawNonce`.
-    final rawNonce = generateNonce();
-    final nonce = sha256ofString(rawNonce);
-
-    // Request credential for the currently signed in Apple account.
-    try {
-      final appleCredential = await SignInWithApple.getAppleIDCredential(
-        scopes: [
-          AppleIDAuthorizationScopes.email,
-          AppleIDAuthorizationScopes.fullName,
-        ],
-        nonce: nonce,
-      );
-
-      var loginResponse = await Provider.of<AuthProvider>(
+      
+    } on Exception catch (e) {
+      print("Google Sign-In error: $e");
+      setState(() {
+        isGoogleLoggingIn = false;
+      });
+      
+      // Show error message to user
+      CustomSnackbar.show(
         context,
-        listen: false,
-      ).completeSocialLogin(
-        provider: appleCredential.userIdentifier!,
-        socialProvider: "apple",
-        name: appleCredential.givenName!,
-        email: appleCredential.email!,
-        secret_token: '',
-        access_token: appleCredential.identityToken,
+        message: 'Failed to sign in with Google: ${e.toString()}',
+        isError: true,
       );
-      if (!loginResponse) {
-        CustomSnackbar.show(context, message: 'error_signing_in_with_apple_e'.tr(context),isError: true);
-        setState(() {
-          isSocialLoggingIn = false;
-        });
-      }
-      else {
-        CustomSnackbar.show(context, message: 'login_successfully'.tr(context));
-        print(loginResponse);
-        setState(() {
-          isSocialLoggingIn = false;
-        });
-
-        AppRoutes.navigateToAndRemoveUntil(context, AppRoutes.mainLayoutScreen);
-      }
-    } on Exception catch (e) {
-      print("error is ....... $e");
-      setState(() {
-        isSocialLoggingIn = false;
-      });
     }
   }
-
-
 
   Widget _buildSocialButton({
     required String icon,
