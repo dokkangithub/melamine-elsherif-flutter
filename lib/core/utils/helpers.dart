@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:melamine_elsherif/core/config/routes.dart/routes.dart';
+import 'package:melamine_elsherif/core/config/themes.dart/theme.dart';
 import 'package:melamine_elsherif/core/utils/constants/app_strings.dart';
 import 'package:melamine_elsherif/core/utils/extension/translate_extension.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_dilog.dart';
 import 'package:melamine_elsherif/core/utils/widgets/cutsom_toast.dart';
 import 'package:provider/provider.dart';
-
+import 'package:top_snackbar_flutter/custom_snack_bar.dart';
+import 'package:top_snackbar_flutter/tap_bounce_container.dart';
+import 'package:top_snackbar_flutter/top_snack_bar.dart';
 import '../../features/presentation/cart/controller/cart_provider.dart';
 import '../../features/presentation/product details/controller/product_provider.dart';
 import '../../features/presentation/wishlist/controller/wishlist_provider.dart';
@@ -59,9 +62,13 @@ abstract class AppFunctions {
       await cartProvider.fetchCartSummary();
 
       if (context.mounted) {
-        CustomToast.showToast(
-          message: cartMessage ?? 'Added to cart successfully',
-          type: ToastType.success,
+        showTopSnackBar(
+          Overlay.of(context),
+          CustomSnackBar.success(
+            message:
+            cartMessage ?? 'added_to_cart_successfully'.tr(context),
+            backgroundColor: AppTheme.primaryColor,
+          ),
         );
       }
     } finally {
@@ -85,34 +92,16 @@ abstract class AppFunctions {
       await provider.toggleWishlistStatus(context, slug);
 
       if (context.mounted && provider.lastActionMessage != null) {
-        CustomToast.showToast(
-          message: provider.lastActionMessage!,
-          type: ToastType.success,
+        showTopSnackBar(
+          Overlay.of(context),
+          CustomSnackBar.success(
+            message: provider.lastActionMessage!,
+            backgroundColor: AppTheme.primaryColor,
+          ),
         );
+
       }
     }
   }
 
-  static Future<void> showCustomDialog({
-    required BuildContext context,
-    required String title,
-    required String description,
-    String confirmButtonText = 'OK',
-    String cancelButtonText = 'Cancel',
-    VoidCallback? onConfirm,
-    VoidCallback? onCancel,
-  }) async {
-    return showDialog(
-      context: context,
-      builder:
-          (context) => CustomDialog(
-            title: title,
-            description: description,
-            confirmButtonText: confirmButtonText,
-            cancelButtonText: cancelButtonText,
-            onConfirm: onConfirm,
-            onCancel: onCancel,
-          ),
-    );
-  }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:melamine_elsherif/core/utils/constants/app_assets.dart';
 import 'package:melamine_elsherif/core/utils/local_storage/local_storage_keys.dart';
@@ -99,11 +100,17 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        toolbarHeight: 0.0,
+        systemOverlayStyle: const SystemUiOverlayStyle(
+          statusBarColor: AppTheme.white,
+          statusBarIconBrightness: Brightness.dark
+        ),
+      ),
       body: SafeArea(
         child: Stack(
           children: [
-          
-            
+
             Column(
               children: [
                 // Add space for the skip button

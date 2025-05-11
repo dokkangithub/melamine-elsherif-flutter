@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:melamine_elsherif/core/config/themes.dart/theme.dart';
 import 'package:melamine_elsherif/core/utils/extension/text_style_extension.dart';
 import 'package:melamine_elsherif/core/utils/extension/translate_extension.dart';
+import 'package:melamine_elsherif/core/utils/widgets/custom_cached_image.dart';
 import '../../../../core/utils/widgets/custom_button.dart';
 
 enum ContentType {
@@ -50,9 +51,9 @@ class OnboardingContent extends StatelessWidget {
             padding: const EdgeInsets.all(16.0),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(16),
-              child: Image.asset(
-                image,
-                fit: BoxFit.cover,
+              child: CustomImage(
+                assetPath: image,
+                fit: BoxFit.contain,
               ),
             ),
           ),
@@ -155,9 +156,9 @@ class OnboardingContent extends StatelessWidget {
             padding: const EdgeInsets.all(16.0),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(16),
-              child: Image.asset(
-                image,
-                fit: BoxFit.cover,
+              child: CustomImage(
+                assetPath: image,
+                fit: BoxFit.contain,
               ),
             ),
           ),
