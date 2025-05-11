@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:melamine_elsherif/core/services/widget_service.dart';
 import 'package:melamine_elsherif/core/utils/constants/app_strings.dart';
 import 'package:melamine_elsherif/features/presentation/home/controller/home_provider.dart';
 import 'package:melamine_elsherif/features/presentation/search/controller/search_provider.dart';
@@ -62,6 +63,12 @@ Future<void> main() async {
   await SharedPrefs.init();
   await setupDependencies();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  // Initialize widget service
+  await WidgetService().initialize();
+  
+  // Register widget interactivity
+  await WidgetService().registerInteractivity();
 
   // Get saved locale from storage
   Locale locale = await sl<LanguageProvider>().getLocale();

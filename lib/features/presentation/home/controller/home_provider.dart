@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:melamine_elsherif/core/services/widget_service.dart';
 import 'package:melamine_elsherif/features/domain/product/usecases/get_all_products_use_case.dart';
 import '../../../../core/utils/enums/loading_state.dart';
 import '../../../domain/product/entities/product.dart';
@@ -251,6 +252,11 @@ class HomeProvider extends ChangeNotifier {
       }
 
       bestSellingProductsState = LoadingState.loaded;
+      
+      // Update widget data with best selling products
+      if (bestSellingProducts.isNotEmpty) {
+        await WidgetService().updateWidgetDataFromProvider(this);
+      }
     } catch (e) {
       bestSellingProductsState = LoadingState.error;
       bestSellingProductsError = e.toString();

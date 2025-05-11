@@ -36,6 +36,24 @@ android {
             signingConfig = signingConfigs.getByName("debug")
         }
     }
+
+    // Add configuration to resolve duplicate class conflicts
+    configurations.all {
+        resolutionStrategy {
+            // Force a specific version of androidx.work to resolve conflicts
+            force("androidx.work:work-runtime:2.8.1")
+            force("androidx.work:work-runtime-ktx:2.8.1")
+        }
+    }
+}
+
+dependencies {
+    // Kotlin Coroutines
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+    // Material Components for Android
+    implementation("com.google.android.material:material:1.11.0")
+    // Add explicit dependency on androidx.work
+    implementation("androidx.work:work-runtime-ktx:2.8.1")
 }
 
 flutter {
