@@ -1599,6 +1599,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.7.4"
+  thanos_snap_effect:
+    dependency: "direct main"
+    description:
+      name: thanos_snap_effect
+      sha256: "9c6f3a54e131f860c50e7af964835c9d8448fdc90db98f762a4869087879cfa7"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.8"
   timing:
     dependency: transitive
     description:

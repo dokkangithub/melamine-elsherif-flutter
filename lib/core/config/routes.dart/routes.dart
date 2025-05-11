@@ -63,7 +63,7 @@ class AppRoutes {
   static const String searchScreen = '/search-screen';
 
 
-  static const PageTransitionType defaultTransition = PageTransitionType.scale;
+  static const PageTransitionType defaultTransition = PageTransitionType.fade;
 
   static Route<dynamic> generateRoute(RouteSettings settings, {PageTransitionType? transitionType}) {
     Widget page;

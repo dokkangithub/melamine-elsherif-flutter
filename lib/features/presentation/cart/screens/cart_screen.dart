@@ -6,6 +6,7 @@ import 'package:melamine_elsherif/core/utils/widgets/custom_cached_image.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_form_field.dart';
 import 'package:melamine_elsherif/features/domain/cart/entities/cart.dart';
 import 'package:melamine_elsherif/features/presentation/cart/widgets/custom_product_in_cart.dart';
+import 'package:melamine_elsherif/features/presentation/cart/widgets/snappable_cart_item.dart';
 import 'package:provider/provider.dart';
 import '../../../../core/config/routes.dart/routes.dart';
 import '../../../../core/config/themes.dart/theme.dart';
@@ -154,7 +155,7 @@ class _CartScreenState extends State<CartScreen> {
                   itemCount: cartProvider.cartItems.length,
                   itemBuilder: (context, index) {
                     final CartItem item = cartProvider.cartItems[index];
-                    return ProductItemInCart(
+                    return SnappableCartItem(
                       item: item,
                       index: index,
                       onQuantityChanged: (int quntity) {

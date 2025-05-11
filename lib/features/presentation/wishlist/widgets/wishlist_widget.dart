@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:melamine_elsherif/core/utils/extension/text_style_extension.dart';
 import 'package:melamine_elsherif/core/utils/helpers.dart';
 import 'package:melamine_elsherif/features/presentation/wishlist/widgets/shimmer/wishlist_screen_shimmer.dart';
+import 'package:melamine_elsherif/features/presentation/wishlist/widgets/snappable_wishlist_item.dart';
 import '../../../../core/config/routes.dart/routes.dart';
 import '../../../../core/config/themes.dart/theme.dart';
 import '../../../../core/utils/constants/app_assets.dart';
@@ -48,12 +49,39 @@ class WishlistWidget extends StatelessWidget {
             alignment: Alignment.centerRight,
             child: InkWell(
               onTap: () {
-                for (var item in provider.wishlistItems) {
-                  provider.removeFromWishlist(item.slug);
-                }
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('wishlist_cleared'.tr(context)),
+                // Get all item keys and trigger snap animation
+                final wishlistItemKeys = List.generate(
+                  provider.wishlistItems.length,
+                  (index) => GlobalKey<SnappableWishlistItemState>(),
+                );
+                
+                // Show a confirmation dialog
+                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: Text('Clear Wishlist?'.tr(context)),
+                    content: Text('Are you sure you want to remove all items from your wishlist?'.tr(context)),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.pop(context),
+                        child: Text('Cancel'.tr(context)),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                          
+                          // Once confirmed, clear the wishlist with animation effect
+                          for (var item in provider.wishlistItems) {
+                            provider.removeFromWishlist(item.slug);
+                          }
+                          
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('wishlist_cleared'.tr(context))),
+                          );
+                        },
+                        child: Text('Clear'.tr(context), style: TextStyle(color: Colors.red)),
+                      ),
+                    ],
                   ),
                 );
               },
@@ -103,129 +131,136 @@ class WishlistWidget extends StatelessWidget {
   }
 
   Widget _buildWishlistItem(BuildContext context, wishlistItem, WishlistProvider provider) {
-    return InkWell(
-      onTap: () {
-        AppRoutes.navigateTo(
-          context,
-          AppRoutes.productDetailScreen,
-          arguments: {'slug': wishlistItem.slug},
-        );
-      },
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(8),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withValues(alpha: 0.1),
-              spreadRadius: 1,
-              blurRadius: 2,
-            ),
-          ],
-        ),
-        child: Stack(
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Product image
-                Expanded(
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(8),
-                      topRight: Radius.circular(8),
-                    ),
-                    child: CustomImage(
-                      imageUrl:  wishlistItem.thumbnailImage,
-                      fit: BoxFit.cover,
-                      width: double.infinity,
-                      height: double.infinity,
+    final GlobalKey<SnappableWishlistItemState> snappableKey = GlobalKey<SnappableWishlistItemState>();
+    
+    return SnappableWishlistItem(
+      key: snappableKey,
+      slug: wishlistItem.slug,
+      child: InkWell(
+        onTap: () {
+          AppRoutes.navigateTo(
+            context,
+            AppRoutes.productDetailScreen,
+            arguments: {'slug': wishlistItem.slug},
+          );
+        },
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(8),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withValues(alpha: 0.1),
+                spreadRadius: 1,
+                blurRadius: 2,
+              ),
+            ],
+          ),
+          child: Stack(
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Product image
+                  Expanded(
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(8),
+                        topRight: Radius.circular(8),
+                      ),
+                      child: CustomImage(
+                        imageUrl: wishlistItem.thumbnailImage,
+                        fit: BoxFit.cover,
+                        width: double.infinity,
+                        height: double.infinity,
+                      ),
                     ),
                   ),
-                ),
 
-                // Product details
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      // Product name
-                      Text(
-                        wishlistItem.name,
-                        style: context.titleSmall,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
+                  // Product details
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        // Product name
+                        Text(
+                          wishlistItem.name,
+                          style: context.titleSmall,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
 
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          // Price
-                          Text('${wishlistItem.price}'.tr(context),
-                            style: context.titleSmall,
-                          ),
-                          // Add to cart button
-                          InkWell(
-                            onTap: () {
-                              AppFunctions.addProductToCart(
-                                context: context,
-                                productId: wishlistItem.productId,
-                                productName: wishlistItem.name,
-                                productSlug: wishlistItem.slug,
-                                hasVariation: wishlistItem.hasVariation,
-                              );
-                            },
-                            child: Container(
-                                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-                                decoration: BoxDecoration(
-                                  color: AppTheme.accentColor,
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                child: CustomImage(assetPath: AppSvgs.cart_white)
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            // Price
+                            Text('${wishlistItem.price}'.tr(context),
+                              style: context.titleSmall,
                             ),
-                          ),
-                        ],
-                      ),
+                            // Add to cart button
+                            InkWell(
+                              onTap: () {
+                                AppFunctions.addProductToCart(
+                                  context: context,
+                                  productId: wishlistItem.productId,
+                                  productName: wishlistItem.name,
+                                  productSlug: wishlistItem.slug,
+                                  hasVariation: wishlistItem.hasVariation,
+                                );
+                              },
+                              child: Container(
+                                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                                  decoration: BoxDecoration(
+                                    color: AppTheme.accentColor,
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: CustomImage(assetPath: AppSvgs.cart_white)
+                              ),
+                            ),
+                          ],
+                        ),
 
 
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              ],
-            ),
+                ],
+              ),
 
-            // Wishlist heart icon
-            Positioned(
-              top: 8,
-              right: 8,
-              child: InkWell(
-                onTap: () {
-                  provider.removeFromWishlist(wishlistItem.slug);
-                },
-                child: Container(
-                  padding: EdgeInsets.all(6),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    shape: BoxShape.circle,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.2),
-                        spreadRadius: 1,
-                        blurRadius: 2,
-                      ),
-                    ],
-                  ),
-                  child: Icon(
-                    Icons.favorite,
-                    color: AppTheme.accentColor,
-                    size: 18,
+              // Wishlist heart icon
+              Positioned(
+                top: 8,
+                right: 8,
+                child: InkWell(
+                  onTap: () {
+                    // Trigger the snap effect before removing item
+                    snappableKey.currentState?.startSnap();
+                  },
+                  child: Container(
+                    padding: EdgeInsets.all(6),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.2),
+                          spreadRadius: 1,
+                          blurRadius: 2,
+                        ),
+                      ],
+                    ),
+                    child: Icon(
+                      Icons.favorite,
+                      color: AppTheme.accentColor,
+                      size: 18,
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
