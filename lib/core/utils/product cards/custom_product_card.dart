@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:melamine_elsherif/core/config/themes.dart/theme.dart';
-import 'package:melamine_elsherif/core/utils/extension/responsive_extension.dart';
 import 'package:melamine_elsherif/core/utils/extension/text_style_extension.dart';
 import 'package:melamine_elsherif/core/utils/extension/translate_extension.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_button.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_cached_image.dart';
+import 'package:melamine_elsherif/core/utils/widgets/custom_loading.dart';
 import 'package:melamine_elsherif/features/presentation/main%20layout/controller/layout_provider.dart';
 import 'package:provider/provider.dart';
 import '../../../../features/domain/product/entities/product.dart';
@@ -12,7 +12,7 @@ import '../../../features/presentation/wishlist/controller/wishlist_provider.dar
 import '../../config/routes.dart/routes.dart';
 import '../helpers.dart';
 
-class ProductCard extends StatelessWidget {
+class ProductCard extends StatefulWidget {
   final Product product;
   final bool? isOutlinedAddToCart;
   final bool? isBuyNow;
@@ -20,7 +20,15 @@ class ProductCard extends StatelessWidget {
   const ProductCard({super.key, required this.product, this.isOutlinedAddToCart=false, this.isBuyNow=false});
 
   @override
+  State<ProductCard> createState() => _ProductCardState();
+}
+
+class _ProductCardState extends State<ProductCard> {
+  bool isAddingToCart = false;
+
+  @override
   Widget build(BuildContext context) {
+    print(widget.product.discountedPrice);
     return InkWell(
       splashColor: Colors.transparent,
       highlightColor: Colors.transparent,
@@ -28,7 +36,7 @@ class ProductCard extends StatelessWidget {
         AppRoutes.navigateTo(
           context,
           AppRoutes.productDetailScreen,
-          arguments: {'slug': product.slug},
+          arguments: {'slug': widget.product.slug},
         );
       },
       child: Padding(
@@ -47,7 +55,7 @@ class ProductCard extends StatelessWidget {
                       child: AspectRatio(
                         aspectRatio: 1.3,
                         child: CustomImage(
-                          imageUrl: product.thumbnailImage,
+                          imageUrl: widget.product.thumbnailImage,
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -60,41 +68,52 @@ class ProductCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       // Rating stars
-                      !isBuyNow! ?SizedBox.shrink():Row(
+                      !widget.isBuyNow! ?const SizedBox.shrink():Row(
                         children: List.generate(
                           5,
                               (index) =>
-                              Icon(Icons.star_outline_sharp, color: Colors.amber, size: 14),
+                              const Icon(Icons.star_outline_sharp, color: Colors.amber, size: 14),
                         ),
                       ),
                       // Product name
                       Text(
-                        product.name,
+                        widget.product.name,
                         style: context.bodyMedium.copyWith(color: AppTheme.black,fontWeight: FontWeight.w700),
                         maxLines: 1,
                       ),
 
                       // Price
-                      Text('${product.discountedPrice}'.tr(context),
+                      Text(widget.product.discountedPrice,
                         style: context.titleMedium.copyWith(color: AppTheme.primaryColor),
                       ),
 
-                      CustomButton(
-                        text: isBuyNow! ? 'buy_now'.tr(context): 'add_to_cart'.tr(context),
-                        textStyle: context.bodyMedium.copyWith(color: isOutlinedAddToCart! ?AppTheme.primaryColor:AppTheme.white),
+                      isAddingToCart ? const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          CustomLoadingWidget(),
+                        ],
+                      ): CustomButton(
+                        text: widget.isBuyNow! ? 'buy_now'.tr(context): 'add_to_cart'.tr(context),
+                        textStyle: context.bodyMedium.copyWith(color: widget.isOutlinedAddToCart! ?AppTheme.primaryColor:AppTheme.white),
                         fullWidth: true,
-                        isOutlined: isOutlinedAddToCart!,
-                        padding: EdgeInsets.all(8),
+                        isOutlined: widget.isOutlinedAddToCart!,
+                        padding: const EdgeInsets.all(8),
                         onPressed: () async {
+                          setState(() {
+                            isAddingToCart = true;
+                          });
                           await AppFunctions.addProductToCart(
                               context: context,
-                              productId: product.id,
-                              productName: product.name,
-                              productSlug: product.slug,
-                              hasVariation: product.hasVariation
+                              productId: widget.product.id,
+                              productName: widget.product.name,
+                              productSlug: widget.product.slug,
+                              hasVariation: widget.product.hasVariation
                           );
-                          isBuyNow! ? AppRoutes.navigateTo(context, AppRoutes.mainLayoutScreen):null;
-                          isBuyNow! ? Provider.of<LayoutProvider>(context,listen: false).currentIndex=3:null;
+                          widget.isBuyNow! ? AppRoutes.navigateTo(context, AppRoutes.mainLayoutScreen):null;
+                          widget.isBuyNow! ? Provider.of<LayoutProvider>(context,listen: false).currentIndex=3:null;
+                          setState(() {
+                            isAddingToCart = false;
+                          });
                         },
                       )
                     ],
@@ -104,23 +123,23 @@ class ProductCard extends StatelessWidget {
               Positioned(
                 top: 12,
                 right:
-                    Directionality.of(context) == TextDirection.ltr ? 8 : null,
+                Directionality.of(context) == TextDirection.ltr ? 8 : null,
                 left: Directionality.of(context) == TextDirection.rtl ? 8 : null,
                 child: Consumer<WishlistProvider>(
                   builder: (context, provider, _) {
                     final isInWishlist = provider.isProductInWishlist(
-                      product.slug,
+                      widget.product.slug,
                     );
 
                     return InkWell(
                       onTap: () {
-                        AppFunctions.toggleWishlistStatus(context, product.slug);
+                        AppFunctions.toggleWishlistStatus(context, widget.product.slug);
                       },
                       child: Container(
-                        padding: EdgeInsets.all(6),
+                        padding: const EdgeInsets.all(6),
                         decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: AppTheme.white.withValues(alpha: 0.6)
+                            shape: BoxShape.circle,
+                            color: AppTheme.white.withValues(alpha: 0.6)
                         ),
                         child: Icon(
                           isInWishlist ? Icons.favorite : Icons.favorite_border,

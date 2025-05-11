@@ -25,14 +25,13 @@ import '../../../features/presentation/splash/splash_screen.dart';
 import '../../../features/presentation/search/screens/search_screen.dart';
 
 
-// Define transition types for different animations outside the class
 enum PageTransitionType {
-  slide, // Slide from right
-  fade, // Fade in
-  scale, // Scale up
-  slideUp, // Slide from bottom
-  rotation, // Rotate in
-  size, // Grow from center
+  slide,
+  fade,
+  scale,
+  slideUp,
+  rotation,
+  size,
 }
 
 class AppRoutes {
@@ -172,7 +171,6 @@ class AppRoutes {
     return PageRouteBuilder(
       pageBuilder: (context, animation, secondaryAnimation) => page,
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        const duration = Duration(milliseconds: 300);
         const curve = Curves.easeInOut;
 
         switch (transition) {
@@ -212,7 +210,6 @@ class AppRoutes {
             );
 
           case PageTransitionType.slide:
-          default:
             return SlideTransition(
               position: Tween<Offset>(
                 begin: const Offset(1.0, 0.0),

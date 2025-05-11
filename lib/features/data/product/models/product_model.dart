@@ -40,7 +40,7 @@ class ProductModel extends entity.Product {
       hasDiscount: json['has_discount'] ?? false,
       discount: json['discount'] ?? '',
       mainPrice: json['main_price'] ?? '',
-      discountedPrice: json['discounted_price'] ?? '',
+      discountedPrice: json['stroked_price'] ?? '',
       published: json['published'] ?? 0,
       hasVariation: json['has_variation'] ?? false,
       stockQuantity: json['stock_quantity'] ?? 0,
