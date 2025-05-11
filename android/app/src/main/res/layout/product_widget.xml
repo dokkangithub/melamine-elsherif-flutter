@@ -16,10 +16,10 @@
         
     <!-- Icon in top right corner -->
     <ImageView
-        android:layout_width="36dp"
-        android:layout_height="36dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_gravity="top|end"
-        android:layout_margin="12dp"
+        android:layout_margin="10dp"
         android:src="@drawable/home_widget_icon"
         android:contentDescription="Widget Icon" />
 
@@ -38,7 +38,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Product"
-            android:textSize="14sp"
+            android:textSize="16sp"
             android:textStyle="bold"
             android:textColor="#FFFFFF"
             android:maxLines="1" />

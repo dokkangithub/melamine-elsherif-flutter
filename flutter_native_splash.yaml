@@ -1,12 +1,14 @@
 flutter_native_splash:
   color: "#FFFFFF"  # White background for light mode
-  image: assets/images/app_splash.png  # Your centered logo
-  color_dark: "#FFFFFF"  # White background for dark mode
-  image_dark: assets/images/app_splash.png  # Same logo for dark mode
+  image: assets/images/app_logo.png  # Your centered logo
+  color_dark: "#1a1a1a"  # White background for dark mode
+  image_dark: assets/images/app_logo.png  # Same logo for dark mode
 
   android_12:
-    image: assets/images/app_splash.png  # Same logo for Android 12
+    image: assets/images/app_logo.png  # Same logo for Android 12
     icon_background_color: "#FFFFFF"  # White background for Android 12
+    image_dark: assets/images/app_logo.png
+    icon_background_color_dark: "#1a1a1a"
 
   ios: true  # Enable for iOS
   web: false  # Disable for web

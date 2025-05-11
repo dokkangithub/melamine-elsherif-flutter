@@ -91,6 +91,8 @@ dependencies:
   shared_preferences: ^2.5.3
   google_fonts: ^6.2.1
   flutter_neumorphic_plus: ^3.4.0
+  awesome_snackbar_content: ^0.1.5
+
 
 
 
