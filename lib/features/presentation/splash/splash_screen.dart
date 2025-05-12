@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:melamine_elsherif/core/config/app_config.dart/app_config.dart';
 import 'package:melamine_elsherif/core/config/themes.dart/theme.dart';
 import 'package:melamine_elsherif/core/utils/extension/text_style_extension.dart';
@@ -193,6 +194,14 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        toolbarHeight: 0,
+        elevation: 0,
+        systemOverlayStyle: const SystemUiOverlayStyle(
+          statusBarColor: AppTheme.white,
+          statusBarIconBrightness: Brightness.dark
+        ),
+      ),
       backgroundColor: Colors.white,
       body: SafeArea(
         child: Column(

@@ -64,8 +64,8 @@ class OnboardingContent extends StatelessWidget {
             children: [
               Text(
                 title,
-                style: context.headlineMedium.copyWith(
-                  fontWeight: FontWeight.bold,
+                style: context.displaySmall.copyWith(
+                  fontWeight: FontWeight.normal,
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -121,8 +121,8 @@ class OnboardingContent extends StatelessWidget {
                             children: [
                               Text(
                                 feature.title,
-                                style: context.titleMedium.copyWith(
-                                  fontWeight: FontWeight.bold,
+                                style: context.displaySmall.copyWith(
+                                  fontWeight: FontWeight.normal,
                                 ),
                               ),
                               const SizedBox(height: 4),
@@ -186,6 +186,7 @@ class OnboardingContent extends StatelessWidget {
               CustomButton(
                 text: 'sign_up'.tr(context),
                 onPressed: onSignUp,
+                isGradient: true,
                 backgroundColor: AppTheme.primaryColor,
                 fullWidth: true,
               ),

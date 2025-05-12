@@ -160,6 +160,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         CustomButton(
                           text: 'Next',
                           onPressed: _onNextPressed,
+                          isGradient: true,
                           backgroundColor: AppTheme.primaryColor,
                           fullWidth: true,
                         ),

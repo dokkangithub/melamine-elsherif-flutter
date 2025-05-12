@@ -54,15 +54,15 @@ class CustomButton extends StatelessWidget {
 
     // Default gradient colors if not provided
     final colors = gradientColors ?? [
-      Color(0xFFB85959), // Darker reddish color
-      Color(0xFFE9A2A2), // Lighter pinkish color
+       AppTheme.primaryColor, // Darker reddish color
+      AppTheme.secondaryColor, // Lighter pinkish color
     ];
 
     if (isGradient) {
       // Return gradient style button
       return Container(
         width: fullWidth ? double.infinity : null,
-        height: 50,
+        height: 45,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(borderRadius ?? 10.0),
           gradient: LinearGradient(
@@ -74,7 +74,7 @@ class CustomButton extends StatelessWidget {
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.1),
               blurRadius: 4,
-              offset: Offset(0, 2),
+              offset: const Offset(0, 2),
             ),
           ],
         ),
@@ -89,7 +89,7 @@ class CustomButton extends StatelessWidget {
               ? SizedBox(
                   width: loadingIndicatorSize,
                   height: loadingIndicatorSize,
-                  child: CircularProgressIndicator(
+                  child: const CircularProgressIndicator(
                     strokeWidth: 2,
                     valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                   ),
@@ -128,7 +128,7 @@ class CustomButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(borderRadius ?? 25.0),
           ),
           child: isLoading
-              ? Center(
+              ? const Center(
                   child: CustomLoadingWidget(),
                 )
               : _buildContent(context, effectiveTextColor),
