@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart' as ToastComponent;
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:melamine_elsherif/core/config/routes.dart/routes.dart';
@@ -12,13 +11,18 @@ import 'package:melamine_elsherif/core/utils/local_storage/secure_storage.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_button.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_cached_image.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_form_field.dart';
+import 'package:melamine_elsherif/features/presentation/main%20layout/controller/layout_provider.dart';
 import 'package:provider/provider.dart';
 import '../../../../core/utils/extension/translate_extension.dart';
 import '../../../../core/utils/widgets/custom_loading.dart';
 import '../../../../core/utils/widgets/custom_snackbar.dart';
+import '../../../../core/utils/widgets/cutsom_toast.dart';
 import '../controller/auth_provider.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+
+import '../widgets/login_screen_logo.dart';
+import '../widgets/social_login_widget.dart';
+
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -31,7 +35,6 @@ class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  bool _obscurePassword = true;
 
   @override
   void dispose() {
@@ -57,213 +60,193 @@ class _LoginScreenState extends State<LoginScreen> {
             (context, authProvider, _) => Form(
               key: _formKey,
               child: SafeArea(
-                child: Center(
-                  child: SingleChildScrollView(
-                    physics: const BouncingScrollPhysics(),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          // Logo
-                          const CustomImage(
-                            assetPath: AppImages.appLogo,
-                            height: 160,
-                            width: 160,
-                          ),
-
-                          // Welcome back text
-                          Row(
+                child: Stack(
+                  alignment: Alignment.topLeft,
+                  children: [
+                    Center(
+                      child: SingleChildScrollView(
+                        physics: const BouncingScrollPhysics(),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Text(
-                                'welcome_back_1'.tr(context),
-                                style: context.displaySmall.copyWith(
-                                  fontWeight: FontWeight.w800,
-                                  color: Colors.black,
-                                ),
+                              // Logo
+                              const LoginScreenLogo(),
+
+                              // Welcome back text
+                              Row(
+                                children: [
+                                  Text(
+                                    'welcome_back_1'.tr(context),
+                                    style: context.displaySmall.copyWith(
+                                      fontWeight: FontWeight.w800,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
-                          const SizedBox(height: 8),
+                              const SizedBox(height: 8),
 
-                          // Subtitle
-                          Row(
-                            children: [
-                              Text(
-                                'sign_in_continue'.tr(context),
-                                style: context.titleMedium.copyWith(
-                                  color: Colors.grey[600],
-                                ),
+                              // Subtitle
+                              Row(
+                                children: [
+                                  Text(
+                                    'sign_in_continue'.tr(context),
+                                    style: context.titleSmall.copyWith(
+                                      color: Colors.grey[600],
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
-                          const SizedBox(height: 32),
+                              const SizedBox(height: 32),
 
-                          // Email Field
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              'email'.tr(context),
-                              style: context.titleMedium.copyWith(
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          CustomTextFormField(
-                            controller: emailController,
-                            hint: 'enter_your_email'.tr(context),
-                            keyboardType: TextInputType.emailAddress,
-                          ),
-                          const SizedBox(height: 16),
-
-                          // Password Field
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              'password'.tr(context),
-                              style: context.titleMedium.copyWith(
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          CustomTextFormField(
-                            controller: passwordController,
-                            hint: 'enter_password'.tr(context),
-                            keyboardType: TextInputType.emailAddress,
-                          ),
-
-                          // Forgot Password
-                          Align(
-                            alignment: Alignment.centerRight,
-                            child: TextButton(
-                              onPressed: () {
-                                AppRoutes.navigateTo(
-                                  context,
-                                  AppRoutes.forgetPassword,
-                                );
-                              },
-                              child: Text(
-                                'forgot_password'.tr(context),
-                                style: context.titleSmall.copyWith(
-                                  color: AppTheme.primaryColor,
-                                ),
-                              ),
-                            ),
-                          ),
-
-                          const SizedBox(height: 10),
-
-                          // Sign In Button
-                          if (authProvider.isLoading)
-                            const CustomLoadingWidget()
-                          else
-                            CustomButton(
-                              onPressed:
-                                  () => _handleLogin(context, authProvider),
-                              backgroundColor: AppTheme.primaryColor,
-                              text: 'login'.tr(context),
-                              fullWidth: true,
-                            ),
-
-                          const SizedBox(height: 20),
-                          CustomButton(
-                            onPressed: () {
-                              AppRoutes.navigateTo(
-                                context,
-                                AppRoutes.mainLayoutScreen,
-                              );
-                            },
-                            backgroundColor: AppTheme.primaryColor,
-                            isOutlined: true,
-                            text: 'continue_as_guest'.tr(context),
-                            fullWidth: true,
-                          ),
-                          const SizedBox(height: 32),
-                          // Or continue with
-                          Row(
-                            children: [
-                              const Expanded(child: Divider()),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 16,
-                                ),
+                              // Email Field
+                              Align(
+                                alignment: Alignment.centerLeft,
                                 child: Text(
-                                  'or_continue_with'.tr(context),
-                                  style: context.bodySmall.copyWith(
-                                    color: Colors.grey,
+                                  'email'.tr(context),
+                                  style: context.titleMedium.copyWith(
+                                    fontWeight: FontWeight.w400,
                                   ),
                                 ),
                               ),
-                              const Expanded(child: Divider()),
-                            ],
-                          ),
-
-                          const SizedBox(height: 24),
-
-                          // Social Login Options
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              _buildSocialButton(
-                                icon: AppSvgs.google,
-                                onTap: () {
-                                  onPressedGoogleLogin();
-                                },
+                              CustomTextFormField(
+                                controller: emailController,
+                                hint: 'enter_your_email'.tr(context),
+                                keyboardType: TextInputType.emailAddress,
                               ),
-                              const SizedBox(width: 16),
-                              _buildSocialButton(
-                                icon: AppSvgs.facebook,
-                                onTap: () {
-                                  // Handle Facebook login
-                                },
-                              ),
-                              const SizedBox(width: 16),
-                              _buildSocialButton(
-                                icon: AppSvgs.apple,
-                                onTap: () {
-                                  // Handle Apple login
-                                },
-                              ),
-                            ],
-                          ),
+                              const SizedBox(height: 16),
 
-                          const SizedBox(height: 24),
-
-                          // Sign Up Prompt
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                "don't_have_an_account?".tr(context),
-                                style: context.bodyMedium.copyWith(
-                                  color: Colors.grey[700],
-                                ),
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  AppRoutes.navigateTo(
-                                    context,
-                                    AppRoutes.signUp,
-                                  );
-                                },
+                              // Password Field
+                              Align(
+                                alignment: Alignment.centerLeft,
                                 child: Text(
-                                  'sign_up'.tr(context),
-                                  style: context.bodyMedium.copyWith(
-                                    color: AppTheme.primaryColor,
-                                    fontWeight: FontWeight.bold,
+                                  'password'.tr(context),
+                                  style: context.titleMedium.copyWith(
+                                    fontWeight: FontWeight.w400,
                                   ),
                                 ),
                               ),
+                              CustomTextFormField(
+                                controller: passwordController,
+                                hint: 'enter_password'.tr(context),
+                                keyboardType: TextInputType.emailAddress,
+                              ),
+
+                              // Forgot Password
+                              Align(
+                                alignment: Alignment.centerRight,
+                                child: TextButton(
+                                  onPressed: () {
+                                    AppRoutes.navigateTo(
+                                      context,
+                                      AppRoutes.forgetPassword,
+                                    );
+                                  },
+                                  child: Text(
+                                    'forgot_password'.tr(context),
+                                    style: context.titleSmall.copyWith(
+                                      color: AppTheme.primaryColor,
+                                    ),
+                                  ),
+                                ),
+                              ),
+
+                              const SizedBox(height: 10),
+
+                              // Sign In Button
+                              if (authProvider.isLoading)
+                                const CustomLoadingWidget()
+                              else
+                                CustomButton(
+                                  onPressed:
+                                      () => _handleLogin(context, authProvider),
+                                  isGradient: true,
+                                  backgroundColor: AppTheme.primaryColor,
+                                  text: 'login'.tr(context),
+                                  fullWidth: true,
+                                ),
+
+                              const SizedBox(height: 32),
+                              // Or continue with
+                              Row(
+                                children: [
+                                  const Expanded(child: Divider()),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 16,
+                                    ),
+                                    child: Text(
+                                      'or_continue_with'.tr(context),
+                                      style: context.bodyLarge.copyWith(
+                                        color: Colors.grey[900],
+                                      ),
+                                    ),
+                                  ),
+                                  const Expanded(child: Divider()),
+                                ],
+                              ),
+
+                              const SizedBox(height: 24),
+
+                              // Social Login Options
+                              const SocialLoginWidget(),
+
+                              const SizedBox(height: 24),
+
+                              // Sign Up Prompt
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    "don't_have_an_account?".tr(context),
+                                    style: context.bodyLarge.copyWith(
+                                      color: Colors.grey[900],
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      AppRoutes.navigateTo(
+                                        context,
+                                        AppRoutes.signUp,
+                                      );
+                                    },
+                                    child: Text(
+                                      'sign_up'.tr(context),
+                                      style: context.bodyLarge.copyWith(
+                                        color: AppTheme.primaryColor,
+                                        fontWeight: FontWeight.w900,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 16),
                             ],
                           ),
-                          const SizedBox(height: 16),
-                        ],
+                        ),
                       ),
                     ),
-                  ),
+                    TextButton(
+                      onPressed: () {
+                        Provider.of<LayoutProvider>(context,listen: false).currentIndex=0;
+                        AppRoutes.navigateTo(
+                          context,
+                          AppRoutes.mainLayoutScreen,
+                        );
+                      },
+                        style: ButtonStyle(
+                          overlayColor: MaterialStateProperty.all(Colors.transparent),
+                          splashFactory: NoSplash.splashFactory,
+                        ),
+                      child: const CustomImage(
+                        assetPath:  AppSvgs.back,
+                        fit: BoxFit.cover,
+                      )
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -271,97 +254,6 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  bool isGoogleLoggingIn = false;
-
-  onPressedGoogleLogin() async {
-    setState(() {
-      isGoogleLoggingIn = true;
-    });
-    try {
-      print('11111');
-      // Initialize with proper configuration
-      final GoogleSignIn googleSignIn = GoogleSignIn(
-        scopes: ['email', 'profile'],
-        // Add your web client ID from Google Developer Console
-        // clientId: 'YOUR_WEB_CLIENT_ID.apps.googleusercontent.com', // Uncomment and add your client ID if needed
-      );
-      
-      final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
-      print('33333');
-      
-      if (googleUser == null) {
-        print('Google Sign-In canceled by user');
-        setState(() {
-          isGoogleLoggingIn = false;
-        });
-        return; // Exit early if no account is selected
-      }
-      
-      print('22222');
-      print(googleUser.toString());
-
-      GoogleSignInAuthentication googleSignInAuthentication =
-          await googleUser.authentication;
-      String? accessToken = googleSignInAuthentication.accessToken;
-
-      print("accessToken $accessToken");
-      print("displayName ${googleUser.displayName}");
-      print("email ${googleUser.email}");
-      print("googleUser.id ${googleUser.id}");
-
-      var loginResponse = await Provider.of<AuthProvider>(
-        context,
-        listen: false,
-      ).completeSocialLogin(
-        provider: "google",
-        socialProvider: "google",
-        name: googleUser.displayName ?? "",
-        email: googleUser.email,
-        secret_token: googleUser.id,
-        access_token: accessToken,
-      );
-      print('sssss${loginResponse}');
-      
-      // Disconnect after completion
-      await googleSignIn.disconnect();
-      
-      setState(() {
-        isGoogleLoggingIn = false;
-      });
-      
-    } on Exception catch (e) {
-      print("Google Sign-In error: $e");
-      setState(() {
-        isGoogleLoggingIn = false;
-      });
-      
-      // Show error message to user
-      CustomSnackbar.show(
-        context,
-        message: 'Failed to sign in with Google: ${e.toString()}',
-        isError: true,
-      );
-    }
-  }
-
-  Widget _buildSocialButton({
-    required String icon,
-    required VoidCallback onTap,
-  }) {
-    return InkWell(
-      onTap: onTap,
-      child: Container(
-        width: 60,
-        height: 60,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: Colors.grey.shade300),
-        ),
-        child: Center(child: SvgPicture.asset(icon, width: 24, height: 24)),
-      ),
-    );
-  }
 
   void _handleLogin(BuildContext context, AuthProvider authProvider) async {
     if (_formKey.currentState!.validate()) {
@@ -375,6 +267,10 @@ class _LoginScreenState extends State<LoginScreen> {
         // Set the isLoggedIn flag in secure storage
         await sl<SecureStorage>().save(LocalStorageKey.isLoggedIn, true);
         AppRoutes.navigateToAndRemoveUntil(context, AppRoutes.mainLayoutScreen);
+        CustomToast.showToast(
+          message: 'login_successfully'.tr(context),
+          type: ToastType.success,
+        );
       } else {
         CustomSnackbar.show(
           context,

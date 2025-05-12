@@ -8,7 +8,7 @@ class AppTheme {
   static const Color secondaryColor = Color(0x80C2665A); // Pink
   static const Color accentColor = Color(0xFFB65B4F);
   static const Color white = Color(0xFFFFFFFF);
-  static const Color black = Color(0xFF000000);
+  static const Color black = Color(0xFF111111);
 
   static const Color successColor = Color(0xFF4CAF50); // Green
   static const Color warningColor = Color(0xFFFFC107); // Amber
@@ -102,7 +102,7 @@ class AppTheme {
       ),
       titleSmall: GoogleFonts.inter(
         textStyle: const TextStyle(
-          color: lightSecondaryTextColor,
+          color: black,
           fontSize: 14,
           fontWeight: FontWeight.w300,
         ),

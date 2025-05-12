@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:melamine_elsherif/core/config/app_config.dart/app_config.dart';
 import 'package:melamine_elsherif/core/config/themes.dart/theme.dart';
+import 'package:melamine_elsherif/core/utils/constants/app_assets.dart';
 import 'package:melamine_elsherif/core/utils/extension/text_style_extension.dart';
 import 'package:melamine_elsherif/core/utils/extension/translate_extension.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_cached_image.dart';
@@ -219,10 +220,11 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
                           angle: _logoRotationAnimation.value,
                           child: Transform.scale(
                             scale: _logoScaleAnimation.value * _logoPulseAnimation.value,
-                            child: Image.asset(
-                              'assets/images/melamine_elsherif_logo.png',
-                              width: 180,
-                              height: 180,
+                            child: const CustomImage(
+                              assetPath: AppImages.linearAppLogo,
+                              fit: BoxFit.contain,
+                              height: 140,
+                              width: 240,
                             ),
                           ),
                         );

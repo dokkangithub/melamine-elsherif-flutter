@@ -28,7 +28,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
   bool _acceptTerms = false;
@@ -45,11 +46,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
   @override
   Widget build(BuildContext context) {
     // Set status bar color to white with dark icons
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
-      statusBarColor: Colors.white,
-      statusBarIconBrightness: Brightness.dark,
-    ));
-    
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle.dark.copyWith(
+        statusBarColor: Colors.white,
+        statusBarIconBrightness: Brightness.dark,
+      ),
+    );
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -67,12 +70,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     // Logo
                     Padding(
                       padding: const EdgeInsets.only(bottom: 24.0),
-                      child: Image.asset(
-                        AppImages.appLogo,
-                        height: 80,
-                      ),
+                      child: Image.asset(AppImages.appLogo, height: 80),
                     ),
-                    
+
                     // Create Account Title
                     Text(
                       'Create Account',
@@ -89,7 +89,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       ),
                     ),
                     const SizedBox(height: 32),
-                    
+
                     // Social Login Options
                     Row(
                       children: [
@@ -115,26 +115,28 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         ),
                       ],
                     ),
-                    
+
                     const SizedBox(height: 32),
-                    
+
                     // Divider
                     Row(
                       children: [
-                        Expanded(child: Divider()),
+                        const Expanded(child: Divider()),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 16),
                           child: Text(
                             'or',
-                            style: context.bodySmall.copyWith(color: Colors.grey),
+                            style: context.bodySmall.copyWith(
+                              color: Colors.grey,
+                            ),
                           ),
                         ),
-                        Expanded(child: Divider()),
+                        const Expanded(child: Divider()),
                       ],
                     ),
-                    
+
                     const SizedBox(height: 24),
-                    
+
                     // Name Field
                     TextField(
                       controller: _nameController,
@@ -154,9 +156,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
-                          borderSide: BorderSide(color: AppTheme.primaryColor),
+                          borderSide: const BorderSide(
+                            color: AppTheme.primaryColor,
+                          ),
                         ),
-                        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 16,
+                        ),
                       ),
                       style: GoogleFonts.inter(
                         fontSize: 14,
@@ -164,7 +171,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       ),
                     ),
                     const SizedBox(height: 16),
-                    
+
                     // Email Field
                     TextField(
                       controller: _emailController,
@@ -184,9 +191,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
-                          borderSide: BorderSide(color: AppTheme.primaryColor),
+                          borderSide: const BorderSide(
+                            color: AppTheme.primaryColor,
+                          ),
                         ),
-                        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 16,
+                        ),
                       ),
                       keyboardType: TextInputType.emailAddress,
                       style: GoogleFonts.inter(
@@ -195,7 +207,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       ),
                     ),
                     const SizedBox(height: 16),
-                    
+
                     // Password Field
                     TextField(
                       controller: _passwordController,
@@ -218,10 +230,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           borderRadius: BorderRadius.circular(8),
                           borderSide: BorderSide(color: AppTheme.primaryColor),
                         ),
-                        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 16,
+                        ),
                         suffixIcon: IconButton(
                           icon: Icon(
-                            _obscurePassword ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+                            _obscurePassword
+                                ? Icons.visibility_off_outlined
+                                : Icons.visibility_outlined,
                             color: Colors.grey,
                           ),
                           onPressed: () {
@@ -237,7 +254,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       ),
                     ),
                     const SizedBox(height: 16),
-                    
+
                     // Confirm Password Field
                     TextField(
                       controller: _confirmPasswordController,
@@ -258,17 +275,25 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
-                          borderSide: BorderSide(color: AppTheme.primaryColor),
+                          borderSide: const BorderSide(
+                            color: AppTheme.primaryColor,
+                          ),
                         ),
-                        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 16,
+                        ),
                         suffixIcon: IconButton(
                           icon: Icon(
-                            _obscureConfirmPassword ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+                            _obscureConfirmPassword
+                                ? Icons.visibility_off_outlined
+                                : Icons.visibility_outlined,
                             color: Colors.grey,
                           ),
                           onPressed: () {
                             setState(() {
-                              _obscureConfirmPassword = !_obscureConfirmPassword;
+                              _obscureConfirmPassword =
+                                  !_obscureConfirmPassword;
                             });
                           },
                         ),
@@ -279,7 +304,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       ),
                     ),
                     const SizedBox(height: 16),
-                    
+
                     // Terms and Conditions
                     Row(
                       children: [
@@ -303,27 +328,31 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         Expanded(
                           child: Wrap(
                             children: [
-                              Text('I agree to the '.tr(context),
+                              Text(
+                                'I agree to the '.tr(context),
                                 style: context.bodySmall,
                               ),
                               GestureDetector(
                                 onTap: () {
                                   // Navigate to Terms of Service
                                 },
-                                child: Text('Terms of Service'.tr(context),
+                                child: Text(
+                                  'Terms of Service'.tr(context),
                                   style: context.bodySmall.copyWith(
                                     color: AppTheme.primaryColor,
                                   ),
                                 ),
                               ),
-                              Text(' and '.tr(context),
+                              Text(
+                                ' and '.tr(context),
                                 style: context.bodySmall,
                               ),
                               GestureDetector(
                                 onTap: () {
                                   // Navigate to Privacy Policy
                                 },
-                                child: Text('Privacy Policy'.tr(context),
+                                child: Text(
+                                  'Privacy Policy'.tr(context),
                                   style: context.bodySmall.copyWith(
                                     color: AppTheme.primaryColor,
                                   ),
@@ -335,7 +364,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       ],
                     ),
                     const SizedBox(height: 24),
-                    
+
                     // Sign Up Button
                     Consumer<AuthProvider>(
                       builder: (context, provider, _) {
@@ -346,7 +375,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             } else {
                               CustomSnackbar.show(
                                 context,
-                                message: 'Please accept the Terms of Service and Privacy Policy'.tr(context),
+                                message:
+                                    'Please accept the Terms of Service and Privacy Policy'
+                                        .tr(context),
                                 isError: true,
                               );
                             }
@@ -357,21 +388,28 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         );
                       },
                     ),
-                    
+
                     const SizedBox(height: 24),
-                    
+
                     // Login Prompt
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text('Already have an account? '.tr(context),
-                          style: context.bodyMedium.copyWith(color: Colors.grey[700]),
+                        Text(
+                          'already_have_account'.tr(context),
+                          style: context.bodyMedium.copyWith(
+                            color: Colors.grey[700],
+                          ),
                         ),
                         GestureDetector(
                           onTap: () {
-                            Navigator.of(context).pop();
+                              AppRoutes.navigateToAndRemoveUntil(
+                                context,
+                                AppRoutes.login,
+                              );
                           },
-                          child: Text('Log In'.tr(context),
+                          child: Text(
+                            'login'.tr(context),
                             style: context.bodyMedium.copyWith(
                               color: AppTheme.primaryColor,
                               fontWeight: FontWeight.bold,
@@ -415,7 +453,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
               icon,
               width: 24,
               height: 24,
-              colorFilter: isApple ? ColorFilter.mode(Colors.white, BlendMode.srcIn) : null,
+              colorFilter:
+                  isApple
+                      ? const ColorFilter.mode(Colors.white, BlendMode.srcIn)
+                      : null,
             ),
             const SizedBox(width: 12),
             Text(
@@ -442,7 +483,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         );
         return;
       }
-      
+
       final userData = {
         "name": _nameController.text,
         "password": _passwordController.text,
@@ -455,11 +496,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
       if (isSuccess) {
         AppRoutes.navigateTo(
-          context, 
+          context,
           AppRoutes.verificationScreen,
-          arguments: {
-            'contactInfo': _emailController.text,
-          },
+          arguments: {'contactInfo': _emailController.text},
         );
       } else {
         CustomSnackbar.show(

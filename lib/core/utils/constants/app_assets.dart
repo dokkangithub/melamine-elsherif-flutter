@@ -11,6 +11,7 @@ class AppImages {
   static const String plates_image = '$imagesPath/plates_image.png';
   static const String second_home_image = '$imagesPath/second_home_image.png';
   static const String summers_deals_image = '$imagesPath/summers_deals_image.png';
+  static const String linearAppLogo = '$imagesPath/linear_app_logo.png';
 }
 
 class AppAnimations {

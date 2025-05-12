@@ -14,7 +14,7 @@ class CustomBackButton extends StatelessWidget {
         onTap: () {
           Navigator.pop(context);
         },
-        child: CustomImage(
+        child: const CustomImage(
           assetPath:  AppSvgs.back,
           fit: BoxFit.cover,
         )
