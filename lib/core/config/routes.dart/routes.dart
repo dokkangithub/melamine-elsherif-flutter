@@ -23,16 +23,7 @@ import '../../../features/presentation/checkout/screens/checkout_screen.dart';
 import '../../../features/presentation/product details/screens/product_screen.dart';
 import '../../../features/presentation/splash/splash_screen.dart';
 import '../../../features/presentation/search/screens/search_screen.dart';
-
-
-enum PageTransitionType {
-  slide,
-  fade,
-  scale,
-  slideUp,
-  rotation,
-  size,
-}
+import 'package:page_transition/page_transition.dart';
 
 class AppRoutes {
 
@@ -61,13 +52,11 @@ class AppRoutes {
   static const String orderDetailsScreen = '/order-details';
   static const String searchScreen = '/search-screen';
 
-
-  static const PageTransitionType defaultTransition = PageTransitionType.fade;
+  static const PageTransitionType defaultTransition = PageTransitionType.sharedAxisHorizontal;
 
   static Route<dynamic> generateRoute(RouteSettings settings, {PageTransitionType? transitionType}) {
     Widget page;
 
-    // Use provided transition type or default
     final transition = transitionType ?? defaultTransition;
 
     switch (settings.name) {
@@ -167,63 +156,15 @@ class AppRoutes {
         );
     }
 
-    // Apply appropriate transition animation
-    return PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) => page,
-      transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        const curve = Curves.easeInOut;
-
-        switch (transition) {
-          case PageTransitionType.fade:
-            return FadeTransition(
-              opacity: animation,
-              child: child,
-            );
-
-          case PageTransitionType.scale:
-            return ScaleTransition(
-              scale: Tween<double>(begin: 0.5, end: 1.0)
-                  .animate(CurvedAnimation(parent: animation, curve: curve)),
-              child: child,
-            );
-
-          case PageTransitionType.rotation:
-            return RotationTransition(
-              turns: Tween<double>(begin: 0.5, end: 1.0)
-                  .animate(CurvedAnimation(parent: animation, curve: curve)),
-              child: child,
-            );
-
-          case PageTransitionType.slideUp:
-            return SlideTransition(
-              position: Tween<Offset>(
-                begin: const Offset(0.0, 1.0),
-                end: Offset.zero,
-              ).animate(CurvedAnimation(parent: animation, curve: curve)),
-              child: child,
-            );
-
-          case PageTransitionType.size:
-            return SizeTransition(
-              sizeFactor: animation,
-              child: child,
-            );
-
-          case PageTransitionType.slide:
-            return SlideTransition(
-              position: Tween<Offset>(
-                begin: const Offset(1.0, 0.0),
-                end: Offset.zero,
-              ).animate(CurvedAnimation(parent: animation, curve: curve)),
-              child: child,
-            );
-        }
-      },
-      transitionDuration: const Duration(milliseconds: 300),
+    return PageTransition(
+      child: page,
+      type: transition,
+      settings: settings,
+      duration: const Duration(milliseconds: 300),
+      reverseDuration: const Duration(milliseconds: 300),
     );
   }
 
-  // Updated navigation methods to accept transition type
   static void navigateTo(
       BuildContext context,
       String route, {

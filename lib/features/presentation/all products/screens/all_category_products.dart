@@ -4,7 +4,6 @@ import 'package:melamine_elsherif/core/utils/enums/loading_state.dart';
 import 'package:melamine_elsherif/core/utils/extension/text_theme_extension.dart';
 import 'package:melamine_elsherif/core/utils/extension/translate_extension.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_empty_widgets.dart';
-import 'package:melamine_elsherif/core/utils/widgets/custom_form_field.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_loading.dart';
 import 'package:melamine_elsherif/features/domain/product/entities/product.dart' as product_import;
 import 'package:provider/provider.dart';
@@ -197,8 +196,8 @@ class _AllCategoryProductsScreenState extends State<AllCategoryProductsScreen> {
                     AppRoutes.navigateTo(context, AppRoutes.searchScreen);
                   },
                   child: Container(
-                    margin: EdgeInsets.symmetric(horizontal: 15,vertical: 10),
-                    padding: EdgeInsets.symmetric(horizontal: 15,vertical: 15),
+                    margin: const EdgeInsets.symmetric(horizontal: 15,vertical: 10),
+                    padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 15),
                     width: double.infinity,
                     height: 50,
                     decoration: BoxDecoration(
@@ -209,11 +208,11 @@ class _AllCategoryProductsScreenState extends State<AllCategoryProductsScreen> {
                     child: Row(
                       spacing: 10,
                       children: [
-                        CustomImage(
+                        const CustomImage(
                           assetPath: AppSvgs.category_search_icon,
                         ),
                         Text(
-                          'search_skin_care_products'.tr(context),
+                          'search_products'.tr(context),
                           style: context.bodySmall?.copyWith(color: AppTheme.primaryColor),
                         ),
                       ],
@@ -272,90 +271,90 @@ class _AllCategoryProductsScreenState extends State<AllCategoryProductsScreen> {
                   ),
 
                 /// Subcategories horizontal list
-                // if (categoryProvider.subCategoriesState == LoadingState.loading)
-                //   const Padding(
-                //     padding: EdgeInsets.symmetric(vertical: 8.0),
-                //     child: CustomLoadingWidget(),
-                //   )
-                // else if (categoryProvider.subCategoriesState == LoadingState.error)
-                //   Padding(
-                //     padding: const EdgeInsets.symmetric(vertical: 8.0),
-                //     child: Text(categoryProvider.errorMessage!),
-                //   )
-                // else if (categoryProvider.subCategoriesResponse?.data.isNotEmpty ?? false)
-                //     SingleChildScrollView(
-                //       scrollDirection: Axis.horizontal,
-                //       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                //       child: Row(
-                //         children: [
-                //           // "All" option for subcategories
-                //           Padding(
-                //             padding: const EdgeInsets.only(right: 8.0),
-                //             child: InkWell(
-                //               onTap: () {
-                //                 setState(() {
-                //                   _selectedSubCategoryId = null;
-                //                   _selectedSubCategoryName = null;
-                //                   final provider = Provider.of<HomeProvider>(context, listen: false);
-                //                   provider.fetchCategoryProducts(_selectedCategoryId, refresh: true, name: _searchQuery);
-                //                 });
-                //               },
-                //               child: Container(
-                //                 padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                //                 decoration: BoxDecoration(
-                //                   color: _selectedSubCategoryId == null ? Colors.amber[100] : Colors.white,
-                //                   borderRadius: BorderRadius.circular(20),
-                //                   border: Border.all(
-                //                     color: _selectedSubCategoryId == null ? Colors.amber : Colors.grey.shade300,
-                //                   ),
-                //                 ),
-                //                 child: Text(
-                //                   'all'.tr(context),
-                //                   style: TextStyle(
-                //                     color: _selectedSubCategoryId == null ? Colors.amber[800] : Colors.grey,
-                //                     fontWeight: _selectedSubCategoryId == null ? FontWeight.w600 : FontWeight.normal,
-                //                   ),
-                //                 ),
-                //               ),
-                //             ),
-                //           ),
-                //
-                //           // Individual subcategories
-                //           ...categoryProvider.subCategoriesResponse?.data.map((subcategory) {
-                //             bool isSelected = _selectedSubCategoryId == subcategory.id;
-                //             return Padding(
-                //               padding: const EdgeInsets.only(right: 8.0),
-                //               child: InkWell(
-                //                 onTap: () {
-                //                   if (subcategory.id != null && subcategory.name != null) {
-                //                     _selectSubCategory(subcategory.name!, subcategory.id!);
-                //                   }
-                //                 },
-                //                 child: Container(
-                //                   padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                //                   decoration: BoxDecoration(
-                //                     color: isSelected ? Colors.amber[100] : Colors.white,
-                //                     borderRadius: BorderRadius.circular(20),
-                //                     border: Border.all(
-                //                       color: isSelected ? Colors.amber : Colors.grey.shade300,
-                //                     ),
-                //                   ),
-                //                   child: Text(
-                //                     subcategory.name ?? '',
-                //                     style: TextStyle(
-                //                       color: isSelected ? Colors.amber[800] : Colors.grey,
-                //                       fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
-                //                     ),
-                //                   ),
-                //                 ),
-                //               ),
-                //             );
-                //           }) ?? [],
-                //         ],
-                //       ),
-                //     ),
+                if (categoryProvider.subCategoriesState == LoadingState.loading)
+                  const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 8.0),
+                    child: CustomLoadingWidget(),
+                  )
+                else if (categoryProvider.subCategoriesState == LoadingState.error)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: Text(categoryProvider.errorMessage!),
+                  )
+                else if (categoryProvider.subCategoriesResponse?.data.isNotEmpty ?? false)
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                      child: Row(
+                        children: [
+                          // "All" option for subcategories
+                          Padding(
+                            padding: const EdgeInsets.only(right: 8.0),
+                            child: InkWell(
+                              onTap: () {
+                                setState(() {
+                                  _selectedSubCategoryId = null;
+                                  _selectedSubCategoryName = null;
+                                  final provider = Provider.of<HomeProvider>(context, listen: false);
+                                  provider.fetchCategoryProducts(_selectedCategoryId, refresh: true, name: _searchQuery);
+                                });
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                                decoration: BoxDecoration(
+                                  color: _selectedSubCategoryId == null ? Colors.amber[100] : Colors.white,
+                                  borderRadius: BorderRadius.circular(20),
+                                  border: Border.all(
+                                    color: _selectedSubCategoryId == null ? Colors.amber : Colors.grey.shade300,
+                                  ),
+                                ),
+                                child: Text(
+                                  'all'.tr(context),
+                                  style: TextStyle(
+                                    color: _selectedSubCategoryId == null ? Colors.amber[800] : Colors.grey,
+                                    fontWeight: _selectedSubCategoryId == null ? FontWeight.w600 : FontWeight.normal,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
 
-                // Products grid
+                          // Individual subcategories
+                          ...categoryProvider.subCategoriesResponse?.data.map((subcategory) {
+                            bool isSelected = _selectedSubCategoryId == subcategory.id;
+                            return Padding(
+                              padding: const EdgeInsets.only(right: 8.0),
+                              child: InkWell(
+                                onTap: () {
+                                  if (subcategory.id != null && subcategory.name != null) {
+                                    _selectSubCategory(subcategory.name!, subcategory.id!);
+                                  }
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                                  decoration: BoxDecoration(
+                                    color: isSelected ? Colors.amber[100] : Colors.white,
+                                    borderRadius: BorderRadius.circular(20),
+                                    border: Border.all(
+                                      color: isSelected ? Colors.amber : Colors.grey.shade300,
+                                    ),
+                                  ),
+                                  child: Text(
+                                    subcategory.name ?? '',
+                                    style: TextStyle(
+                                      color: isSelected ? Colors.amber[800] : Colors.grey,
+                                      fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          }) ?? [],
+                        ],
+                      ),
+                    ),
+
+                //Products grid
                 Expanded(
                   child: _buildProductsGrid(products, state, error, homeProvider, error),
                 ),

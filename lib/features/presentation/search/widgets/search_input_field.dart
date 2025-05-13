@@ -22,7 +22,7 @@ class SearchInputField extends StatelessWidget {
       child: CustomTextFormField(
         controller: controller,
         textInputAction: TextInputAction.search,
-        hint: 'search_skin_care_products'.tr(context),
+        hint: 'search_products'.tr(context),
         onChanged: onChanged,
         suffixIcon: InkWell(
             onTap: (){
