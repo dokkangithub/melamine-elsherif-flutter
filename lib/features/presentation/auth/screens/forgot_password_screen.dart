@@ -3,7 +3,9 @@ import 'package:flutter/services.dart';
 import 'package:melamine_elsherif/core/config/routes.dart/routes.dart';
 import 'package:melamine_elsherif/core/config/themes.dart/theme.dart';
 import 'package:melamine_elsherif/core/utils/extension/text_style_extension.dart';
+import 'package:melamine_elsherif/core/utils/widgets/custom_back_button.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_button.dart';
+import 'package:melamine_elsherif/core/utils/widgets/custom_cached_image.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_loading.dart';
 import '../../../../core/utils/constants/app_assets.dart';
 import '../../../../core/utils/extension/translate_extension.dart';
@@ -65,163 +67,159 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
+        leading: const CustomBackButton(),
         systemOverlayStyle: SystemUiOverlayStyle.dark,
       ),
       body: SafeArea(
-        child: Center(
-          child: SingleChildScrollView(
-            physics: const BouncingScrollPhysics(),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24.0),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    // Logo
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 24.0),
-                      child: Image.asset(
-                        AppImages.appLogo,
-                        height: 80,
-                      ),
+        child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24.0),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+
+                  // Logo
+                  const Padding(
+                    padding: EdgeInsets.only(bottom: 24.0),
+                    child: CustomImage(
+                      assetPath:  AppImages.appLogo,
+                      height: 150,
+                      width: 250,
                     ),
-                    
-                    // Forgot Password Title
-                    Text(
-                      'Forgot Password?',
-                      style: context.headlineMedium.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                      ),
+                  ),
+
+                  // Forgot Password Title
+                  Text(
+                    'forgot_password'.tr(context),
+                    style: context.headlineMedium.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
                     ),
-                    const SizedBox(height: 8),
-                    
-                    // Subtitle
-                    Text(
-                      _isSendingEmail
-                        ? 'Enter your email and we\'ll send you a link to reset your password'
-                        : 'Enter your phone number and we\'ll send you an OTP to reset your password',
-                      style: context.bodyMedium.copyWith(
-                        color: Colors.grey[600],
-                      ),
-                      textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 15),
+
+                  // Subtitle
+                  Text(
+                    _isSendingEmail
+                      ? 'forgot_password_email_desc'.tr(context)
+                      : 'forgot_password_phone_desc'.tr(context),
+                    style: context.titleSmall.copyWith(
+                      color: Colors.grey[600],
                     ),
-                    const SizedBox(height: 32),
-                    
-                    // Email/Phone Field
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        _isSendingEmail ? 'Email' : 'Phone Number',
-                        style: context.titleSmall,
-                      ),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 32),
+
+                  // Email/Phone Field
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      _isSendingEmail ? 'email'.tr(context) : 'phone'.tr(context),
+                      style: context.titleSmall,
                     ),
-                    const SizedBox(height: 8),
-                    TextFormField(
-                      controller: _controller,
-                      decoration: InputDecoration(
-                        hintText: _isSendingEmail ? 'Enter your email' : 'Enter your phone number',
-                        hintStyle: GoogleFonts.inter(
-                          fontSize: 14,
-                          color: Colors.grey[500],
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8),
-                          borderSide: BorderSide(color: Colors.grey.shade300),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8),
-                          borderSide: BorderSide(color: Colors.grey.shade300),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8),
-                          borderSide: BorderSide(color: AppTheme.primaryColor),
-                        ),
-                        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                      ),
-                      keyboardType: _isSendingEmail 
-                        ? TextInputType.emailAddress 
-                        : TextInputType.phone,
-                      style: GoogleFonts.inter(
+                  ),
+                  const SizedBox(height: 8),
+                  TextFormField(
+                    controller: _controller,
+                    decoration: InputDecoration(
+                      hintText: _isSendingEmail ? 'enter_your_email'.tr(context) : 'enter_your_phone_number'.tr(context),
+                      hintStyle: GoogleFonts.inter(
                         fontSize: 14,
-                        color: Colors.black,
+                        color: Colors.grey[500],
                       ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return _isSendingEmail 
-                            ? 'Please enter your email' 
-                            : 'Please enter your phone number';
-                        }
-                        if (_isSendingEmail && !value.contains('@')) {
-                          return 'Please enter a valid email';
-                        }
-                        return null;
-                      },
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey.shade300),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey.shade300),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: const BorderSide(color: AppTheme.primaryColor),
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                     ),
-                    
-                    const SizedBox(height: 16),
-                    
-                    // Toggle Method Button
-                    TextButton(
-                      onPressed: () {
-                        setState(() {
-                          _isSendingEmail = !_isSendingEmail;
-                          _controller.clear();
-                        });
-                      },
-                      child: Text(
-                        _isSendingEmail
-                            ? 'Use phone number instead'
-                            : 'Use email address instead',
-                        style: context.titleSmall.copyWith(
-                          color: AppTheme.primaryColor,
-                        ),
+                    keyboardType: _isSendingEmail
+                      ? TextInputType.emailAddress
+                      : TextInputType.phone,
+                    style: GoogleFonts.inter(
+                      fontSize: 14,
+                      color: Colors.black,
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return _isSendingEmail
+                          ? 'please_enter_email'.tr(context)
+                          : 'please_enter_phone'.tr(context);
+                      }
+                      if (_isSendingEmail && !value.contains('@')) {
+                        return 'please_enter_valid_email'.tr(context);
+                      }
+                      return null;
+                    },
+                  ),
+
+                  const SizedBox(height: 16),
+
+                  // Toggle Method Button
+                  TextButton(
+                    onPressed: () {
+                      setState(() {
+                        _isSendingEmail = !_isSendingEmail;
+                        _controller.clear();
+                      });
+                    },
+                    child: Text(
+                      _isSendingEmail
+                          ? 'use_phone_number_instead'.tr(context)
+                          : 'use_email_address_instead'.tr(context),
+                      style: context.titleSmall.copyWith(
+                        color: AppTheme.primaryColor,
                       ),
                     ),
-                    
-                    const SizedBox(height: 24),
-                    
-                    // Submit Button
-                    _isLoading
-                      ? const Center(child: CustomLoadingWidget())
-                      : CustomButton(
-                          onPressed: _handleResetPassword,
-                          backgroundColor: AppTheme.primaryColor,
-                          text: _isSendingEmail ? 'Send Reset Link' : 'Send OTP',
-                          fullWidth: true,
-                        ),
-                    
-                    const SizedBox(height: 24),
-                    
-                    // Back to Login
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text('Remember your password? '.tr(context),
-                          style: context.bodyMedium.copyWith(color: Colors.grey[700]),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.of(context).pop();
-                          },
-                          child: Text('Log In'.tr(context),
-                            style: context.bodyMedium.copyWith(
-                              color: AppTheme.primaryColor,
-                              fontWeight: FontWeight.bold,
-                            ),
+                  ),
+
+                  const SizedBox(height: 24),
+
+                  // Submit Button
+                  _isLoading
+                    ? const Center(child: CustomLoadingWidget())
+                    : CustomButton(
+                        onPressed: _handleResetPassword,
+                        backgroundColor: AppTheme.primaryColor,
+                        text: _isSendingEmail ? 'send_reset_link'.tr(context) : 'send_otp'.tr(context),
+                        fullWidth: true,
+                      ),
+
+                  const SizedBox(height: 24),
+
+                  // Back to Login
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text('remember_your_password'.tr(context),
+                        style: context.bodyMedium.copyWith(color: Colors.grey[700]),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: Text('sign_in'.tr(context),
+                          style: context.bodyMedium.copyWith(
+                            color: AppTheme.primaryColor,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
-                      ],
-                    ),
-                    const SizedBox(height: 16),
-                  ],
-                ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
           ),

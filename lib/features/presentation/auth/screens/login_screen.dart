@@ -133,6 +133,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 controller: passwordController,
                                 hint: 'enter_password'.tr(context),
                                 keyboardType: TextInputType.emailAddress,
+                                isPassword: true,
                               ),
 
                               // Forgot Password
@@ -165,7 +166,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                       () => _handleLogin(context, authProvider),
                                   isGradient: true,
                                   backgroundColor: AppTheme.primaryColor,
-                                  text: 'login'.tr(context),
+                                  text: 'sign_in'.tr(context),
                                   fullWidth: true,
                                 ),
 
@@ -192,7 +193,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               const SizedBox(height: 24),
 
                               // Social Login Options
-                              const SocialLoginWidget(),
+                              const SocialLoginWidget(isLoginScreen: true,),
 
                               const SizedBox(height: 24),
 

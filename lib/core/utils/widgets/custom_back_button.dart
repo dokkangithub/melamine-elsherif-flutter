@@ -8,18 +8,18 @@ class CustomBackButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(20.0),
-      child: InkWell(
-        onTap: () {
+    return TextButton(
+        onPressed: () {
           Navigator.pop(context);
         },
+        style: ButtonStyle(
+          overlayColor: MaterialStateProperty.all(Colors.transparent),
+          splashFactory: NoSplash.splashFactory,
+        ),
         child: const CustomImage(
           assetPath:  AppSvgs.back,
           fit: BoxFit.cover,
         )
-
-      ),
     );
   }
 }

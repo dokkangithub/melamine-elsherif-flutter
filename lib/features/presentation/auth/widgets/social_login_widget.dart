@@ -1,12 +1,16 @@
 import 'dart:convert';
 import 'dart:math';
-
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:melamine_elsherif/core/config/routes.dart/routes.dart';
+import 'package:melamine_elsherif/core/config/themes.dart/theme.dart';
+import 'package:melamine_elsherif/core/utils/extension/text_theme_extension.dart';
 import 'package:melamine_elsherif/core/utils/extension/translate_extension.dart';
+import 'package:melamine_elsherif/core/utils/widgets/custom_button.dart';
+import 'package:melamine_elsherif/core/utils/widgets/custom_cached_image.dart';
+import 'package:melamine_elsherif/features/presentation/main%20layout/controller/layout_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import '../../../../core/utils/constants/app_assets.dart';
@@ -15,11 +19,12 @@ import '../controller/auth_provider.dart';
 
 
 class SocialLoginWidget extends StatelessWidget {
-   const SocialLoginWidget({super.key});
+   const SocialLoginWidget({super.key, required this.isLoginScreen});
+   final bool isLoginScreen;
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return isLoginScreen?  Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         _buildSocialButton(
@@ -28,13 +33,6 @@ class SocialLoginWidget extends StatelessWidget {
             onPressedGoogleLogin(context);
           },
         ),
-        // const SizedBox(width: 16),
-        // _buildSocialButton(
-        //   icon: AppSvgs.facebook,
-        //   onTap: () {
-        //     // Handle Facebook login
-        //   },
-        // ),
         const SizedBox(width: 16),
         _buildSocialButton(
           icon: AppSvgs.apple,
@@ -43,8 +41,66 @@ class SocialLoginWidget extends StatelessWidget {
           },
         ),
       ],
+    )
+        :Column(
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: CustomButton(
+                isOutlined: true,
+                fullWidth: true,
+                splashColor: Colors.transparent,
+                borderColor: AppTheme.lightDividerColor,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const CustomImage(
+                      assetPath: AppSvgs.google,
+                    ),
+                    const SizedBox(width: 10),
+                    Text('continue_with_google'.tr(context),style: context.titleMedium!.copyWith(fontWeight: FontWeight.w900)),
+                  ],
+                ),
+                onPressed: (){
+                  onPressedGoogleLogin(context);
+                },
+
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 16),
+        Row(
+          children: [
+            Expanded(
+              child: CustomButton(
+                isOutlined: true,
+                fullWidth: true,
+                splashColor: Colors.transparent,
+                borderColor: AppTheme.lightDividerColor,
+                onPressed: (){
+                  onPressedAppleLogin(context);
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const CustomImage(
+                      assetPath: AppSvgs.apple,
+                    ),
+                    const SizedBox(width: 10),
+                    Text('continue_with_apple'.tr(context),style: context.titleMedium!.copyWith(fontWeight: FontWeight.w900)),
+                  ],
+                ),
+
+              ),
+            ),
+          ],
+        ),
+      ],
     );
   }
+
 
 
    Future<void> onPressedGoogleLogin(context) async {
@@ -75,6 +131,7 @@ class SocialLoginWidget extends StatelessWidget {
         access_token: accessToken,
       );
       if (loginResponse == true) {
+        Provider.of<LayoutProvider>(context,listen: false).currentIndex=0;
         AppRoutes.navigateTo(context, AppRoutes.mainLayoutScreen);
         CustomToast.showToast(
           message: 'login_successfully'.tr(context),
@@ -141,6 +198,7 @@ class SocialLoginWidget extends StatelessWidget {
        );
 
        if (loginResponse == true) {
+         Provider.of<LayoutProvider>(context,listen: false).currentIndex=0;
          AppRoutes.navigateTo(context, AppRoutes.mainLayoutScreen);
          CustomToast.showToast(
            message: 'login_successfully'.tr(context),
@@ -163,8 +221,8 @@ class SocialLoginWidget extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Container(
-        width: 60,
-        height: 60,
+        width: 100,
+        height: 50,
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(8),

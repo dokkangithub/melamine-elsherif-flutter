@@ -11,6 +11,7 @@ class CustomButton extends StatelessWidget {
   final Color? textColor;
   final String? icon;
   final Color? splashColor;
+  final Color? borderColor;
   final EdgeInsetsGeometry? padding;
   final double? elevation;
   final VoidCallback? onPressed;
@@ -30,6 +31,7 @@ class CustomButton extends StatelessWidget {
     this.backgroundColor,
     this.textColor,
     this.splashColor,
+    this.borderColor=AppTheme.accentColor,
     this.padding,
     this.elevation,
     this.onPressed,
@@ -50,7 +52,6 @@ class CustomButton extends StatelessWidget {
     final effectiveTextColor = isOutlined
         ? textColor ?? buttonColor
         : textColor ?? AppTheme.white;
-    final borderColor = isOutlined ? AppTheme.accentColor : buttonColor;
 
     // Default gradient colors if not provided
     final colors = gradientColors ?? [
@@ -105,7 +106,7 @@ class CustomButton extends StatelessWidget {
       elevation: isOutlined ? 0 : (elevation ?? 4.0),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(borderRadius ?? 10.0),
-        side: BorderSide(color: borderColor, width: isOutlined ? 1.5 : 1.0),
+        side: BorderSide(color: this.borderColor!, width: 0.5),
       ),
       child: InkWell(
         onTap: isLoading ? null : onPressed,
