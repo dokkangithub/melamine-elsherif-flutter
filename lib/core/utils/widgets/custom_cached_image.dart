@@ -92,14 +92,14 @@ class CustomImage extends StatelessWidget {
         AppIcons.filter,
         width: width,
         height: height,
-        fit: fit,
+        fit: BoxFit.contain,
       );
     } else {
       return Image.asset(
         placeholderAsset!,
         width: width,
         height: height,
-        fit: fit,
+        fit: BoxFit.contain,
       );
     }
   }

@@ -78,13 +78,13 @@ class _ProductCardState extends State<ProductCard> {
                       // Product name
                       Text(
                         widget.product.name,
-                        style: context.bodyMedium.copyWith(color: AppTheme.black,fontWeight: FontWeight.w700),
+                        style: context.titleMedium.copyWith(color: AppTheme.black,fontWeight: FontWeight.w400),
                         maxLines: 1,
                       ),
 
                       // Price
                       Text(widget.product.discountedPrice,
-                        style: context.titleMedium.copyWith(color: AppTheme.primaryColor),
+                        style: context.titleMedium.copyWith(color: AppTheme.primaryColor,fontWeight: FontWeight.w500),
                       ),
 
                       isAddingToCart ? const Row(
@@ -94,7 +94,7 @@ class _ProductCardState extends State<ProductCard> {
                         ],
                       ): CustomButton(
                         text: widget.isBuyNow! ? 'buy_now'.tr(context): 'add_to_cart'.tr(context),
-                        textStyle: context.bodyMedium.copyWith(color: widget.isOutlinedAddToCart! ?AppTheme.primaryColor:AppTheme.white),
+                        textStyle: context.titleSmall.copyWith(color: widget.isOutlinedAddToCart! ?AppTheme.primaryColor:AppTheme.white),
                         fullWidth: true,
                         isOutlined: widget.isOutlinedAddToCart!,
                         padding: const EdgeInsets.all(8),

@@ -57,9 +57,9 @@ class CategoriesWidget extends StatelessWidget {
               // const SizedBox(height: 12),
               Expanded(
                 child: GridView.builder(
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 4,
-                    childAspectRatio: 0.9,
+                    childAspectRatio: 0.75,
                     crossAxisSpacing: 8,
                     mainAxisSpacing: 8,
                   ),

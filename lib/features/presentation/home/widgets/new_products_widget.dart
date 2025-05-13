@@ -59,7 +59,6 @@ class NewProductsWidget extends StatelessWidget {
                 );
               },
             ),
-            const SizedBox(height: 12),
             SizedBox(
               height: 270,
               child: ListView.builder(

@@ -15,7 +15,7 @@ class SingleImagePreview extends StatelessWidget {
         children: [
           PhotoView(
             imageProvider: NetworkImage(imageUrl), // Use NetworkImage for URLs
-            backgroundDecoration: BoxDecoration(color: Colors.black),
+            backgroundDecoration: const BoxDecoration(color: Colors.black),
             minScale: PhotoViewComputedScale.contained,
             maxScale: PhotoViewComputedScale.covered * 2,
           ),
@@ -23,7 +23,7 @@ class SingleImagePreview extends StatelessWidget {
             top: 40,
             left: 10,
             child: IconButton(
-              icon: Icon(Icons.close, color: Colors.white),
+              icon: const Icon(Icons.close, color: Colors.white),
               onPressed: () => Navigator.pop(context),
             ),
           ),

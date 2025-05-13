@@ -31,7 +31,7 @@ class _TopHomeWidgetState extends State<TopHomeWidget> {
           child: Stack(
             children: [
               // Image with color filter
-              CustomImage(
+              const CustomImage(
                 assetPath: AppImages.home_banner,
                 fit: BoxFit.cover,
                 width: double.infinity,
@@ -68,11 +68,11 @@ class _TopHomeWidgetState extends State<TopHomeWidget> {
               ),
               Text(
                 'up_to_30%_off_on_selected_premium_appliances'.tr(context),
-                style: context.bodyLarge!.copyWith(
+                style: context.titleLarge!.copyWith(
                     color: AppTheme.white
                 ),
               ),
-              SizedBox(height: 15),
+              const SizedBox(height: 15),
               CustomButton(
                 backgroundColor: AppTheme.accentColor,
                 splashColor: AppTheme.accentColor,

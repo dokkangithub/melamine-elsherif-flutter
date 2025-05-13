@@ -28,8 +28,8 @@ class CategoryCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(25),
               child: CustomImage(
                imageUrl:  imageUrl,
-                width: context.responsive(60),
-                height: context.responsive(40),
+                width: context.responsive(80),
+                height: context.responsive(60),
                 fit: BoxFit.contain,
               ),
             ),
@@ -37,7 +37,7 @@ class CategoryCard extends StatelessWidget {
           const SizedBox(height: 8),
           Text(
             name,
-            style: context.bodySmall!.copyWith(fontWeight: FontWeight.w600),
+            style: context.bodyMedium!.copyWith(fontWeight: FontWeight.w300),
             textAlign: TextAlign.center,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,

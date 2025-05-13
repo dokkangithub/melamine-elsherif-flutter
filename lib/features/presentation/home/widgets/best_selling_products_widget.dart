@@ -43,6 +43,7 @@ class BestSellingProductsWidget extends StatelessWidget {
 
         final filteredProducts = products.where((product) => product.published == 1).toList();
         // Show products list
+        print(filteredProducts[0].discountedPrice);
         return Column(
           children: [
             SeeAllWidget(

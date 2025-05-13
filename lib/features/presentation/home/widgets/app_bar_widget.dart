@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:melamine_elsherif/core/config/app_config.dart/app_config.dart';
 import 'package:melamine_elsherif/core/config/routes.dart/routes.dart';
 import 'package:melamine_elsherif/core/utils/constants/app_assets.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_cached_image.dart';
 import 'package:provider/provider.dart';
-import 'package:melamine_elsherif/core/utils/extension/text_style_extension.dart';
 import 'package:melamine_elsherif/core/config/themes.dart/theme.dart';
 import '../../main layout/controller/layout_provider.dart';
+import '../../../presentation/cart/controller/cart_provider.dart';
 
 class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
 
@@ -27,10 +26,10 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
         children: [
           SizedBox(width: 15),
           CustomImage(
-            assetPath: AppImages.home_logo,
-            width: 110,
-            height: 140,
-            fit: BoxFit.cover,
+            assetPath: AppImages.linearAppLogo,
+            width: 130,
+            height: 100,
+            fit: BoxFit.contain,
           ),
 
         ],
@@ -45,15 +44,23 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
           },
         ),
         const SizedBox(width: 15),
-        InkWell(
-          child: const CustomImage(
-            assetPath: AppSvgs.cart_icon,
-          ),
-          onTap: () {
-            Provider.of<LayoutProvider>(context,listen: false).currentIndex=3;
+        Consumer<CartProvider>(
+          builder: (context, cart, child) {
+            return Badge(
+              label: Text(cart.cartCount.toString()),
+              isLabelVisible: cart.cartCount > 0,
+              child: InkWell(
+                child: const CustomImage(
+                  assetPath: AppSvgs.cart_icon,
+                ),
+                onTap: () {
+                  Provider.of<LayoutProvider>(context, listen: false).currentIndex = 3;
+                },
+              ),
+            );
           },
         ),
-        SizedBox(width: 15),
+        const SizedBox(width: 15),
       ],
     );
   }

@@ -58,7 +58,7 @@ class _SimpleBannerCarouselState extends State<SimpleBannerCarousel> {
                 options: CarouselOptions(
                   height: 150,
                   aspectRatio: 16 / 9,
-                  viewportFraction: 0.9,
+                  viewportFraction: 1,
                   initialPage: 0,
                   enableInfiniteScroll: sliders.length > 1,
                   reverse: false,

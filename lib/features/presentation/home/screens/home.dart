@@ -9,6 +9,7 @@ import 'package:melamine_elsherif/features/presentation/home/widgets/best_sellin
 import 'package:melamine_elsherif/features/presentation/home/widgets/featured_products_widget.dart';
 import 'package:melamine_elsherif/features/presentation/home/widgets/new_products_widget.dart';
 import 'package:melamine_elsherif/features/presentation/home/widgets/all_products_widget.dart';
+import '../../cart/controller/cart_provider.dart';
 import '../../slider/controller/provider.dart';
 import '../widgets/app_bar_widget.dart';
 import '../widgets/banners_widget.dart';
@@ -39,14 +40,19 @@ class _HomeScreenState extends State<HomeScreen> {
       context,
       listen: false,
     );
+    final cartProvider = Provider.of<CartProvider>(
+      context,
+      listen: false,
+    );
     final categoryProvider = Provider.of<CategoryProvider>(
       context,
       listen: false,
     );
 
-    wishlistProvider.fetchWishlist();
-    homeProvider.initHomeData();
     categoryProvider.getCategories();
+    homeProvider.initHomeData();
+    cartProvider.fetchCartCount();
+    wishlistProvider.fetchWishlist();
   }
 
   @override
@@ -66,29 +72,29 @@ class _HomeScreenState extends State<HomeScreen> {
           categoryProvider.getCategories(needRefresh: true),
         ]);
       },
-      child: Scaffold(
+      child: const Scaffold(
         appBar: AppBarWidget(),
         body: SingleChildScrollView(
           child: Column(
             spacing: 8,
             children: [
-              const TopHomeWidget(),
+              TopHomeWidget(),
               Padding(
-                padding: const EdgeInsets.all(12.0),
+                padding: EdgeInsets.all(12.0),
                 child: Column(
-                  spacing: 15,
+                  spacing: 20,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const CategoriesWidget(),
-                    const PlatesWidgets(),
-                    const NewProductsWidget(),
-                    const SimpleBannerCarousel(),
-                    const BestSellingProductsWidget(),
-                    const SecondHomeImageWidget(),
-                    const FeaturedProductsWidget(),
-                    const TodayDealsProductsWidget(),
-                    const SummerDealsWidgets(),
-                    const AllProductsWidget(),
+                    CategoriesWidget(),
+                    PlatesWidgets(),
+                    NewProductsWidget(),
+                    SimpleBannerCarousel(),
+                    BestSellingProductsWidget(),
+                    SecondHomeImageWidget(),
+                    FeaturedProductsWidget(),
+                    TodayDealsProductsWidget(),
+                    SummerDealsWidgets(),
+                    AllProductsWidget(),
                   ],
                 ),
               ),
