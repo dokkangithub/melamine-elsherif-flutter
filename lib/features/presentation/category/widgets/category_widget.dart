@@ -22,7 +22,7 @@ class _CategoryWidgetState extends State<CategoryWidget> with SingleTickerProvid
   @override
   void initState() {
     super.initState();
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarColor: Colors.white,
       statusBarIconBrightness: Brightness.dark,
     ));
@@ -39,12 +39,12 @@ class _CategoryWidgetState extends State<CategoryWidget> with SingleTickerProvid
         backgroundColor: Colors.white,
         scrolledUnderElevation: 0,
         elevation: 0,
-        title: Text('Categories'.tr(context),
-          style: context.headlineSmall
+        title: Text('categories'.tr(context),
+          style: context.headlineSmall!.copyWith(fontWeight: FontWeight.w700)
         ),
         actions: [
           IconButton(
-            icon: Icon(Icons.search, color: Colors.black),
+            icon: const Icon(Icons.search, color: Colors.black),
             onPressed: () {
               AppRoutes.navigateTo(context, AppRoutes.searchScreen);
             },
@@ -65,56 +65,19 @@ class _CategoryWidgetState extends State<CategoryWidget> with SingleTickerProvid
                     padding: const EdgeInsets.all(12.0),
                     child: GridView.builder(
                       shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
+                      physics: const NeverScrollableScrollPhysics(),
                       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,
                         crossAxisSpacing: 14,
                         mainAxisSpacing: 14,
                         childAspectRatio: 1,
                       ),
-                      itemCount: widget.categories.length > 4 ? 4 : widget.categories.length,
+                      itemCount: widget.categories.length,
                       itemBuilder: (context, index) {
                         final category = widget.categories[index];
                         return _buildCategoryCard(context, category);
                       },
                     ),
-                  ),
-                  
-                  // Popular Categories
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('Popular Categories'.tr(context),
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(height: 16),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            _buildPopularCategoryItem('ROUND', Icons.circle_outlined),
-                            _buildPopularCategoryItem('SQUARE', Icons.crop_square_outlined),
-                            _buildPopularCategoryItem('OVAL', Icons.panorama_horizontal_outlined),
-                            _buildPopularCategoryItem('OCT...', Icons.stop_outlined),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                  
-                  // Category List
-                  ListView.builder(
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    itemCount: widget.categories.length > 5 ? 5 : widget.categories.length,
-                    itemBuilder: (context, index) {
-                      final category = widget.categories[index];
-                      return _buildCategoryListItem(context, category);
-                    },
                   ),
                 ],
               ),
@@ -126,7 +89,7 @@ class _CategoryWidgetState extends State<CategoryWidget> with SingleTickerProvid
   }
   
   Widget _buildCategoryCard(BuildContext context, Category category) {
-    return GestureDetector(
+    return InkWell(
       onTap: () {
         AppRoutes.navigateTo(
           context,
@@ -155,7 +118,7 @@ class _CategoryWidgetState extends State<CategoryWidget> with SingleTickerProvid
                   end: Alignment.bottomCenter,
                   colors: [
                     Colors.transparent,
-                    Colors.black.withOpacity(0.5),
+                    Colors.black.withValues(alpha: 0.5),
                   ],
                 ),
               ),
@@ -163,23 +126,16 @@ class _CategoryWidgetState extends State<CategoryWidget> with SingleTickerProvid
             // Text overlay
             Positioned(
               bottom: 16,
-              left: 16,
+              left: 4,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     category.name?.toUpperCase() ?? '',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                    ),
+                    style: context.titleLarge!.copyWith(color: AppTheme.white,fontWeight: FontWeight.w700),
                   ),
-                  Text('${category.productCount ?? 0} items'.tr(context),
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 12,
-                    ),
+                  Text('${category.productCount ?? 0} ${'items'.tr(context)}',
+                    style: context.titleSmall!.copyWith(color: AppTheme.white),
                   ),
                 ],
               ),
@@ -187,55 +143,6 @@ class _CategoryWidgetState extends State<CategoryWidget> with SingleTickerProvid
           ],
         ),
       ),
-    );
-  }
-  
-  Widget _buildPopularCategoryItem(String title, IconData icon) {
-    return Column(
-      children: [
-        Container(
-          padding: EdgeInsets.all(12),
-          decoration: BoxDecoration(
-            color: Colors.grey.shade200,
-            shape: BoxShape.circle,
-          ),
-          child: Icon(icon, color: AppTheme.primaryColor),
-        ),
-        SizedBox(height: 8),
-        Text(
-          title,
-          style: TextStyle(fontSize: 12),
-        ),
-      ],
-    );
-  }
-  
-  Widget _buildCategoryListItem(BuildContext context, Category category) {
-    IconData getCategoryIcon() {
-      final name = category.name?.toLowerCase() ?? '';
-      if (name.contains('round')) return Icons.circle_outlined;
-      if (name.contains('square')) return Icons.crop_square_outlined;
-      if (name.contains('oval')) return Icons.panorama_horizontal_outlined;
-      if (name.contains('octagon')) return Icons.stop_outlined;
-      return Icons.category_outlined;
-    }
-    
-    return ListTile(
-      leading: Icon(getCategoryIcon(), color: AppTheme.primaryColor),
-      title: Text(
-        category.name?.toUpperCase() ?? '',
-        style: TextStyle(fontWeight: FontWeight.w500),
-      ),
-      trailing: Icon(Icons.arrow_forward_ios, size: 16),
-      onTap: () {
-        AppRoutes.navigateTo(
-          context,
-          AppRoutes.allCategoryProductsScreen,
-          arguments: {
-            'category': category,
-          },
-        );
-      },
     );
   }
 }
