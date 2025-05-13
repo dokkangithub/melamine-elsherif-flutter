@@ -34,7 +34,7 @@ class _SecondHomeImageWidgetState extends State<SecondHomeImageWidget> {
               children: [
                 ClipRRect(
                   borderRadius: BorderRadius.circular(15),
-                  child: CustomImage(
+                  child: const CustomImage(
                     assetPath: AppImages.second_home_image,
                     fit: BoxFit.contain,
                     width: double.infinity,
@@ -44,7 +44,7 @@ class _SecondHomeImageWidgetState extends State<SecondHomeImageWidget> {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(15),
                   child: Container(
-                    padding: EdgeInsets.all(12),
+                    padding: const EdgeInsets.all(12),
                     height: double.infinity,
                     width: double.infinity,
                     color: Colors.black.withValues(alpha: 0.4),
@@ -52,12 +52,12 @@ class _SecondHomeImageWidgetState extends State<SecondHomeImageWidget> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('Transform Your Home With Smart Appliances'.tr(context),
+                        Text('transform_your_home_with'.tr(context),
                           style: context.titleLarge?.copyWith(color: AppTheme.white),
                         ),
-                        SizedBox(height: 20),
+                        const SizedBox(height: 20),
                         CustomButton(
-                          text: 'Learn more'.tr(context),
+                          text: 'learn_more'.tr(context),
                         )
                       ],
                     ),

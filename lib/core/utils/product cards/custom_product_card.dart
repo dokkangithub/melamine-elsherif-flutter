@@ -17,7 +17,12 @@ class ProductCard extends StatefulWidget {
   final bool? isOutlinedAddToCart;
   final bool? isBuyNow;
 
-  const ProductCard({super.key, required this.product, this.isOutlinedAddToCart=false, this.isBuyNow=false});
+  const ProductCard({
+    super.key,
+    required this.product,
+    this.isOutlinedAddToCart = false,
+    this.isBuyNow = false,
+  });
 
   @override
   State<ProductCard> createState() => _ProductCardState();
@@ -68,63 +73,97 @@ class _ProductCardState extends State<ProductCard> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       // Rating stars
-                      !widget.isBuyNow! ?const SizedBox.shrink():Row(
-                        children: List.generate(
-                          5,
-                              (index) =>
-                              const Icon(Icons.star_outline_sharp, color: Colors.amber, size: 14),
-                        ),
-                      ),
+                      !widget.isBuyNow!
+                          ? const SizedBox.shrink()
+                          : Row(
+                            children: List.generate(
+                              5,
+                              (index) => const Icon(
+                                Icons.star_outline_sharp,
+                                color: Colors.amber,
+                                size: 14,
+                              ),
+                            ),
+                          ),
                       // Product name
                       Text(
                         widget.product.name,
-                        style: context.titleMedium.copyWith(color: AppTheme.black,fontWeight: FontWeight.w400),
+                        style: context.titleMedium.copyWith(
+                          color: AppTheme.black,
+                          fontWeight: FontWeight.w400,
+                        ),
                         maxLines: 1,
+                        textAlign: Directionality.of(context) == TextDirection.rtl ? TextAlign.right : TextAlign.left,
                       ),
 
                       // Price
-                      Text(widget.product.discountedPrice,
-                        style: context.titleMedium.copyWith(color: AppTheme.primaryColor,fontWeight: FontWeight.w500),
+                      Text(
+                        widget.product.discountedPrice,
+                        style: context.titleMedium.copyWith(
+                          color: AppTheme.primaryColor,
+                          fontWeight: FontWeight.w500,
+                        ),
+                        textAlign: Directionality.of(context) == TextDirection.rtl ? TextAlign.right : TextAlign.left,
                       ),
 
-                      isAddingToCart ? const Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          CustomLoadingWidget(),
-                        ],
-                      ): CustomButton(
-                        text: widget.isBuyNow! ? 'buy_now'.tr(context): 'add_to_cart'.tr(context),
-                        textStyle: context.titleSmall.copyWith(color: widget.isOutlinedAddToCart! ?AppTheme.primaryColor:AppTheme.white),
-                        fullWidth: true,
-                        isOutlined: widget.isOutlinedAddToCart!,
-                        padding: const EdgeInsets.all(8),
-                        onPressed: () async {
-                          setState(() {
-                            isAddingToCart = true;
-                          });
-                          await AppFunctions.addProductToCart(
-                              context: context,
-                              productId: widget.product.id,
-                              productName: widget.product.name,
-                              productSlug: widget.product.slug,
-                              hasVariation: widget.product.hasVariation
-                          );
-                          widget.isBuyNow! ? AppRoutes.navigateTo(context, AppRoutes.mainLayoutScreen):null;
-                          widget.isBuyNow! ? Provider.of<LayoutProvider>(context,listen: false).currentIndex=3:null;
-                          setState(() {
-                            isAddingToCart = false;
-                          });
-                        },
-                      )
+                      isAddingToCart
+                          ? const Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [CustomLoadingWidget()],
+                          )
+                          : CustomButton(
+                            text:
+                                widget.isBuyNow!
+                                    ? 'buy_now'.tr(context)
+                                    : 'add_to_cart'.tr(context),
+                            textStyle: context.titleSmall.copyWith(
+                              color:
+                                  widget.isOutlinedAddToCart!
+                                      ? AppTheme.primaryColor
+                                      : AppTheme.white,
+                            ),
+                            fullWidth: true,
+                            isOutlined: widget.isOutlinedAddToCart!,
+                            padding: const EdgeInsets.all(8),
+                            onPressed: () async {
+                              setState(() {
+                                isAddingToCart = true;
+                              });
+                              await AppFunctions.addProductToCart(
+                                context: context,
+                                productId: widget.product.id,
+                                productName: widget.product.name,
+                                productSlug: widget.product.slug,
+                                hasVariation: widget.product.hasVariation,
+                              );
+                              widget.isBuyNow!
+                                  ? AppRoutes.navigateTo(
+                                    context,
+                                    AppRoutes.mainLayoutScreen,
+                                  )
+                                  : null;
+                              widget.isBuyNow!
+                                  ? Provider.of<LayoutProvider>(
+                                        context,
+                                        listen: false,
+                                      ).currentIndex =
+                                      3
+                                  : null;
+                              setState(() {
+                                isAddingToCart = false;
+                              });
+                            },
+                          ),
                     ],
                   ),
                 ],
               ),
               Positioned(
-                top: 12,
+                top: 4,
                 right:
-                Directionality.of(context) == TextDirection.ltr ? 8 : null,
-                left: Directionality.of(context) == TextDirection.rtl ? 8 : null,
+                    Directionality.of(context) == TextDirection.ltr ? 4 : null,
+                left:
+                    Directionality.of(context) == TextDirection.rtl ? 4 : null,
                 child: Consumer<WishlistProvider>(
                   builder: (context, provider, _) {
                     final isInWishlist = provider.isProductInWishlist(
@@ -133,18 +172,22 @@ class _ProductCardState extends State<ProductCard> {
 
                     return InkWell(
                       onTap: () {
-                        AppFunctions.toggleWishlistStatus(context, widget.product.slug);
+                        AppFunctions.toggleWishlistStatus(
+                          context,
+                          widget.product.slug,
+                        );
                       },
-                      child: Container(
-                        padding: const EdgeInsets.all(6),
-                        decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: AppTheme.white.withValues(alpha: 0.6)
-                        ),
-                        child: Icon(
-                          isInWishlist ? Icons.favorite : Icons.favorite_border,
-                          color: isInWishlist ? Colors.red : Colors.black54,
-                          size: 22,
+                      child: Card(
+                        elevation: 2,
+                        margin: EdgeInsets.zero,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
+                        child: Padding(
+                          padding: const EdgeInsets.all(6.0),
+                          child: Icon(
+                            isInWishlist ? Icons.favorite : Icons.favorite_border,
+                            color: AppTheme.primaryColor,
+                            size: 22,
+                          ),
                         ),
                       ),
                     );

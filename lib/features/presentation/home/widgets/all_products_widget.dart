@@ -57,7 +57,7 @@ class AllProductsWidget extends StatelessWidget {
 
         // Show products grid
         return Container(
-          padding: EdgeInsets.all(10),
+          padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
               color: AppTheme.accentColor.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(15)
@@ -85,8 +85,8 @@ class AllProductsWidget extends StatelessWidget {
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                   childAspectRatio: 0.75,
-                  crossAxisSpacing: 16,
-                  mainAxisSpacing: 16,
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10,
                 ),
                 itemCount: filteredProducts.length > 8 ? 8 : filteredProducts.length,
                 itemBuilder: (context, index) {

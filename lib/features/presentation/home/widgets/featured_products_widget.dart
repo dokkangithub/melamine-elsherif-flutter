@@ -24,7 +24,7 @@ class FeaturedProductsWidget extends StatelessWidget {
 
         // Show error state
         if (homeProvider.featuredProductsState == LoadingState.error) {
-          return _buildEmptyState(context, "no_products_available".tr(context));
+          return _buildEmptyState();
         }
 
         // Get products data
@@ -32,10 +32,7 @@ class FeaturedProductsWidget extends StatelessWidget {
 
         // Show empty state if no products
         if (products.isEmpty) {
-          return _buildEmptyState(
-            context,
-            "no_featured_products_available".tr(context),
-          );
+          return _buildEmptyState();
         }
         final filteredProducts = products.where((product) => product.published == 1).toList();
 
@@ -72,7 +69,7 @@ class FeaturedProductsWidget extends StatelessWidget {
   }
 
 
-  Widget _buildEmptyState(BuildContext context, String message) {
+  Widget _buildEmptyState() {
     return const SizedBox.shrink();
   }
 }

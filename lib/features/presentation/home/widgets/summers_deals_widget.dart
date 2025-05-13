@@ -28,7 +28,7 @@ class SummerDealsWidgets extends StatelessWidget {
                         AppTheme.primaryColor.withValues(alpha: 0.7),
                         AppTheme.primaryColor.withValues(alpha: 0.5),
                       ],
-                      stops: [0.4, 0.7, 0.99],
+                      stops: const [0.4, 0.7, 0.99],
                     ),
                   ),
                 ),
@@ -38,13 +38,13 @@ class SummerDealsWidgets extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Text('Summer Sale'.tr(context),
+                      Text('summer_sale'.tr(context),
                         style: context.headlineMedium.copyWith(
                           color: AppTheme.white,
                         ),
                       ),
-                      SizedBox(height: 10),
-                      Text('Up to 40% off'.tr(context),
+                      const SizedBox(height: 10),
+                      Text('up_to_40_off'.tr(context),
                         style: context.titleSmall.copyWith(
                           color: AppTheme.white,
                           fontWeight: FontWeight.w200,
@@ -56,7 +56,7 @@ class SummerDealsWidgets extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(width: 15),
+          const SizedBox(width: 15),
           Expanded(
             child: Stack(
               alignment: Alignment.center,
@@ -86,7 +86,7 @@ class SummerDealsWidgets extends StatelessWidget {
                           color: AppTheme.white,
                         ),
                       ),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       Text(
                         'shop_now'.tr(context),
                         style: context.titleMedium.copyWith(

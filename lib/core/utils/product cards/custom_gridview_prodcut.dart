@@ -76,19 +76,25 @@ class ProductGridCard extends StatelessWidget {
                           product.name,
                           style: context.titleSmall!.copyWith(fontWeight: FontWeight.w600,color: AppTheme.black),
                           maxLines: 1,
+                          textAlign: Directionality.of(context) == TextDirection.rtl ? TextAlign.right : TextAlign.left,
                         ),
                         const SizedBox(height: 6),
                         // Price
-                        Text('${product.mainPrice}'.tr(context), style: context.titleSmall!.copyWith(fontWeight: FontWeight.w600,color: AppTheme.primaryColor)),
+                        Text(product.discountedPrice, 
+                             style: context.titleSmall!.copyWith(fontWeight: FontWeight.w600,color: AppTheme.primaryColor),
+                             textAlign: Directionality.of(context) == TextDirection.rtl ? TextAlign.right : TextAlign.left,
+                        ),
                       ],
                     ),
                   ),
                 ],
               ),
               Positioned(
-                top: 4,
-                right: Directionality.of(context) == TextDirection.ltr ? 4 : null,
-                left: Directionality.of(context) == TextDirection.rtl ? 4 : null,
+                top: 0,
+                right:
+                Directionality.of(context) == TextDirection.ltr ? 0 : null,
+                left:
+                Directionality.of(context) == TextDirection.rtl ? 0 : null,
                 child: Consumer<WishlistProvider>(
                   builder: (context, provider, _) {
                     final isInWishlist = provider.isProductInWishlist(
@@ -97,18 +103,22 @@ class ProductGridCard extends StatelessWidget {
 
                     return InkWell(
                       onTap: () {
-                        AppFunctions.toggleWishlistStatus(context, product.slug);
+                        AppFunctions.toggleWishlistStatus(
+                          context,
+                          product.slug,
+                        );
                       },
-                      child: Container(
-                        padding: EdgeInsets.all(6),
-                        decoration: BoxDecoration(
-                          color: AppTheme.white.withValues(alpha: 0.7),
-                          shape: BoxShape.circle,
-                        ),
-                        child: Icon(
-                          isInWishlist ? Icons.favorite : Icons.favorite_border,
-                          color: isInWishlist ? Colors.red : Colors.black54,
-                          size: 22,
+                      child: Card(
+                        elevation: 2,
+                        margin: EdgeInsets.zero,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
+                        child: Padding(
+                          padding: const EdgeInsets.all(6.0),
+                          child: Icon(
+                            isInWishlist ? Icons.favorite : Icons.favorite_border,
+                            color: AppTheme.primaryColor,
+                            size: 22,
+                          ),
                         ),
                       ),
                     );
@@ -116,14 +126,14 @@ class ProductGridCard extends StatelessWidget {
                 ),
               ),
               Positioned(
-                bottom: availableAddToCart ? 0 : 4,
+                bottom: availableAddToCart ? 0 : 2,
                 right:
                     Directionality.of(context) == TextDirection.ltr
-                        ? (availableAddToCart ? 0 : 4)
+                        ? (availableAddToCart ? 0 : 2)
                         : null,
                 left:
                     Directionality.of(context) == TextDirection.rtl
-                        ? (availableAddToCart ? 0 : 4)
+                        ? (availableAddToCart ? 0 : 2)
                         : null,
                 child: InkWell(
                   onTap: () {
@@ -140,7 +150,7 @@ class ProductGridCard extends StatelessWidget {
                         : null;
                   },
                   child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
                     decoration: BoxDecoration(
                       color:
                           !availableAddToCart
@@ -160,7 +170,7 @@ class ProductGridCard extends StatelessWidget {
                                 fontWeight: FontWeight.w900,
                               ),
                             )
-                            : CustomImage(assetPath: AppSvgs.active_cart_icon),
+                            : const CustomImage(assetPath: AppSvgs.active_cart_icon),
                   ),
                 ),
               ),

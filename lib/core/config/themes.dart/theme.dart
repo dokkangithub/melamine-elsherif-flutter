@@ -50,85 +50,85 @@ class AppTheme {
     dividerColor: lightDividerColor,
 
     // Correctly apply Google Fonts
-    textTheme: GoogleFonts.interTextTheme(ThemeData.light().textTheme).copyWith(
-      displayLarge: GoogleFonts.inter(
+    textTheme: GoogleFonts.nunitoTextTheme(ThemeData.light().textTheme).copyWith(
+      displayLarge: GoogleFonts.nunito(
         textStyle: const TextStyle(
           color: black,
           fontSize: 32,
           fontWeight: FontWeight.w500,
         ),
       ),
-      displayMedium: GoogleFonts.inter(
+      displayMedium: GoogleFonts.nunito(
         textStyle: const TextStyle(
           color: black,
           fontSize: 28,
           fontWeight: FontWeight.w500,
         ),
       ),
-      displaySmall: GoogleFonts.inter(
+      displaySmall: GoogleFonts.nunito(
         textStyle: const TextStyle(
           color: black,
           fontSize: 24,
           fontWeight: FontWeight.w600,
         ),
       ),
-      headlineMedium: GoogleFonts.inter(
+      headlineMedium: GoogleFonts.nunito(
         textStyle: const TextStyle(
           color: black,
           fontSize: 20,
           fontWeight: FontWeight.w500,
         ),
       ),
-      headlineSmall: GoogleFonts.inter(
+      headlineSmall: GoogleFonts.nunito(
         textStyle: const TextStyle(
           color: black,
           fontSize: 18,
           fontWeight: FontWeight.w500,
         ),
       ),
-      titleLarge: GoogleFonts.inter(
+      titleLarge: GoogleFonts.nunito(
         textStyle: const TextStyle(
           color: black,
           fontSize: 16,
           fontWeight: FontWeight.w500,
         ),
       ),
-      titleMedium: GoogleFonts.inter(
+      titleMedium: GoogleFonts.nunito(
         textStyle: const TextStyle(
           color: black,
           fontSize: 15,
           fontWeight: FontWeight.w500,
         ),
       ),
-      titleSmall: GoogleFonts.inter(
+      titleSmall: GoogleFonts.nunito(
         textStyle: const TextStyle(
           color: black,
           fontSize: 14,
           fontWeight: FontWeight.w500,
         ),
       ),
-      bodyLarge: GoogleFonts.inter(
+      bodyLarge: GoogleFonts.nunito(
         textStyle: const TextStyle(
           color: black,
           fontSize: 13,
           fontWeight: FontWeight.w500,
         ),
       ),
-      bodyMedium: GoogleFonts.inter(
+      bodyMedium: GoogleFonts.nunito(
         textStyle: const TextStyle(
           color: black,
           fontSize: 12,
           fontWeight: FontWeight.w500,
         ),
       ),
-      bodySmall: GoogleFonts.inter(
+      bodySmall: GoogleFonts.nunito(
         textStyle: const TextStyle(
           color: black,
           fontSize: 11,
           fontWeight: FontWeight.w500,
         ),
       ),
-      labelLarge: GoogleFonts.inter(
+      labelLarge: GoogleFonts.nunito(
         textStyle: const TextStyle(
           color: black,
           fontSize: 10,
@@ -145,7 +145,7 @@ class AppTheme {
         elevation: 2,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        textStyle: GoogleFonts.inter(
+        textStyle: GoogleFonts.nunito(
           textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
         ),
       ),
@@ -157,7 +157,7 @@ class AppTheme {
         side: const BorderSide(color: primaryColor),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        textStyle: GoogleFonts.inter(
+        textStyle: GoogleFonts.nunito(
           textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
         ),
       ),
@@ -167,7 +167,7 @@ class AppTheme {
       style: TextButton.styleFrom(
         foregroundColor: primaryColor,
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        textStyle: GoogleFonts.inter(
+        textStyle: GoogleFonts.nunito(
           textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
         ),
       ),
@@ -198,13 +198,13 @@ class AppTheme {
         borderRadius: BorderRadius.circular(8),
         borderSide: const BorderSide(color: errorColor, width: 2),
       ),
-      labelStyle: GoogleFonts.inter(
+      labelStyle: GoogleFonts.nunito(
         textStyle: const TextStyle(color: lightSecondaryTextColor, fontSize: 16),
       ),
-      hintStyle: GoogleFonts.inter(
+      hintStyle: GoogleFonts.nunito(
         textStyle: const TextStyle(color: lightSecondaryTextColor, fontSize: 16),
       ),
-      errorStyle: GoogleFonts.inter(
+      errorStyle: GoogleFonts.nunito(
         textStyle: const TextStyle(color: errorColor, fontSize: 12),
       ),
     ),
@@ -222,7 +222,7 @@ class AppTheme {
       color: primaryColor,
       elevation: 0,
       centerTitle: true,
-      titleTextStyle: GoogleFonts.inter(
+      titleTextStyle: GoogleFonts.nunito(
         textStyle: const TextStyle(
           color: Colors.white,
           fontSize: 20,
@@ -237,10 +237,10 @@ class AppTheme {
       backgroundColor: lightCardColor,
       selectedItemColor: primaryColor,
       unselectedItemColor: lightSecondaryTextColor,
-      selectedLabelStyle: GoogleFonts.inter(
+      selectedLabelStyle: GoogleFonts.nunito(
         textStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
       ),
-      unselectedLabelStyle: GoogleFonts.inter(
+      unselectedLabelStyle: GoogleFonts.nunito(
         textStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
       ),
       elevation: 8,

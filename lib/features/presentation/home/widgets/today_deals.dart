@@ -34,10 +34,7 @@ class TodayDealsProductsWidget extends StatelessWidget {
 
         // Show empty state if no products
         if (products.isEmpty) {
-          return _buildEmptyState(
-            context,
-            "no_new_products_available".tr(context),
-          );
+          return const SizedBox.shrink();
         }
         final filteredProducts = products.where((product) => product.published == 1).toList();
 
