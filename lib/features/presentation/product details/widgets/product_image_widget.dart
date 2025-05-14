@@ -69,7 +69,7 @@ class _ProductImageWidgetState extends State<ProductImageWidget> {
                   itemBuilder: (context, index) {
                     return CustomImage(
                       imageUrl: widget.product.photos[index].path,
-                      fit: BoxFit.cover,
+                      fit: BoxFit.fill,
                       height: widget.height,
                       width: double.infinity,
                     );

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:melamine_elsherif/core/config/themes.dart/theme.dart';
+import 'package:melamine_elsherif/core/utils/extension/text_theme_extension.dart';
 import 'package:melamine_elsherif/features/domain/product%20details/entities/product_details.dart';
 import 'package:melamine_elsherif/core/utils/enums/loading_state.dart';
 import 'package:melamine_elsherif/features/presentation/product%20details/controller/product_provider.dart';
@@ -44,7 +46,7 @@ class QuantitySelectorWidget extends StatelessWidget {
                 ),
                 Text(
                   quantity.toString().padLeft(2, '0'),
-                  style: ProductTheme.titleLarge(context),
+                  style: context.displayMedium
                 ),
                 IconButton(
                   onPressed: () => provider.setQuantity(quantity + 1),
@@ -59,7 +61,7 @@ class QuantitySelectorWidget extends StatelessWidget {
               child: CircularProgressIndicator(strokeWidth: 2),
             )
                 : Text('\$${(price * quantity).toStringAsFixed(2)}',
-              style: ProductTheme.titleLarge(context),
+              style: context.headlineSmall!.copyWith(color: AppTheme.primaryColor,fontWeight: FontWeight.w900),
             ),
           ],
         );

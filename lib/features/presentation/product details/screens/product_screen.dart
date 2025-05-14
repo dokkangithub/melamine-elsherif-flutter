@@ -90,7 +90,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   Text('Error: ${productProvider.productDetailsError}',
                     style: const TextStyle(color: ProductTheme.errorColor),
                   ),
-                  ElevatedButton(
+                  CustomButton(
+                    isGradient: true,
                     onPressed:
                         () => productProvider.fetchProductDetails(widget.slug),
                     child: const Text('Retry'),
@@ -124,34 +125,15 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           product: product,
                           height: screenHeight * 0.4,
                         ),
-                        const Positioned(
+                         Positioned(
                           top: 16,
                           left: 16,
-                          child: CustomBackButton(),
-                        ),
-                        Positioned(
-                          top: 16,
-                          right: 16,
-                          child: Consumer<WishlistProvider>(
-                            builder: (context, wishlistProvider, child) {
-                              return IconButton(
-                                icon: Icon(
-                                  wishlistProvider.isProductInWishlist(
-                                    widget.slug,
-                                  )
-                                      ? Icons.favorite
-                                      : Icons.favorite_border,
-                                  color: ProductTheme.favoriteColor,
-                                ),
-                                onPressed: () async {
-                                  await AppFunctions.toggleWishlistStatus(
-                                    context,
-                                    widget.slug,
-                                  );
-                                },
-                              );
-                            },
-                          ),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: AppTheme.lightDividerColor.withValues(alpha: 0.6)
+                            ),
+                              child: const CustomBackButton()),
                         ),
                       ],
                     ),
@@ -165,14 +147,92 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         children: [
                           Text(
                             product.name,
-                            style: ProductTheme.titleLarge(context),
+                            style: context.displaySmall,
+                          ),
+                          const SizedBox(height: 8),
+                          // Add pricing and ratings UI
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              // Rating and review count
+                              Row(
+                                children: [
+                                  // Star rating
+                                  Row(
+                                    children: List.generate(5, (index) {
+                                      return Icon(
+                                        index < product.rating.floor()
+                                            ? Icons.star
+                                            : index < product.rating
+                                                ? Icons.star_half
+                                                : Icons.star_border,
+                                        color: Colors.amber,
+                                        size: 18,
+                                      );
+                                    }),
+                                  ),
+                                  const SizedBox(width: 4),
+                                  Text(
+                                    "(${product.ratingCount} ${'reviews'.tr(context)})",
+                                    style: context.bodyMedium?.copyWith(
+                                      color: Colors.grey[600],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              // Wishlist icon (already exists in another position, can be removed if needed)
+                            ],
+                          ),
+                          const SizedBox(height: 8),
+                          // Price display
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              RichText(
+                                text: TextSpan(
+                                  children: [
+                                    TextSpan(
+                                      text: product.currencySymbol,
+                                      style: context.titleLarge?.copyWith(
+                                        color: AppTheme.primaryColor,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    TextSpan(
+                                      text: product.price.replaceAll(' ${product.currencySymbol}', ''),
+                                      style: context.headlineMedium?.copyWith(
+                                        color: AppTheme.primaryColor,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Consumer<WishlistProvider>(
+                                builder: (context, wishlistProvider, child) {
+                                  return IconButton(
+                                    icon: Icon(
+                                      wishlistProvider.isProductInWishlist(
+                                        widget.slug,
+                                      )
+                                          ? Icons.favorite
+                                          : Icons.favorite_border,
+                                      color: AppTheme.primaryColor,
+                                      size: 28,
+                                    ),
+                                    onPressed: () async {
+                                      await AppFunctions.toggleWishlistStatus(
+                                        context,
+                                        widget.slug,
+                                      );
+                                    },
+                                  );
+                                },
+                              ),
+                            ],
                           ),
                           const SizedBox(height: 16),
-                          
-                          // Add specification summary at the top
-                          if (product.specifications.isNotEmpty)
-                            ProductSpecificationsSummary(product: product),
-                          
+
                           // Display variations
                           if (product.hasVariation) ...[
                             // Color variants
@@ -189,8 +249,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           ],
 
                           DescriptionWidget(product: product),
-                          const SizedBox(height: 16),
-                          
+
                           // Add specifications table widget
                           SpecificationsWidget(product: product),
                         ],

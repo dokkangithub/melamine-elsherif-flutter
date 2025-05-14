@@ -80,12 +80,6 @@ class SpecificationsWidget extends StatelessWidget {
             ),
           ),
         ),
-        const SizedBox(height: 24),
-        // Add a divider after specifications
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16.0),
-          child: Divider(height: 1, thickness: 1, color: Colors.grey),
-        ),
       ],
     );
   }
