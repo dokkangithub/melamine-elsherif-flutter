@@ -39,7 +39,7 @@ class ProfileMenuItem extends StatelessWidget {
                 ),
               ),
             ),
-            CustomImage(assetPath: AppSvgs.profile_back),
+            const CustomImage(assetPath: AppSvgs.profile_back),
           ],
         ),
       ),

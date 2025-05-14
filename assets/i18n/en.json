@@ -419,7 +419,6 @@
   "select_your_country": "Select your country",
   "share_your_experience_with": "Share your experience with this product details",
   "shipping_address_1": "Shipping Address",
-  "sign_out_1": "Sign Out",
   "start_shopping": "Start Shopping",
   "added_to_cart_successfully": "Added to cart successfully",
   "remove_from_cart_successfully": "Remove from cart successfully",
@@ -454,7 +453,6 @@
   "are_you_sure_you_want_to_cancel_this_order": "Are you sure you want to cancel this order?",
   "yes_cancel": "Yes, Cancel",
   "no_keep_it": "No, Keep It",
-  
   "no_processing_orders": "No Processing Orders",
   "no_shipped_orders": "No Shipped Orders",
   "no_delivered_orders": "No Delivered Orders",

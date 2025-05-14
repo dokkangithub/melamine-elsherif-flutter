@@ -4,6 +4,8 @@ import 'package:melamine_elsherif/core/utils/extension/translate_extension.dart'
 import 'package:melamine_elsherif/core/utils/widgets/custom_button.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_cached_image.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter/services.dart';
 import '../../../../core/config/routes.dart/routes.dart';
 import '../../../../core/config/themes.dart/theme.dart';
 import '../../../../core/utils/constants/app_strings.dart';
@@ -24,10 +26,18 @@ class ProfileScreen extends StatefulWidget {
   State<ProfileScreen> createState() => _ProfileScreenState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> {
+class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProviderStateMixin {
+  late AnimationController _animationController;
+  bool _isDialOpen = false;
+
   @override
   void initState() {
     super.initState();
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 250),
+    );
+    
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final profileProvider = context.read<ProfileProvider>();
       profileProvider.getUserProfile();
@@ -36,6 +46,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
       // Load club points data
       if (AppStrings.token != null) {
         context.read<ClubPointProvider>().fetchClubPoints();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  void _toggleDial() {
+    setState(() {
+      _isDialOpen = !_isDialOpen;
+      if (_isDialOpen) {
+        _animationController.forward();
+      } else {
+        _animationController.reverse();
       }
     });
   }
@@ -51,11 +78,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     return Scaffold(
       backgroundColor: Colors.white,
+      floatingActionButton: _buildSpeedDial(),
       body: SafeArea(
         child: SingleChildScrollView(
         child: Column(
           children: [
-            const SizedBox(height: 40),
+            const SizedBox(height: 20),
               // User Header
               Container(
                 alignment: Alignment.center,
@@ -84,7 +112,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   imageUrl: profileProvider.profileImageUrl!,
                                   fit: BoxFit.cover,
                                 )
-                                : isLoggedIn 
+                                : isLoggedIn
                                   ? const Icon(
                                     Icons.person,
                                     size: 40,
@@ -233,9 +261,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         );
                       },
                     ),
-                    ProfileMenuItem(
-                      icon: AppSvgs.profile_notifications,
-                      title: 'My Wallet',
+                    AppStrings.token == null
+                        ? const SizedBox.shrink()
+                        : ProfileMenuItem(
+                      icon: AppSvgs.profile_coin,
+                      title: 'my_wallet'.tr(context),
                       onTap: () {
                         AppRoutes.navigateTo(
                           context,
@@ -245,9 +275,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                     ProfileMenuItem(
                       icon: AppSvgs.profile_privacy,
-                      title: 'privacy_security'.tr(context),
-                      onTap: () {
-                        // Navigate to privacy
+                      title: 'our_website'.tr(context),
+                      onTap: () async {
+                        final Uri url = Uri.parse('https://melaminefront.dokkan.design/');
+                        if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text('could_not_launch_website'.tr(context)))
+                            );
+                          }
+                        }
                       },
                     ),
                     ProfileMenuItem(
@@ -261,15 +298,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ProfileMenuItem(
                       icon: AppSvgs.profile_help,
                       title: 'help_support'.tr(context),
-                      onTap: () {
-                        // Navigate to help
+                      onTap: () async {
+                        final Uri url = Uri.parse('https://melaminefront.dokkan.design/pages/contact-us');
+                        if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text('could_not_launch_website'.tr(context)))
+                            );
+                          }
+                        }
                       },
                     ),
                     ProfileMenuItem(
                       icon: AppSvgs.profile_about_us,
                       title: 'about_us'.tr(context),
-                      onTap: () {
-                        // Navigate to about
+                      onTap: () async {
+                        final Uri url = Uri.parse('https://melaminefront.dokkan.design/pages/about-us');
+                        if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text('could_not_launch_website'.tr(context)))
+                            );
+                          }
+                        }
                       },
                     ),
                   ],
@@ -278,7 +329,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
               const SizedBox(height: 20),
 
-              // Sign Out Button
+              // Auth Button (Sign Out or Sign In)
               Padding(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 16,
@@ -286,15 +337,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 child: CustomButton(
                   onPressed: () {
-                    _showLogoutConfirmation(context);
+                    if (isLoggedIn) {
+                      _showLogoutConfirmation(context);
+                    } else {
+                      // Navigate to login screen
+                      AppRoutes.navigateTo(context, AppRoutes.login);
+                    }
                   },
                   isOutlined: true,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(Icons.logout, color: AppTheme.primaryColor),
-                      SizedBox(width: 6),
-                      Text('sign_out'.tr(context),
+                      Icon(
+                        isLoggedIn ? Icons.logout : Icons.login,
+                        color: AppTheme.primaryColor
+                      ),
+                      const SizedBox(width: 6),
+                      Text(
+                        isLoggedIn ? 'sign_out'.tr(context) : 'sign_in'.tr(context),
                         style: context.titleMedium.copyWith(color: AppTheme.primaryColor),
                       ),
                     ],
@@ -378,7 +438,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
               if (navigatorContext.mounted) {
                 Navigator.of(navigatorContext).pushAndRemoveUntil(
-                  MaterialPageRoute(builder: (context) => LoginScreen()),
+                  MaterialPageRoute(builder: (context) => const LoginScreen()),
                       (route) => false,
                 );
               }
@@ -391,5 +451,190 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ],
       ),
     );
+  }
+
+  Widget _buildSpeedDial() {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        // YouTube
+        if (_isDialOpen) _buildSpeedDialChild(
+          icon: Icons.play_arrow,
+          backgroundColor: Colors.red,
+          onTap: () {
+            _launchYouTube();
+            _toggleDial();
+          },
+          position: 4,
+        ),
+        
+        // Phone Call
+        if (_isDialOpen) _buildSpeedDialChild(
+          icon: Icons.call,
+          backgroundColor: Colors.green,
+          onTap: () {
+            _makePhoneCall();
+            _toggleDial();
+          },
+          position: 3,
+        ),
+        
+        // WhatsApp
+        if (_isDialOpen) _buildSpeedDialChild(
+          icon: Icons.chat,
+          backgroundColor: Colors.green.shade700,
+          onTap: () {
+            _openWhatsApp();
+            _toggleDial();
+          },
+          position: 2,
+        ),
+        
+        // Facebook
+        if (_isDialOpen) _buildSpeedDialChild(
+          icon: Icons.facebook,
+          backgroundColor: Colors.blue,
+          onTap: () {
+            _openFacebook();
+            _toggleDial();
+          },
+          position: 1,
+        ),
+        
+        // Main FAB
+        GestureDetector(
+          onTap: _toggleDial,
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 250),
+            curve: Curves.easeInOut,
+            height: 56,
+            width: 56,
+            decoration: BoxDecoration(
+              color: AppTheme.primaryColor,
+              borderRadius: BorderRadius.circular(28),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.2),
+                  blurRadius: 5,
+                  spreadRadius: 1,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+            ),
+            child: AnimatedRotation(
+              turns: _isDialOpen ? 0.125 : 0,
+              duration: const Duration(milliseconds: 250),
+              child: const Icon(
+                Icons.add,
+                color: Colors.white,
+                size: 30,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSpeedDialChild({
+    required IconData icon,
+    required Color backgroundColor,
+    required VoidCallback onTap,
+    required int position,
+  }) {
+    final positionAnimation = Tween<double>(
+      begin: 0,
+      end: position * 60.0,
+    ).animate(
+      CurvedAnimation(
+        parent: _animationController,
+        curve: Curves.easeOut,
+      ),
+    );
+
+    return AnimatedBuilder(
+      animation: _animationController,
+      builder: (context, child) {
+        return Positioned(
+          bottom: positionAnimation.value,
+          right: 0,
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 10.0),
+            child: Material(
+              color: Colors.transparent,
+              child: InkWell(
+                onTap: onTap,
+                child: Container(
+                  height: 48,
+                  width: 48,
+                  decoration: BoxDecoration(
+                    color: backgroundColor,
+                    borderRadius: BorderRadius.circular(24),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.2),
+                        blurRadius: 4,
+                        spreadRadius: 1,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: Icon(
+                    icon,
+                    color: Colors.white,
+                    size: 24,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> _launchYouTube() async {
+    final Uri url = Uri.parse('https://www.youtube.com/watch?v=aQSHPRcZdrA');
+    if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('could_not_launch_website'.tr(context))),
+        );
+      }
+    }
+  }
+
+  Future<void> _openFacebook() async {
+    final Uri url = Uri.parse('https://www.facebook.com/alsherifmelamine/about/');
+    if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('could_not_launch_website'.tr(context))),
+        );
+      }
+    }
+  }
+
+  Future<void> _makePhoneCall() async {
+    final Uri url = Uri.parse('tel:01064440808');
+    if (!await launchUrl(url)) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('could_not_make_call'.tr(context))),
+        );
+      }
+    }
+  }
+
+  Future<void> _openWhatsApp() async {
+    final phoneNumber = '201064440808'; // Adding Egypt country code
+    final url = Uri.parse('https://wa.me/$phoneNumber');
+    if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('could_not_open_whatsapp'.tr(context))),
+        );
+      }
+    }
   }
 }

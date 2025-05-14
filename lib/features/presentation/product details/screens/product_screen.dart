@@ -219,6 +219,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         width: double.infinity,
                         height: 50,
                         child: CustomButton(
+                          isGradient: true,
                           onPressed:
                           productProvider.isAddingToCart ||
                               !productProvider.canAddToCart
@@ -263,7 +264,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           child: Center(
                             child: Text(
                               productProvider.canAddToCart
-                                  ? 'Add to Cart'
+                                  ? 'add_to_cart'.tr(context)
                                   : 'Out of Stock',
                               style: context.titleMedium.copyWith(color: AppTheme.white),
                             ),

@@ -12,6 +12,7 @@ class AppImages {
   static const String second_home_image = '$imagesPath/second_home_image.png';
   static const String summers_deals_image = '$imagesPath/summers_deals_image.png';
   static const String linearAppLogo = '$imagesPath/linear_app_logo.png';
+  static const String wallet_icon = '$imagesPath/wallet.png';
 }
 
 class AppAnimations {
@@ -76,6 +77,7 @@ class AppSvgs {
   static const String back = '$svgPath/back.svg';
   static const String colored_search_icon = '$svgPath/colored_search_icon.svg';
   static const String location_icon = '$svgPath/location_icon.svg';
+
 
 
 
