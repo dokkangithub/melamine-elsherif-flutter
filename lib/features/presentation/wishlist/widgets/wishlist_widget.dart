@@ -3,6 +3,7 @@ import 'package:melamine_elsherif/core/utils/extension/text_style_extension.dart
 import 'package:melamine_elsherif/core/utils/helpers.dart';
 import 'package:melamine_elsherif/features/presentation/wishlist/widgets/shimmer/wishlist_screen_shimmer.dart';
 import 'package:melamine_elsherif/features/presentation/wishlist/widgets/snappable_wishlist_item.dart';
+import 'package:quickalert/quickalert.dart';
 import '../../../../core/config/routes.dart/routes.dart';
 import '../../../../core/config/themes.dart/theme.dart';
 import '../../../../core/utils/constants/app_assets.dart';
@@ -15,10 +16,7 @@ import 'empty_wishlist_widget.dart';
 class WishlistWidget extends StatelessWidget {
   final WishlistProvider provider;
 
-  const WishlistWidget({
-    super.key,
-    required this.provider,
-  });
+  const WishlistWidget({super.key, required this.provider});
 
   @override
   Widget build(BuildContext context) {
@@ -27,12 +25,13 @@ class WishlistWidget extends StatelessWidget {
         backgroundColor: Colors.white,
         elevation: 0,
         scrolledUnderElevation: 0,
-        title: Text('My Wishlist'.tr(context),
-          style: context.headlineSmall,
+        title: Text(
+          'my_wishlist'.tr(context),
+          style: context.headlineSmall.copyWith(fontWeight: FontWeight.w800),
         ),
         actions: [
           IconButton(
-            icon: Icon(Icons.search, color: Colors.black),
+            icon: const Icon(Icons.search, color: Colors.black),
             onPressed: () {
               AppRoutes.navigateTo(context, AppRoutes.searchScreen);
             },
@@ -41,98 +40,106 @@ class WishlistWidget extends StatelessWidget {
       ),
       body: Column(
         children: [
-          // Filter categories - removed as per request
-          
           // Remove All button
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            alignment: Alignment.centerRight,
-            child: InkWell(
-              onTap: () {
-                // Get all item keys and trigger snap animation
-                final wishlistItemKeys = List.generate(
-                  provider.wishlistItems.length,
-                  (index) => GlobalKey<SnappableWishlistItemState>(),
-                );
-                
-                // Show a confirmation dialog
-                showDialog(
-                  context: context,
-                  builder: (context) => AlertDialog(
-                    title: Text('Clear Wishlist?'.tr(context)),
-                    content: Text('Are you sure you want to remove all items from your wishlist?'.tr(context)),
-                    actions: [
-                      TextButton(
-                        onPressed: () => Navigator.pop(context),
-                        child: Text('Cancel'.tr(context)),
+          provider.wishlistItems.isEmpty
+              ? const SizedBox.shrink()
+              : Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 8,
+                ),
+                alignment: Alignment.centerRight,
+                child: InkWell(
+                  onTap: () {
+                    // Get all item keys and trigger snap animation
+                    final wishlistItemKeys = List.generate(
+                      provider.wishlistItems.length,
+                      (index) => GlobalKey<SnappableWishlistItemState>(),
+                    );
+
+                    // Show confirmation with QuickAlert instead of standard AlertDialog
+                    QuickAlert.show(
+                      context: context,
+                      type: QuickAlertType.confirm,
+                      title: 'clear_wishlist'.tr(context),
+                      text: 'clear_wishlist_confirmation'.tr(context),
+                      confirmBtnText: 'clear'.tr(context),
+                      cancelBtnText: 'cancel'.tr(context),
+                      confirmBtnColor: AppTheme.accentColor,
+                      cancelBtnTextStyle: context.titleMedium.copyWith(fontWeight: FontWeight.w600,color: AppTheme.lightSecondaryTextColor),
+                      confirmBtnTextStyle: context.titleMedium.copyWith(fontWeight: FontWeight.w600,color: AppTheme.white),
+                      onConfirmBtnTap: () {
+                        Navigator.pop(context);
+                        
+                        // Once confirmed, clear the wishlist
+                        for (var item in provider.wishlistItems) {
+                          provider.removeFromWishlist(item.slug);
+                        }
+
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              'wishlist_cleared'.tr(context),
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  },
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Icon(
+                        Icons.delete_outline,
+                        color: AppTheme.accentColor,
                       ),
-                      TextButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                          
-                          // Once confirmed, clear the wishlist with animation effect
-                          for (var item in provider.wishlistItems) {
-                            provider.removeFromWishlist(item.slug);
-                          }
-                          
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('wishlist_cleared'.tr(context))),
-                          );
-                        },
-                        child: Text('Clear'.tr(context), style: TextStyle(color: Colors.red)),
+                      const SizedBox(width: 4),
+                      Text(
+                        'remove_all'.tr(context),
+                        style: context.titleSmall.copyWith(fontWeight: FontWeight.w700,color: AppTheme.primaryColor),
                       ),
                     ],
                   ),
-                );
-              },
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(Icons.delete_outline, color: AppTheme.accentColor),
-                  const SizedBox(width: 4),
-                  Text(
-                    'remove_all'.tr(context),
-                    style: TextStyle(
-                      color: AppTheme.accentColor,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ],
+                ),
               ),
-            ),
-          ),
 
           // Wishlist items grid
           provider.wishlistState != LoadingState.loading
               ? provider.wishlistItems.isEmpty
-                  ? Expanded(child: EmptyWishlistWidget())
+                  ? const Expanded(child: EmptyWishlistWidget())
                   : Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: GridView.builder(
-                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            childAspectRatio: 0.7,
-                            crossAxisSpacing: 16,
-                            mainAxisSpacing: 16,
-                          ),
-                          itemCount: provider.wishlistItems.length,
-                          itemBuilder: (context, index) {
-                            final item = provider.wishlistItems[index];
-                            return _buildWishlistItem(context, item, provider);
-                          },
-                        ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: GridView.builder(
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              childAspectRatio: 0.6,
+                              crossAxisSpacing: 10,
+                              mainAxisSpacing: 10,
+                            ),
+                        itemCount: provider.wishlistItems.length,
+                        itemBuilder: (context, index) {
+                          final item = provider.wishlistItems[index];
+                          return _buildWishlistItem(context, item, provider);
+                        },
                       ),
-                    )
-              : Expanded(child: WishlistScreenShimmer()),
+                    ),
+                  )
+              : const Expanded(child: WishlistScreenShimmer()),
         ],
       ),
     );
   }
 
-  Widget _buildWishlistItem(BuildContext context, wishlistItem, WishlistProvider provider) {
-    final GlobalKey<SnappableWishlistItemState> snappableKey = GlobalKey<SnappableWishlistItemState>();
-    
+  Widget _buildWishlistItem(
+    BuildContext context,
+    wishlistItem,
+    WishlistProvider provider,
+  ) {
+    final GlobalKey<SnappableWishlistItemState> snappableKey =
+        GlobalKey<SnappableWishlistItemState>();
+
     return SnappableWishlistItem(
       key: snappableKey,
       slug: wishlistItem.slug,
@@ -164,7 +171,7 @@ class WishlistWidget extends StatelessWidget {
                   // Product image
                   Expanded(
                     child: ClipRRect(
-                      borderRadius: BorderRadius.only(
+                      borderRadius: const BorderRadius.only(
                         topLeft: Radius.circular(8),
                         topRight: Radius.circular(8),
                       ),
@@ -188,16 +195,19 @@ class WishlistWidget extends StatelessWidget {
                         Text(
                           wishlistItem.name,
                           style: context.titleSmall,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
+                          maxLines: 2,
                         ),
-
+                        const SizedBox(height: 2),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             // Price
-                            Text('${wishlistItem.price}'.tr(context),
-                              style: context.titleSmall,
+                            Text(
+                              '${wishlistItem.price}',
+                              style: context.titleLarge.copyWith(
+                                fontWeight: FontWeight.w700,
+                                color: AppTheme.primaryColor,
+                              ),
                             ),
                             // Add to cart button
                             InkWell(
@@ -211,18 +221,21 @@ class WishlistWidget extends StatelessWidget {
                                 );
                               },
                               child: Container(
-                                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-                                  decoration: BoxDecoration(
-                                    color: AppTheme.accentColor,
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  child: CustomImage(assetPath: AppSvgs.cart_white)
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 8,
+                                  vertical: 6,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: AppTheme.accentColor,
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: const CustomImage(
+                                  assetPath: AppSvgs.cart_white,
+                                ),
                               ),
                             ),
                           ],
                         ),
-
-
                       ],
                     ),
                   ),
@@ -231,15 +244,15 @@ class WishlistWidget extends StatelessWidget {
 
               // Wishlist heart icon
               Positioned(
-                top: 8,
-                right: 8,
+                top: 4,
+                right: 4,
                 child: InkWell(
                   onTap: () {
                     // Trigger the snap effect before removing item
                     snappableKey.currentState?.startSnap();
                   },
                   child: Container(
-                    padding: EdgeInsets.all(6),
+                    padding: const EdgeInsets.all(6),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       shape: BoxShape.circle,
@@ -251,7 +264,7 @@ class WishlistWidget extends StatelessWidget {
                         ),
                       ],
                     ),
-                    child: Icon(
+                    child: const Icon(
                       Icons.favorite,
                       color: AppTheme.accentColor,
                       size: 18,
