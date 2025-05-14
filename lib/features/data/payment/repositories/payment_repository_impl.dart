@@ -70,6 +70,32 @@ class PaymentRepositoryImpl implements PaymentRepository {
   }
 
   @override
+  Future<OrderResponse> createWalletOrder({
+    required String postalCode,
+    required String stateId,
+    required String address,
+    required String city,
+    required String phone,
+    String? additionalInfo,
+    required BuildContext context,
+  }) async {
+    try {
+      final orderResponse = await remoteDataSource.createWalletOrder(
+        stateId: stateId,
+        address: address,
+        city: city,
+        phone: phone,
+        additionalInfo: additionalInfo,
+        context: context,
+        postalCode: postalCode,
+      );
+      return orderResponse;
+    } catch (e) {
+      throw Exception('Failed to create Wallet order: $e');
+    }
+  }
+
+  @override
   Future<Map<String, dynamic>> verifyOrderSuccess(String orderId) async {
     try {
       final verificationResult = await remoteDataSource.verifyOrderSuccess(orderId);

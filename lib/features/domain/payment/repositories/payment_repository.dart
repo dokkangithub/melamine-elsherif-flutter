@@ -27,6 +27,17 @@ abstract class PaymentRepository {
     required BuildContext context,
   });
   
+  /// Create a Wallet payment order
+  Future<OrderResponse> createWalletOrder({
+    required String postalCode,
+    required String stateId,
+    required String address,
+    required String city,
+    required String phone,
+    String? additionalInfo,
+    required BuildContext context,
+  });
+  
   /// Verify order success by order ID
   Future<Map<String, dynamic>> verifyOrderSuccess(String orderId);
 

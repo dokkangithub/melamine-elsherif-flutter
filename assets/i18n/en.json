@@ -446,5 +446,19 @@
   "login_successfully": "Login Successfully",
   "create_account_successfully": "Account created successfully",
   "state_1": "state",
-  "2025_powered_by_dokkan_agency": "© 2025 Powered by Dokkan Agency"
+  "2025_powered_by_dokkan_agency": "© 2025 Powered by Dokkan Agency",
+  
+  "expected_in_3_5_days": "Expected in 3-5 days",
+  "do_you_want_to_contact_customer_support": "Do you want to contact our customer support team?",
+  "yes": "Yes",
+  "are_you_sure_you_want_to_cancel_this_order": "Are you sure you want to cancel this order?",
+  "yes_cancel": "Yes, Cancel",
+  "no_keep_it": "No, Keep It",
+  
+  "no_processing_orders": "No Processing Orders",
+  "no_shipped_orders": "No Shipped Orders",
+  "no_delivered_orders": "No Delivered Orders",
+  "you_dont_have_any_processing_orders_at_the_moment": "You don't have any processing orders at the moment.",
+  "you_dont_have_any_shipped_orders_at_the_moment": "You don't have any shipped orders at the moment.",
+  "you_dont_have_any_delivered_orders_at_the_moment": "You don't have any delivered orders at the moment."
 }

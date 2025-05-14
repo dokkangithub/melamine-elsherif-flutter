@@ -5,6 +5,7 @@ import 'package:melamine_elsherif/core/utils/extension/text_theme_extension.dart
 import 'package:melamine_elsherif/core/utils/extension/translate_extension.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_cached_image.dart';
 import 'package:provider/provider.dart';
+import 'package:quickalert/quickalert.dart';
 import '../../../../core/utils/enums/loading_state.dart';
 import '../controller/order_provider.dart';
 import '../widgets/shimmer/order_screen_shimmer.dart';
@@ -39,14 +40,14 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
         centerTitle: true,
         scrolledUnderElevation: 0,
         leading: InkWell(
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
+          child: const Padding(
+            padding: EdgeInsets.all(20.0),
             child: CustomImage(assetPath: AppSvgs.back),
           ),
           onTap: () => Navigator.pop(context),
         ),
         title: Text(
-          'Order Details',
+          'order_details'.tr(context),
           style: context.headlineSmall,
         ),
       ),
@@ -106,58 +107,35 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Order Number',
+                                'order_number'.tr(context),
                                 style: context.titleSmall!.copyWith(fontWeight: FontWeight.w600),
                               ),
                               const SizedBox(height: 4),
-                              Text('#ORD-2023-12-001'.tr(context),
+                              Text('#${orderDetails.code}',
                                 style: context.titleMedium!.copyWith(fontWeight: FontWeight.w600),
                               ),
                             ],
                           ),
                           
-                          Text(
-                            'In Transit',
-                            style: context.titleSmall!.copyWith(fontWeight: FontWeight.w600,color: AppTheme.primaryColor),
-                          ),
+                          _buildStatusBadge(orderDetails.deliveryStatus),
                         ],
                       ),
                       
                       // Order Progress Bar
                       const SizedBox(height: 10),
-                      Container(
-                        height: 4,
-                        decoration: BoxDecoration(
-                          color: Colors.grey[200],
-                          borderRadius: BorderRadius.circular(2),
-                        ),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              flex: 1,
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: AppTheme.primaryColor,
-                                  borderRadius: BorderRadius.circular(2),
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              flex: 2,
-                              child: Container(color: Colors.transparent),
-                            ),
-                          ],
-                        ),
-                      ),
+                      _buildOrderProgressBar(orderDetails.deliveryStatus),
                       
                       // Order Timeline Steps
                       const SizedBox(height: 8),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          _buildSimpleOrderStep('Ordered', true),
-                          _buildSimpleOrderStep('Shipped', false),
-                          _buildSimpleOrderStep('Delivered', false),
+                          _buildSimpleOrderStep('ordered'.tr(context), true),
+                          _buildSimpleOrderStep('shipped'.tr(context), 
+                              orderDetails.deliveryStatus.toLowerCase() == 'picked_up' || 
+                              orderDetails.deliveryStatus.toLowerCase() == 'delivered'),
+                          _buildSimpleOrderStep('delivered'.tr(context), 
+                              orderDetails.deliveryStatus.toLowerCase() == 'delivered'),
                         ],
                       ),
 
@@ -166,7 +144,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                       
                       // Delivery Address
                        Text(
-                        'Delivery Address',
+                        'delivery_address'.tr(context),
                         style: context.titleMedium!.copyWith(fontWeight: FontWeight.w800),
                       ),
                       const SizedBox(height: 8),
@@ -178,7 +156,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('Order Items (${provider.orderItems.length})'.tr(context),
+                          Text('${'order_items'.tr(context)} (${provider.orderItems.length})',
                             style: context.titleMedium!.copyWith(fontWeight: FontWeight.w800),
                           ),
                         ],
@@ -202,7 +180,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                       
                       // Price Details
                        Text(
-                        'Price Details',
+                        'price_details'.tr(context),
                         style: context.titleMedium!.copyWith(fontWeight: FontWeight.w800,color: AppTheme.black),
                       ),
                       const SizedBox(height: 10),
@@ -212,7 +190,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                       
                       // Payment Information
                        Text(
-                        'Payment Information',
+                        'payment_information'.tr(context),
                         style: context.titleMedium!.copyWith(fontWeight: FontWeight.w800,color: AppTheme.black),
                       ),
                       const SizedBox(height: 16),
@@ -221,12 +199,9 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                       const SizedBox(height: 32),
                       
                       // Order Timeline
-                      const Text(
-                        'Order Timeline',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                        ),
+                      Text(
+                        'order_timeline'.tr(context),
+                        style: context.titleMedium!.copyWith(fontWeight: FontWeight.w800),
                       ),
                       const SizedBox(height: 16),
                       _buildOrderTimelineCard(orderDetails),
@@ -258,19 +233,20 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                       child: ElevatedButton(
                         onPressed: () {
                           // Contact support logic
+                          _showContactSupportDialog(context);
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFFBD5B4D),
+                          backgroundColor: AppTheme.primaryColor,
                           padding: const EdgeInsets.symmetric(vertical: 16),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8),
                           ),
                         ),
-                        child: const Text(
-                          'Contact Support',
-                          style: TextStyle(
-                            fontSize: 16,
+                        child: Text(
+                          'contact_support'.tr(context),
+                          style: context.titleMedium!.copyWith(
                             fontWeight: FontWeight.bold,
+                            color: Colors.white,
                           ),
                         ),
                       ),
@@ -281,12 +257,12 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                       child: TextButton(
                         onPressed: () {
                           // Cancel order logic
+                          _showCancelOrderDialog(context);
                         },
-                        child: const Text(
-                          'Cancel Order',
-                          style: TextStyle(
+                        child: Text(
+                          'cancel_order'.tr(context),
+                          style: context.titleMedium!.copyWith(
                             color: Colors.black87,
-                            fontSize: 16,
                           ),
                         ),
                       ),
@@ -319,28 +295,27 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
     switch (status.toLowerCase()) {
       case 'pending':
       case 'confirmed':
-        color = const Color(0xFFBD5B4D);
-        label = 'In Transit';
+        color = AppTheme.primaryColor;
+        label = 'in_transit'.tr(context);
         break;
       case 'picked_up':
         color = Colors.blue;
-        label = 'Shipped';
+        label = 'shipped'.tr(context);
         break;
       case 'delivered':
         color = Colors.green;
-        label = 'Delivered';
+        label = 'delivered'.tr(context);
         break;
       default:
         color = Colors.orange;
-        label = 'Processing';
+        label = 'processing'.tr(context);
     }
     
     return Text(
       label,
-      style: TextStyle(
+      style: context.titleSmall!.copyWith(
+        fontWeight: FontWeight.w600,
         color: color,
-        fontWeight: FontWeight.bold,
-        fontSize: 16,
       ),
     );
   }
@@ -349,11 +324,11 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
   Widget _buildOrderProgressBar(String status) {
     int progress = 0;
     
-    if (status == 'pending' || status == 'confirmed') {
+    if (status.toLowerCase() == 'pending' || status.toLowerCase() == 'confirmed') {
       progress = 1;
-    } else if (status == 'picked_up') {
+    } else if (status.toLowerCase() == 'picked_up') {
       progress = 2;
-    } else if (status == 'delivered') {
+    } else if (status.toLowerCase() == 'delivered') {
       progress = 3;
     }
     
@@ -369,7 +344,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
             flex: progress >= 1 ? 1 : 0,
             child: Container(
               decoration: BoxDecoration(
-                color: const Color(0xFFBD5B4D),
+                color: AppTheme.primaryColor,
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
@@ -382,7 +357,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
             flex: progress >= 2 ? 1 : 0,
             child: Container(
               decoration: BoxDecoration(
-                color: const Color(0xFFBD5B4D),
+                color: AppTheme.primaryColor,
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
@@ -395,7 +370,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
             flex: progress >= 3 ? 1 : 0,
             child: Container(
               decoration: BoxDecoration(
-                color: const Color(0xFFBD5B4D),
+                color: AppTheme.primaryColor,
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
@@ -462,7 +437,8 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                   style: context.titleSmall
                 ),
                 const SizedBox(height: 8),
-                Text('${address.address}, ${address.city}, ${address.state}, ${address.country} ${address.postalCode}'.tr(context),
+                Text(
+                  '${address.address}, ${address.city}, ${address.state}, ${address.country} ${address.postalCode}',
                   style: context.titleSmall!.copyWith(fontWeight: FontWeight.w600),
                 ),
                 const SizedBox(height: 8),
@@ -516,11 +492,13 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                 if (item.variation.isNotEmpty)
                   Padding(
                     padding: const EdgeInsets.only(bottom: 4),
-                    child: Text('Variation: ${item.variation}'.tr(context),
+                    child: Text(
+                      'variation'.tr(context) + ': ${item.variation}',
                       style: context.titleSmall!.copyWith(fontWeight: FontWeight.w600),
                     ),
                   ),
-                Text('Quantity: ${item.quantity}'.tr(context),
+                Text(
+                  'quantity'.tr(context) + ': ${item.quantity}',
                   style: context.titleSmall!.copyWith(fontWeight: FontWeight.w600,color: AppTheme.black),
                 ),
                 const SizedBox(height: 8),
@@ -539,13 +517,13 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
   // Price Details Card
   Widget _buildPriceDetailsCard(dynamic orderDetails) {
     final items = [
-      {'label': 'Subtotal', 'value': orderDetails.subtotal},
-      {'label': 'Shipping Fee', 'value': orderDetails.shippingCost},
-      {'label': 'Tax', 'value': orderDetails.tax},
+      {'label': 'subtotal'.tr(context), 'value': orderDetails.subtotal},
+      {'label': 'shipping_fee'.tr(context), 'value': orderDetails.shippingCost},
+      {'label': 'tax'.tr(context), 'value': orderDetails.tax},
     ];
     
     if (orderDetails.couponDiscount.isNotEmpty && orderDetails.couponDiscount != '0' && orderDetails.couponDiscount != '0.00') {
-      items.add({'label': 'Coupon Discount', 'value': orderDetails.couponDiscount});
+      items.add({'label': 'coupon_discount'.tr(context), 'value': orderDetails.couponDiscount});
     }
     
     return Container(
@@ -559,7 +537,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
         children: [
           ...items.map((item) => _buildPriceRow(item['label']!, item['value']!)),
           const Divider(height: 24),
-          _buildPriceRow('Total', orderDetails.grandTotal, isTotal: true),
+          _buildPriceRow('total'.tr(context), orderDetails.grandTotal, isTotal: true),
         ],
       ),
     );
@@ -583,7 +561,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
           Text(
             value,
             style: TextStyle(
-              color: isTotal ? const Color(0xFFBD5B4D) : Colors.black,
+              color: isTotal ? AppTheme.primaryColor : Colors.black,
               fontWeight: isTotal ? FontWeight.bold : FontWeight.normal,
               fontSize: isTotal ? 16 : 14,
             ),
@@ -595,12 +573,12 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
   
   // Payment Information Card
   Widget _buildPaymentInfoCard(dynamic orderDetails) {
-    final paymentStatus = orderDetails.paymentStatus.toLowerCase() == 'paid' ? 'Paid' : 'Pending';
-    final statusColor = paymentStatus == 'Paid' ? Colors.green[700] : Colors.orange[700];
-    final bgColor = paymentStatus == 'Paid' ? Colors.green[50] : Colors.orange[50];
+    final paymentStatus = orderDetails.paymentStatus.toLowerCase() == 'paid' ? 'paid'.tr(context) : 'pending'.tr(context);
+    final statusColor = paymentStatus == 'paid'.tr(context) ? Colors.green[700] : Colors.orange[700];
+    final bgColor = paymentStatus == 'paid'.tr(context) ? Colors.green[50] : Colors.orange[50];
     
     return Container(
-            padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.grey[50],
         borderRadius: BorderRadius.circular(8),
@@ -626,7 +604,8 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                Text('Date: ${orderDetails.date}'.tr(context),
+                Text(
+                  'date'.tr(context) + ': ${orderDetails.date}',
                   style: TextStyle(
                     color: Colors.grey[600],
                     fontSize: 14,
@@ -683,30 +662,30 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
     final confirmedDate = formatDate(orderDate);
     final shippedDate = deliveryStatus == 'picked_up' || deliveryStatus == 'delivered'
         ? formatDate(orderDate.add(const Duration(days: 1)))
-        : 'Pending';
+        : 'pending'.tr(context);
     final deliveredDate = deliveryStatus == 'delivered'
         ? formatDate(orderDate.add(const Duration(days: 3)))
-        : 'Expected in 3-5 days';
+        : 'expected_in_3_5_days'.tr(context);
     
     final timelineItems = [
       {
         'icon': Icons.check_circle,
         'color': Colors.green,
-        'title': 'Order Delivered',
+        'title': 'order_delivered'.tr(context),
         'date': deliveredDate,
         'active': deliveryStatus == 'delivered',
       },
       {
         'icon': Icons.local_shipping,
         'color': Colors.blue,
-        'title': 'Order Shipped',
+        'title': 'order_shipped'.tr(context),
         'date': shippedDate,
         'active': deliveryStatus == 'picked_up' || deliveryStatus == 'delivered',
       },
       {
         'icon': Icons.check,
-        'color': const Color(0xFFBD5B4D),
-        'title': 'Order Confirmed',
+        'color': AppTheme.primaryColor,
+        'title': 'order_confirmed'.tr(context),
         'date': confirmedDate,
         'active': true,
       },
@@ -805,6 +784,39 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
           ),
         ),
       ],
+    );
+  }
+  
+  // Contact Support Dialog
+  void _showContactSupportDialog(BuildContext context) {
+    QuickAlert.show(
+      context: context,
+      type: QuickAlertType.confirm,
+      title: 'contact_support'.tr(context),
+      text: 'do_you_want_to_contact_customer_support'.tr(context),
+      confirmBtnText: 'yes'.tr(context),
+      cancelBtnText: 'cancel'.tr(context),
+      onConfirmBtnTap: () {
+        Navigator.pop(context);
+        // Add logic to contact support
+      },
+    );
+  }
+  
+  // Cancel Order Dialog
+  void _showCancelOrderDialog(BuildContext context) {
+    QuickAlert.show(
+      context: context,
+      type: QuickAlertType.warning,
+      title: 'cancel_order'.tr(context),
+      text: 'are_you_sure_you_want_to_cancel_this_order'.tr(context),
+      confirmBtnText: 'yes_cancel'.tr(context),
+      cancelBtnText: 'no_keep_it'.tr(context),
+      confirmBtnColor: Colors.red,
+      onConfirmBtnTap: () {
+        Navigator.pop(context);
+        // Add logic to cancel order
+      },
     );
   }
 }

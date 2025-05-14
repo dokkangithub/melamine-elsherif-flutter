@@ -26,6 +26,15 @@ abstract class PaymentRemoteDataSource {
     String? additionalInfo,
     required BuildContext context,
   });
+  Future<OrderResponseModel> createWalletOrder({
+    required String stateId,
+    required String address,
+    required String city,
+    required String phone,
+    required String postalCode,
+    String? additionalInfo,
+    required BuildContext context,
+  });
   Future<Map<String, dynamic>> verifyOrderSuccess(String orderId);
 
   // New function
@@ -133,18 +142,18 @@ class PaymentRemoteDataSourceImpl implements PaymentRemoteDataSource {
             } else {
               // Handle verification failure
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('Payment verification failed')),
+                const SnackBar(content: Text('Payment verification failed')),
               );
             }
           } else if (paymentStatus == 'FAILED') {
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Payment failed')),
+              const SnackBar(content: Text('Payment failed')),
             );
           }
         } else {
           // Handle case where WebViewResult is null or not a string
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Payment process was interrupted')),
+            const SnackBar(content: Text('Payment process was interrupted')),
           );
         }
 
@@ -248,6 +257,85 @@ class PaymentRemoteDataSourceImpl implements PaymentRemoteDataSource {
   }
 
   @override
+  Future<OrderResponseModel> createWalletOrder({
+    required String stateId,
+    required String address,
+    required String city,
+    required String phone,
+    required String postalCode,
+    String? additionalInfo,
+    required BuildContext context,
+  }) async {
+    try {
+      showLoadingDialog(context);
+
+      final data = {
+        "name": AppStrings.userName,
+        "email": AppStrings.userEmail??'',
+        "address": address,
+        "country": 'egypt',
+        "state_id": stateId,
+        "city": city,
+        "postal_code" : postalCode,
+        "phone": phone,
+        "payment_type": 'wallet',
+        "order_from": 'mobile',
+        "additional_info": additionalInfo ?? "",
+        if (AppStrings.userId==null) "temp_user_id": AppStrings.tempUserId,
+        if (AppStrings.userId != null) "user_id": AppStrings.userId,
+      };
+
+      print(data);
+
+      final response = await apiProvider.post(
+        LaravelApiEndPoint.orderStore,
+        data: data,
+      );
+
+      print("Raw response from /order/store (wallet payment): ${response.data}");
+
+      // Hide loading dialog
+      if (Navigator.canPop(context)) {
+        Navigator.of(context, rootNavigator: true).pop();
+      }
+
+      final orderResponse = OrderResponseModel.fromJson(response.data);
+
+      // Check if order was created successfully
+      if (orderResponse.result && orderResponse.combinedOrder != null) {
+        final verificationResult = await verifyOrderSuccess(orderResponse.combinedOrder!.id.toString());
+        print("Verification result: $verificationResult");
+
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => SuccessScreen(orderDetails: orderResponse)),
+        );
+
+        return OrderResponseModel(
+          result: true,
+          message: 'Wallet payment successful',
+          status: 'success',
+          combinedOrder: orderResponse.combinedOrder as CombinedOrderModel?,
+        );
+      }
+
+      return orderResponse;
+    } catch (e) {
+      // Ensure loading dialog is closed in case of error
+      if (Navigator.canPop(context)) {
+        Navigator.of(context, rootNavigator: true).pop();
+      }
+
+      print("Error in createWalletOrder: $e");
+      return OrderResponseModel(
+        result: false,
+        message: 'An error occurred while processing wallet payment: $e',
+        status: 'error',
+      );
+    }
+  }
+
+  @override
   Future<Map<String, dynamic>> verifyOrderSuccess(String orderId) async {
     try {
       print("Verifying order: $orderId");
@@ -269,11 +357,11 @@ class PaymentRemoteDataSourceImpl implements PaymentRemoteDataSource {
       context: context,
       barrierDismissible: false,
       builder:
-          (context) => AlertDialog(
+          (context) => const AlertDialog(
             content: Row(
               children: [
-                const CircularProgressIndicator(),
-                const SizedBox(width: 20),
+                CircularProgressIndicator(),
+                SizedBox(width: 20),
                 Text('Processing your order...'),
               ],
             ),

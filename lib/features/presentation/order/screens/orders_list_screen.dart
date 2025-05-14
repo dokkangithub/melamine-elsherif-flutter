@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import '../../../../core/utils/constants/app_assets.dart';
 import '../../../../core/utils/enums/loading_state.dart';
 import '../../../../core/utils/widgets/custom_cached_image.dart';
+import '../../../domain/order/entities/order.dart';
 import '../controller/order_provider.dart';
 import '../widgets/shimmer/orders_list_shimmer.dart';
 
@@ -64,9 +65,9 @@ class _OrdersListScreenState extends State<OrdersListScreen> with SingleTickerPr
         elevation: 0,
         scrolledUnderElevation: 0,
         centerTitle: true,
-        title: const Text(
-          'Orders',
-          style: TextStyle(
+        title: Text(
+          'orders'.tr(context),
+          style: const TextStyle(
             color: Colors.black,
             fontWeight: FontWeight.bold,
           ),
@@ -108,7 +109,7 @@ class _OrdersListScreenState extends State<OrdersListScreen> with SingleTickerPr
               indicatorSize: TabBarIndicatorSize.label,
               tabAlignment: TabAlignment.start,
               labelPadding: const EdgeInsets.symmetric(horizontal: 8),
-              tabs: _tabs.map((tab) => _buildTab(tab)).toList(),
+              tabs: _tabs.map((tab) => _buildTab(tab.tr(context))).toList(),
               onTap: (index) {
                 // Handle tab selection for filtering orders
                 setState(() {});
@@ -134,7 +135,7 @@ class _OrdersListScreenState extends State<OrdersListScreen> with SingleTickerPr
                         const SizedBox(height: 16),
                         ElevatedButton(
                           onPressed: () => provider.fetchOrders(),
-                          child: const Text('Try Again'),
+                          child: Text('try_again'.tr(context)),
                         ),
                       ],
                     ),
@@ -175,7 +176,7 @@ class _OrdersListScreenState extends State<OrdersListScreen> with SingleTickerPr
                             ),
                           ),
                           const SizedBox(height: 20),
-                          Text('No $tabName Orders',
+                          Text('no_${tabName.toLowerCase()}_orders'.tr(context),
                             style: const TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
@@ -184,7 +185,7 @@ class _OrdersListScreenState extends State<OrdersListScreen> with SingleTickerPr
                           ),
                           const SizedBox(height: 12),
                           Text(
-                            'You don\'t have any $tabName orders at the moment.',
+                            'you_dont_have_any_${tabName.toLowerCase()}_orders_at_the_moment'.tr(context),
                             style: const TextStyle(
                               fontSize: 14,
                               color: Colors.grey,
@@ -255,7 +256,7 @@ class _OrdersListScreenState extends State<OrdersListScreen> with SingleTickerPr
   }
   
   // Helper to filter orders based on tab selection
-  List<dynamic> _filterOrders(List<dynamic> orders, int tabIndex) {
+  List<Order> _filterOrders(List<Order> orders, int tabIndex) {
     if (tabIndex == 0) return orders; // All orders
     
     String status;
@@ -270,30 +271,11 @@ class _OrdersListScreenState extends State<OrdersListScreen> with SingleTickerPr
     return orders.where((order) => order.deliveryStatus.toLowerCase() == status).toList();
   }
   
-  Widget _buildOrderCard(BuildContext context, dynamic order) {
-    final status = getStatusInfo(order.deliveryStatus);
+  Widget _buildOrderCard(BuildContext context, Order order) {
+    final status = getStatusInfo(order.deliveryStatus, order.deliveryStatusString);
 
-    String formattedOrderNumber = '';
-    try {
-      // Get current date components for demo
-      final now = DateTime.now();
-      final year = now.year;
-      final month = now.month.toString().padLeft(2, '0');
-      final day = now.day.toString().padLeft(2, '0');
-      
-      String randomPart = (10000000 + (order.id * 9876) % 90000000).toString();
-      formattedOrderNumber = 'ORD-$year$month$day-$randomPart';
-    } catch (e) {
-      // Fallback
-      formattedOrderNumber = 'ORD-${order.code}';
-    }
-    
-    // Calculate the number of items
-    final itemCount = (order.id % 3) + 1;
-    
-    // Generate a random price that looks like the image
-    final prices = ['309', '1,479', '599', '849'];
-    final price = prices[order.id % prices.length];
+    // Use the actual order code instead of generating a random one
+    String formattedOrderNumber = order.code;
     
     return GestureDetector(
       onTap: () {
@@ -331,13 +313,14 @@ class _OrdersListScreenState extends State<OrdersListScreen> with SingleTickerPr
                   Expanded(
                     child: Text(
                       formattedOrderNumber,
-                      style: context.titleSmall!.copyWith(color: AppTheme.black,fontWeight: FontWeight.w800),
+                      style: context.titleSmall!.copyWith(color: AppTheme.black, fontWeight: FontWeight.w800),
                     ),
                   ),
                   CustomButton(
                     onPressed: (){},
                     padding: const EdgeInsets.all(6),
-                    child: Text('processing'.tr(context),
+                    backgroundColor: status.color,
+                    child: Text(status.label.tr(context),
                       style: context.titleSmall!.copyWith(color: AppTheme.white),
                     ),
                   ),
@@ -353,65 +336,23 @@ class _OrdersListScreenState extends State<OrdersListScreen> with SingleTickerPr
                     order.date,
                     style: context.bodyMedium!.copyWith(color: AppTheme.darkDividerColor),
                   ),
-                  Text('$price L.E',
-                    style: context.titleSmall!.copyWith(fontWeight: FontWeight.w800,color: AppTheme.black),
+                  Text(
+                    '${order.grandTotal} L.E',
+                    style: context.titleSmall!.copyWith(fontWeight: FontWeight.w800, color: AppTheme.black),
                   ),
                 ],
               ),
               const SizedBox(height: 20),
               
-              // Icon and items count + View details
+              // View details
               Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  // // Bag icon with grey background
-                  // Container(
-                  //   width: 40,
-                  //   height: 40,
-                  //   decoration: BoxDecoration(
-                  //     color: Colors.grey[200],
-                  //     borderRadius: BorderRadius.circular(4),
-                  //   ),
-                  //   child: Icon(
-                  //     Icons.shopping_bag_outlined,
-                  //     size: 24,
-                  //     color: Colors.grey[600],
-                  //   ),
-                  // ),
-                  //
-                  // if (itemCount > 1)
-                  //   Container(
-                  //     width: 40,
-                  //     height: 40,
-                  //     margin: const EdgeInsets.only(left: 8),
-                  //     decoration: BoxDecoration(
-                  //       color: Colors.grey[200],
-                  //       borderRadius: BorderRadius.circular(4),
-                  //     ),
-                  //     child: Icon(
-                  //       Icons.watch,
-                  //       size: 24,
-                  //       color: Colors.grey[600],
-                  //     ),
-                  //   ),
-                  //
-                  // const SizedBox(width: 12),
-                  // // Item count
-                  // Text(
-                  //   '$itemCount items',
-                  //   style: TextStyle(
-                  //     color: Colors.grey[600],
-                  //     fontSize: 14,
-                  //   ),
-                  // ),
-                  
-                  const Spacer(),
-                  
                   // View details with arrow
                   Row(
                     children: [
-                      Text('View Details'.tr(context),
-                        style: context.titleSmall!.copyWith(color: AppTheme.primaryColor,fontWeight: FontWeight.w800),
+                      Text('view_details'.tr(context),
+                        style: context.titleSmall!.copyWith(color: AppTheme.primaryColor, fontWeight: FontWeight.w800),
                       ),
                       const SizedBox(width: 4),
                       const Icon(
@@ -431,17 +372,17 @@ class _OrdersListScreenState extends State<OrdersListScreen> with SingleTickerPr
   }
   
   // Helper to get status color and label
-  StatusInfo getStatusInfo(String status) {
+  StatusInfo getStatusInfo(String status, String statusString) {
     switch (status.toLowerCase()) {
       case 'pending':
-        return StatusInfo('Processing', const Color(0xFFBD5B4D));
+        return StatusInfo('processing', const Color(0xFFBD5B4D));
       case 'picked_up':
       case 'on_the_way':
-        return StatusInfo('Shipped', Colors.blue);
+        return StatusInfo('shipped', Colors.blue);
       case 'delivered':
-        return StatusInfo('Delivered', Colors.green);
+        return StatusInfo('delivered', Colors.green);
       default:
-        return StatusInfo('Processing', Colors.orange);
+        return StatusInfo(statusString.toLowerCase(), Colors.orange);
     }
   }
 

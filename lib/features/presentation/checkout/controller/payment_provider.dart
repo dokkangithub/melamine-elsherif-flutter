@@ -4,6 +4,7 @@ import '../../../domain/payment/entities/payment_type.dart';
 import '../../../domain/payment/usecases/get_payment_types_usecase.dart';
 import '../../../domain/payment/usecases/create_kashier_order_usecase.dart';
 import '../../../domain/payment/usecases/create_cash_order_usecase.dart';
+import '../../../domain/payment/usecases/create_wallet_order_usecase.dart';
 import '../../../domain/payment/usecases/verify_order_success_usecase.dart';
 import '../../../domain/payment/usecases/update_shipping_type_usecase.dart';
 
@@ -11,6 +12,7 @@ class PaymentProvider extends ChangeNotifier {
   final GetPaymentTypesUseCase getPaymentTypesUseCase;
   final CreateKashierOrderUseCase createKashierOrderUseCase;
   final CreateCashOrderUseCase createCashOrderUseCase;
+  final CreateWalletOrderUseCase createWalletOrderUseCase;
   final VerifyOrderSuccessUseCase verifyOrderSuccessUseCase;
   final UpdateShippingTypeUseCase updateShippingTypeUseCase;
 
@@ -18,6 +20,7 @@ class PaymentProvider extends ChangeNotifier {
     required this.getPaymentTypesUseCase,
     required this.createKashierOrderUseCase,
     required this.createCashOrderUseCase,
+    required this.createWalletOrderUseCase,
     required this.verifyOrderSuccessUseCase,
     required this.updateShippingTypeUseCase,
   });
@@ -68,6 +71,7 @@ class PaymentProvider extends ChangeNotifier {
       notifyListeners();
 
       late OrderResponse response;
+      print('sssss$selectedPaymentTypeKey');
 
       if (selectedPaymentTypeKey == 'kashier') {
         response = await createKashierOrderUseCase(
@@ -81,6 +85,16 @@ class PaymentProvider extends ChangeNotifier {
         );
       } else if (selectedPaymentTypeKey == 'cash_on_delivery') {
         response = await createCashOrderUseCase(
+          postalCode: postalCode,
+          stateId: stateId,
+          address: address,
+          city: city,
+          phone: phone,
+          additionalInfo: additionalInfo,
+          context: context,
+        );
+      } else if (selectedPaymentTypeKey == 'wallet') {
+        response = await createWalletOrderUseCase(
           postalCode: postalCode,
           stateId: stateId,
           address: address,
