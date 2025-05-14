@@ -144,10 +144,24 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     }
   }
 
-  void onAddressSelected(Address address) {
+  void onAddressSelected(Address address) async {
+    // Don't do anything if address is already selected
+    if (_selectedAddress?.id == address.id) return;
+    
     setState(() {
       _selectedAddress = address;
     });
+    
+    // Making the selected address the default one if user is logged in
+    if (!_isGuestUser && !address.isDefault) {
+      try {
+        await context.read<AddressProvider>().makeAddressDefault(address.id);
+      } catch (e) {
+        // Silently handle the error - the address selection will still work
+        debugPrint('Error setting address as default: $e');
+      }
+    }
+    
     _updateShippingWithSelectedAddress(context.read<PaymentProvider>());
   }
 

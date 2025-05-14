@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:melamine_elsherif/core/config/themes.dart/theme.dart';
 import 'package:melamine_elsherif/core/utils/extension/translate_extension.dart';
+import 'package:melamine_elsherif/core/utils/extension/text_theme_extension.dart';
 import '../../../domain/address/entities/address.dart';
 
 class AddressCard extends StatelessWidget {
@@ -40,13 +41,21 @@ class AddressCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    address.title.isNotEmpty ? address.title : '',
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          address.title.isNotEmpty ? address.title : '',
+                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                                fontWeight: FontWeight.bold,
+                              ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                         ),
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: 4),
                   Text(
                     userName ?? '',
                     style: Theme.of(context).textTheme.bodyMedium,
