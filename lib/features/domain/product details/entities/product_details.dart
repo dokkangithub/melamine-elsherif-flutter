@@ -23,6 +23,7 @@ class ProductDetails {
   final List<String> colors;
   final List<ChoiceOption> choiceOptions;
   final bool hasVariation;
+  final Map<String, String> specifications;
 
   ProductDetails({
     required this.id,
@@ -49,6 +50,7 @@ class ProductDetails {
     required this.colors,
     required this.choiceOptions,
     required this.hasVariation,
+    required this.specifications,
   });
 }
 

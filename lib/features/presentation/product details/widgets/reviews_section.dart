@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:melamine_elsherif/core/utils/extension/translate_extension.dart';
+import 'package:melamine_elsherif/core/utils/widgets/custom_cached_image.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/utils/enums/loading_state.dart';
@@ -39,7 +40,7 @@ class _ReviewsSectionWidgetState extends State<ReviewsSectionWidget> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                    Text('customer_reviews'.tr(context),
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
@@ -58,7 +59,7 @@ class _ReviewsSectionWidgetState extends State<ReviewsSectionWidget> {
               else if (reviewProvider.reviews.isEmpty)
                  Center(
                   child: Padding(
-                    padding: EdgeInsets.all(16.0),
+                    padding: const EdgeInsets.all(16.0),
                     child: Text('no_reviews_yet_be'.tr(context)),
                   ),
                 )
@@ -81,7 +82,7 @@ class _ReviewsSectionWidgetState extends State<ReviewsSectionWidget> {
                           children: [
                             Row(
                               children: [
-                                CircleAvatar(
+                                review.avatar==''?const CustomImage(assetPath: '',height: 80,width: 80,): CircleAvatar(
                                   backgroundImage: NetworkImage(review.avatar),
                                   radius: 20,
                                 ),
@@ -195,7 +196,7 @@ class _ReviewsSectionWidgetState extends State<ReviewsSectionWidget> {
                 decoration:  InputDecoration(
                   labelText: 'your_review'.tr(context),
                   hintText: 'share_your_experience_with'.tr(context),
-                  border: OutlineInputBorder(),
+                  border: const OutlineInputBorder(),
                 ),
                 maxLines: 5,
               ),

@@ -9,7 +9,9 @@ import 'package:melamine_elsherif/core/utils/widgets/custom_button.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_loading.dart';
 import 'package:melamine_elsherif/features/presentation/product%20details/controller/product_provider.dart';
 import 'package:melamine_elsherif/features/presentation/product%20details/widgets/choice_options_widget.dart';
+import 'package:melamine_elsherif/features/presentation/product%20details/widgets/product_specifications_summary.dart';
 import 'package:melamine_elsherif/features/presentation/product%20details/widgets/reviews_section.dart';
+import 'package:melamine_elsherif/features/presentation/product%20details/widgets/specifications_widget.dart';
 import 'package:melamine_elsherif/features/presentation/home/controller/home_provider.dart';
 import 'package:melamine_elsherif/features/presentation/review/controller/reviews_provider.dart';
 import 'package:provider/provider.dart';
@@ -166,7 +168,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                             style: ProductTheme.titleLarge(context),
                           ),
                           const SizedBox(height: 16),
-
+                          
+                          // Add specification summary at the top
+                          if (product.specifications.isNotEmpty)
+                            ProductSpecificationsSummary(product: product),
+                          
                           // Display variations
                           if (product.hasVariation) ...[
                             // Color variants
@@ -184,6 +190,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
                           DescriptionWidget(product: product),
                           const SizedBox(height: 16),
+                          
+                          // Add specifications table widget
+                          SpecificationsWidget(product: product),
                         ],
                       ),
                     ),

@@ -37,6 +37,7 @@ class ProductDetailsModel {
   final String link;
   final List<dynamic> wholesale;
   final int estShippingTime;
+  final Map<String, String> specifications; // Added specifications field
 
   ProductDetailsModel({
     required this.id,
@@ -75,9 +76,17 @@ class ProductDetailsModel {
     required this.link,
     required this.wholesale,
     required this.estShippingTime,
+    required this.specifications, // Added to constructor
   });
 
   factory ProductDetailsModel.fromJson(Map<String, dynamic> json) {
+    // Convert specifications from json
+    Map<String, String> specifications = {};
+    if (json['specifications'] != null) {
+      final specsMap = json['specifications'] as Map<String, dynamic>;
+      specifications = specsMap.map((key, value) => MapEntry(key, value.toString()));
+    }
+
     return ProductDetailsModel(
       id: json['id'] ?? 0,
       slug: json['slug'] ?? '',
@@ -121,6 +130,7 @@ class ProductDetailsModel {
       link: json['link'] ?? '',
       wholesale: json['wholesale'] ?? [],
       estShippingTime: json['est_shipping_time'] ?? 0,
+      specifications: specifications, // Added specifications
     );
   }
 
@@ -150,6 +160,7 @@ class ProductDetailsModel {
       colors: colors,
       choiceOptions: choiceOptions.map((option) => option.toEntity()).toList(),
       hasVariation: hasVariation,
+      specifications: specifications, // Added to entity conversion
     );
   }
 }

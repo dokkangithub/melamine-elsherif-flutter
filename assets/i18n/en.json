@@ -28,7 +28,7 @@
   "please_enter_email_phone": "Please enter your email or phone",
   "please_enter_email": "Please enter your email",
   "please_enter_phone": "Please enter your phone",
-
+  "specifications": "Specifications",
   "please_confirm_password": "Please confirm your password",
   "transform_your_home": "Transform Form Your Home",
   "up_to_30%_off_on_selected_premium_appliances": "Up to 30% off on selected premium appliances",
@@ -337,7 +337,6 @@
   "t_have_an_account?": "Don't have an account? ",
   "suggested_key": "String",
   "and": " and ",
-  "ord_2023_12_001": "#ORD-2023-12-001",
   "looks_like_you_havent_placed_any_orders_yet_Start_shopping_to_see_your_orders_here": "Looks like you haven\\'t placed any orders yet. Start shopping to see your orders here.",
   "24_7_support": "24/7 Support",
   "30_day_returns": "30-Day Returns",
@@ -446,7 +445,6 @@
   "create_account_successfully": "Account created successfully",
   "state_1": "state",
   "2025_powered_by_dokkan_agency": "© 2025 Powered by Dokkan Agency",
-  
   "expected_in_3_5_days": "Expected in 3-5 days",
   "do_you_want_to_contact_customer_support": "Do you want to contact our customer support team?",
   "yes": "Yes",
