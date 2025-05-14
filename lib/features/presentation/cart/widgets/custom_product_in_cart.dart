@@ -27,7 +27,7 @@ class ProductItemInCart extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Container(
+      child: SizedBox(
         height: 100,
         child: Padding(
           padding: const EdgeInsets.all(6.0),
@@ -37,7 +37,7 @@ class ProductItemInCart extends StatelessWidget {
               Expanded(
                   flex: 1,
                   child: _productImage()),
-              SizedBox(width: 8),
+              const SizedBox(width: 8),
               // Product Details
               Expanded(
                 flex: 2,
@@ -46,8 +46,8 @@ class ProductItemInCart extends StatelessWidget {
                   children: [
                     Text(
                       item.productName,
-                      style: context.titleSmall.copyWith(
-                        fontWeight: FontWeight.w800,
+                      style: context.titleLarge.copyWith(
+                        fontWeight: FontWeight.w500,
                       ),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
@@ -55,11 +55,11 @@ class ProductItemInCart extends StatelessWidget {
                     if (item.variant.isNotEmpty)
                       Padding(
                         padding: const EdgeInsets.only(top: 4.0),
-                        child: Text('${item.variant}',
+                        child: Text(item.variant,
                           style: context.bodySmall.copyWith(color: Colors.grey[600]),
                         ),
                       ),
-                    Spacer(),
+                    const Spacer(),
                     // Quantity Controls
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -78,7 +78,7 @@ class ProductItemInCart extends StatelessWidget {
                           width: 40,
                           child: Center(
                             child: Text('${item.quantity}',
-                              style: context.titleMedium.copyWith(
+                              style: context.titleLarge.copyWith(
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
@@ -100,7 +100,7 @@ class ProductItemInCart extends StatelessWidget {
                   ],
                 ),
               ),
-              SizedBox(width: 8),
+              const SizedBox(width: 8),
               Expanded(
                 flex: 1,
                 child: Column(
@@ -111,13 +111,14 @@ class ProductItemInCart extends StatelessWidget {
                       onTap: (){
                         onDelete(item.id);
                       },
-                      child: CustomImage(assetPath: AppSvgs.delete_icon),
+                      child: const CustomImage(assetPath: AppSvgs.delete_icon),
                     ),
-                    Spacer(),
-                    Text('${item.currencySymbol}${item.discountedPrice}',
+                    const Spacer(),
+                    Text(
+                      '${item.currencySymbol}${(double.parse(item.discountedPrice) * item.quantity).toStringAsFixed(2)}',
                       style: context.titleSmall.copyWith(
                         color: AppTheme.black,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w800,
                       ),
                     ),
                   ],
@@ -133,7 +134,7 @@ class ProductItemInCart extends StatelessWidget {
   Widget _productImage() {
     return CustomImage(
       imageUrl: item.thumbnailImage,
-     borderRadius: BorderRadius.circular(15),
+      borderRadius: BorderRadius.circular(15),
       fit: BoxFit.cover,
     );
   }
@@ -146,7 +147,7 @@ class ProductItemInCart extends StatelessWidget {
   }) {
     return CustomButton(
       onPressed: enabled ? onPressed : null,
-      padding: EdgeInsets.all(6),
+      padding: const EdgeInsets.all(6),
       borderRadius: 8,
       isOutlined: true,
       child: Icon(

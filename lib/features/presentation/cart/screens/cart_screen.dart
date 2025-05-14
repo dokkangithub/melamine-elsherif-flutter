@@ -97,7 +97,7 @@ class _CartScreenState extends State<CartScreen> {
       if (mounted) {
         ScaffoldMessenger.of(
           context,
-        ).showSnackBar(SnackBar(content: Text('Coupon removed successfully')));
+        ).showSnackBar( SnackBar(content: Text('coupon_removed_successfully'.tr(context))));
       }
     } catch (e) {
       if (mounted) {
@@ -125,8 +125,8 @@ class _CartScreenState extends State<CartScreen> {
         title: Consumer<CartProvider>(
           builder: (context, cartProvider, _) {
             final itemCount = cartProvider.cartItems.length;
-            return Text('Shopping Cart (${itemCount} items)'.tr(context),
-              style: context.titleMedium,
+            return Text('${'shopping_cart'.tr(context)} ($itemCount ${'items'.tr(context)})',
+              style: context.titleLarge!.copyWith(fontWeight: FontWeight.w700),
             );
           },
         ),
@@ -174,35 +174,35 @@ class _CartScreenState extends State<CartScreen> {
                 children: [
                   // Order Summary
                   Container(
-                    padding: EdgeInsets.symmetric(horizontal: 16),
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(height: 15),
-                        Text('Order summary'.tr(context),
+                        const SizedBox(height: 15),
+                        Text('order_summary'.tr(context),
                           style: context.titleMedium!.copyWith(
                             fontWeight: FontWeight.w800,
                           ),
                         ),
-                        SizedBox(height: 8),
+                        const SizedBox(height: 8),
                         _buildSummaryRow(
-                          'Subtotal',
+                          'subtotal'.tr(context),
                           '${((cartProvider.cartSummary?.subtotal ?? 0.0) - (cartProvider.cartSummary?.discount ?? 0.0)).toStringAsFixed(2)}'
                               ' ${cartProvider.cartSummary?.currencySymbol ?? ''}',
                         ),
 
                         _buildSummaryRow(
-                          'Shipping Fee',
+                          'shipping_fee'.tr(context),
                           '${cartProvider.cartSummary?.shippingCost.toStringAsFixed(2) ?? '0.00'} ${cartProvider.cartSummary?.currencySymbol ?? ''}',
                         ),
                         if (cartProvider.cartSummary?.couponApplied == true)
                           _buildSummaryRow(
-                            'Discount',
+                            'discount'.tr(context),
                             '- ${cartProvider.cartSummary?.discount.toStringAsFixed(2) ?? '0.00'} ${cartProvider.cartSummary?.currencySymbol ?? ''}',
                             textColor: AppTheme.errorColor,
                           ),
                         _buildSummaryRow(
-                          'Total',
+                          'total'.tr(context),
                           '${cartProvider.cartSummary?.total.toStringAsFixed(2) ?? '0.00'} ${cartProvider.cartSummary?.currencySymbol ?? ''}',
                           isBold: true,
                         ),
@@ -231,7 +231,7 @@ class _CartScreenState extends State<CartScreen> {
                             if (hasCoupon && couponCode != null)
                               // Applied coupon UI
                               Container(
-                                padding: EdgeInsets.all(10),
+                                padding: const EdgeInsets.all(10),
                                 decoration: BoxDecoration(
                                   color: Colors.green.shade50,
                                   borderRadius: BorderRadius.circular(8),
@@ -241,11 +241,11 @@ class _CartScreenState extends State<CartScreen> {
                                 ),
                                 child: Row(
                                   children: [
-                                    Icon(
+                                    const Icon(
                                       Icons.check_circle,
                                       color: Colors.green,
                                     ),
-                                    SizedBox(width: 8),
+                                    const SizedBox(width: 8),
                                     Expanded(
                                       child: Column(
                                         crossAxisAlignment:
@@ -256,7 +256,7 @@ class _CartScreenState extends State<CartScreen> {
                                             style: context.titleMedium,
                                           ),
                                           Text(
-                                            'Coupon applied successfully',
+                                            'coupon_applied'.tr(context),
                                             style: context.titleSmall,
                                           ),
                                         ],
@@ -269,13 +269,13 @@ class _CartScreenState extends State<CartScreen> {
                                               : () =>
                                                   _removeCoupon(couponProvider),
                                       style: TextButton.styleFrom(
-                                        padding: EdgeInsets.symmetric(
+                                        padding: const EdgeInsets.symmetric(
                                           horizontal: 8,
                                         ),
                                         foregroundColor: Colors.black87,
                                       ),
                                       child: Text(
-                                        'Remove',
+                                        'remove'.tr(context),
                                         style: context.titleSmall!.copyWith(
                                           color: AppTheme.primaryColor,
                                           fontWeight: FontWeight.w800,
@@ -292,10 +292,10 @@ class _CartScreenState extends State<CartScreen> {
                                   Expanded(
                                     child: CustomTextFormField(
                                       controller: _promoCodeController,
-                                      hint: 'Enter promo code',
+                                      hint: 'enter_promo_code'.tr(context),
                                     ),
                                   ),
-                                  SizedBox(width: 10),
+                                  const SizedBox(width: 10),
                                   TextButton(
                                     onPressed:
                                         _isApplyingCoupon
@@ -304,7 +304,7 @@ class _CartScreenState extends State<CartScreen> {
                                                 _applyCoupon(couponProvider),
                                     child:
                                         _isApplyingCoupon
-                                            ? SizedBox(
+                                            ? const SizedBox(
                                               width: 20,
                                               height: 20,
                                               child: CircularProgressIndicator(
@@ -316,7 +316,7 @@ class _CartScreenState extends State<CartScreen> {
                                               ),
                                             )
                                             : Text(
-                                              'Apply',
+                                              'apply'.tr(context),
                                               style: context.titleMedium!
                                                   .copyWith(
                                                     color:
@@ -340,11 +340,11 @@ class _CartScreenState extends State<CartScreen> {
                       vertical: 8,
                     ),
                     child: CustomButton(
-                      text: 'Proceed to Checkout'.tr(context),
+                      text: 'proceed_to_checkout'.tr(context),
                       isGradient: true,
                       fullWidth: true,
                       borderRadius: 10,
-                      padding: EdgeInsets.all(2),
+                      padding: const EdgeInsets.all(2),
                       onPressed: () {
                         AppRoutes.navigateTo(
                           context,
@@ -365,8 +365,8 @@ class _CartScreenState extends State<CartScreen> {
                           size: 14,
                           color: Colors.grey[600],
                         ),
-                        SizedBox(width: 6),
-                        Text('Secure Checkout'.tr(context), style: context.bodySmall),
+                        const SizedBox(width: 6),
+                        Text('secure_checkout'.tr(context), style: context.bodySmall),
                       ],
                     ),
                   ),
