@@ -41,7 +41,7 @@ class AddressCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    address.title.isNotEmpty ? address.title : 'Home',
+                    address.title.isNotEmpty ? address.title : '',
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
@@ -71,7 +71,7 @@ class AddressCard extends StatelessWidget {
               top: 4,
               right: 4,
               child: IconButton(
-                icon: Icon(
+                icon: const Icon(
                   Icons.edit,
                   size: 18,
                   color: AppTheme.primaryColor,

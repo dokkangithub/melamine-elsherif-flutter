@@ -26,12 +26,20 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final ScrollController _scrollController = ScrollController();
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _loadInitialData();
     });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 
   void _loadInitialData() {
@@ -55,6 +63,14 @@ class _HomeScreenState extends State<HomeScreen> {
     wishlistProvider.fetchWishlist();
   }
 
+  void _scrollToShopNow() {
+    _scrollController.animateTo(
+      250.0, // The position to scroll to
+      duration: const Duration(milliseconds: 500), // Duration of the scroll animation
+      curve: Curves.easeInOut, // Animation curve
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
@@ -72,29 +88,30 @@ class _HomeScreenState extends State<HomeScreen> {
           categoryProvider.getCategories(needRefresh: true),
         ]);
       },
-      child: const Scaffold(
-        appBar: AppBarWidget(),
+      child: Scaffold(
+        appBar: const AppBarWidget(),
         body: SingleChildScrollView(
+          controller: _scrollController, // Assign the controller here
           child: Column(
             spacing: 8,
             children: [
-              TopHomeWidget(),
+              TopHomeWidget(onShopNowTapped: _scrollToShopNow), // Pass the callback
               Padding(
-                padding: EdgeInsets.all(12.0),
+                padding: const EdgeInsets.all(12.0),
                 child: Column(
                   spacing: 20,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    CategoriesWidget(),
-                    PlatesWidgets(),
-                    NewProductsWidget(),
-                    SimpleBannerCarousel(),
-                    BestSellingProductsWidget(),
-                    SecondHomeImageWidget(),
-                    FeaturedProductsWidget(),
-                    TodayDealsProductsWidget(),
-                    SummerDealsWidgets(),
-                    AllProductsWidget(),
+                    const CategoriesWidget(),
+                    const PlatesWidgets(),
+                    const NewProductsWidget(),
+                    const SimpleBannerCarousel(),
+                    const BestSellingProductsWidget(),
+                    const SecondHomeImageWidget(),
+                    const FeaturedProductsWidget(),
+                    const TodayDealsProductsWidget(),
+                    const SummerDealsWidgets(),
+                    const AllProductsWidget(),
                   ],
                 ),
               ),

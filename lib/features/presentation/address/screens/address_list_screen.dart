@@ -36,7 +36,7 @@ class _AddressListScreenState extends State<AddressListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: CustomBackButton(),
+        leading: const CustomBackButton(),
         backgroundColor: AppTheme.white,
         title: Text('my_addresses'.tr(context),style: context.titleMedium!.copyWith(fontWeight: FontWeight.w800)),
       ),
@@ -90,11 +90,11 @@ class _AddressListScreenState extends State<AddressListScreen> {
                     fullWidth: true,
                     child: Row(
                       children: [
-                        Icon(Icons.add,color: AppTheme.white,size: 24),
-                        SizedBox(width: 10),
+                        const Icon(Icons.add,color: AppTheme.white,size: 24),
+                        const SizedBox(width: 10),
                         Text('add_new_address'.tr(context),style: context.titleMedium!.copyWith(color: AppTheme.white)),
-                        Spacer(),
-                        Icon(Icons.arrow_forward_ios,color: AppTheme.white,size: 24),
+                        const Spacer(),
+                        const Icon(Icons.arrow_forward_ios,color: AppTheme.white,size: 24),
 
                       ],
                     ),

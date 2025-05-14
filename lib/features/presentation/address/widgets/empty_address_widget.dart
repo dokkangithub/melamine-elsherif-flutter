@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:melamine_elsherif/core/config/themes.dart/theme.dart';
+import 'package:melamine_elsherif/core/utils/constants/app_assets.dart';
 import 'package:melamine_elsherif/core/utils/extension/text_theme_extension.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_cached_image.dart';
 import '../../../../core/utils/extension/translate_extension.dart';
@@ -8,8 +9,7 @@ import '../../../../core/utils/widgets/custom_button.dart';
 class EmptyAddressWidget extends StatelessWidget {
   final VoidCallback onAddAddress;
 
-  const EmptyAddressWidget({Key? key, required this.onAddAddress})
-    : super(key: key);
+  const EmptyAddressWidget({super.key, required this.onAddAddress});
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +17,7 @@ class EmptyAddressWidget extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          CustomImage(assetPath: 'assets/images/noLocation.png',height: 90,width: 90),
+          const CustomImage(assetPath: AppSvgs.location_icon,height: 200,width: 200),
           const SizedBox(height: 16),
           Text(
             'no_addresses_found'.tr(context),
@@ -32,9 +32,8 @@ class EmptyAddressWidget extends StatelessWidget {
           CustomButton(
             text: 'add_new_address'.tr(context),
             onPressed: onAddAddress,
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+            isGradient: true,
             textStyle: context.titleMedium?.copyWith(color: AppTheme.white),
-            icon: 'assets/images/noLocation.png',
           ),
         ],
       ),

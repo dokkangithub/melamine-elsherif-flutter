@@ -1,7 +1,7 @@
 enum Environment { development, staging, production }
 
 class AppConfig {
-  late String apiBaseUrl = 'https://admin.homelyhubmarket.com/api/v2';
+  late String apiBaseUrl = 'https://melamen.dokkan.design/api/v2';
   late Environment environment;
   bool enableLogging = true;
   String appName = 'melamine elsherif';
@@ -11,7 +11,7 @@ class AppConfig {
 
   static final AppConfig _instance = AppConfig._internal();
 
-  factory AppConfig() => _instance; // Remove initialization check
+  factory AppConfig() => _instance;
 
   AppConfig._internal();
 

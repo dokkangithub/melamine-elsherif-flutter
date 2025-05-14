@@ -43,7 +43,7 @@ class CategoriesWidget extends StatelessWidget {
 
         // Show categories grid
         return SizedBox(
-          height: 100,
+          height: 110,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

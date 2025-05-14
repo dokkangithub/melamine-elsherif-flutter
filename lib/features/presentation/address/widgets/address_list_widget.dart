@@ -34,7 +34,13 @@ class AddressListWidget extends StatelessWidget {
           onEdit: () => onEdit(address.id),
           onDelete: () => onDelete(address.id),
           index: index,
-          onSetDefault: () => onSetDefault(address.id),
+          onSetDefault: (id, callback) {
+            onSetDefault(id);
+            // Simulate API completion for callback
+            Future.delayed(const Duration(milliseconds: 500), () {
+              callback(true);
+            });
+          },
           onSelect: isSelectable && onSelect != null
               ? () => onSelect!(address)
               : null,

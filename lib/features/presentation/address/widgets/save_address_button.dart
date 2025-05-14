@@ -25,7 +25,7 @@ class SaveAddressButton extends StatelessWidget {
       isLoading: isLoading,
       isGradient: true,
       textColor: AppTheme.white,
-      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+      padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 24),
       textStyle: context.titleSmall!.copyWith(color: AppTheme.white,fontWeight: FontWeight.w800),
       borderRadius: 8.0,
     );

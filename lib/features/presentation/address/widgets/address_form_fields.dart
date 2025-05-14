@@ -58,7 +58,7 @@ class AddressFormFields extends StatelessWidget {
             return null;
           },
         ),
-        SizedBox(height: 20),
+        const SizedBox(height: 20),
 
         // Phone field
         customText('phone_number'.tr(context), context),
@@ -74,7 +74,7 @@ class AddressFormFields extends StatelessWidget {
             return null;
           },
         ),
-        SizedBox(height: 20),
+        const SizedBox(height: 20),
 
         // Address field
         customText('address'.tr(context), context),
@@ -89,7 +89,7 @@ class AddressFormFields extends StatelessWidget {
             return null;
           },
         ),
-        SizedBox(height: 20),
+        const SizedBox(height: 20),
 
         // Country dropdown
         customText('country'.tr(context), context),
@@ -98,21 +98,21 @@ class AddressFormFields extends StatelessWidget {
           hint: Text('select_your_country'.tr(context)),
           isExpanded: true,
           decoration: InputDecoration(
-            contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+            contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
             border: OutlineInputBorder(
-              borderSide: BorderSide(color: AppTheme.darkDividerColor, width: 1.0),
+              borderSide: const BorderSide(color: AppTheme.darkDividerColor, width: 1.0),
               borderRadius: BorderRadius.circular(4),
             ),
             enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: AppTheme.darkDividerColor, width: 1.0),
+              borderSide: const BorderSide(color: AppTheme.darkDividerColor, width: 1.0),
               borderRadius: BorderRadius.circular(4),
             ),
             focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: AppTheme.primaryColor, width: 1.0),
+              borderSide: const BorderSide(color: AppTheme.primaryColor, width: 1.0),
               borderRadius: BorderRadius.circular(4),
             ),
             errorBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: AppTheme.errorColor, width: 1.0),
+              borderSide: const BorderSide(color: AppTheme.errorColor, width: 1.0),
               borderRadius: BorderRadius.circular(4),
             ),
             filled: false,
@@ -134,9 +134,9 @@ class AddressFormFields extends StatelessWidget {
               onCountryChanged(value);
             }
           },
-          icon: Icon(Icons.keyboard_arrow_down, color: Colors.black54),
+          icon: const Icon(Icons.keyboard_arrow_down, color: Colors.black54),
         ),
-        SizedBox(height: 20),
+        const SizedBox(height: 20),
 
         // State dropdown
         customText('state'.tr(context), context),
@@ -145,21 +145,21 @@ class AddressFormFields extends StatelessWidget {
           hint: Text('select_state'.tr(context)),
           isExpanded: true,
           decoration: InputDecoration(
-            contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+            contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
             border: OutlineInputBorder(
-              borderSide: BorderSide(color: AppTheme.darkDividerColor, width: 1.0),
+              borderSide: const BorderSide(color: AppTheme.darkDividerColor, width: 1.0),
               borderRadius: BorderRadius.circular(4),
             ),
             enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: AppTheme.darkDividerColor, width: 1.0),
+              borderSide: const BorderSide(color: AppTheme.darkDividerColor, width: 1.0),
               borderRadius: BorderRadius.circular(4),
             ),
             focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: AppTheme.primaryColor, width: 1.0),
+              borderSide: const BorderSide(color: AppTheme.primaryColor, width: 1.0),
               borderRadius: BorderRadius.circular(4),
             ),
             errorBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: AppTheme.errorColor, width: 1.0),
+              borderSide: const BorderSide(color: AppTheme.errorColor, width: 1.0),
               borderRadius: BorderRadius.circular(4),
             ),
             filled: false,
@@ -181,9 +181,9 @@ class AddressFormFields extends StatelessWidget {
               onStateChanged(value);
             }
           },
-          icon: Icon(Icons.keyboard_arrow_down, color: Colors.black54),
+          icon: const Icon(Icons.keyboard_arrow_down, color: Colors.black54),
         ),
-        SizedBox(height: 20),
+        const SizedBox(height: 20),
 
         // City text field (replacing dropdown)
         customText('city'.tr(context), context),

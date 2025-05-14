@@ -127,7 +127,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
         maxLines: widget.maxLines,
         minLines: widget.minLines,
         maxLength: widget.maxLength,
-        style: widget.textStyle ?? context.bodyMedium,
+        style: widget.textStyle ?? context.titleMedium,
         inputFormatters: widget.isMobileNumber
             ? [FilteringTextInputFormatter.digitsOnly]
             : null,

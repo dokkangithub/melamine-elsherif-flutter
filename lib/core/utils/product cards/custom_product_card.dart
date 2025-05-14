@@ -69,9 +69,10 @@ class _ProductCardState extends State<ProductCard> {
 
                   // Product details
                   Column(
-                    spacing: 4,
+                    spacing: 2,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      const SizedBox(height: 4),
                       // Rating stars
                       !widget.isBuyNow!
                           ? const SizedBox.shrink()
@@ -81,7 +82,7 @@ class _ProductCardState extends State<ProductCard> {
                               (index) => const Icon(
                                 Icons.star_outline_sharp,
                                 color: Colors.amber,
-                                size: 14,
+                                size: 16,
                               ),
                             ),
                           ),

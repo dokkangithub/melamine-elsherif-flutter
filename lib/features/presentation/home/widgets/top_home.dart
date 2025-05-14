@@ -11,7 +11,8 @@ import 'package:melamine_elsherif/core/utils/widgets/custom_form_field.dart';
 import '../../../../core/utils/widgets/custom_cached_image.dart';
 
 class TopHomeWidget extends StatefulWidget {
-  const TopHomeWidget({super.key});
+  final VoidCallback? onShopNowTapped;
+  const TopHomeWidget({super.key, this.onShopNowTapped});
 
   @override
   State<TopHomeWidget> createState() => _TopHomeWidgetState();
@@ -74,6 +75,7 @@ class _TopHomeWidgetState extends State<TopHomeWidget> {
               ),
               const SizedBox(height: 15),
               CustomButton(
+                onPressed: widget.onShopNowTapped,
                 backgroundColor: AppTheme.accentColor,
                 splashColor: AppTheme.accentColor,
                 child: Text(

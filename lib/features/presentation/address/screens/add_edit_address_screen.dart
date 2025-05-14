@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:melamine_elsherif/core/utils/extension/text_style_extension.dart';
 import 'package:melamine_elsherif/core/utils/extension/translate_extension.dart';
+import 'package:melamine_elsherif/core/utils/widgets/cutsom_toast.dart';
 import 'package:provider/provider.dart';
 import '../../../../core/config/themes.dart/theme.dart';
 import '../../../../core/utils/enums/loading_state.dart';
@@ -79,7 +80,7 @@ class _AddEditAddressScreenState extends State<AddEditAddressScreen> {
         backgroundColor: AppTheme.white,
         title: Text(widget.address == null
             ? 'add_new_address'.tr(context)
-            : 'edit_address'.tr(context),style: context.titleMedium.copyWith(fontWeight: FontWeight.w800)),
+            : 'edit_address'.tr(context),style: context.titleLarge.copyWith(fontWeight: FontWeight.w800)),
       ),
       body: Consumer<AddressProvider>(
         builder: (context, addressProvider, child) {
@@ -186,11 +187,7 @@ class _AddEditAddressScreenState extends State<AddEditAddressScreen> {
           );
 
           if (mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text('address_updated_successfully'.tr(context)),
-              ),
-            );
+            CustomToast.showToast(message: 'address_updated_successfully'.tr(context),type: ToastType.success);
             Navigator.pop(context);
           }
         }

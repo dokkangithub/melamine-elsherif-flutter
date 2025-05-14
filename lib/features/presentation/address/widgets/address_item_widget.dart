@@ -6,18 +6,18 @@ import '../../../../core/config/themes.dart/theme.dart';
 import '../../../../core/utils/constants/app_assets.dart';
 import '../../../domain/address/entities/address.dart';
 
-class AddressItemWidget extends StatelessWidget {
+class AddressItemWidget extends StatefulWidget {
   final Address address;
   final bool isSelectable;
   final bool showActions;
   final VoidCallback? onEdit;
   final VoidCallback? onDelete;
-  final VoidCallback? onSetDefault;
+  final Function(int, Function(bool))? onSetDefault;
   final VoidCallback? onSelect;
   final int index;
 
   const AddressItemWidget({
-    Key? key,
+    super.key,
     required this.address,
     this.isSelectable = false,
     this.showActions = true,
@@ -26,12 +26,19 @@ class AddressItemWidget extends StatelessWidget {
     this.onSetDefault,
     this.onSelect,
     required this.index,
-  }) : super(key: key);
+  });
+
+  @override
+  State<AddressItemWidget> createState() => _AddressItemWidgetState();
+}
+
+class _AddressItemWidgetState extends State<AddressItemWidget> {
+  bool _isLoading = false;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: isSelectable ? onSelect : null,
+      onTap: widget.isSelectable ? widget.onSelect : null,
       borderRadius: BorderRadius.circular(12),
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -42,16 +49,27 @@ class AddressItemWidget extends StatelessWidget {
             Row(
               children: [
                 Text(
-                  address.title.isNotEmpty
-                      ? address.title
-                      : 'Address ${index + 1}',
+                  widget.address.title.isNotEmpty
+                      ? widget.address.title
+                      : 'Address ${widget.index + 1}',
                   style: context.titleMedium!.copyWith(
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                SizedBox(width: 10),
+                const SizedBox(width: 10),
                 InkWell(
-                  onTap: onSetDefault,
+                  onTap: _isLoading || widget.address.isDefault || widget.onSetDefault == null 
+                      ? null 
+                      : () {
+                          setState(() {
+                            _isLoading = true;
+                          });
+                          widget.onSetDefault!(widget.address.id, (success) {
+                            setState(() {
+                              _isLoading = false;
+                            });
+                          });
+                        },
                   splashColor: Colors.transparent,
                   hoverColor: Colors.transparent,
                   highlightColor: Colors.transparent,
@@ -62,26 +80,41 @@ class AddressItemWidget extends StatelessWidget {
                     ),
                     decoration: BoxDecoration(
                       color:
-                          address.isDefault
-                              ? Color(0xFFE6F4FF)
+                          widget.address.isDefault
+                              ? const Color(0xFFE6F4FF)
                               : Colors.grey[100],
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    child: Text(
-                       address.isDefault?'Default':'set as Default',
-                      style: context.bodySmall!.copyWith(
-                        color: AppTheme.primaryColor,
-                        fontWeight:
-                            address.isDefault ? FontWeight.w800 : FontWeight.w300,
-                        fontSize: address.isDefault ? 12 : 10,
-                      ),
-                    ),
+                    child: _isLoading 
+                      ? SizedBox(
+                          width: 50,
+                          height: 14,
+                          child: Center(
+                            child: SizedBox(
+                              width: 10,
+                              height: 10,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: AppTheme.primaryColor,
+                              ),
+                            ),
+                          ),
+                        )
+                      : Text(
+                          widget.address.isDefault ? 'default'.tr(context) : 'make_default'.tr(context),
+                          style: context.bodySmall!.copyWith(
+                            color: AppTheme.primaryColor,
+                            fontWeight:
+                                widget.address.isDefault ? FontWeight.w800 : FontWeight.w300,
+                            fontSize: widget.address.isDefault ? 12 : 10,
+                          ),
+                        ),
                   ),
                 ),
-                Spacer(),
+                const Spacer(),
                 InkWell(
-                  onTap: onEdit,
-                  child: Icon(
+                  onTap: widget.onEdit,
+                  child: const Icon(
                     Icons.edit,
                     color: AppTheme.primaryColor,
                     size: 20,
@@ -98,7 +131,7 @@ class AddressItemWidget extends StatelessWidget {
                 const Icon(Icons.location_on, color: Colors.grey, size: 20),
                 const SizedBox(width: 8),
                 Expanded(
-                  child: Text(address.address, style: context.bodyMedium),
+                  child: Text(widget.address.address, style: context.bodyMedium),
                 ),
               ],
             ),
@@ -110,17 +143,17 @@ class AddressItemWidget extends StatelessWidget {
                 const Icon(Icons.map, color: Colors.grey, size: 20),
                 const SizedBox(width: 8),
                 Expanded(
-                  child: Text('${address.cityName}, ${address.stateName}, ${address.countryName}'.tr(context),
+                  child: Text('${widget.address.cityName}, ${widget.address.stateName}, ${widget.address.countryName}'.tr(context),
                     style: const TextStyle(fontSize: 14, color: Colors.grey),
                   ),
                 ),
                 InkWell(
-                  onTap: onDelete,
-                  child: CustomImage(assetPath: AppSvgs.delete_icon),
+                  onTap: widget.onDelete,
+                  child: const CustomImage(assetPath: AppSvgs.delete_icon),
                 ),
               ],
             ),
-            Divider(color: AppTheme.lightDividerColor),
+            const Divider(color: AppTheme.lightDividerColor),
 
             // // Contact details
             // Row(
