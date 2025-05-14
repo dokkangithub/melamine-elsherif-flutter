@@ -14,6 +14,7 @@ import '../../auth/screens/login_screen.dart';
 import '../../home/controller/home_provider.dart';
 import '../../category/controller/provider.dart';
 import '../../slider/controller/provider.dart';
+import '../../wallet/screens/wallet_screen.dart';
 
 class ProfileMenuItemsWidget extends StatelessWidget {
   const ProfileMenuItemsWidget({super.key});
@@ -38,6 +39,16 @@ class ProfileMenuItemsWidget extends StatelessWidget {
                       builder: (context) => const AddressListScreen(),
                     ),
                   );
+                },
+                trailing: const Icon(Icons.chevron_right),
+              ),
+          AppStrings.token == null
+              ? SizedBox.shrink()
+              : _buildMenuItem(
+                icon: Icons.account_balance_wallet_outlined,
+                title: 'My Wallet',
+                onTap: () {
+                  AppRoutes.navigateTo(context, AppRoutes.walletScreen);
                 },
                 trailing: const Icon(Icons.chevron_right),
               ),

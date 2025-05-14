@@ -72,8 +72,8 @@ class _OrdersListScreenState extends State<OrdersListScreen> with SingleTickerPr
           ),
         ),
         leading: InkWell(
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
+          child: const Padding(
+            padding: EdgeInsets.all(20.0),
             child: CustomImage(assetPath: AppSvgs.back),
           ),
           onTap: () => Navigator.pop(context),
@@ -160,8 +160,8 @@ class _OrdersListScreenState extends State<OrdersListScreen> with SingleTickerPr
                           Container(
                             width: 100,
                             height: 100,
-                            decoration: BoxDecoration(
-                              color: const Color(0xFFF7F9FC),
+                            decoration: const BoxDecoration(
+                              color: Color(0xFFF7F9FC),
                               shape: BoxShape.circle,
                             ),
                             child: Center(
@@ -336,10 +336,10 @@ class _OrdersListScreenState extends State<OrdersListScreen> with SingleTickerPr
                   ),
                   CustomButton(
                     onPressed: (){},
+                    padding: const EdgeInsets.all(6),
                     child: Text('processing'.tr(context),
                       style: context.titleSmall!.copyWith(color: AppTheme.white),
                     ),
-                    padding: EdgeInsets.all(6),
                   ),
                 ],
               ),
@@ -414,7 +414,7 @@ class _OrdersListScreenState extends State<OrdersListScreen> with SingleTickerPr
                         style: context.titleSmall!.copyWith(color: AppTheme.primaryColor,fontWeight: FontWeight.w800),
                       ),
                       const SizedBox(width: 4),
-                      Icon(
+                      const Icon(
                         Icons.arrow_forward_ios,
                         size: 14,
                         color: AppTheme.primaryColor,
@@ -456,8 +456,8 @@ class _OrdersListScreenState extends State<OrdersListScreen> with SingleTickerPr
             Container(
               width: 100,
               height: 100,
-              decoration: BoxDecoration(
-                color: const Color(0xFFF7F9FC),
+              decoration: const BoxDecoration(
+                color: Color(0xFFF7F9FC),
                 shape: BoxShape.circle,
               ),
               child: Center(
@@ -475,7 +475,7 @@ class _OrdersListScreenState extends State<OrdersListScreen> with SingleTickerPr
             const SizedBox(height: 12),
             Text(
               'looks_like_you_havent_placed_any_orders_yet_Start_shopping_to_see_your_orders_here'.tr(context),
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 14,
                 color: Colors.grey,
                 height: 1.4,
@@ -499,7 +499,7 @@ class _OrdersListScreenState extends State<OrdersListScreen> with SingleTickerPr
                   ),
                 ),
                 child: Text('start_shopping'.tr(context),
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
                   ),

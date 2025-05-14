@@ -38,8 +38,14 @@ import '../../features/data/slider/datasources/slider_remote_datasource.dart';
 import '../../features/data/slider/repositories/slider_repository_impl.dart';
 import '../../features/data/wishlist/datasources/wishlist_remote_datasource.dart';
 import '../../features/data/wishlist/repositories/wishlist_repository_impl.dart';
-import '../../features/data/cart/datasources/cart_remote_datasource.dart'; // Add this
-import '../../features/data/cart/repositories/cart_repository_impl.dart'; // Add this
+import '../../features/data/cart/datasources/cart_remote_datasource.dart';
+import '../../features/data/cart/repositories/cart_repository_impl.dart';
+import '../../features/data/club_point/datasources/club_point_datasource.dart';
+import '../../features/data/club_point/repositories/club_point_repository_impl.dart';
+import '../../features/domain/club_point/repositories/club_point_repository.dart';
+import '../../features/domain/club_point/usecases/get_club_points_usecase.dart';
+import '../../features/domain/club_point/usecases/convert_to_wallet_usecase.dart';
+import '../../features/presentation/club_point/controller/club_point_provider.dart';
 import '../../features/domain/address/repositories/address_repository.dart';
 import '../../features/domain/address/usecases/add_address_usecases.dart';
 import '../../features/domain/address/usecases/delete_address_usecase.dart';
@@ -145,6 +151,9 @@ import '../database/timestamp_service.dart';
 import '../providers/localization/language_provider.dart';
 import '../utils/local_storage/secure_storage.dart';
 import '../utils/local_storage/local_storage_keys.dart';
+import '../../features/di/wallet_injection.dart';
+import '../../core/network/network_info.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 
 final sl = GetIt.instance;
 
@@ -156,6 +165,8 @@ Future<void> setupDependencies() async {
   // Core
   sl.registerLazySingleton<AppConfig>(() => AppConfig());
   sl.registerLazySingleton<SecureStorage>(() => SecureStorage());
+  sl.registerLazySingleton<InternetConnectionChecker>(() => InternetConnectionChecker.createInstance());
+  sl.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(sl()));
 
   sl.registerLazySingleton<Dio>(() {
     final dio = Dio();
@@ -530,4 +541,32 @@ Future<void> setupDependencies() async {
       getFilteredProductsUseCase: sl(),
     ),
   );
+
+  // ClubPoint repository
+  sl.registerLazySingleton<ClubPointRepository>(
+    () => ClubPointRepositoryImpl(
+      dataSource: sl<ClubPointDataSource>(),
+      networkInfo: sl<NetworkInfo>(),
+    ),
+  );
+
+  // ClubPoint data source
+  sl.registerLazySingleton<ClubPointDataSource>(
+    () => ClubPointDataSourceImpl(sl<ApiProvider>()),
+  );
+
+  // ClubPoint use cases
+  sl.registerLazySingleton(() => GetClubPointsUseCase(sl()));
+  sl.registerLazySingleton(() => ConvertToWalletUseCase(sl()));
+
+  // ClubPoint provider
+  sl.registerFactory(
+    () => ClubPointProvider(
+      getClubPointsUseCase: sl(),
+      convertToWalletUseCase: sl(),
+    ),
+  );
+
+  // Initialize Wallet dependencies
+  await initWalletDependencies();
 }

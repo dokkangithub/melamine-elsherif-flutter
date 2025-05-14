@@ -23,6 +23,7 @@ import '../../../features/presentation/checkout/screens/checkout_screen.dart';
 import '../../../features/presentation/product details/screens/product_screen.dart';
 import '../../../features/presentation/splash/splash_screen.dart';
 import '../../../features/presentation/search/screens/search_screen.dart';
+import '../../../features/presentation/wallet/screens/wallet_screen.dart';
 import 'package:page_transition/page_transition.dart';
 
 class AppRoutes {
@@ -51,6 +52,7 @@ class AppRoutes {
   static const String allOrdersListScreen = '/all-orders-list';
   static const String orderDetailsScreen = '/order-details';
   static const String searchScreen = '/search-screen';
+  static const String walletScreen = '/wallet-screen';
 
   static const PageTransitionType defaultTransition = PageTransitionType.sharedAxisHorizontal;
 
@@ -149,6 +151,9 @@ class AppRoutes {
         break;
       case searchScreen:
         page = const SearchScreen();
+        break;
+      case walletScreen:
+        page = const WalletScreen();
         break;
       default:
         page = Scaffold(

@@ -12,6 +12,7 @@ import '../../../../core/utils/extension/text_style_extension.dart';
 import '../../../../core/providers/localization/language_provider.dart';
 import '../../auth/controller/auth_provider.dart';
 import '../../auth/screens/login_screen.dart';
+import '../../club_point/controller/club_point_provider.dart';
 import '../controller/profile_provider.dart';
 import '../widgets/profile_menu_item.dart';
 import '../widgets/language_selector.dart';
@@ -31,12 +32,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
       final profileProvider = context.read<ProfileProvider>();
       profileProvider.getUserProfile();
       profileProvider.getProfileCounters();
+      
+      // Load club points data
+      if (AppStrings.token != null) {
+        context.read<ClubPointProvider>().fetchClubPoints();
+      }
     });
   }
 
   @override
   Widget build(BuildContext context) {
     final profileProvider = Provider.of<ProfileProvider>(context);
+    final clubPointProvider = Provider.of<ClubPointProvider>(context);
     final counters = profileProvider.profileCounters;
     final isLoggedIn = AppStrings.token != null;
     final isLoadingCounters =
@@ -83,8 +90,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     size: 40,
                                     color: Colors.grey,
                                   )
-                                  : CustomImage(
-                                    assetPath: 'assets/images/app_logo.png',
+                                  :  const CustomImage(
+                                    assetPath: AppImages.appLogo,
                                     fit: BoxFit.cover,
                                   ),
                       ),
@@ -155,7 +162,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                       _buildStatItem(
                         context,
-                        '${counters.cartItemCount + counters.wishlistItemCount * 5}',
+                        clubPointProvider.clubPointsState == LoadingState.loaded
+                            ? clubPointProvider.totalPoints
+                            : '0',
                         'points'.tr(context),
                         AppSvgs.profile_coin,
                       ),
@@ -226,9 +235,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                     ProfileMenuItem(
                       icon: AppSvgs.profile_notifications,
-                      title: 'notifications'.tr(context),
+                      title: 'My Wallet',
                       onTap: () {
-                        // Navigate to notifications
+                        AppRoutes.navigateTo(
+                          context,
+                          AppRoutes.walletScreen,
+                        );
                       },
                     ),
                     ProfileMenuItem(
@@ -336,7 +348,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           children: [
             CustomImage(assetPath: icon),
             const SizedBox(width: 10),
-            Expanded(child: Text(label, style: context.bodyMedium.copyWith(fontWeight: FontWeight.w800))),
+            Expanded(child: Text(label, style: context.titleMedium.copyWith(fontWeight: FontWeight.w700))),
           ],
         ),
       ),

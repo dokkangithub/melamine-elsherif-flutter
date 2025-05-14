@@ -30,6 +30,8 @@ import 'features/presentation/profile/controller/profile_provider.dart';
 import 'features/presentation/review/controller/reviews_provider.dart';
 import 'features/presentation/slider/controller/provider.dart';
 import 'features/presentation/wishlist/controller/wishlist_provider.dart';
+import 'features/presentation/wallet/controller/wallet_provider.dart';
+import 'features/presentation/club_point/controller/club_point_provider.dart';
 import 'firebase_options.dart';
 
 Future<void> getInitData() async {
@@ -102,6 +104,8 @@ Future<void> main() async {
         ChangeNotifierProvider(create: (_) => sl<ProfileProvider>()),
         ChangeNotifierProvider(create: (_) => sl<OrderProvider>()),
         ChangeNotifierProvider(create: (_) => sl<SearchProvider>()),
+        ChangeNotifierProvider(create: (_) => sl<WalletProvider>()),
+        ChangeNotifierProvider(create: (_) => sl<ClubPointProvider>()),
       ],
       child: MyApp(route: await getStartupScreen()),
     ),

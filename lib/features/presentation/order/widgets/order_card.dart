@@ -1,4 +1,3 @@
-// lib/features/presentation/order/widgets/order_card.dart
 import 'package:flutter/material.dart';
 import '../../../domain/order/entities/order.dart';
 
@@ -48,7 +47,7 @@ class OrderCard extends StatelessWidget {
                       order.paymentStatus == 'paid' ? Colors.green : Colors.orange,
                     ),
                   ),
-                  SizedBox(width: 8.0), // Optional: adds spacing between chips
+                  const SizedBox(width: 8.0), // Optional: adds spacing between chips
                   Flexible(
                     child: _buildStatusChip(
                       context,

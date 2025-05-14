@@ -121,8 +121,8 @@ class SearchResultsGrid extends StatelessWidget {
                   child: Text(
                     'loading_more_products'.tr(context),
                     style: context.titleSmall?.copyWith(color: AppTheme.accentColor),
-                  ),
                 ),
+              ),
             ],
           ),
         );
