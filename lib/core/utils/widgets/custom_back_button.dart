@@ -13,7 +13,7 @@ class CustomBackButton extends StatelessWidget {
           Navigator.pop(context);
         },
         style: ButtonStyle(
-          overlayColor: MaterialStateProperty.all(Colors.transparent),
+          overlayColor: WidgetStateProperty.all(Colors.transparent),
           splashFactory: NoSplash.splashFactory,
         ),
         child: const CustomImage(

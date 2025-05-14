@@ -55,11 +55,11 @@ class CustomProductCardForAllProducts extends StatelessWidget {
         width: context.responsive(170), 
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(10), // Image has slightly less rounding
-          border: Border.all(color: Colors.grey.shade300, width: 0.8), // Thinner border
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: Colors.grey.shade300, width: 0.8),
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.12),
+              color: Colors.grey.withValues(alpha: 0.12),
               spreadRadius: 0.5,
               blurRadius: 2,
               offset: const Offset(0, 1),
@@ -69,13 +69,13 @@ class CustomProductCardForAllProducts extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0), 
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start, // Align content to the start
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Product image
               AspectRatio(
-                aspectRatio: 1.05, // Image seems slightly taller than wide, or square
+                aspectRatio: 1.05,
                 child: ClipRRect(
-                  borderRadius: BorderRadius.circular(6), // Less rounding for image corners
+                  borderRadius: BorderRadius.circular(6),
                   child: CustomImage(
                     width: double.infinity,
                     imageUrl: product.thumbnailImage,

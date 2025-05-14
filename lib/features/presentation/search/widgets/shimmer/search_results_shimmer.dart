@@ -11,9 +11,9 @@ class SearchResultsShimmer extends StatelessWidget {
       child: GridView.builder(
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
-          childAspectRatio: 0.7,
-          crossAxisSpacing: 10,
-          mainAxisSpacing: 10,
+          childAspectRatio: 0.65,
+          crossAxisSpacing: 0,
+          mainAxisSpacing: 0,
         ),
         itemCount: 6, // Show 6 shimmer items
         itemBuilder: (context, index) {
@@ -30,7 +30,7 @@ class SearchResultsShimmer extends StatelessWidget {
                   // Product image placeholder
                   Container(
                     height: 120,
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(12),

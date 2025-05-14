@@ -5,16 +5,20 @@ import '../../../../../core/utils/enums/loading_state.dart';
 import '../../../../../core/utils/product cards/custom_gridview_prodcut.dart';
 import '../../../../../core/utils/widgets/custom_loading.dart';
 import '../../../../../core/utils/extension/translate_extension.dart';
+import '../../../../core/utils/product cards/custom_product_card_for_all_products.dart';
 import '../controller/search_provider.dart';
+import 'package:melamine_elsherif/core/config/themes.dart/theme.dart';
 
 class SearchResultsGrid extends StatelessWidget {
   final String searchQuery;
   final bool isLoading;
+  final ScrollController? scrollController;
 
   const SearchResultsGrid({
     super.key,
     required this.searchQuery,
     this.isLoading = false,
+    this.scrollController,
   });
 
   @override
@@ -70,16 +74,17 @@ class SearchResultsGrid extends StatelessWidget {
         final filteredProducts = searchProvider.filteredProducts.where((product) => product.published == 1).toList();
 
         return Padding(
-          padding: const EdgeInsets.all(12.0),
+          padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Text('search_products'.tr(context),style: context.headlineMedium),
+                  const SizedBox(width: 8),
+                  Text('search_products'.tr(context),style: context.titleLarge!.copyWith(fontWeight: FontWeight.w700)),
                 ],
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               Expanded(
                 child: NotificationListener<ScrollNotification>(
                   onNotification: (ScrollNotification scrollInfo) {
@@ -92,6 +97,7 @@ class SearchResultsGrid extends StatelessWidget {
                     return true;
                   },
                   child: GridView.builder(
+                    controller: scrollController,
                     padding: const EdgeInsets.all(8),
                     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
@@ -99,20 +105,24 @@ class SearchResultsGrid extends StatelessWidget {
                       crossAxisSpacing: 10,
                       mainAxisSpacing: 10,
                     ),
-                    itemCount:
-                        filteredProducts.length +
-                        (searchProvider.hasMoreFilteredProducts ? 1 : 0),
+                    itemCount: filteredProducts.length,
                     itemBuilder: (context, index) {
-                      if (index >= filteredProducts.length) {
-                        return const Center(child: CustomLoadingWidget());
-                      }
-
                       final product = filteredProducts[index];
-                      return ProductGridCard(product: product,availableAddToCart: true);
+                      return CustomProductCardForAllProducts(product: product);
                     },
                   ),
                 ),
               ),
+              // Show loading text at bottom when loading more products
+              if (searchProvider.filteredProductsState == LoadingState.loading && 
+                  searchProvider.filteredProducts.isNotEmpty)
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 16.0),
+                  child: Text(
+                    'loading_more_products'.tr(context),
+                    style: context.titleSmall?.copyWith(color: AppTheme.accentColor),
+                  ),
+                ),
             ],
           ),
         );

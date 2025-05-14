@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:melamine_elsherif/core/config/themes.dart/theme.dart';
 import 'package:melamine_elsherif/core/utils/extension/text_theme_extension.dart';
+import 'package:melamine_elsherif/core/utils/widgets/custom_back_button.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_empty_widgets.dart';
 import 'package:provider/provider.dart';
 import '../../../../core/utils/enums/loading_state.dart';
@@ -11,6 +13,7 @@ import '../widgets/popular_searches.dart';
 import '../widgets/search_results_grid.dart';
 import '../widgets/shimmer/popular_searches_shimmer.dart';
 import '../widgets/shimmer/search_results_shimmer.dart';
+import '../widgets/shimmer/search_suggestions_shimmer.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -21,24 +24,40 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   final TextEditingController _searchController = TextEditingController();
+  final ScrollController _scrollControllerForSearchResults = ScrollController();
   bool _isSearchActive = false;
+
 
   @override
   void initState() {
     super.initState();
+    _scrollControllerForSearchResults.addListener(_searchScrollListener);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final provider = Provider.of<SearchProvider>(context, listen: false);
       provider.clearFilteredProducts();
-      // Fetch popular products (empty search)
       provider.fetchFilteredProducts(refresh: true, name: '');
+      provider.fetchSearchSuggestions(''); // Fetch initial search suggestions
     });
   }
 
   @override
   void dispose() {
     _searchController.dispose();
+    _scrollControllerForSearchResults.removeListener(_searchScrollListener);
+    _scrollControllerForSearchResults.dispose();
     super.dispose();
+  }
+
+  void _searchScrollListener() {
+    final searchProvider = Provider.of<SearchProvider>(context, listen: false);
+    if (_scrollControllerForSearchResults.position.pixels >=
+        _scrollControllerForSearchResults.position.maxScrollExtent - 200) {
+      // TODO: Replace with actual provider field checks for pagination
+      // if (searchProvider.hasMoreSearchResults && !searchProvider.isPaginatingSearchResults) {
+      //   searchProvider.fetchFilteredProducts(name: _searchController.text, refresh: false);
+      // }
+    }
   }
 
   void _performSearch(String query) {
@@ -46,57 +65,70 @@ class _SearchScreenState extends State<SearchScreen> {
       _isSearchActive = query.isNotEmpty;
     });
 
+    final searchProvider = Provider.of<SearchProvider>(context, listen: false);
     if (query.isNotEmpty) {
-      Provider.of<SearchProvider>(
-        context,
-        listen: false,
-      ).fetchFilteredProducts(refresh: true, name: query);
+      if (_scrollControllerForSearchResults.hasClients) {
+         _scrollControllerForSearchResults.jumpTo(0.0);
+      }
+      searchProvider.fetchFilteredProducts(refresh: true, name: query);
     } else {
-      Provider.of<SearchProvider>(
-        context,
-        listen: false,
-      ).clearFilteredProducts();
-      // Re-fetch popular products when search is cleared
-      Provider.of<SearchProvider>(
-        context,
-        listen: false,
-      ).fetchFilteredProducts(refresh: true, name: '');
+      searchProvider.clearFilteredProducts();
+      searchProvider.fetchFilteredProducts(refresh: true, name: '');
     }
+  }
+
+  void _clearSearch() {
+    setState(() {
+      _isSearchActive = false;
+    });
+    
+    final searchProvider = Provider.of<SearchProvider>(context, listen: false);
+    searchProvider.onSearchQueryChanged('');
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('search'.tr(context),style: context.titleLarge!.copyWith(color: AppTheme.white),),
+        systemOverlayStyle: const SystemUiOverlayStyle(
+          statusBarColor: AppTheme.white,
+          statusBarIconBrightness: Brightness.dark,
+        ),
+        toolbarHeight: 0.0,
         elevation: 0,
       ),
       body: Consumer<SearchProvider>(
         builder: (context, searchProvider, _) {
           return Column(
             children: [
-              // Search input field (always visible)
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: SearchInputField(
-                  controller: _searchController,
-                  onChanged: (value) {
-                    // Update search state immediately
-                    setState(() {
-                      _isSearchActive = value.isNotEmpty;
-                    });
-                    searchProvider.onSearchQueryChanged(value);
-                    if (value.isEmpty) {
-                      searchProvider.clearFilteredProducts();
-                      // Re-fetch popular products
-                      searchProvider.fetchFilteredProducts(refresh: true, name: '');
-                    }
-                  },
-                  onSubmitted: _performSearch,
-                ),
+              const SizedBox(height: 20),
+              Row(
+                children: [
+                  const CustomBackButton(),
+                  Expanded(
+                    child: SearchInputField(
+                      controller: _searchController,
+                      onChanged: (value) {
+                        setState(() {
+                          _isSearchActive = value.isNotEmpty;
+                        });
+                        searchProvider.onSearchQueryChanged(value);
+                        if (value.isEmpty) {
+                          searchProvider.clearFilteredProducts();
+                          searchProvider.fetchFilteredProducts(
+                            refresh: true,
+                            name: '',
+                          );
+                        }
+                      },
+                      onSubmitted: _performSearch,
+                      onClear: _clearSearch,
+                    ),
+                  ),
+                  const SizedBox(width: 20),
+                ],
               ),
-
-              // Content area (expanded to fill remaining space)
+              const SizedBox(height: 10),
               Expanded(
                 child: _isSearchActive
                     ? _buildSearchResults(searchProvider)
@@ -109,36 +141,141 @@ class _SearchScreenState extends State<SearchScreen> {
     );
   }
 
-  // Widget for search results (when search is active)
   Widget _buildSearchResults(SearchProvider searchProvider) {
-    final bool isLoading =
-        searchProvider.filteredProductsState == LoadingState.loading;
+    final bool isLoadingInitially = searchProvider.filteredProductsState == LoadingState.loading &&
+                                 searchProvider.filteredProducts.isEmpty;
 
-    if (isLoading) {
+    if (isLoadingInitially) {
       return const SearchResultsShimmer();
     }
 
-    return SearchResultsGrid(
-      searchQuery: _searchController.text,
+    final String errorMessage = ""; // searchProvider.filteredProductsError;
+    if (searchProvider.filteredProductsState == LoadingState.error && searchProvider.filteredProducts.isEmpty) {
+        return Center(
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                    Text(errorMessage.isNotEmpty
+                        ? errorMessage
+                        : 'error_loading_products'.tr(context)),
+                    const SizedBox(height: 16),
+                    ElevatedButton(
+                        onPressed: () => _performSearch(_searchController.text),
+                        child: Text('retry'.tr(context)),
+                    ),
+                ],
+            ),
+        );
+    }
+
+    if (searchProvider.filteredProducts.isEmpty) {
+      return const CustomEmptyWidget();
+    }
+
+    return Column(
+      children: [
+        Expanded(
+          child: SearchResultsGrid(
+            searchQuery: _searchController.text,
+            scrollController: _scrollControllerForSearchResults,
+          ),
+        ),
+        // TODO: Uncomment and use your actual pagination loading state from SearchProvider
+        // if (searchProvider.isPaginatingSearchResults ?? false) 
+        //   Padding(
+        //     padding: const EdgeInsets.symmetric(vertical: 16.0),
+        //     child: Text(
+        //       'loading_more_products'.tr(context),
+        //       style: context.titleSmall?.copyWith(color: AppTheme.accentColor),
+        //     ),
+        //   ),
+      ],
     );
   }
 
-  // Widget for initial view (when search is not active)
+  Widget _buildSearchSuggestionsWidget(SearchProvider searchProvider) {
+    bool isLoadingSuggestions = searchProvider.suggestionState == LoadingState.loading; 
+    
+    if (isLoadingSuggestions) {
+      return const SearchSuggestionsShimmer();
+    }
+    
+    final suggestions = searchProvider.suggestions;
+
+    if (suggestions.isEmpty && !isLoadingSuggestions) {
+      return const SizedBox.shrink();
+    }
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'search_suggestions'.tr(context),
+            style: context.titleMedium!.copyWith(fontWeight: FontWeight.w700),
+          ),
+          const SizedBox(height: 8),
+          Wrap(
+            spacing: 8.0,
+            runSpacing: 4.0,
+            children: suggestions.map((suggestion) { 
+              return InkWell(
+                onTap: () {
+                  _searchController.text = suggestion.query; 
+                  _searchController.selection = TextSelection.fromPosition(
+                    TextPosition(offset: _searchController.text.length),
+                  );
+                  _performSearch(suggestion.query); 
+                },
+                splashColor: Colors.transparent,
+                highlightColor: Colors.transparent,
+                hoverColor: Colors.transparent,
+                borderRadius: BorderRadius.circular(16.0),
+                child: Chip(
+                  label: Row(
+                     mainAxisSize: MainAxisSize.min,
+                     children: [
+                       const Icon(Icons.refresh,color: AppTheme.primaryColor, size: 16),
+                       const SizedBox(width: 4),
+                       Text(suggestion.query), 
+                     ],
+                   ),
+                  backgroundColor: Colors.grey[200],
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+                  shape: RoundedRectangleBorder(
+                    side: const BorderSide(color: Colors.red, width: 0.002),
+                    borderRadius: BorderRadius.circular(16.0),
+                  ),
+                ),
+              );
+            }).toList(),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildInitialView(SearchProvider searchProvider) {
-    final bool isLoading =
-        searchProvider.filteredProductsState == LoadingState.loading;
+    final bool isLoadingPopular = 
+        searchProvider.filteredProductsState == LoadingState.loading && searchProvider.filteredProducts.isEmpty;
 
     return SingleChildScrollView(
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Popular products section
-          isLoading
+          _buildSearchSuggestionsWidget(searchProvider),
+          const SizedBox(height: 16),
+          isLoadingPopular
               ? const PopularSearchesShimmer()
-              : PopularSearches(popularProducts: searchProvider.filteredProducts),
-
-          // Empty widget (when not searching)
-          const SizedBox(height: 32),
-          const CustomEmptyWidget(),
+              : PopularSearches(
+                  popularProducts: searchProvider.filteredProducts,
+                ),
+          if (!isLoadingPopular && searchProvider.filteredProducts.isEmpty)
+            const Padding(
+              padding: EdgeInsets.only(top: 32.0),
+              child: CustomEmptyWidget(),
+            ),
         ],
       ),
     );

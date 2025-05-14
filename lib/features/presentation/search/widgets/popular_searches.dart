@@ -4,6 +4,7 @@ import 'package:melamine_elsherif/features/presentation/search/widgets/shimmer/p
 import 'package:provider/provider.dart';
 import '../../../../../core/utils/extension/translate_extension.dart';
 import '../../../../core/utils/product cards/custom_gridview_prodcut.dart';
+import '../../../../core/utils/product cards/custom_product_card_for_all_products.dart';
 import '../../../domain/product/entities/product.dart';
 import '../controller/search_provider.dart';
 
@@ -24,7 +25,7 @@ class PopularSearches extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           child: Text(
             'most_searched'.tr(context),
-            style: context.headlineSmall,
+            style: context.titleMedium!.copyWith(fontWeight: FontWeight.w700),
           ),
         ),
         SizedBox(
@@ -41,7 +42,7 @@ class PopularSearches extends StatelessWidget {
               final product = filteredProducts[index];
               return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: ProductGridCard(product: product,availableAddToCart: true),
+                child: CustomProductCardForAllProducts(product: product),
               );
             },
           ),

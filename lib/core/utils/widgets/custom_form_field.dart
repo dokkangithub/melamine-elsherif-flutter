@@ -111,7 +111,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
     // Determine fill color based on isBorderAvailable
     Color fillColor = widget.isBorderAvailable
         ? Colors.white
-        : Colors.grey[300] ?? Colors.grey.shade300;
+        : AppTheme.darkTextColor;
 
     return Container(
       decoration: BoxDecoration(
@@ -138,7 +138,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
           prefixIcon: widget.prefixIcon,
           suffixIcon: passwordSuffixIcon,  // Use our custom suffix icon for password fields
           labelStyle: context.bodyMedium?.copyWith(color: AppTheme.lightSecondaryTextColor),
-          hintStyle: context.bodyMedium?.copyWith(color: AppTheme.lightSecondaryTextColor),
+          hintStyle: context.titleMedium?.copyWith(color: AppTheme.lightSecondaryTextColor),
           filled: true,
           fillColor: fillColor,
           contentPadding: const EdgeInsets.symmetric(
