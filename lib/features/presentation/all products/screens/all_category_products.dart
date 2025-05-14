@@ -3,6 +3,7 @@ import 'package:melamine_elsherif/core/config/themes.dart/theme.dart';
 import 'package:melamine_elsherif/core/utils/enums/loading_state.dart';
 import 'package:melamine_elsherif/core/utils/extension/text_theme_extension.dart';
 import 'package:melamine_elsherif/core/utils/extension/translate_extension.dart';
+import 'package:melamine_elsherif/core/utils/widgets/custom_button.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_empty_widgets.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_loading.dart';
 import 'package:melamine_elsherif/features/domain/product/entities/product.dart' as product_import;
@@ -119,7 +120,7 @@ class _AllCategoryProductsScreenState extends State<AllCategoryProductsScreen> {
       final provider = Provider.of<HomeProvider>(context, listen: false);
       final categoryProvider = Provider.of<CategoryProvider>(context, listen: false);
       provider.fetchCategoryProducts(id, refresh: true, name: _searchQuery);
-      //categoryProvider.getSubCategories(mainCategoryId: id.toString());
+      categoryProvider.getSubCategories(mainCategoryId: id.toString());
     });
   }
 
@@ -170,7 +171,7 @@ class _AllCategoryProductsScreenState extends State<AllCategoryProductsScreen> {
               children: [
                 // App Bar similar to AllProductsByTypeScreen
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
                   child: Row(
                     children: [
                       const SizedBox(width: 6),
@@ -178,45 +179,39 @@ class _AllCategoryProductsScreenState extends State<AllCategoryProductsScreen> {
                         onTap: () => Navigator.pop(context),
                         child: const Icon(Icons.arrow_back_ios, size: 20, color: AppTheme.accentColor),
                       ),
-                      const Spacer(),
-                      Text(
-                        'discover_products'.tr(context),
-                        style: context.headlineSmall,
+                      Expanded(
+                        child: InkWell(
+                          onTap: (){
+                            AppRoutes.navigateTo(context, AppRoutes.searchScreen);
+                          },
+                          child: Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 10),
+                            padding: const EdgeInsets.symmetric(horizontal: 15),
+                            height: 45,
+                            decoration: BoxDecoration(
+                                color: AppTheme.lightBackgroundColor,
+                                borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Row(
+                              children: [
+                                const CustomImage(
+                                  assetPath: AppSvgs.category_search_icon,
+                                ),
+                                const SizedBox(width: 10),
+                                Expanded(
+                                  child: Text(
+                                    'search_products'.tr(context),
+                                    style: context.titleSmall?.copyWith(color: AppTheme.lightSecondaryTextColor),
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
                       ),
-                      const Spacer(),
-                      const Icon(Icons.filter_list_rounded, color: AppTheme.accentColor),
-                      const SizedBox(width: 6),
                     ],
-                  ),
-                ),
-
-                // Search bar
-                InkWell(
-                  onTap: (){
-                    AppRoutes.navigateTo(context, AppRoutes.searchScreen);
-                  },
-                  child: Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 15,vertical: 10),
-                    padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 15),
-                    width: double.infinity,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      color: AppTheme.white,
-                      borderRadius: BorderRadius.circular(15),
-                      border: Border.all(width: 1,color: AppTheme.primaryColor)
-                    ),
-                    child: Row(
-                      spacing: 10,
-                      children: [
-                        const CustomImage(
-                          assetPath: AppSvgs.category_search_icon,
-                        ),
-                        Text(
-                          'search_products'.tr(context),
-                          style: context.bodySmall?.copyWith(color: AppTheme.primaryColor),
-                        ),
-                      ],
-                    ),
                   ),
                 ),
 
@@ -234,42 +229,110 @@ class _AllCategoryProductsScreenState extends State<AllCategoryProductsScreen> {
                 else
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                    physics: const BouncingScrollPhysics(),
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: Row(
                       children: categoryProvider.filterPageCategoriesResponse?.data
                           .map((category) {
-                        bool isSelected = _selectedCategoryId == category.id;
+                        onCategorySelect() {
+                          if (category.id != null && category.name != null) {
+                            _selectCategory(category.name!, category.id!);
+                          }
+                        }
+
                         return Padding(
-                          padding: const EdgeInsets.only(right: 8.0),
+                          padding: const EdgeInsets.only(right: 12.0),
                           child: InkWell(
-                            onTap: () {
-                              if (category.id != null && category.name != null) {
-                                _selectCategory(category.name!, category.id!);
-                              }
-                            },
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                              decoration: BoxDecoration(
-                                color: isSelected ? Colors.amber[100] : Colors.white,
-                                borderRadius: BorderRadius.circular(20),
-                                border: Border.all(
-                                  color: isSelected ? Colors.amber : Colors.grey.shade300,
-                                ),
-                              ),
-                              child: Text(
-                                category.name ?? '',
-                                style: TextStyle(
-                                  color: isSelected ? Colors.amber[800] : Colors.grey,
-                                  fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+                            onTap: onCategorySelect,
+                            borderRadius: BorderRadius.circular(12.0),
+                            child: SizedBox(
+                              width: 280,
+                              height: 150,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(12.0),
+                                child: Stack(
+                                  fit: StackFit.expand,
+                                  children: [
+                                    // Background Image
+                                    CustomImage(
+                                      imageUrl: category.bannerMobile,
+                                      fit: BoxFit.fill,
+                                    ),
+                                    // Gradient Overlay for text readability
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        gradient: LinearGradient(
+                                          colors: [
+                                            Colors.black.withValues(alpha: 0.7),
+                                            Colors.black.withValues(alpha: 0.1),
+                                            Colors.transparent
+                                          ],
+                                          stops: const [0.0, 0.5, 1.0],
+                                          begin: Alignment.bottomCenter,
+                                          end: Alignment.topCenter,
+                                        ),
+                                      ),
+                                    ),
+                                    // Content: Name, Product Count, Shop Now button
+                                    Positioned(
+                                      bottom: 5,
+                                      left: 0,
+                                      right: 0,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(10.0),
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          crossAxisAlignment: CrossAxisAlignment.end,
+                                          children: [
+                                            Expanded(
+                                              child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  Text(
+                                                    category.name ?? '',
+                                                    style: context.headlineSmall?.copyWith(
+                                                      color: Colors.white,
+                                                      fontWeight: FontWeight.bold,
+                                                    ),
+                                                    maxLines: 2,
+                                                    overflow: TextOverflow.ellipsis,
+                                                  ),
+                                                  const SizedBox(height: 6),
+                                                  Text(
+                                                    '${category.productCount ?? 0} ' 'products'.tr(context),
+                                                    style: context.titleLarge?.copyWith(
+                                                      color: AppTheme.lightDividerColor,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            const SizedBox(width: 8),
+                                            CustomButton(
+                                              onPressed: onCategorySelect,
+                                              padding: const EdgeInsets.symmetric(vertical: 8,horizontal: 15),
+                                              child: Text(
+                                                'shop_now'.tr(context),
+                                                style: context.bodyLarge?.copyWith(color: Colors.white)
+                                                ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),
                           ),
                         );
-                      }).toList() ?? [],
+                      }).toList() ??
+                          [], // Provide an empty list if data is null
                     ),
                   ),
 
+                const SizedBox(height: 10),
                 /// Subcategories horizontal list
                 if (categoryProvider.subCategoriesState == LoadingState.loading)
                   const Padding(
@@ -284,72 +347,39 @@ class _AllCategoryProductsScreenState extends State<AllCategoryProductsScreen> {
                 else if (categoryProvider.subCategoriesResponse?.data.isNotEmpty ?? false)
                     SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                      physics: const BouncingScrollPhysics(),
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: Row(
                         children: [
                           // "All" option for subcategories
-                          Padding(
-                            padding: const EdgeInsets.only(right: 8.0),
-                            child: InkWell(
-                              onTap: () {
-                                setState(() {
-                                  _selectedSubCategoryId = null;
-                                  _selectedSubCategoryName = null;
-                                  final provider = Provider.of<HomeProvider>(context, listen: false);
-                                  provider.fetchCategoryProducts(_selectedCategoryId, refresh: true, name: _searchQuery);
-                                });
-                              },
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                                decoration: BoxDecoration(
-                                  color: _selectedSubCategoryId == null ? Colors.amber[100] : Colors.white,
-                                  borderRadius: BorderRadius.circular(20),
-                                  border: Border.all(
-                                    color: _selectedSubCategoryId == null ? Colors.amber : Colors.grey.shade300,
-                                  ),
-                                ),
-                                child: Text(
-                                  'all'.tr(context),
-                                  style: TextStyle(
-                                    color: _selectedSubCategoryId == null ? Colors.amber[800] : Colors.grey,
-                                    fontWeight: _selectedSubCategoryId == null ? FontWeight.w600 : FontWeight.normal,
-                                  ),
-                                ),
-                              ),
-                            ),
+                          _buildSubCategoryChip(
+                            text: 'all'.tr(context),
+                            isSelected: _selectedSubCategoryId == null,
+                            onTap: () {
+                              setState(() {
+                                _selectedSubCategoryId = null;
+                                _selectedSubCategoryName = null;
+                                final provider = Provider.of<HomeProvider>(context, listen: false);
+                                provider.fetchCategoryProducts(_selectedCategoryId, refresh: true, name: _searchQuery);
+                              });
+                            },
                           ),
-
                           // Individual subcategories
-                          ...categoryProvider.subCategoriesResponse?.data.map((subcategory) {
+                          ...categoryProvider.subCategoriesResponse!.data.map((subcategory) {
                             bool isSelected = _selectedSubCategoryId == subcategory.id;
                             return Padding(
-                              padding: const EdgeInsets.only(right: 8.0),
-                              child: InkWell(
+                              padding: const EdgeInsets.only(left: 8.0), // Add spacing between items
+                              child: _buildSubCategoryChip(
+                                text: subcategory.name ?? '',
+                                isSelected: isSelected,
                                 onTap: () {
                                   if (subcategory.id != null && subcategory.name != null) {
                                     _selectSubCategory(subcategory.name!, subcategory.id!);
                                   }
                                 },
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                                  decoration: BoxDecoration(
-                                    color: isSelected ? Colors.amber[100] : Colors.white,
-                                    borderRadius: BorderRadius.circular(20),
-                                    border: Border.all(
-                                      color: isSelected ? Colors.amber : Colors.grey.shade300,
-                                    ),
-                                  ),
-                                  child: Text(
-                                    subcategory.name ?? '',
-                                    style: TextStyle(
-                                      color: isSelected ? Colors.amber[800] : Colors.grey,
-                                      fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
-                                    ),
-                                  ),
-                                ),
                               ),
                             );
-                          }) ?? [],
+                          }).toList(),
                         ],
                       ),
                     ),
@@ -363,6 +393,37 @@ class _AllCategoryProductsScreenState extends State<AllCategoryProductsScreen> {
           ),
         );
       },
+    );
+  }
+
+  Widget _buildSubCategoryChip({required String text, required bool isSelected, required VoidCallback onTap}) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(4.0), // Optional: for ink splash shape
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0), // Padding for tap area and visual spacing
+        child: IntrinsicWidth(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(
+                text,
+                textAlign: TextAlign.center,
+                style: context.titleMedium?.copyWith(
+                  color: isSelected ? AppTheme.primaryColor : AppTheme.lightSecondaryTextColor,
+                  fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                ),
+              ),
+              const SizedBox(height: 4), // Space between text and underline
+              Container(
+                height: 2.5,
+                color: isSelected ? AppTheme.primaryColor : Colors.transparent,
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 

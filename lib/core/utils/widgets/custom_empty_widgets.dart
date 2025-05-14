@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:melamine_elsherif/core/config/themes.dart/theme.dart';
 import 'package:melamine_elsherif/core/utils/constants/app_assets.dart';
 import 'package:melamine_elsherif/core/utils/extension/text_theme_extension.dart';
 import 'package:melamine_elsherif/core/utils/extension/translate_extension.dart';
@@ -11,7 +12,7 @@ class CustomEmptyWidget extends StatelessWidget {
   const CustomEmptyWidget({
     super.key,
     this.title = "we_could't_find_anything_for_that",
-    this.subtitle = "Try another ritual?",
+    this.subtitle = "bring_your_vision to_life_with_melamine_elsherif",
   });
 
   @override
@@ -20,10 +21,17 @@ class CustomEmptyWidget extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          CustomImage(
-            assetPath: AppSvgs.no_data,
+          Container(
+            padding: const EdgeInsets.all(60),
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+              color: AppTheme.lightBackgroundColor,
+            ),
+            child: const CustomImage(
+              assetPath: AppSvgs.no_data,
 
-            fit: BoxFit.contain,
+              fit: BoxFit.contain,
+            ),
           ),
           const SizedBox(height: 16),
           Text(
@@ -37,6 +45,7 @@ class CustomEmptyWidget extends StatelessWidget {
             style: context.titleMedium,
             textAlign: TextAlign.center,
           ),
+          const SizedBox(height: 30),
         ],
       ),
     );

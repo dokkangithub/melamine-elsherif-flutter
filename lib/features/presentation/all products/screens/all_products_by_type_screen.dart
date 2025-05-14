@@ -192,89 +192,69 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
             child: Column(
               children: [
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
                   child: Row(
                     children: [
-                      SizedBox(width: 6),
+                      const SizedBox(width: 6),
                       InkWell(
                         onTap: () => Navigator.pop(context),
-                        child: const Icon(Icons.arrow_back_ios, size: 20,color: AppTheme.accentColor),
+                        child: const Icon(Icons.arrow_back_ios, size: 20, color: AppTheme.accentColor),
                       ),
-                      const Spacer(),
-                      Text(
-                        _productTypeNames[_selectedProductType]!.tr(context),
-                        style: context.headlineSmall,
+                      Expanded(
+                        child: InkWell(
+                          onTap: (){
+                            AppRoutes.navigateTo(context, AppRoutes.searchScreen);
+                          },
+                          child: Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 10),
+                            padding: const EdgeInsets.symmetric(horizontal: 15),
+                            height: 45,
+                            decoration: BoxDecoration(
+                                color: AppTheme.lightBackgroundColor, 
+                                borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Row(
+                              children: [
+                                const CustomImage(
+                                  assetPath: AppSvgs.category_search_icon,
+                                ),
+                                const SizedBox(width: 10),
+                                Expanded(
+                                  child: Text(
+                                    'search_products'.tr(context),
+                                    style: context.titleSmall?.copyWith(color: AppTheme.lightSecondaryTextColor),
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
                       ),
-                      const Spacer(),
-                      const Icon(Icons.filter_list_rounded,color: AppTheme.accentColor),
-                      SizedBox(width: 6),
                     ],
                   ),
                 ),
-                // Search bar
-                InkWell(
-                  onTap: (){
-                    AppRoutes.navigateTo(context, AppRoutes.searchScreen);
-                  },
-                  child: Container(
-                    margin: EdgeInsets.symmetric(horizontal: 15,vertical: 10),
-                    padding: EdgeInsets.symmetric(horizontal: 15,vertical: 15),
-                    width: double.infinity,
-                    height: 50,
-                    decoration: BoxDecoration(
-                        color: AppTheme.white,
-                        borderRadius: BorderRadius.circular(15),
-                        border: Border.all(width: 1,color: AppTheme.primaryColor)
-                    ),
-                    child: Row(
-                      spacing: 10,
-                      children: [
-                        CustomImage(
-                          assetPath: AppSvgs.category_search_icon,
-                        ),
-                        Text(
-                          'search_skin_care_products'.tr(context),
-                          style: context.bodySmall?.copyWith(color: AppTheme.primaryColor),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
 
-                // Product type tabs
+                // Product type tabs - New Style
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                  physics: const BouncingScrollPhysics(),
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
                   child: Row(
                     children: ProductType.values.map((type) {
                       bool isSelected = _selectedProductType == type;
                       return Padding(
                         padding: const EdgeInsets.only(right: 8.0),
-                        child: InkWell(
+                        child: _buildProductTypeChip(
+                          text: _productTypeNames[type]!.tr(context),
+                          isSelected: isSelected,
                           onTap: () {
                             setState(() {
                               _selectedProductType = type;
-                              // Fetch products for the selected type
                               _fetchProducts(homeProvider, refresh: true);
                             });
                           },
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                            decoration: BoxDecoration(
-                              color: isSelected ? Colors.amber[100] : Colors.white,
-                              borderRadius: BorderRadius.circular(20),
-                              border: Border.all(
-                                color: isSelected ? Colors.amber : Colors.grey.shade300,
-                              ),
-                            ),
-                            child: Text(
-                              _productTypeNames[type]!.tr(context),
-                              style: TextStyle(
-                                color: isSelected ? Colors.amber[800] : Colors.grey,
-                                fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
-                              ),
-                            ),
-                          ),
                         ),
                       );
                     }).toList(),
@@ -291,6 +271,37 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
           ),
         );
       },
+    );
+  }
+
+  Widget _buildProductTypeChip({required String text, required bool isSelected, required VoidCallback onTap}) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(4.0),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+        child: IntrinsicWidth(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(
+                text,
+                textAlign: TextAlign.center,
+                style: context.titleMedium?.copyWith(
+                  color: isSelected ? AppTheme.primaryColor : AppTheme.lightSecondaryTextColor,
+                  fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                ),
+              ),
+              const SizedBox(height: 4),
+              Container(
+                height: 2.5,
+                color: isSelected ? AppTheme.primaryColor : Colors.transparent,
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 

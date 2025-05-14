@@ -7,6 +7,8 @@ import 'package:melamine_elsherif/features/domain/product/entities/product.dart'
 import 'package:melamine_elsherif/features/presentation/all%20products/widgets/shimmer/products_grid_shimmer.dart';
 import 'package:shimmer/shimmer.dart';
 
+import '../../../../core/utils/product cards/custom_product_card_for_all_products.dart';
+
 class ProductsGrid extends StatelessWidget {
   final List<Product> products;
   final LoadingState state;
@@ -58,7 +60,7 @@ class ProductsGrid extends StatelessWidget {
 
     return GridView.builder(
       controller: scrollController,
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.symmetric(horizontal: 10),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
         childAspectRatio: 0.7,
@@ -81,7 +83,7 @@ class ProductsGrid extends StatelessWidget {
           );
         }
         final product = products[index];
-        return ProductGridCard(product: product,availableAddToCart: true);
+        return CustomProductCardForAllProducts(product: product);
       },
     );
   }
