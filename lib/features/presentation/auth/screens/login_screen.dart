@@ -104,7 +104,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
                               // Email Field
                               Align(
-                                alignment: Alignment.centerLeft,
+                                alignment: Directionality.of(context) == TextDirection.rtl 
+                                    ? Alignment.centerRight 
+                                    : Alignment.centerLeft,
                                 child: Text(
                                   'email'.tr(context),
                                   style: context.titleMedium.copyWith(
@@ -121,7 +123,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
                               // Password Field
                               Align(
-                                alignment: Alignment.centerLeft,
+                                alignment: Directionality.of(context) == TextDirection.rtl 
+                                    ? Alignment.centerRight 
+                                    : Alignment.centerLeft,
                                 child: Text(
                                   'password'.tr(context),
                                   style: context.titleMedium.copyWith(

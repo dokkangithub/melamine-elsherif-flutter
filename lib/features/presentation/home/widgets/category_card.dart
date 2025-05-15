@@ -36,7 +36,7 @@ class CategoryCard extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           SizedBox(
-            height: 30,
+            height: 35,
             child: Text(
               name,
               style: context.bodyMedium!.copyWith(fontWeight: FontWeight.w300),

@@ -112,6 +112,10 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
     Color fillColor = widget.isBorderAvailable
         ? Colors.white
         : AppTheme.darkTextColor;
+        
+    // Get the directionality from context for RTL support
+    final textDirection = Directionality.of(context);
+    final isRTL = textDirection == TextDirection.rtl;
 
     return Container(
       decoration: BoxDecoration(
@@ -128,6 +132,8 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
         minLines: widget.minLines,
         maxLength: widget.maxLength,
         style: widget.textStyle ?? context.titleMedium,
+        textDirection: textDirection, // Apply text direction based on locale
+        textAlign: isRTL ? TextAlign.right : TextAlign.left, // Align text based on direction
         inputFormatters: widget.isMobileNumber
             ? [FilteringTextInputFormatter.digitsOnly]
             : null,
@@ -145,6 +151,9 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
             horizontal: 20,
             vertical: 10,
           ),
+          // Apply alignment and direction to hint text as well
+          alignLabelWithHint: true,
+          hintTextDirection: textDirection,
           enabledBorder: widget.isBorderAvailable
               ? OutlineInputBorder(
             borderRadius: BorderRadius.circular(widget.borderRadius),

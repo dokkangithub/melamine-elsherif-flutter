@@ -410,7 +410,7 @@
   "processing_your_order": "Processing your order...",
   "rate_this_product_details": "Rate this product details",
   "related_products": "Related Products",
-  "products": "Products",
+  "products": "products",
   "remember_your_password": "Remember your password? ",
   "saved_addresses": "Saved Addresses",
   "secure_checkout": "Secure Checkout",
@@ -465,5 +465,6 @@
   "personalize_experience": "Personalize your app experience",
   "get_assistance": "Get help with orders and products",
   "learn_about_elsherif": "Learn about our company and values",
-  "browse_products": "Browse our extensive catalog"
+  "browse_products": "Browse our extensive catalog",
+  "product_count": "{count} products"
 }

@@ -221,7 +221,7 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
                                 const SizedBox(width: 10),
                                 Expanded(
                                   child: Text(
-                                    'search_products'.tr(context),
+                                    'search_for_yours'.tr(context),
                                     style: context.titleSmall?.copyWith(color: AppTheme.lightSecondaryTextColor),
                                     overflow: TextOverflow.ellipsis,
                                     maxLines: 1,

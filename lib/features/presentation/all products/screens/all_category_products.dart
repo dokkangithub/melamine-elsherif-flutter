@@ -200,7 +200,7 @@ class _AllCategoryProductsScreenState extends State<AllCategoryProductsScreen> {
                                 const SizedBox(width: 10),
                                 Expanded(
                                   child: Text(
-                                    'search_products'.tr(context),
+                                    'search_for_yours'.tr(context),
                                     style: context.titleSmall?.copyWith(color: AppTheme.lightSecondaryTextColor),
                                     overflow: TextOverflow.ellipsis,
                                     maxLines: 1,
@@ -300,7 +300,7 @@ class _AllCategoryProductsScreenState extends State<AllCategoryProductsScreen> {
                                                   ),
                                                   const SizedBox(height: 6),
                                                   Text(
-                                                    '${category.productCount ?? 0} ' 'products'.tr(context),
+                                                    'product_count'.tr(context).replaceAll('{count}', '${category.productCount ?? 0}'),
                                                     style: context.titleLarge?.copyWith(
                                                       color: AppTheme.lightDividerColor,
                                                     ),

@@ -67,162 +67,187 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        leading: const CustomBackButton(),
+        toolbarHeight: 0.0,
         systemOverlayStyle: SystemUiOverlayStyle.dark,
       ),
       body: SafeArea(
-        child: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24.0),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-
-                  // Logo
-                  const Padding(
-                    padding: EdgeInsets.only(bottom: 24.0),
-                    child: CustomImage(
-                      assetPath:  AppImages.appLogo,
-                      height: 150,
-                      width: 250,
-                    ),
-                  ),
-
-                  // Forgot Password Title
-                  Text(
-                    'forgot_password'.tr(context),
-                    style: context.headlineMedium.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
-                  ),
-                  const SizedBox(height: 15),
-
-                  // Subtitle
-                  Text(
-                    _isSendingEmail
-                      ? 'forgot_password_email_desc'.tr(context)
-                      : 'forgot_password_phone_desc'.tr(context),
-                    style: context.titleSmall.copyWith(
-                      color: Colors.grey[600],
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 32),
-
-                  // Email/Phone Field
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      _isSendingEmail ? 'email'.tr(context) : 'phone'.tr(context),
-                      style: context.titleSmall,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  TextFormField(
-                    controller: _controller,
-                    decoration: InputDecoration(
-                      hintText: _isSendingEmail ? 'enter_your_email'.tr(context) : 'enter_your_phone_number'.tr(context),
-                      hintStyle: GoogleFonts.inter(
-                        fontSize: 14,
-                        color: Colors.grey[500],
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(color: Colors.grey.shade300),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(color: Colors.grey.shade300),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: const BorderSide(color: AppTheme.primaryColor),
-                      ),
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                    ),
-                    keyboardType: _isSendingEmail
-                      ? TextInputType.emailAddress
-                      : TextInputType.phone,
-                    style: GoogleFonts.inter(
-                      fontSize: 14,
-                      color: Colors.black,
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return _isSendingEmail
-                          ? 'please_enter_email'.tr(context)
-                          : 'please_enter_phone'.tr(context);
-                      }
-                      if (_isSendingEmail && !value.contains('@')) {
-                        return 'please_enter_valid_email'.tr(context);
-                      }
-                      return null;
-                    },
-                  ),
-
-                  const SizedBox(height: 16),
-
-                  // Toggle Method Button
-                  TextButton(
-                    onPressed: () {
-                      setState(() {
-                        _isSendingEmail = !_isSendingEmail;
-                        _controller.clear();
-                      });
-                    },
-                    child: Text(
-                      _isSendingEmail
-                          ? 'use_phone_number_instead'.tr(context)
-                          : 'use_email_address_instead'.tr(context),
-                      style: context.titleSmall.copyWith(
-                        color: AppTheme.primaryColor,
-                      ),
-                    ),
-                  ),
-
-                  const SizedBox(height: 24),
-
-                  // Submit Button
-                  _isLoading
-                    ? const Center(child: CustomLoadingWidget())
-                    : CustomButton(
-                        onPressed: _handleResetPassword,
-                        backgroundColor: AppTheme.primaryColor,
-                        text: _isSendingEmail ? 'send_reset_link'.tr(context) : 'send_otp'.tr(context),
-                        fullWidth: true,
-                      ),
-
-                  const SizedBox(height: 24),
-
-                  // Back to Login
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+        child: Stack(
+          alignment: Alignment.topLeft,
+          children: [
+            SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Text('remember_your_password'.tr(context),
-                        style: context.bodyMedium.copyWith(color: Colors.grey[700]),
+
+                      const SizedBox(height: 50),
+                      // Logo
+                      const Padding(
+                        padding: EdgeInsets.only(bottom: 24.0),
+                        child: CustomImage(
+                          assetPath:  AppImages.appLogo,
+                          height: 150,
+                          width: 250,
+                        ),
                       ),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.of(context).pop();
+
+                      // Forgot Password Title
+                      Text(
+                        'forgot_password'.tr(context),
+                        style: context.headlineMedium.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ),
+                      const SizedBox(height: 15),
+
+                      // Subtitle
+                      Text(
+                        _isSendingEmail
+                          ? 'forgot_password_email_desc'.tr(context)
+                          : 'forgot_password_phone_desc'.tr(context),
+                        style: context.titleSmall.copyWith(
+                          color: Colors.grey[600],
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 32),
+
+                      // Email/Phone Field
+                      Align(
+                        alignment: Directionality.of(context) == TextDirection.rtl
+                            ? Alignment.centerRight
+                            : Alignment.centerLeft,
+                        child: Text(
+                          _isSendingEmail ? 'email'.tr(context) : 'phone'.tr(context),
+                          style: context.titleSmall,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      TextFormField(
+                        controller: _controller,
+                        decoration: InputDecoration(
+                          hintText: _isSendingEmail ? 'enter_your_email'.tr(context) : 'enter_your_phone_number'.tr(context),
+                          hintStyle: GoogleFonts.inter(
+                            fontSize: 14,
+                            color: Colors.grey[500],
+                          ),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            borderSide: BorderSide(color: Colors.grey.shade300),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            borderSide: BorderSide(color: Colors.grey.shade300),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            borderSide: const BorderSide(color: AppTheme.primaryColor),
+                          ),
+                          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                          hintTextDirection: Directionality.of(context),
+                          alignLabelWithHint: true,
+                        ),
+                        keyboardType: _isSendingEmail
+                          ? TextInputType.emailAddress
+                          : TextInputType.phone,
+                        textDirection: Directionality.of(context),
+                        textAlign: Directionality.of(context) == TextDirection.rtl ? TextAlign.right : TextAlign.left,
+                        style: GoogleFonts.inter(
+                          fontSize: 14,
+                          color: Colors.black,
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return _isSendingEmail
+                              ? 'please_enter_email'.tr(context)
+                              : 'please_enter_phone'.tr(context);
+                          }
+                          if (_isSendingEmail && !value.contains('@')) {
+                            return 'please_enter_valid_email'.tr(context);
+                          }
+                          return null;
                         },
-                        child: Text('sign_in'.tr(context),
-                          style: context.bodyMedium.copyWith(
+                      ),
+
+                      const SizedBox(height: 16),
+
+                      // Toggle Method Button
+                      TextButton(
+                        onPressed: () {
+                          setState(() {
+                            _isSendingEmail = !_isSendingEmail;
+                            _controller.clear();
+                          });
+                        },
+                        child: Text(
+                          _isSendingEmail
+                              ? 'use_phone_number_instead'.tr(context)
+                              : 'use_email_address_instead'.tr(context),
+                          style: context.titleSmall.copyWith(
                             color: AppTheme.primaryColor,
-                            fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
+
+                      const SizedBox(height: 24),
+
+                      // Submit Button
+                      _isLoading
+                        ? const Center(child: CustomLoadingWidget())
+                        : CustomButton(
+                            onPressed: _handleResetPassword,
+                            backgroundColor: AppTheme.primaryColor,
+                            text: _isSendingEmail ? 'send_reset_link'.tr(context) : 'send_otp'.tr(context),
+                            fullWidth: true,
+                          ),
+
+                      const SizedBox(height: 24),
+
+                      // Back to Login
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text('remember_your_password'.tr(context),
+                            style: context.bodyMedium.copyWith(color: Colors.grey[700]),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: Text('sign_in'.tr(context),
+                              style: context.bodyMedium.copyWith(
+                                color: AppTheme.primaryColor,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ],
                   ),
-                ],
+                ),
               ),
             ),
-          ),
+            TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                style: ButtonStyle(
+                  overlayColor: WidgetStateProperty.all(Colors.transparent),
+                  splashFactory: NoSplash.splashFactory,
+                ),
+                child: const CustomImage(
+                  assetPath:  AppSvgs.back,
+                  fit: BoxFit.cover,
+                )
+            ),
+          ],
         ),
       ),
     );
