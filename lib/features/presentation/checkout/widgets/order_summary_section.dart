@@ -40,7 +40,7 @@ class OrderSummarySection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Order Summary'.tr(context),
+          Text('order_summary'.tr(context),
             style: context.titleMedium!.copyWith(fontWeight: FontWeight.w600),
           ),
           const SizedBox(height: 10),
@@ -53,12 +53,12 @@ class OrderSummarySection extends StatelessWidget {
               (item) => Column(
                 children: [
                   CheckoutCartItem(item: item),
-                  Divider(color: AppTheme.lightDividerColor),
+                  const Divider(color: AppTheme.lightDividerColor),
                 ],
               ),
             ),
 
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           // Price Summary
           if (isInitialLoading)
             _buildShimmerEffect(context)
@@ -67,18 +67,18 @@ class OrderSummarySection extends StatelessWidget {
               children: [
                 _buildPriceRow(
                   context: context,
-                  label: 'Subtotal',
+                  label: 'subtotal'.tr(context),
                   value:
                       '${(cartSummary.subtotal + cartSummary.discount - cartSummary.tax).toStringAsFixed(2)} ${cartSummary.currencySymbol}',
                 ),
                 const SizedBox(height: 12),
                 _buildPriceRow(
                   context: context,
-                  label: 'Shipping',
+                  label: 'shipping'.tr(context),
                   value:
                       cartSummary.shippingCost > 0
                           ? '${cartSummary.shippingCost.toStringAsFixed(2)} ${cartSummary.currencySymbol}'
-                          : 'Free',
+                          : 'free_shipping'.tr(context),
                   isLoading: isUpdatingShipping,
                   color: AppTheme.successColor,
                 ),
@@ -87,7 +87,7 @@ class OrderSummarySection extends StatelessWidget {
                     padding: const EdgeInsets.only(top: 12),
                     child: _buildPriceRow(
                       context: context,
-                      label: 'Discount',
+                      label: 'discount'.tr(context),
                       value:
                           '-${cartSummary.discount.toStringAsFixed(2)} ${cartSummary.currencySymbol}',
                       color: AppTheme.errorColor,
@@ -96,7 +96,7 @@ class OrderSummarySection extends StatelessWidget {
                 const SizedBox(height: 12),
                 _buildPriceRow(
                   context: context,
-                  label: 'Tax',
+                  label: 'tax'.tr(context),
                   value:
                       '${cartSummary.tax.toStringAsFixed(2)} ${cartSummary.currencySymbol}',
                 ),
@@ -106,7 +106,7 @@ class OrderSummarySection extends StatelessWidget {
                 ),
                 _buildPriceRow(
                   context: context,
-                  label: 'Total',
+                  label: 'total'.tr(context),
                   value:
                       '${cartSummary.total.toStringAsFixed(2)} ${cartSummary.currencySymbol}',
                 ),
@@ -120,7 +120,7 @@ class OrderSummarySection extends StatelessWidget {
             child: CustomTextFormField(
               controller: noteController,
               maxLines: 2,
-              hint: 'Add a note to order',
+              hint: 'add_note_to_order'.tr(context),
             ),
           ),
           const SizedBox(height: 10),
@@ -138,7 +138,7 @@ class OrderSummarySection extends StatelessWidget {
         _buildBenefitItem(icon: Icons.lock_outline, label: 'secure_ssl'.tr(context)),
         _buildBenefitItem(
           icon: Icons.local_shipping_outlined,
-          label: 'Free Shipping'.tr(context),
+          label: 'free_shipping'.tr(context),
         ),
         _buildBenefitItem(icon: Icons.access_time, label: '30_day_returns'.tr(context)),
         _buildBenefitItem(icon: Icons.payment, label: 'secure_payment'.tr(context)),

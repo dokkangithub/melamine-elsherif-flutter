@@ -91,7 +91,7 @@ class _ShippingAddressSectionState extends State<ShippingAddressSection> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Saved Addresses'.tr(context),
+              Text('shipping_address'.tr(context),
                 style: context.titleLarge?.copyWith(
                   fontWeight: FontWeight.w600,
                 ),
@@ -100,7 +100,7 @@ class _ShippingAddressSectionState extends State<ShippingAddressSection> {
                 TextButton(
                   onPressed: widget.onChangePressed,
                   child: Text(
-                    isGuest ? 'Edit' : 'Change',
+                    isGuest ? 'edit'.tr(context) : 'change'.tr(context),
                     style: context.titleSmall!.copyWith(color: AppTheme.primaryColor,fontWeight: FontWeight.w800),
                   ),
                 ),
