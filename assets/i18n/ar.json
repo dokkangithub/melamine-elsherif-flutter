@@ -456,5 +456,12 @@
   "no_delivered_orders": "لا توجد طلبات مسلمة",
   "you_dont_have_any_processing_orders_at_the_moment": "ليس لديك أي طلبات قيد المعالجة في الوقت الحالي.",
   "you_dont_have_any_shipped_orders_at_the_moment": "ليس لديك أي طلبات مشحونة في الوقت الحالي.",
-  "you_dont_have_any_delivered_orders_at_the_moment": "ليس لديك أي طلبات مسلمة في الوقت الحالي."
+  "you_dont_have_any_delivered_orders_at_the_moment": "ليس لديك أي طلبات مسلمة في الوقت الحالي.",
+  "welcome_to_elsherif": "مرحبًا بك في ميلامين الشريف",
+  "sign_in_to_explore": "سجل الدخول لاستكشاف مجموعتنا الحصرية والاستمتاع بتجربة تسوق مخصصة",
+  "account_benefits": "قم بإنشاء حساب لتتبع الطلبات وحفظ العناصر والحصول على توصيات مخصصة",
+  "personalize_experience": "خصص تجربة التطبيق الخاصة بك",
+  "get_assistance": "احصل على المساعدة بخصوص الطلبات والمنتجات",
+  "learn_about_elsherif": "تعرف على شركتنا وقيمنا",
+  "browse_products": "تصفح كتالوجنا الواسع"
 }

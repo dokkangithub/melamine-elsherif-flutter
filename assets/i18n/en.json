@@ -458,5 +458,12 @@
   "no_delivered_orders": "No Delivered Orders",
   "you_dont_have_any_processing_orders_at_the_moment": "You don't have any processing orders at the moment.",
   "you_dont_have_any_shipped_orders_at_the_moment": "You don't have any shipped orders at the moment.",
-  "you_dont_have_any_delivered_orders_at_the_moment": "You don't have any delivered orders at the moment."
+  "you_dont_have_any_delivered_orders_at_the_moment": "You don't have any delivered orders at the moment.",
+  "welcome_to_elsherif": "Welcome to Melamine Elsherif",
+  "sign_in_to_explore": "Sign in to explore our exclusive collection and enjoy personalized shopping experience",
+  "account_benefits": "Create an account to track orders, save items, and get personalized recommendations",
+  "personalize_experience": "Personalize your app experience",
+  "get_assistance": "Get help with orders and products",
+  "learn_about_elsherif": "Learn about our company and values",
+  "browse_products": "Browse our extensive catalog"
 }

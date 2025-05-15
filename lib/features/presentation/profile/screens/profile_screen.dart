@@ -85,91 +85,14 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
         child: Column(
           children: [
             const SizedBox(height: 20),
-              // User Header
-              Container(
-                alignment: Alignment.center,
-                color: Colors.white,
-
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 15,
-                  vertical: 20,
-                ),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    // Profile Image
-                    Container(
-                      width: 70,
-                      height: 70,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(color: Colors.grey[300]!, width: 1),
-                      ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(45),
-                        child:
-                            profileProvider.profileImageUrl != null
-                                ? CustomImage(
-                                  imageUrl: profileProvider.profileImageUrl!,
-                                  fit: BoxFit.cover,
-                                )
-                                : isLoggedIn
-                                  ? const Icon(
-                                    Icons.person,
-                                    size: 40,
-                                    color: Colors.grey,
-                                  )
-                                  :  const CustomImage(
-                                    assetPath: AppImages.appLogo,
-                                    fit: BoxFit.cover,
-                                  ),
-                      ),
-                    ),
-                    const SizedBox(width: 16),
-                    // User Info
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            AppStrings.userName ?? 'Guest User',
-                            style: context.titleLarge,
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            AppStrings.userEmail ?? '',
-                            style: context.bodyMedium.copyWith(
-                              color: Colors.grey[600],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(width: 16),
-                    // Edit Button - only show for logged in users
-                    if (isLoggedIn)
-                      CustomButton(
-                        onPressed: () {
-                          AppRoutes.navigateTo(
-                            context,
-                            AppRoutes.editProfileScreen,
-                          );
-                        },
-                        isOutlined: true,
-                        child: Text(
-                          'edit'.tr(context),
-                          style: context.titleSmall.copyWith(
-                            color: AppTheme.black,
-                          ),
-                        ),
-                      ),
-                  ],
-                ),
-              ),
+            // Different UI based on login status
+            isLoggedIn 
+            ? _buildLoggedInUserHeader(context, profileProvider)
+            : _buildGuestUserHeader(context),
 
               const SizedBox(height: 16),
 
-              // Stats Section
+            // Stats Section - only for logged in users
               if (isLoggedIn && !isLoadingCounters && counters != null)
                 Container(
                   color: Colors.white,
@@ -209,7 +132,7 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
 
               const SizedBox(height: 10),
 
-              // Quick Access Section
+              // Quick Access Section - only for logged in users
             if (isLoggedIn && !isLoadingCounters && counters != null)
               Container(
                 color: Colors.white,
@@ -247,9 +170,345 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
 
               const SizedBox(height: 10),
 
-              // Menu Items
+              // Menu Items - different for guest vs logged in
+              isLoggedIn 
+                ? _buildLoggedInMenuItems(context)
+                : _buildGuestMenuItems(context),
+
+              const SizedBox(height: 20),
+
+              // Auth Button (Sign Out or Sign In) - different style based on login status
+              isLoggedIn
+                ? _buildSignOutButton(context)
+                : _buildSignInButton(context),
+
+              const SizedBox(height: 40),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  // Guest user header with more attractive design
+  Widget _buildGuestUserHeader(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            AppTheme.primaryColor.withOpacity(0.9),
+            AppTheme.primaryColor.withOpacity(0.7),
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: AppTheme.primaryColor.withOpacity(0.3),
+            blurRadius: 10,
+            offset: const Offset(0, 5),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          // Logo with animated container
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              shape: BoxShape.circle,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.1),
+                  blurRadius: 8,
+                  offset: const Offset(0, 3),
+                ),
+              ],
+            ),
+            child: const CustomImage(
+              assetPath: AppImages.appLogo,
+              width: 80,
+              height: 80,
+            ),
+          ),
+          const SizedBox(height: 16),
+          
+          // Welcome text
+          Text(
+            'welcome_to_elsherif'.tr(context),
+            style: context.titleLarge.copyWith(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 8),
+          
+          // Description
+          Text(
+            'sign_in_to_explore'.tr(context),
+            textAlign: TextAlign.center,
+            style: context.bodyMedium.copyWith(
+              color: Colors.white.withOpacity(0.9),
+            ),
+          ),
+          const SizedBox(height: 20),
+          
+          // Sign in button in header
+          ElevatedButton(
+            onPressed: () {
+              AppRoutes.navigateTo(context, AppRoutes.login);
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.white,
+              foregroundColor: AppTheme.primaryColor,
+              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30),
+              ),
+            ),
+            child: Text(
+              'sign_in'.tr(context),
+              style: context.titleMedium.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Logged in user header - extracted from original code
+  Widget _buildLoggedInUserHeader(BuildContext context, ProfileProvider profileProvider) {
+    return Container(
+      alignment: Alignment.center,
+      color: Colors.white,
+      padding: const EdgeInsets.symmetric(
+        horizontal: 15,
+        vertical: 20,
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          // Profile Image
+          Container(
+            width: 70,
+            height: 70,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              border: Border.all(color: Colors.grey[300]!, width: 1),
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(45),
+              child: profileProvider.profileImageUrl != null
+                  ? CustomImage(
+                      imageUrl: profileProvider.profileImageUrl!,
+                      fit: BoxFit.cover,
+                    )
+                  : const Icon(
+                      Icons.person,
+                      size: 40,
+                      color: Colors.grey,
+                    ),
+            ),
+          ),
+          const SizedBox(width: 16),
+          // User Info
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  AppStrings.userName ?? '',
+                  style: context.titleLarge,
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  AppStrings.userEmail ?? '',
+                  style: context.bodyMedium.copyWith(
+                    color: Colors.grey[600],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 16),
+          // Edit Button
+          CustomButton(
+            onPressed: () {
+              AppRoutes.navigateTo(
+                context,
+                AppRoutes.editProfileScreen,
+              );
+            },
+            isOutlined: true,
+            child: Text(
+              'edit'.tr(context),
+              style: context.titleSmall.copyWith(
+                color: AppTheme.black,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Guest menu items with better styling
+  Widget _buildGuestMenuItems(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.1),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          _buildGuestMenuItem(
+            context,
+            AppSvgs.profile_language,
+            'language_region'.tr(context),
+            'personalize_experience'.tr(context),
+            () {
+              LanguageDialog.show(context);
+            },
+          ),
+          const Divider(height: 1, indent: 70),
+          _buildGuestMenuItem(
+            context,
+            AppSvgs.profile_help,
+            'help_support'.tr(context),
+            'get_assistance'.tr(context),
+            () async {
+              final Uri url = Uri.parse('https://melaminefront.dokkan.design/pages/contact-us');
+              if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('could_not_launch_website'.tr(context)))
+                  );
+                }
+              }
+            },
+          ),
+          const Divider(height: 1, indent: 70),
+          _buildGuestMenuItem(
+            context,
+            AppSvgs.profile_about_us,
+            'about_us'.tr(context),
+            'learn_about_elsherif'.tr(context),
+            () async {
+              final Uri url = Uri.parse('https://melaminefront.dokkan.design/pages/about-us');
+              if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('could_not_launch_website'.tr(context)))
+                  );
+                }
+              }
+            },
+          ),
+          const Divider(height: 1, indent: 70),
+          _buildGuestMenuItem(
+            context,
+            AppSvgs.profile_privacy,
+            'our_website'.tr(context),
+            'browse_products'.tr(context),
+            () async {
+              final Uri url = Uri.parse('https://melaminefront.dokkan.design/');
+              if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('could_not_launch_website'.tr(context)))
+                  );
+                }
+              }
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Enhanced menu item for guest users
+  Widget _buildGuestMenuItem(
+    BuildContext context,
+    String icon,
+    String title,
+    String subtitle,
+    VoidCallback onTap,
+  ) {
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(16),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+          child: Row(
+            children: [
               Container(
-                color: Colors.white,
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: AppTheme.primaryColor.withOpacity(0.1),
+                  shape: BoxShape.circle,
+                ),
+                child: Center(
+                  child: CustomImage(
+                    assetPath: icon,
+                    width: 20,
+                    height: 20,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: context.titleMedium.copyWith(
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      subtitle,
+                      style: context.bodySmall.copyWith(
+                        color: Colors.grey[600],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Icon(
+                Icons.arrow_forward_ios,
+                size: 16,
+                color: Colors.grey[400],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  // Menu items for logged in users - extracted from original code
+  Widget _buildLoggedInMenuItems(BuildContext context) {
+    return Container(
+      color: Colors.white,
                 child: Column(
                   children: [
                     ProfileMenuItem(
@@ -292,8 +551,7 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                       icon: AppSvgs.profile_language,
                       title: 'language_region'.tr(context),
                       onTap: () {
-                        // Show premium language selection
-                        LanguageDialog.show(context);
+              LanguageDialog.show(context);
                       },
                     ),
                     ProfileMenuItem(
@@ -323,49 +581,113 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                           }
                         }
                       },
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Sign in button with enhanced styling
+  Widget _buildSignInButton(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16),
+      child: Column(
+        children: [
+          // Benefits message
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: Colors.grey[50],
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: Colors.grey[200]!),
+            ),
+            child: Row(
+              children: [
+                Icon(
+                  Icons.info_outline,
+                  color: AppTheme.primaryColor,
+                  size: 24,
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Text(
+                    'account_benefits'.tr(context),
+                    style: context.bodyMedium,
+                  ),
                     ),
                   ],
                 ),
               ),
-
               const SizedBox(height: 20),
 
-              // Auth Button (Sign Out or Sign In)
-              Padding(
+          // Sign in button
+          CustomButton(
+            onPressed: () {
+              AppRoutes.navigateTo(context, AppRoutes.login);
+            },
+            backgroundColor: AppTheme.primaryColor,
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            borderRadius: 12,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(Icons.login, color: Colors.white),
+                const SizedBox(width: 10),
+                Text(
+                  'sign_in'.tr(context),
+                  style: context.titleMedium.copyWith(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 12),
+          
+          // Create account text button
+          TextButton(
+            onPressed: () {
+              AppRoutes.navigateTo(context, AppRoutes.signUp);
+            },
+            child: Text(
+              'create_account'.tr(context),
+              style: context.titleSmall.copyWith(
+                color: AppTheme.primaryColor,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Sign out button - extracted from original code
+  Widget _buildSignOutButton(BuildContext context) {
+    return Padding(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 16,
                   vertical: 8,
                 ),
                 child: CustomButton(
                   onPressed: () {
-                    if (isLoggedIn) {
                       _showLogoutConfirmation(context);
-                    } else {
-                      // Navigate to login screen
-                      AppRoutes.navigateTo(context, AppRoutes.login);
-                    }
                   },
                   isOutlined: true,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(
-                        isLoggedIn ? Icons.logout : Icons.login,
+              Icons.logout,
                         color: AppTheme.primaryColor
                       ),
                       const SizedBox(width: 6),
                       Text(
-                        isLoggedIn ? 'sign_out'.tr(context) : 'sign_in'.tr(context),
+              'sign_out'.tr(context),
                         style: context.titleMedium.copyWith(color: AppTheme.primaryColor),
                       ),
                     ],
-                  ),
-                ),
-              ),
-
-              const SizedBox(height: 40),
-            ],
-          ),
         ),
       ),
     );
@@ -390,8 +712,6 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
       ],
     );
   }
-
-
 
   Widget _buildQuickAccessItem(
     BuildContext context,
