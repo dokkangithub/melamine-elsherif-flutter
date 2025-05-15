@@ -53,11 +53,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final isLoggedIn = AppStrings.token != null;
     final isLoadingCounters =
         profileProvider.countersState == LoadingState.loading;
+    
+    // Get the text direction to adjust the FAB position accordingly
+    final TextDirection textDirection = Directionality.of(context);
+    final FloatingActionButtonLocation fabLocation = textDirection == TextDirection.rtl
+        ? FloatingActionButtonLocation.startFloat  // For RTL (Arabic)
+        : FloatingActionButtonLocation.endFloat;   // For LTR (English)
 
     return Scaffold(
       backgroundColor: Colors.white,
-      floatingActionButton: _buildFloatingActionButton(),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      floatingActionButton: _buildFloatingActionButton(context),
+      floatingActionButtonLocation: fabLocation,
       body: SafeArea(
         child: SingleChildScrollView(
         child: Column(
@@ -752,7 +758,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget _buildFloatingActionButton() {
+  Widget _buildFloatingActionButton(BuildContext context) {
     // Create items list for social media actions
     var socialMediaItems = [
       FloatingActionButton(
@@ -781,7 +787,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
     ];
     
-    // Using floatingActionButton implementation which doesn't need position parameter
     return CircleFloatingButton.floatingActionButton(
       items: socialMediaItems,
       color: AppTheme.primaryColor,
