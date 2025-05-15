@@ -19,6 +19,7 @@ import '../controller/profile_provider.dart';
 import '../widgets/profile_menu_item.dart';
 import '../widgets/language_selector.dart';
 import '../../../../core/utils/widgets/premium_language_dialog.dart';
+import 'package:radial_button/widget/circle_floating_button.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -27,17 +28,10 @@ class ProfileScreen extends StatefulWidget {
   State<ProfileScreen> createState() => _ProfileScreenState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProviderStateMixin {
-  late AnimationController _animationController;
-  bool _isDialOpen = false;
-
+class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     super.initState();
-    _animationController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 250),
-    );
     
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final profileProvider = context.read<ProfileProvider>();
@@ -47,23 +41,6 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
       // Load club points data
       if (AppStrings.token != null) {
         context.read<ClubPointProvider>().fetchClubPoints();
-      }
-    });
-  }
-
-  @override
-  void dispose() {
-    _animationController.dispose();
-    super.dispose();
-  }
-
-  void _toggleDial() {
-    setState(() {
-      _isDialOpen = !_isDialOpen;
-      if (_isDialOpen) {
-        _animationController.forward();
-      } else {
-        _animationController.reverse();
       }
     });
   }
@@ -79,7 +56,8 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
 
     return Scaffold(
       backgroundColor: Colors.white,
-      floatingActionButton: _buildSpeedDial(),
+      floatingActionButton: _buildFloatingActionButton(),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       body: SafeArea(
         child: SingleChildScrollView(
         child: Column(
@@ -774,143 +752,43 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
     );
   }
 
-  Widget _buildSpeedDial() {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        // YouTube
-        if (_isDialOpen) _buildSpeedDialChild(
-          icon: Icons.play_arrow,
-          backgroundColor: Colors.red,
-          onTap: () {
-            _launchYouTube();
-            _toggleDial();
-          },
-          position: 4,
-        ),
-        
-        // Phone Call
-        if (_isDialOpen) _buildSpeedDialChild(
-          icon: Icons.call,
-          backgroundColor: Colors.green,
-          onTap: () {
-            _makePhoneCall();
-            _toggleDial();
-          },
-          position: 3,
-        ),
-        
-        // WhatsApp
-        if (_isDialOpen) _buildSpeedDialChild(
-          icon: Icons.chat,
-          backgroundColor: Colors.green.shade700,
-          onTap: () {
-            _openWhatsApp();
-            _toggleDial();
-          },
-          position: 2,
-        ),
-        
-        // Facebook
-        if (_isDialOpen) _buildSpeedDialChild(
-          icon: Icons.facebook,
-          backgroundColor: Colors.blue,
-          onTap: () {
-            _openFacebook();
-            _toggleDial();
-          },
-          position: 1,
-        ),
-        
-        // Main FAB
-        GestureDetector(
-          onTap: _toggleDial,
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 250),
-            curve: Curves.easeInOut,
-            height: 56,
-            width: 56,
-            decoration: BoxDecoration(
-              color: AppTheme.primaryColor,
-              borderRadius: BorderRadius.circular(28),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.2),
-                  blurRadius: 5,
-                  spreadRadius: 1,
-                  offset: const Offset(0, 2),
-                ),
-              ],
-            ),
-            child: AnimatedRotation(
-              turns: _isDialOpen ? 0.125 : 0,
-              duration: const Duration(milliseconds: 250),
-              child: const Icon(
-                Icons.add,
-                color: Colors.white,
-                size: 30,
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildSpeedDialChild({
-    required IconData icon,
-    required Color backgroundColor,
-    required VoidCallback onTap,
-    required int position,
-  }) {
-    final positionAnimation = Tween<double>(
-      begin: 0,
-      end: position * 60.0,
-    ).animate(
-      CurvedAnimation(
-        parent: _animationController,
-        curve: Curves.easeOut,
+  Widget _buildFloatingActionButton() {
+    // Create items list for social media actions
+    var socialMediaItems = [
+      FloatingActionButton(
+        heroTag: "youtube",
+        backgroundColor: Colors.red,
+        onPressed: _launchYouTube,
+        child: const Icon(Icons.play_arrow),
       ),
-    );
-
-    return AnimatedBuilder(
-      animation: _animationController,
-      builder: (context, child) {
-        return Positioned(
-          bottom: positionAnimation.value,
-          right: 0,
-          child: Padding(
-            padding: const EdgeInsets.only(bottom: 10.0),
-            child: Material(
-              color: Colors.transparent,
-              child: InkWell(
-                onTap: onTap,
-                child: Container(
-                  height: 48,
-                  width: 48,
-                  decoration: BoxDecoration(
-                    color: backgroundColor,
-                    borderRadius: BorderRadius.circular(24),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.2),
-                        blurRadius: 4,
-                        spreadRadius: 1,
-                        offset: const Offset(0, 2),
-                      ),
-                    ],
-                  ),
-                  child: Icon(
-                    icon,
-                    color: Colors.white,
-                    size: 24,
-                  ),
-                ),
-              ),
-            ),
-          ),
-        );
-      },
+      FloatingActionButton(
+        heroTag: "phone",
+        backgroundColor: Colors.green,
+        onPressed: _makePhoneCall,
+        child: const Icon(Icons.call),
+      ),
+      FloatingActionButton(
+        heroTag: "whatsapp",
+        backgroundColor: Colors.green.shade700,
+        onPressed: _openWhatsApp,
+        child: const Icon(Icons.chat),
+      ),
+      FloatingActionButton(
+        heroTag: "facebook",
+        backgroundColor: Colors.blue,
+        onPressed: _openFacebook,
+        child: const Icon(Icons.facebook),
+      ),
+    ];
+    
+    // Using floatingActionButton implementation which doesn't need position parameter
+    return CircleFloatingButton.floatingActionButton(
+      items: socialMediaItems,
+      color: AppTheme.primaryColor,
+      icon: Icons.add,
+      duration: const Duration(milliseconds: 500),
+      curveAnim: Curves.easeOutBack,
+      useOpacity: true,
     );
   }
 

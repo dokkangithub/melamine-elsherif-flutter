@@ -45,6 +45,7 @@ dependencies:
   talker_flutter: ^4.6.14
   pretty_dio_logger: ^1.4.0
   thanos_snap_effect: ^0.0.8
+  radial_button: ^1.0.1
 
   # Home screen widget dependencies
   home_widget: ^0.7.0+1
