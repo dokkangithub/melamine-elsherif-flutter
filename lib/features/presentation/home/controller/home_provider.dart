@@ -593,14 +593,26 @@ class HomeProvider extends ChangeNotifier {
 
   // Update the refresh method to include all refreshable sections
   Future<void> refreshHomeData() async {
+    // Reset all states to loading
+    allProductsState = LoadingState.loading;
+    featuredProductsState = LoadingState.loading;
+    bestSellingProductsState = LoadingState.loading;
+    newProductsState = LoadingState.loading;
+    todaysDealProductsState = LoadingState.loading;
+    notifyListeners();
+    
+    // Refresh all data with refresh flag set to true
     await Future.wait([
       fetchAllProducts(refresh: true),
       fetchFeaturedProducts(refresh: true),
       fetchBestSellingProducts(refresh: true),
       fetchNewProducts(refresh: true),
-      fetchTodaysDealProducts(),
+      fetchTodaysDealProducts(refresh: true),
       fetchDigitalProducts(refresh: true),
     ]);
+    
+    // Notify about completed refresh
+    notifyListeners();
   }
 
   // Updated helper to check if any section is loading
@@ -628,5 +640,42 @@ class HomeProvider extends ChangeNotifier {
         bestSellingProductsState == LoadingState.loaded &&
         newProductsState == LoadingState.loaded &&
         todaysDealProductsState == LoadingState.loaded;
+  }
+
+  // Special method for language change - resets all cache and forces refresh
+  Future<void> refreshAfterLanguageChange() async {
+    debugPrint('Refreshing all home data after language change');
+    
+    // Reset all states to loading
+    allProductsState = LoadingState.loading;
+    featuredProductsState = LoadingState.loading;
+    bestSellingProductsState = LoadingState.loading;
+    newProductsState = LoadingState.loading;
+    todaysDealProductsState = LoadingState.loading;
+    notifyListeners();
+    
+    // Reset all pages
+    allProductsPage = 1;
+    featuredProductsPage = 1;
+    bestSellingProductsPage = 1;
+    newProductsPage = 1;
+    
+    // Reset hasMore flags
+    hasMoreAllProducts = true;
+    hasMoreFeaturedProducts = true;
+    hasMoreBestSellingProducts = true;
+    hasMoreNewProducts = true;
+    
+    // Force refresh all data with needUpdate flag set to true
+    await Future.wait([
+      fetchAllProducts(refresh: true),
+      fetchFeaturedProducts(refresh: true),
+      fetchBestSellingProducts(refresh: true),
+      fetchNewProducts(refresh: true),
+      fetchTodaysDealProducts(refresh: true),
+      fetchDigitalProducts(refresh: true),
+    ]);
+    
+    notifyListeners();
   }
 }

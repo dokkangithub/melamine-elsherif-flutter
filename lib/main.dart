@@ -121,6 +121,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<LanguageProvider>(
       builder: (context, languageProvider, child) {
+        debugPrint('Building MyApp with locale: ${languageProvider.locale.languageCode}');
+        
         return MaterialApp(
           title: AppConfig().appName,
           debugShowCheckedModeBanner: false,
@@ -129,9 +131,7 @@ class MyApp extends StatelessWidget {
           locale: languageProvider.locale,
           supportedLocales: const [
             Locale('en', 'US'),
-            Locale('ar', 'SA'),
-            Locale('ru', 'RU'),
-            Locale('de', 'DE'),
+            Locale('ar', 'EG'),
           ],
           localizationsDelegates: const [
             AppLocalizations.delegate,
@@ -140,12 +140,15 @@ class MyApp extends StatelessWidget {
             GlobalCupertinoLocalizations.delegate,
           ],
           localeResolutionCallback: (locale, supportedLocales) {
+            debugPrint('Resolving locale: ${locale?.languageCode}');
+            
             for (var supportedLocale in supportedLocales) {
-              if (supportedLocale.languageCode == locale?.languageCode &&
-                  supportedLocale.countryCode == locale?.countryCode) {
+              if (supportedLocale.languageCode == locale?.languageCode) {
+                debugPrint('Resolved to supported locale: ${supportedLocale.languageCode}');
                 return supportedLocale;
               }
             }
+            debugPrint('No matching locale, using default: ${supportedLocales.first.languageCode}');
             return supportedLocales.first;
           },
           onGenerateRoute: AppRoutes.generateRoute,

@@ -18,6 +18,7 @@ import '../../club_point/controller/club_point_provider.dart';
 import '../controller/profile_provider.dart';
 import '../widgets/profile_menu_item.dart';
 import '../widgets/language_selector.dart';
+import '../../../../core/utils/widgets/premium_language_dialog.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -291,8 +292,8 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                       icon: AppSvgs.profile_language,
                       title: 'language_region'.tr(context),
                       onTap: () {
-                        // Show language selection
-                        LanguageSelector.show(context);
+                        // Show premium language selection
+                        LanguageDialog.show(context);
                       },
                     ),
                     ProfileMenuItem(

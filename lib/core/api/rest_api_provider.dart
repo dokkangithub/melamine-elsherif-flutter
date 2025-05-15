@@ -7,8 +7,23 @@ import 'package:talker/talker.dart';
 import '../config/app_config.dart/app_config.dart';
 import 'api_provider.dart';
 
+// Custom language interceptor class 
+class _LanguageInterceptor extends Interceptor {
+  final String languageCode;
+  final Talker talker;
+  
+  _LanguageInterceptor(this.languageCode, this.talker);
+  
+  @override
+  void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
+    options.headers['Accept-Language'] = languageCode;
+    talker.debug('Request language set to: $languageCode');
+    super.onRequest(options, handler);
+  }
+}
+
 class RestApiProvider implements ApiProvider {
-  late final Dio _dio;
+  late Dio _dio;
   final AppConfig _appConfig = AppConfig();
   String _languageCode = 'en';
   final Talker _talker = Talker();
@@ -60,12 +75,7 @@ class RestApiProvider implements ApiProvider {
 
     // Language Interceptor
     _dio.interceptors.add(
-      InterceptorsWrapper(
-        onRequest: (options, handler) {
-          options.headers['Accept-Language'] = _languageCode;
-          return handler.next(options);
-        },
-      ),
+      _LanguageInterceptor(_languageCode, _talker),
     );
   }
 
@@ -198,8 +208,25 @@ class RestApiProvider implements ApiProvider {
 
   @override
   void setLanguage(String languageCode) {
-    _talker.debug('Setting language to: $languageCode');
-    _languageCode = languageCode;
+    try {
+      _talker.debug('Setting language to: $languageCode');
+      _languageCode = languageCode;
+      
+      // Update the existing Dio instance headers
+      _dio.options.headers['Accept-Language'] = languageCode;
+      
+      // Remove existing language interceptors
+      _dio.interceptors.removeWhere((interceptor) => interceptor is _LanguageInterceptor);
+      
+      // Add a fresh language interceptor
+      _dio.interceptors.add(_LanguageInterceptor(languageCode, _talker));
+      
+      // Log the language change
+      _talker.info('API language changed to: $languageCode');
+    } catch (e) {
+      _talker.error('Error changing API language: $e');
+      print('Error loading language for API: $e. Using default language.');
+    }
   }
 
   /// Handles Dio errors and throws appropriate exceptions
@@ -276,4 +303,68 @@ class RestApiProvider implements ApiProvider {
 
   // Getter to expose the talker instance for external use
   Talker get talker => _talker;
+
+  // Helper method to reset Dio client
+  void resetClient() {
+    try {
+      // Close existing client
+      try {
+        _dio.close(force: true);
+      } catch (_) {
+        // Ignore errors when closing
+      }
+      
+      // Create a new Dio instance
+      _dio = Dio(
+        BaseOptions(
+          baseUrl: _appConfig.apiBaseUrl,
+          connectTimeout: Duration(milliseconds: _appConfig.connectTimeout),
+          receiveTimeout: Duration(milliseconds: _appConfig.receiveTimeout),
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'System-Key': '123456',
+            'Accept-Language': _languageCode,
+          },
+        ),
+      );
+      
+      // Add auth token interceptor
+      _dio.interceptors.add(
+        InterceptorsWrapper(
+          onRequest: (options, handler) {
+            // Dynamically add the auth token to each request if available
+            if (AppStrings.token != null && AppStrings.token!.isNotEmpty) {
+              options.headers['Authorization'] = 'Bearer ${AppStrings.token}';
+              _talker.debug('Adding auth token to request: ${options.uri}');
+            }
+            return handler.next(options);
+          },
+        ),
+      );
+      
+      // Add logging if enabled
+      if (_appConfig.enableLogging) {
+        _dio.interceptors.add(
+          TalkerDioLogger(
+            talker: _talker,
+            settings: const TalkerDioLoggerSettings(
+              printRequestHeaders: true,
+              printRequestData: true,
+              printResponseHeaders: true,
+              printResponseData: true,
+              printResponseMessage: true,
+            ),
+          ),
+        );
+      }
+      
+      // Add language interceptor
+      _dio.interceptors.add(_LanguageInterceptor(_languageCode, _talker));
+      
+      _talker.info('Dio client reset successfully');
+    } catch (e) {
+      _talker.error('Error resetting Dio client: $e');
+    }
+  }
 }

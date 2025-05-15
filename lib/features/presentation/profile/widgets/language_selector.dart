@@ -49,12 +49,24 @@ class LanguageSelector extends StatelessWidget {
                   trailing: isSelected 
                     ? const Icon(Icons.check_circle, color: Colors.red)
                     : null,
-                  onTap: () {
+                  onTap: () async {
+                    // Save if it's a direction change before closing dialog
+                    bool isDirectionChange = languageProvider.isDirectionChange(language.languageCode);
+                    
+                    // Close the dialog first
                     Navigator.of(context).pop();
-                    languageProvider.changeLanguage(
+                    
+                    // Wait slightly before changing language to allow snackbar to show
+                    await Future.delayed(const Duration(milliseconds: 300));
+                    
+                    // Change the language
+                    await languageProvider.changeLanguage(
                       language.languageCode, 
                       language.countryCode
                     );
+                    
+                    // No need to do anything else - the UI will rebuild with the new locale
+                    // and the API language is already changed
                   },
                 );
               },

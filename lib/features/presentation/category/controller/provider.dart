@@ -117,4 +117,29 @@ class CategoryProvider extends ChangeNotifier {
     }
     notifyListeners();
   }
+
+  // Special method for language change - refresh all category data
+  Future<void> refreshAfterLanguageChange() async {
+    // Set all states to loading
+    categoriesState = LoadingState.loading;
+    featuredCategoriesState = LoadingState.loading;
+    topCategoriesState = LoadingState.loading;
+    filterPageCategoriesState = LoadingState.loading;
+    notifyListeners();
+    
+    // Force refresh all category data
+    try {
+      await Future.wait([
+        getCategories(needRefresh: true),
+        getFeaturedCategories(needRefresh: true),
+        getTopCategories(needRefresh: true),
+        getFilterPageCategories(needRefresh: true),
+      ]);
+    } catch (e) {
+      errorMessage = e.toString();
+      debugPrint('Error refreshing categories after language change: $e');
+    }
+    
+    notifyListeners();
+  }
 }

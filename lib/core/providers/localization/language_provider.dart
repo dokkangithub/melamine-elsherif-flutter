@@ -4,6 +4,9 @@ import '../../utils/local_storage/local_storage_keys.dart';
 import 'language_model.dart';
 import '../../di/injection_container.dart';
 import '../../api/api_provider.dart';
+import '../../../features/presentation/home/controller/home_provider.dart';
+import '../../../features/presentation/category/controller/provider.dart';
+import 'package:provider/provider.dart';
 
 class LanguageProvider extends ChangeNotifier {
   // Changed from final to late to allow updating
@@ -77,11 +80,43 @@ class LanguageProvider extends ChangeNotifier {
     return true;
   }
 
-  Future<void> changeLanguage(String languageCode, String countryCode) async {
+  // This method changes the language and refreshes all data
+  Future<void> changeLanguage(String languageCode, String countryCode, {BuildContext? context}) async {
+    debugPrint('Changing language to: $languageCode');
+    
+    // Create the new locale
     Locale tempLocale = Locale(languageCode, countryCode);
-    await setLocale(tempLocale);
+    
+    // Save to storage first
+    await SecureStorage().save(
+      LocalStorageKey.languageCode,
+      languageCode,
+    );
+    await SecureStorage().save(
+      LocalStorageKey.countryCode,
+      countryCode,
+    );
 
-    // No need to call notifyListeners() here as it's already called in setLocale
+    // Update ApiProvider with new language
+    sl<ApiProvider>().setLanguage(languageCode);
+    
+    // Update the locale
+    _locale = tempLocale;
+    
+    // Force UI rebuild
+    notifyListeners();
+    
+    // Trigger data refresh directly (without relying on context)
+    try {
+      // Get singleton instances from service locator and refresh them
+      final homeProvider = sl<HomeProvider>();
+      homeProvider.refreshAfterLanguageChange(); // Use the new method for complete refresh
+      
+      final categoryProvider = sl<CategoryProvider>();
+      categoryProvider.refreshAfterLanguageChange(); // Use the new method for complete refresh
+    } catch (e) {
+      debugPrint('Error refreshing data providers: $e');
+    }
   }
 
   // Helper method to determine if a language change will affect RTL/LTR layout
