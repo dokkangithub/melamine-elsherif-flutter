@@ -13,6 +13,7 @@ import 'package:melamine_elsherif/core/utils/widgets/custom_cached_image.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_form_field.dart';
 import 'package:melamine_elsherif/features/presentation/main%20layout/controller/layout_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:animate_do/animate_do.dart';
 import '../../../../core/utils/extension/translate_extension.dart';
 import '../../../../core/utils/widgets/custom_loading.dart';
 import '../../../../core/utils/widgets/custom_snackbar.dart';
@@ -73,87 +74,118 @@ class _LoginScreenState extends State<LoginScreen> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               // Logo
-                              const LoginScreenLogo(),
+                              FadeInDown(
+                                duration: const Duration(milliseconds: 500),
+                                child: const LoginScreenLogo(),
+                              ),
 
                               // Welcome back text
-                              Row(
-                                children: [
-                                  Text(
-                                    'welcome_back_1'.tr(context),
-                                    style: context.displaySmall.copyWith(
-                                      fontWeight: FontWeight.w800,
-                                      color: Colors.black,
+                              FadeInLeft(
+                                duration: const Duration(milliseconds: 600),
+                                delay: const Duration(milliseconds: 100),
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      'welcome_back_1'.tr(context),
+                                      style: context.displaySmall.copyWith(
+                                        fontWeight: FontWeight.w800,
+                                        color: Colors.black,
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                               const SizedBox(height: 8),
 
                               // Subtitle
-                              Row(
-                                children: [
-                                  Text(
-                                    'sign_in_continue'.tr(context),
-                                    style: context.titleSmall.copyWith(
-                                      color: Colors.grey[600],
+                              FadeInLeft(
+                                duration: const Duration(milliseconds: 600),
+                                delay: const Duration(milliseconds: 200),
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      'sign_in_continue'.tr(context),
+                                      style: context.titleSmall.copyWith(
+                                        color: Colors.grey[600],
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                               const SizedBox(height: 32),
 
                               // Email Field
-                              Align(
-                                alignment: Directionality.of(context) == TextDirection.rtl 
-                                    ? Alignment.centerRight 
-                                    : Alignment.centerLeft,
-                                child: Text(
-                                  'email'.tr(context),
-                                  style: context.titleMedium.copyWith(
-                                    fontWeight: FontWeight.w400,
+                              FadeInUp(
+                                duration: const Duration(milliseconds: 700),
+                                delay: const Duration(milliseconds: 300),
+                                child: Align(
+                                  alignment: Directionality.of(context) == TextDirection.rtl 
+                                      ? Alignment.centerRight 
+                                      : Alignment.centerLeft,
+                                  child: Text(
+                                    'email'.tr(context),
+                                    style: context.titleMedium.copyWith(
+                                      fontWeight: FontWeight.w400,
+                                    ),
                                   ),
                                 ),
                               ),
-                              CustomTextFormField(
-                                controller: emailController,
-                                hint: 'enter_your_email'.tr(context),
-                                keyboardType: TextInputType.emailAddress,
+                              FadeInUp(
+                                duration: const Duration(milliseconds: 700),
+                                delay: const Duration(milliseconds: 350),
+                                child: CustomTextFormField(
+                                  controller: emailController,
+                                  hint: 'enter_your_email'.tr(context),
+                                  keyboardType: TextInputType.emailAddress,
+                                ),
                               ),
                               const SizedBox(height: 16),
 
                               // Password Field
-                              Align(
-                                alignment: Directionality.of(context) == TextDirection.rtl 
-                                    ? Alignment.centerRight 
-                                    : Alignment.centerLeft,
-                                child: Text(
-                                  'password'.tr(context),
-                                  style: context.titleMedium.copyWith(
-                                    fontWeight: FontWeight.w400,
+                              FadeInUp(
+                                duration: const Duration(milliseconds: 700),
+                                delay: const Duration(milliseconds: 400),
+                                child: Align(
+                                  alignment: Directionality.of(context) == TextDirection.rtl 
+                                      ? Alignment.centerRight 
+                                      : Alignment.centerLeft,
+                                  child: Text(
+                                    'password'.tr(context),
+                                    style: context.titleMedium.copyWith(
+                                      fontWeight: FontWeight.w400,
+                                    ),
                                   ),
                                 ),
                               ),
-                              CustomTextFormField(
-                                controller: passwordController,
-                                hint: 'enter_password'.tr(context),
-                                keyboardType: TextInputType.emailAddress,
-                                isPassword: true,
+                              FadeInUp(
+                                duration: const Duration(milliseconds: 700),
+                                delay: const Duration(milliseconds: 450),
+                                child: CustomTextFormField(
+                                  controller: passwordController,
+                                  hint: 'enter_password'.tr(context),
+                                  keyboardType: TextInputType.emailAddress,
+                                  isPassword: true,
+                                ),
                               ),
 
                               // Forgot Password
-                              Align(
-                                alignment: Alignment.centerRight,
-                                child: TextButton(
-                                  onPressed: () {
-                                    AppRoutes.navigateTo(
-                                      context,
-                                      AppRoutes.forgetPassword,
-                                    );
-                                  },
-                                  child: Text(
-                                    'forgot_password'.tr(context),
-                                    style: context.titleSmall.copyWith(
-                                      color: AppTheme.primaryColor,
+                              FadeInUp(
+                                duration: const Duration(milliseconds: 700),
+                                delay: const Duration(milliseconds: 500),
+                                child: Align(
+                                  alignment: Alignment.centerRight,
+                                  child: TextButton(
+                                    onPressed: () {
+                                      AppRoutes.navigateTo(
+                                        context,
+                                        AppRoutes.forgetPassword,
+                                      );
+                                    },
+                                    child: Text(
+                                      'forgot_password'.tr(context),
+                                      style: context.titleSmall.copyWith(
+                                        color: AppTheme.primaryColor,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -162,71 +194,86 @@ class _LoginScreenState extends State<LoginScreen> {
                               const SizedBox(height: 10),
 
                               // Sign In Button
-                              if (authProvider.isLoading)
-                                const CustomLoadingWidget()
-                              else
-                                CustomButton(
-                                  onPressed:
-                                      () => _handleLogin(context, authProvider),
-                                  isGradient: true,
-                                  backgroundColor: AppTheme.primaryColor,
-                                  text: 'sign_in'.tr(context),
-                                  fullWidth: true,
-                                ),
+                              FadeInUp(
+                                duration: const Duration(milliseconds: 800),
+                                delay: const Duration(milliseconds: 600),
+                                child: authProvider.isLoading
+                                    ? const CustomLoadingWidget()
+                                    : CustomButton(
+                                        onPressed:
+                                            () => _handleLogin(context, authProvider),
+                                        isGradient: true,
+                                        backgroundColor: AppTheme.primaryColor,
+                                        text: 'sign_in'.tr(context),
+                                        fullWidth: true,
+                                      ),
+                              ),
 
                               const SizedBox(height: 32),
                               // Or continue with
-                              Row(
-                                children: [
-                                  const Expanded(child: Divider()),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 16,
-                                    ),
-                                    child: Text(
-                                      'or_continue_with'.tr(context),
-                                      style: context.bodyLarge.copyWith(
-                                        color: Colors.grey[900],
+                              FadeIn(
+                                duration: const Duration(milliseconds: 900),
+                                delay: const Duration(milliseconds: 700),
+                                child: Row(
+                                  children: [
+                                    const Expanded(child: Divider()),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 16,
+                                      ),
+                                      child: Text(
+                                        'or_continue_with'.tr(context),
+                                        style: context.bodyLarge.copyWith(
+                                          color: Colors.grey[900],
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  const Expanded(child: Divider()),
-                                ],
+                                    const Expanded(child: Divider()),
+                                  ],
+                                ),
                               ),
 
                               const SizedBox(height: 24),
 
                               // Social Login Options
-                              const SocialLoginWidget(isLoginScreen: true,),
+                              FadeInUp(
+                                duration: const Duration(milliseconds: 1000),
+                                delay: const Duration(milliseconds: 800),
+                                child: const SocialLoginWidget(isLoginScreen: true,),
+                              ),
 
                               const SizedBox(height: 24),
 
                               // Sign Up Prompt
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    "don't_have_an_account?".tr(context),
-                                    style: context.bodyLarge.copyWith(
-                                      color: Colors.grey[900],
-                                    ),
-                                  ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      AppRoutes.navigateTo(
-                                        context,
-                                        AppRoutes.signUp,
-                                      );
-                                    },
-                                    child: Text(
-                                      'sign_up'.tr(context),
+                              FadeInUp(
+                                duration: const Duration(milliseconds: 1100),
+                                delay: const Duration(milliseconds: 900),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      "don't_have_an_account?".tr(context),
                                       style: context.bodyLarge.copyWith(
-                                        color: AppTheme.primaryColor,
-                                        fontWeight: FontWeight.w900,
+                                        color: Colors.grey[900],
                                       ),
                                     ),
-                                  ),
-                                ],
+                                    GestureDetector(
+                                      onTap: () {
+                                        AppRoutes.navigateTo(
+                                          context,
+                                          AppRoutes.signUp,
+                                        );
+                                      },
+                                      child: Text(
+                                        'sign_up'.tr(context),
+                                        style: context.bodyLarge.copyWith(
+                                          color: AppTheme.primaryColor,
+                                          fontWeight: FontWeight.w900,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                               const SizedBox(height: 16),
                             ],
@@ -234,22 +281,25 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                     ),
-                    TextButton(
-                      onPressed: () {
-                        Provider.of<LayoutProvider>(context,listen: false).currentIndex=0;
-                        AppRoutes.navigateTo(
-                          context,
-                          AppRoutes.mainLayoutScreen,
-                        );
-                      },
-                        style: ButtonStyle(
-                          overlayColor: MaterialStateProperty.all(Colors.transparent),
-                          splashFactory: NoSplash.splashFactory,
-                        ),
-                      child: const CustomImage(
-                        assetPath:  AppSvgs.back,
-                        fit: BoxFit.cover,
-                      )
+                    FadeInLeft(
+                      duration: const Duration(milliseconds: 500),
+                      child: TextButton(
+                        onPressed: () {
+                          Provider.of<LayoutProvider>(context,listen: false).currentIndex=0;
+                          AppRoutes.navigateTo(
+                            context,
+                            AppRoutes.mainLayoutScreen,
+                          );
+                        },
+                          style: ButtonStyle(
+                            overlayColor: MaterialStateProperty.all(Colors.transparent),
+                            splashFactory: NoSplash.splashFactory,
+                          ),
+                        child: const CustomImage(
+                          assetPath:  AppSvgs.back,
+                          fit: BoxFit.cover,
+                        )
+                      ),
                     ),
                   ],
                 ),

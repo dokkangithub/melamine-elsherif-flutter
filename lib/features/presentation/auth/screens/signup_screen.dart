@@ -5,6 +5,7 @@ import 'package:melamine_elsherif/core/utils/extension/text_style_extension.dart
 import 'package:melamine_elsherif/core/utils/widgets/custom_form_field.dart';
 import 'package:melamine_elsherif/core/utils/widgets/cutsom_toast.dart';
 import 'package:provider/provider.dart';
+import 'package:animate_do/animate_do.dart';
 import '../../../../core/config/routes.dart/routes.dart';
 import '../../../../core/utils/extension/translate_extension.dart';
 import '../../../../core/utils/widgets/custom_button.dart';
@@ -49,6 +50,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
     return Scaffold(
       backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        leading: FadeInLeft(
+          duration: const Duration(milliseconds: 500),
+          child: IconButton(
+            icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+        ),
+      ),
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -62,75 +74,106 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // Create Account Title
-                    Text(
-                      'create_account'.tr(context),
-                      style: context.displayMedium.copyWith(
-                        fontWeight: FontWeight.w900,
-                        color: Colors.black,
+                    FadeInDown(
+                      duration: const Duration(milliseconds: 600),
+                      child: Text(
+                        'create_account'.tr(context),
+                        style: context.displayMedium.copyWith(
+                          fontWeight: FontWeight.w900,
+                          color: Colors.black,
+                        ),
                       ),
                     ),
                     const SizedBox(height: 8),
-                    Text(
-                      'sign_up_to_start'.tr(context),
-                      style: context.titleLarge.copyWith(
-                        color: Colors.grey[600],
+                    FadeInDown(
+                      duration: const Duration(milliseconds: 600),
+                      delay: const Duration(milliseconds: 100),
+                      child: Text(
+                        'sign_up_to_start'.tr(context),
+                        style: context.titleLarge.copyWith(
+                          color: Colors.grey[600],
+                        ),
                       ),
                     ),
                     const SizedBox(height: 32),
 
                     // Social Login Options
-                    const SocialLoginWidget(isLoginScreen: false),
+                    FadeInUp(
+                      duration: const Duration(milliseconds: 700),
+                      delay: const Duration(milliseconds: 200),
+                      child: const SocialLoginWidget(isLoginScreen: false),
+                    ),
 
                     const SizedBox(height: 32),
 
                     // Divider
-                    Row(
-                      children: [
-                        const Expanded(child: Divider()),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                          child: Text(
-                            'or',
-                            style: context.titleMedium.copyWith(
-                              color: Colors.grey,
+                    FadeIn(
+                      duration: const Duration(milliseconds: 800),
+                      delay: const Duration(milliseconds: 300),
+                      child: Row(
+                        children: [
+                          const Expanded(child: Divider()),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            child: Text(
+                              'or',
+                              style: context.titleMedium.copyWith(
+                                color: Colors.grey,
+                              ),
                             ),
                           ),
-                        ),
-                        const Expanded(child: Divider()),
-                      ],
+                          const Expanded(child: Divider()),
+                        ],
+                      ),
                     ),
 
                     const SizedBox(height: 24),
 
                     // Name Field
-                    CustomTextFormField(
-                      controller: _nameController,
-                      hint: 'full_name'.tr(context),
+                    FadeInUp(
+                      duration: const Duration(milliseconds: 700),
+                      delay: const Duration(milliseconds: 400),
+                      child: CustomTextFormField(
+                        controller: _nameController,
+                        hint: 'full_name'.tr(context),
+                      ),
                     ),
                     const SizedBox(height: 16),
 
                     // Email Field
-                    CustomTextFormField(
-                      controller: _emailController,
-                      hint: 'email_or_phone'.tr(context),
+                    FadeInUp(
+                      duration: const Duration(milliseconds: 700),
+                      delay: const Duration(milliseconds: 450),
+                      child: CustomTextFormField(
+                        controller: _emailController,
+                        hint: 'email_or_phone'.tr(context),
+                      ),
                     ),
                     const SizedBox(height: 16),
 
                     // Password Field
-                    CustomTextFormField(
-                      controller: _passwordController,
-                      hint: 'password'.tr(context),
-                      isPassword: true,
+                    FadeInUp(
+                      duration: const Duration(milliseconds: 700),
+                      delay: const Duration(milliseconds: 500),
+                      child: CustomTextFormField(
+                        controller: _passwordController,
+                        hint: 'password'.tr(context),
+                        isPassword: true,
+                      ),
                     ),
                     const SizedBox(height: 16),
 
                     // Confirm Password Field
-                    CustomTextFormField(
-                      controller: _confirmPasswordController,
-                      hint: 'confirm_password'.tr(context),
-                      isPassword: true,
+                    FadeInUp(
+                      duration: const Duration(milliseconds: 700),
+                      delay: const Duration(milliseconds: 550),
+                      child: CustomTextFormField(
+                        controller: _confirmPasswordController,
+                        hint: 'confirm_password'.tr(context),
+                        isPassword: true,
+                      ),
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 24),
 
                     /// Terms and Conditions
                     // Row(
@@ -193,57 +236,66 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     // const SizedBox(height: 24),
 
                     // Sign Up Button
-                    Consumer<AuthProvider>(
-                      builder: (context, provider, _) {
-                        return CustomButton(
-                          onPressed: () {
-
-                            if (_passwordController.text ==
-                                _confirmPasswordController.text) {
-                              _handleSignUp(context, provider);
-                            } else {
-                              CustomToast.showToast(
-                                message: 'passwords_not_match'.tr(context),
-                                type: ToastType.error,
-                              );
-                            }
-                          },
-                          backgroundColor: AppTheme.primaryColor,
-                          isGradient: true,
-                          text: 'sign_up'.tr(context),
-                          fullWidth: true,
-                        );
-                      },
+                    FadeInUp(
+                      duration: const Duration(milliseconds: 800),
+                      delay: const Duration(milliseconds: 650),
+                      child: Consumer<AuthProvider>(
+                        builder: (context, provider, _) {
+                          return CustomButton(
+                            onPressed: () {
+                              if (_formKey.currentState!.validate()) {
+                                if (_passwordController.text ==
+                                    _confirmPasswordController.text) {
+                                  _handleSignUp(context, provider);
+                                } else {
+                                  CustomToast.showToast(
+                                    message: 'passwords_not_match'.tr(context),
+                                    type: ToastType.error,
+                                  );
+                                }
+                              }
+                            },
+                            backgroundColor: AppTheme.primaryColor,
+                            isGradient: true,
+                            text: 'sign_up'.tr(context),
+                            fullWidth: true,
+                          );
+                        },
+                      ),
                     ),
 
                     const SizedBox(height: 24),
 
                     // Login Prompt
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'already_have_account'.tr(context),
-                          style: context.titleMedium.copyWith(
-                            color: Colors.grey[700],
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            AppRoutes.navigateToAndRemoveUntil(
-                              context,
-                              AppRoutes.login,
-                            );
-                          },
-                          child: Text(
-                            'login'.tr(context),
+                    FadeInUp(
+                      duration: const Duration(milliseconds: 900),
+                      delay: const Duration(milliseconds: 750),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'already_have_account'.tr(context),
                             style: context.titleMedium.copyWith(
-                              color: AppTheme.primaryColor,
-                              fontWeight: FontWeight.bold,
+                              color: Colors.grey[700],
                             ),
                           ),
-                        ),
-                      ],
+                          GestureDetector(
+                            onTap: () {
+                              AppRoutes.navigateToAndRemoveUntil(
+                                context,
+                                AppRoutes.login,
+                              );
+                            },
+                            child: Text(
+                              'login'.tr(context),
+                              style: context.titleMedium.copyWith(
+                                color: AppTheme.primaryColor,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                     const SizedBox(height: 16),
                   ],

@@ -97,6 +97,7 @@ dependencies:
   quickalert: ^1.1.0
   page_transition: ^2.2.1
   animated_text_kit: ^4.2.3
+  animate_do: ^4.2.0
 
 
 
