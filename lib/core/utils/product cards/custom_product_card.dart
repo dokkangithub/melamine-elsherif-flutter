@@ -11,6 +11,9 @@ import '../../../../features/domain/product/entities/product.dart';
 import '../../../features/presentation/wishlist/controller/wishlist_provider.dart';
 import '../../config/routes.dart/routes.dart';
 import '../helpers.dart';
+import '../widgets/like_button.dart';
+import 'package:lottie/lottie.dart';
+import 'package:melamine_elsherif/core/utils/constants/app_assets.dart';
 
 class ProductCard extends StatefulWidget {
   final Product product;
@@ -30,6 +33,22 @@ class ProductCard extends StatefulWidget {
 
 class _ProductCardState extends State<ProductCard> {
   bool isAddingToCart = false;
+  bool _showWishlistAnimation = false;
+
+  void _triggerWishlistAnimation() {
+    if (mounted) {
+      setState(() {
+        _showWishlistAnimation = true;
+      });
+      Future.delayed(const Duration(milliseconds: 1500), () {
+        if (mounted) {
+          setState(() {
+            _showWishlistAnimation = false;
+          });
+        }
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,13 +63,14 @@ class _ProductCardState extends State<ProductCard> {
           arguments: {'slug': widget.product.slug},
         );
       },
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: SizedBox(
-          width: 160,
-          child: Stack(
-            children: [
-              Column(
+      child: Stack(
+        alignment: Alignment.topCenter,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: SizedBox(
+              width: 180,
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Product image
@@ -77,15 +97,15 @@ class _ProductCardState extends State<ProductCard> {
                       !widget.isBuyNow!
                           ? const SizedBox.shrink()
                           : Row(
-                            children: List.generate(
-                              5,
+                        children: List.generate(
+                          5,
                               (index) => const Icon(
-                                Icons.star_outline_sharp,
-                                color: Colors.amber,
-                                size: 16,
-                              ),
-                            ),
+                            Icons.star_outline_sharp,
+                            color: Colors.amber,
+                            size: 16,
                           ),
+                        ),
+                      ),
                       // Product name
                       Text(
                         widget.product.name,
@@ -97,107 +117,126 @@ class _ProductCardState extends State<ProductCard> {
                         textAlign: Directionality.of(context) == TextDirection.rtl ? TextAlign.right : TextAlign.left,
                       ),
 
-                      // Price
-                      Text(
-                        widget.product.discountedPrice,
-                        style: context.titleMedium.copyWith(
-                          color: AppTheme.primaryColor,
-                          fontWeight: FontWeight.w500,
-                        ),
-                        textAlign: Directionality.of(context) == TextDirection.rtl ? TextAlign.right : TextAlign.left,
+                      // Price and fav icon
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  widget.product.discountedPrice,
+                                  style: context.titleMedium.copyWith(
+                                    color: AppTheme.primaryColor,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                  textAlign: Directionality.of(context) == TextDirection.rtl ? TextAlign.right : TextAlign.left,
+                                ),
+                                Text(
+                                  widget.product.mainPrice,
+                                  style: context.bodyMedium.copyWith(
+                                      color: AppTheme.lightSecondaryTextColor,
+                                      fontWeight: FontWeight.w400,
+                                      decoration: TextDecoration.lineThrough
+                                  ),
+                                  textAlign: Directionality.of(context) == TextDirection.rtl ? TextAlign.right : TextAlign.left,
+                                ),
+                              ],
+                            ),
+                          ),
+                          Consumer<WishlistProvider>(
+                            builder: (context, provider, _) {
+                              final isInWishlist = provider.isProductInWishlist(
+                                widget.product.slug,
+                              );
+
+                              return LikeButton(
+                                isFavorite: isInWishlist,
+                                iconColor: AppTheme.primaryColor,
+                                onPressed: () async {
+                                  bool wasInWishlist = isInWishlist;
+                                  await AppFunctions.toggleWishlistStatus(
+                                    context,
+                                    widget.product.slug,
+                                  );
+                                  final nowInWishlist = Provider.of<WishlistProvider>(context, listen: false)
+                                      .isProductInWishlist(widget.product.slug);
+                                  if (!wasInWishlist && nowInWishlist) {
+                                    _triggerWishlistAnimation();
+                                  }
+                                },
+                              );
+                            },
+                          ),
+                        ],
                       ),
 
                       isAddingToCart
                           ? const Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [CustomLoadingWidget()],
-                          )
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [CustomLoadingWidget()],
+                      )
                           : CustomButton(
-                            text:
-                                widget.isBuyNow!
-                                    ? 'buy_now'.tr(context)
-                                    : 'add_to_cart'.tr(context),
-                            textStyle: context.titleSmall.copyWith(
-                              color:
-                                  widget.isOutlinedAddToCart!
-                                      ? AppTheme.primaryColor
-                                      : AppTheme.white,
-                            ),
-                            fullWidth: true,
-                            isOutlined: widget.isOutlinedAddToCart!,
-                            padding: const EdgeInsets.all(8),
-                            onPressed: () async {
-                              setState(() {
-                                isAddingToCart = true;
-                              });
-                              await AppFunctions.addProductToCart(
-                                context: context,
-                                productId: widget.product.id,
-                                productName: widget.product.name,
-                                productSlug: widget.product.slug,
-                                hasVariation: widget.product.hasVariation,
-                              );
-                              widget.isBuyNow!
-                                  ? AppRoutes.navigateTo(
-                                    context,
-                                    AppRoutes.mainLayoutScreen,
-                                  )
-                                  : null;
-                              widget.isBuyNow!
-                                  ? Provider.of<LayoutProvider>(
-                                        context,
-                                        listen: false,
-                                      ).currentIndex =
-                                      3
-                                  : null;
-                              setState(() {
-                                isAddingToCart = false;
-                              });
-                            },
-                          ),
+                        text:
+                        widget.isBuyNow!
+                            ? 'buy_now'.tr(context)
+                            : 'add_to_cart'.tr(context),
+                        textStyle: context.titleSmall.copyWith(
+                            color:
+                            widget.isOutlinedAddToCart!
+                                ? AppTheme.primaryColor
+                                : AppTheme.white,
+                            fontWeight: FontWeight.w600
+                        ),
+                        fullWidth: true,
+                        isOutlined: widget.isOutlinedAddToCart!,
+                        padding: const EdgeInsets.all(8),
+                        onPressed: () async {
+                          setState(() {
+                            isAddingToCart = true;
+                          });
+                          await AppFunctions.addProductToCart(
+                            context: context,
+                            productId: widget.product.id,
+                            productName: widget.product.name,
+                            productSlug: widget.product.slug,
+                            hasVariation: widget.product.hasVariation,
+                          );
+                          widget.isBuyNow!
+                              ? AppRoutes.navigateTo(
+                            context,
+                            AppRoutes.mainLayoutScreen,
+                          )
+                              : null;
+                          widget.isBuyNow!
+                              ? Provider.of<LayoutProvider>(
+                            context,
+                            listen: false,
+                          ).currentIndex =
+                          3
+                              : null;
+                          setState(() {
+                            isAddingToCart = false;
+                          });
+                        },
+                      ),
                     ],
                   ),
                 ],
               ),
-              Positioned(
-                top: 4,
-                right:
-                    Directionality.of(context) == TextDirection.ltr ? 4 : null,
-                left:
-                    Directionality.of(context) == TextDirection.rtl ? 4 : null,
-                child: Consumer<WishlistProvider>(
-                  builder: (context, provider, _) {
-                    final isInWishlist = provider.isProductInWishlist(
-                      widget.product.slug,
-                    );
-
-                    return InkWell(
-                      onTap: () {
-                        AppFunctions.toggleWishlistStatus(
-                          context,
-                          widget.product.slug,
-                        );
-                      },
-                      child: Card(
-                        elevation: 2,
-                        margin: EdgeInsets.zero,
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
-                        child: Padding(
-                          padding: const EdgeInsets.all(6.0),
-                          child: Icon(
-                            isInWishlist ? Icons.favorite : Icons.favorite_border,
-                            color: AppTheme.primaryColor,
-                            size: 22,
-                          ),
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ],
+            ),
           ),
-        ),
+          if (_showWishlistAnimation)
+            Center(
+              child: Lottie.asset(
+                AppAnimations.wishlistAnimation,
+                width: 180,
+                height: 200,
+                fit: BoxFit.cover,
+              ),
+            ),
+        ],
       ),
     );
   }

@@ -19,6 +19,7 @@ class AppAnimations {
   static const String animationPath = 'assets/animation';
 
   static const String loading = '$animationPath/loading.json';
+  static const String wishlistAnimation ='$animationPath/wishlist_animation.json';
 }
 
 class AppSvgs {

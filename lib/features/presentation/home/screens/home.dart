@@ -96,22 +96,22 @@ class _HomeScreenState extends State<HomeScreen> {
             spacing: 8,
             children: [
               TopHomeWidget(onShopNowTapped: _scrollToShopNow), // Pass the callback
-              Padding(
-                padding: const EdgeInsets.all(12.0),
+              const Padding(
+                padding: EdgeInsets.all(12.0),
                 child: Column(
                   spacing: 20,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const CategoriesWidget(),
-                    const PlatesWidgets(),
-                    const NewProductsWidget(),
-                    const SimpleBannerCarousel(),
-                    const BestSellingProductsWidget(),
-                    const SecondHomeImageWidget(),
-                    const FeaturedProductsWidget(),
-                    const TodayDealsProductsWidget(),
-                    const SummerDealsWidgets(),
-                    const AllProductsWidget(),
+                    CategoriesWidget(),
+                    PlatesWidgets(),
+                    NewProductsWidget(),
+                    SimpleBannerCarousel(),
+                    BestSellingProductsWidget(),
+                    SecondHomeImageWidget(),
+                    FeaturedProductsWidget(),
+                    TodayDealsProductsWidget(),
+                    SummerDealsWidgets(),
+                    AllProductsWidget(),
                   ],
                 ),
               ),
