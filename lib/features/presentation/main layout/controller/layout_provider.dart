@@ -11,6 +11,9 @@ class LayoutProvider extends ChangeNotifier {
   bool _isLoading = false;
   final bool _isDrawerOpen = false;
   late final List<Widget> _mainScreens;
+  
+  // Track if we're coming from a "Buy Now" action to optimize cart loading
+  bool _skipCartDataReload = false;
 
   // Initialize screens once
   LayoutProvider() {
@@ -27,14 +30,35 @@ class LayoutProvider extends ChangeNotifier {
   bool get isLoading => _isLoading;
   bool get isDrawerOpen => _isDrawerOpen;
   List<Widget> get mainScreens => _mainScreens;
+  bool get skipCartDataReload => _skipCartDataReload;
 
   void setCurrentIndex(int index) {
     _currentIndex = index;
+    
+    // Reset the flag when changing to any tab other than cart
+    if (index != 3) {
+      _skipCartDataReload = false;
+    }
+    
     notifyListeners();
   }
 
   set currentIndex(int index) {
     _currentIndex = index;
+    
+    // Reset the flag when changing to any tab other than cart
+    if (index != 3) {
+      _skipCartDataReload = false;
+    }
+    
+    notifyListeners();
+  }
+  
+  /// Navigate to cart tab after adding product via Buy Now
+  /// This will skip unnecessary data reloading
+  void navigateToCartFromBuyNow() {
+    _skipCartDataReload = true;
+    _currentIndex = 3; // Cart tab index
     notifyListeners();
   }
 
@@ -43,8 +67,6 @@ class LayoutProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-
-
   List<String> screenTitles = [
     'explore',
     'category',
@@ -52,5 +74,4 @@ class LayoutProvider extends ChangeNotifier {
     'cart',
     'profile',
   ];
-
 }

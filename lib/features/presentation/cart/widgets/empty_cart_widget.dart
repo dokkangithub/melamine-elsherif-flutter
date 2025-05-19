@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:melamine_elsherif/core/config/themes.dart/theme.dart';
 import 'package:melamine_elsherif/core/utils/constants/app_assets.dart';
 import 'package:melamine_elsherif/core/utils/extension/text_theme_extension.dart';
@@ -18,19 +19,20 @@ class EmptyCartWidget extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Card(
-            elevation: 4,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(200)),
-            child: const Padding(
-              padding: EdgeInsets.all(50.0),
-              child: CustomImage(
-                assetPath: AppSvgs.emptyCart,
-                height: 100,
-                width: 100,
-
-              ),
-            ),
-          ),
+          // Card(
+          //   elevation: 4,
+          //   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(200)),
+          //   child: const Padding(
+          //     padding: EdgeInsets.all(50.0),
+          //     child: CustomImage(
+          //       assetPath: AppSvgs.emptyCart,
+          //       height: 100,
+          //       width: 100,
+          //
+          //     ),
+          //   ),
+          // ),
+          Lottie.asset(AppAnimations.emptyCart,fit: BoxFit.cover,height: 250,width: 250),
           const SizedBox(height: 16),
           Text(
             'your_cart_is_empty'.tr(context),

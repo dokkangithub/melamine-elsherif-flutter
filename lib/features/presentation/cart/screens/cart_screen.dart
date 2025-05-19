@@ -7,6 +7,7 @@ import 'package:melamine_elsherif/core/utils/widgets/custom_form_field.dart';
 import 'package:melamine_elsherif/features/domain/cart/entities/cart.dart';
 import 'package:melamine_elsherif/features/presentation/cart/widgets/custom_product_in_cart.dart';
 import 'package:melamine_elsherif/features/presentation/cart/widgets/snappable_cart_item.dart';
+import 'package:melamine_elsherif/features/presentation/main%20layout/controller/layout_provider.dart';
 import 'package:provider/provider.dart';
 import '../../../../core/config/routes.dart/routes.dart';
 import '../../../../core/config/themes.dart/theme.dart';
@@ -17,7 +18,21 @@ import '../widgets/empty_cart_widget.dart';
 import '../widgets/shimmer/cart_screen_shimmer.dart';
 
 class CartScreen extends StatefulWidget {
-  const CartScreen({super.key});
+  final bool skipDataRefresh;
+  
+  const CartScreen({super.key, this.skipDataRefresh = false});
+
+  /// Factory constructor for direct navigation from Buy Now
+  /// that uses the existing cart data to minimize API calls
+  static Widget forBuyNow(BuildContext context) {
+    // Get the cart provider and check if we already have cart data
+    final cartProvider = Provider.of<CartProvider>(context, listen: false);
+    
+    // If we already have cart items, skip the reload
+    final skipDataRefresh = cartProvider.cartItems.isNotEmpty;
+    
+    return CartScreen(skipDataRefresh: skipDataRefresh);
+  }
 
   @override
   State<CartScreen> createState() => _CartScreenState();
@@ -30,12 +45,20 @@ class _CartScreenState extends State<CartScreen> {
   @override
   void initState() {
     super.initState();
-    Future.microtask(() {
-      final cartProvider = context.read<CartProvider>();
-      cartProvider.fetchCartItems();
-      cartProvider.fetchCartCount();
-      cartProvider.fetchCartSummary();
-    });
+    
+    // Check if we should skip data loading (either through the direct prop or from LayoutProvider)
+    final layoutProvider = Provider.of<LayoutProvider>(context, listen: false);
+    final shouldSkipRefresh = widget.skipDataRefresh || layoutProvider.skipCartDataReload;
+    
+    // Only fetch data if we're not skipping data refresh
+    if (!shouldSkipRefresh) {
+      Future.microtask(() {
+        final cartProvider = context.read<CartProvider>();
+        cartProvider.fetchCartItems();
+        cartProvider.fetchCartCount();
+        cartProvider.fetchCartSummary();
+      });
+    }
   }
 
   @override

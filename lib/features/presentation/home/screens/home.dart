@@ -59,7 +59,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
     categoryProvider.getCategories();
     homeProvider.initHomeData();
-    cartProvider.fetchCartCount();
     wishlistProvider.fetchWishlist();
   }
 

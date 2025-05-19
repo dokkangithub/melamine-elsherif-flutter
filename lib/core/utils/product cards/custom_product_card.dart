@@ -5,6 +5,7 @@ import 'package:melamine_elsherif/core/utils/extension/translate_extension.dart'
 import 'package:melamine_elsherif/core/utils/widgets/custom_button.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_cached_image.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_loading.dart';
+import 'package:melamine_elsherif/features/presentation/cart/screens/cart_screen.dart';
 import 'package:melamine_elsherif/features/presentation/main%20layout/controller/layout_provider.dart';
 import 'package:provider/provider.dart';
 import '../../../../features/domain/product/entities/product.dart';
@@ -14,6 +15,8 @@ import '../helpers.dart';
 import '../widgets/like_button.dart';
 import 'package:lottie/lottie.dart';
 import 'package:melamine_elsherif/core/utils/constants/app_assets.dart';
+import '../../../features/presentation/cart/controller/cart_provider.dart';
+import 'package:page_transition/page_transition.dart';
 
 class ProductCard extends StatefulWidget {
   final Product product;
@@ -78,7 +81,7 @@ class _ProductCardState extends State<ProductCard> {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(15),
                       child: AspectRatio(
-                        aspectRatio: 1.3,
+                        aspectRatio: 1.5,
                         child: CustomImage(
                           imageUrl: widget.product.thumbnailImage,
                           fit: BoxFit.cover,
@@ -196,6 +199,10 @@ class _ProductCardState extends State<ProductCard> {
                           setState(() {
                             isAddingToCart = true;
                           });
+                          
+                          // Store the current cart count
+                          final cartProvider = Provider.of<CartProvider>(context, listen: false);
+                          
                           await AppFunctions.addProductToCart(
                             context: context,
                             productId: widget.product.id,
@@ -203,22 +210,21 @@ class _ProductCardState extends State<ProductCard> {
                             productSlug: widget.product.slug,
                             hasVariation: widget.product.hasVariation,
                           );
-                          widget.isBuyNow!
-                              ? AppRoutes.navigateTo(
-                            context,
-                            AppRoutes.mainLayoutScreen,
-                          )
-                              : null;
-                          widget.isBuyNow!
-                              ? Provider.of<LayoutProvider>(
-                            context,
-                            listen: false,
-                          ).currentIndex =
-                          3
-                              : null;
+                          
                           setState(() {
                             isAddingToCart = false;
                           });
+                          
+                          // Only navigate if it's buy now and the product was added successfully
+                          if (widget.isBuyNow! && cartProvider.lastAddToCartSuccess) {
+                            if (context.mounted) {
+                              // Use the optimized navigation that sets a flag to avoid unnecessary API calls
+                              Provider.of<LayoutProvider>(
+                                context,
+                                listen: false,
+                              ).navigateToCartFromBuyNow();
+                            }
+                          }
                         },
                       ),
                     ],

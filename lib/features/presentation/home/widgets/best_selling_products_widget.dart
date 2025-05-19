@@ -60,7 +60,7 @@ class BestSellingProductsWidget extends StatelessWidget {
               },
             ),
             SizedBox(
-              height: 270,
+              height: 300,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
                 itemCount: filteredProducts.length,

@@ -44,32 +44,32 @@ class BottomNavBarWidget extends StatelessWidget {
             elevation: 0,
             items: [
               BottomNavigationBarItem(
-                icon: CustomImage(assetPath: AppSvgs.home_icon),
-                activeIcon: CustomImage(assetPath: AppSvgs.active_home_icon),
+                icon: const CustomImage(assetPath: AppSvgs.home_icon),
+                activeIcon: const CustomImage(assetPath: AppSvgs.active_home_icon),
                 label: 'home'.tr(context),
               ),
               BottomNavigationBarItem(
-                icon: CustomImage(assetPath: AppSvgs.category_icon),
-                activeIcon: CustomImage(
+                icon: const CustomImage(assetPath: AppSvgs.category_icon),
+                activeIcon: const CustomImage(
                   assetPath: AppSvgs.active_category_icon,
                 ),
                 label: 'category'.tr(context),
               ),
               BottomNavigationBarItem(
-                icon: CustomImage(assetPath: AppSvgs.wishlist_icon),
-                activeIcon: CustomImage(
+                icon: const CustomImage(assetPath: AppSvgs.wishlist_icon),
+                activeIcon: const CustomImage(
                   assetPath: AppSvgs.active_wishlist_icon,
                 ),
                 label: 'wishlist'.tr(context),
               ),
               BottomNavigationBarItem(
-                icon: CustomImage(assetPath: AppSvgs.cart_icon),
-                activeIcon: CustomImage(assetPath: AppSvgs.active_cart_icon),
+                icon: const CustomImage(assetPath: AppSvgs.cart_icon),
+                activeIcon: const CustomImage(assetPath: AppSvgs.active_cart_icon),
                 label: 'cart'.tr(context),
               ),
               BottomNavigationBarItem(
-                icon: CustomImage(assetPath: AppSvgs.profile_icon),
-                activeIcon: CustomImage(assetPath: AppSvgs.active_profile_icon),
+                icon: const CustomImage(assetPath: AppSvgs.profile_icon),
+                activeIcon: const CustomImage(assetPath: AppSvgs.active_profile_icon),
                 label: 'profile'.tr(context),
               ),
             ],
