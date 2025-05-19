@@ -3,6 +3,7 @@ import 'package:melamine_elsherif/core/config/routes.dart/routes.dart';
 import 'package:melamine_elsherif/core/config/themes.dart/theme.dart';
 import 'package:melamine_elsherif/core/utils/constants/app_strings.dart';
 import 'package:melamine_elsherif/core/utils/extension/translate_extension.dart';
+import 'package:melamine_elsherif/core/utils/widgets/cart_animation_overlay.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_dilog.dart';
 import 'package:melamine_elsherif/core/utils/widgets/cutsom_toast.dart';
 import 'package:provider/provider.dart';
@@ -49,35 +50,64 @@ abstract class AppFunctions {
     }
 
     try {
-      final cartMessage = await cartProvider.addToCart(
+      // Add product to cart and get the result
+      final result = await cartProvider.addToCart(
         productId,
         variant,
         quantity,
         color,
       );
 
-      // Manually refresh cart data
-      await cartProvider.fetchCartItems();
-      await cartProvider.fetchCartCount();
-      await cartProvider.fetchCartSummary();
-
-      if (context.mounted) {
-        showTopSnackBar(
-          Overlay.of(context),
-          CustomSnackBar.success(
-            message:
-            cartMessage ?? 'added_to_cart_successfully'.tr(context),
-            backgroundColor: AppTheme.primaryColor,
-          ),
-        );
-      }
-    } finally {
-      // Reset loading state if still on same product
+      // Reset loading state immediately after getting the API response
       if (context.mounted &&
           productProvider.selectedProduct?.slug == productSlug) {
         productProvider.setAddingToCartState(false);
       }
+
+      if (context.mounted) {
+        // Check if the operation was successful
+        final bool isSuccess = cartProvider.lastAddToCartSuccess;
+
+        // Show appropriate toast message
+        isSuccess
+            ? CustomToast.showToast(
+          message: result ?? 'added_to_cart_successfully'.tr(context),
+          type: ToastType.success
+        )
+            : CustomToast.showToast(
+          message: result ?? 'failed_to_add_to_cart'.tr(context),
+            type: ToastType.error
+        );
+        
+        // Show animation only if cart addition was successful
+        if (isSuccess) {
+          showCartAddedAnimation(context);
+          
+          // Refresh cart data asynchronously without waiting
+          _refreshCartDataAsync(cartProvider);
+        }
+      }
+    } catch (e) {
+      // Reset loading state in case of error
+      if (context.mounted &&
+          productProvider.selectedProduct?.slug == productSlug) {
+        productProvider.setAddingToCartState(false);
+      }
+      
+      if (context.mounted) {
+        CustomToast.showToast(
+          message: e.toString(),
+          type: ToastType.error
+        );
+      }
     }
+  }
+  
+  // Helper method to refresh cart data asynchronously
+  static Future<void> _refreshCartDataAsync(CartProvider cartProvider) async {
+    await cartProvider.fetchCartItems();
+    await cartProvider.fetchCartCount();
+    await cartProvider.fetchCartSummary();
   }
 
   static Future<void> toggleWishlistStatus(
@@ -90,18 +120,6 @@ abstract class AppFunctions {
       final provider = Provider.of<WishlistProvider>(context, listen: false);
 
       await provider.toggleWishlistStatus(context, slug);
-
-      if (context.mounted && provider.lastActionMessage != null) {
-        showTopSnackBar(
-          Overlay.of(context),
-          CustomSnackBar.success(
-            message: provider.lastActionMessage!,
-            backgroundColor: AppTheme.primaryColor,
-          ),
-        );
-
-      }
     }
   }
-
 }

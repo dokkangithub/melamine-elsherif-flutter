@@ -6,7 +6,7 @@ class AddToCartUseCase {
 
   AddToCartUseCase(this.repository);
 
-  Future<CartItem> call(int productId, String variant, int quantity,String color) async {
-    return await repository.addToCart(productId, variant, quantity,color);
+  Future<Map<String, dynamic>> call(int productId, String variant, int quantity, String color) async {
+    return await repository.addToCart(productId, variant, quantity, color);
   }
 }

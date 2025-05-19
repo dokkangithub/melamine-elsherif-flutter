@@ -36,9 +36,8 @@ class CartRepositoryImpl implements CartRepository {
   }
 
   @override
-  Future<CartItem> addToCart(int productId, String variant, int quantity, String color) async {
-    final model = await remoteDataSource.addToCart(productId, variant, quantity,color);
-    return model.toEntity();
+  Future<Map<String, dynamic>> addToCart(int productId, String variant, int quantity, String color) async {
+    return await remoteDataSource.addToCart(productId, variant, quantity, color);
   }
 
   @override

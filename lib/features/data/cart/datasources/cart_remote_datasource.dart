@@ -18,7 +18,7 @@ abstract class CartRemoteDataSource {
 
   Future<void> updateCartQuantities(String cartIds, String quantities);
 
-  Future<CartItemModel> addToCart(int productId, String variant, int quantity, String color);
+  Future<Map<String, dynamic>> addToCart(int productId, String variant, int quantity, String color);
 
   Future<CartSummaryModel> getCartSummary();
 
@@ -116,7 +116,7 @@ class CartRemoteDataSourceImpl implements CartRemoteDataSource {
   }
 
   @override
-  Future<CartItemModel> addToCart(
+  Future<Map<String, dynamic>> addToCart(
       int productId,
       String variant,
       int quantity,
@@ -134,27 +134,16 @@ class CartRemoteDataSourceImpl implements CartRemoteDataSource {
       },
     );
 
-    // First check if response.data is null
-    if (response.data == null) {
-      throw Exception('Failed to add to cart: Empty response');
-    }
-
     // Check for temp_user_id and save it if provided
-    if (response.data['temp_user_id'] != null) {
+    if (response.data != null && response.data['temp_user_id'] != null) {
       await SecureStorage().save(
         LocalStorageKey.tempUserId,
         response.data['temp_user_id'],
       );
     }
 
-    // Check if operation was successful
-    if (response.data['result'] == true && response.data['data'] != null) {
-      return CartItemModel.fromJson(response.data['data']);
-    }
-
-    // If we're here, it's an error response
-    final message = response.data['message'] ?? 'Failed to add to cart';
-    throw Exception(message);
+    // Return the full response data
+    return response.data;
   }
 
 }

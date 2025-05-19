@@ -36,6 +36,7 @@ class CartProvider extends ChangeNotifier {
   String cartError = '';
   ShippingUpdateResponse? shippingUpdateResponse;
   bool isUpdatingShipping = false;
+  bool lastAddToCartSuccess = false;
 
   Future<void> fetchCartItems() async {
     try {
@@ -112,13 +113,17 @@ class CartProvider extends ChangeNotifier {
 
   Future<String?> addToCart(int productId, String variant, int quantity, String color) async {
     try {
-      await addToCartUseCase(productId, variant, quantity, color);
-      await fetchCartItems();
-      await fetchCartCount();
-      await fetchCartSummary();
+      final response = await addToCartUseCase(productId, variant, quantity, color);
+      // Check the result field from the API response
+      lastAddToCartSuccess = response['result'] == true;
+      
+      // Return the message from the API response
+      final message = response['message'] as String?;
+      
       notifyListeners();
-      return null;
+      return message;
     } catch (e) {
+      lastAddToCartSuccess = false;
       cartError = e.toString();
       String errorMessage = cartError;
       if (cartError.contains('Exception: ')) {

@@ -18,12 +18,17 @@ class AppImages {
 class AppAnimations {
   static const String animationPath = 'assets/animation';
 
-  static const String loading = '$animationPath/loading.json';
   static const String wishlistAnimation ='$animationPath/wishlist_animation.json';
+  static const String successfullyCart ='$animationPath/successfully_cart.json';
+  static const String emptyCart ='$animationPath/empty_cart.json';
+
+
+
 }
 
 class AppSvgs {
   static const String svgPath = 'assets/svgs';
+
   static const String EyeOn = '$svgPath/EyeOn.svg';
   static const String EyeOff = '$svgPath/EyeOff.svg';
   static const String emptyCart = '$svgPath/emptyCart.svg';
