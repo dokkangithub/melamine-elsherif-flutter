@@ -3,6 +3,7 @@ import '../../../domain/product/entities/product.dart';
 import '../../../domain/product/repositories/product_repository.dart';
 import '../datasources/product_local_datasource.dart';
 import '../datasources/product_remote_datasource.dart';
+import '../models/flash_deal_response_model.dart';
 
 class ProductRepositoryImpl implements ProductRepository {
   final ProductRemoteDataSource remoteDataSource;
@@ -144,11 +145,11 @@ class ProductRepositoryImpl implements ProductRepository {
   }
 
   @override
-  Future<ProductsResponse> getFlashDealProducts( {bool needUpdate = false}) async {
+  Future<FlashDealResponseModel> getFlashDealProducts({bool needUpdate = false}) async {
     // If needUpdate is true, always go to remote
     if (needUpdate) {
       final response = await remoteDataSource.getFlashDealProducts();
-      await localDataSource.saveCollection('flash_deal_products', 1, response);
+      await localDataSource.saveFlashDealCollection('flash_deal_products', 1, response);
       return response;
     }
 
@@ -156,7 +157,7 @@ class ProductRepositoryImpl implements ProductRepository {
     final isCacheValid = await localDataSource.isCollectionCacheValid('flash_deal_products', 1);
 
     if (isCacheValid) {
-      final cachedData = await localDataSource.getCollectionFromCache('flash_deal_products', 1);
+      final cachedData = await localDataSource.getFlashDealsFromCache('flash_deal_products', 1);
       if (cachedData != null) {
         return cachedData;
       }
@@ -164,7 +165,7 @@ class ProductRepositoryImpl implements ProductRepository {
 
     // Get data from remote and cache it
     final remoteResponse = await remoteDataSource.getFlashDealProducts();
-    await localDataSource.saveCollection('flash_deal_products', 1, remoteResponse);
+    await localDataSource.saveFlashDealCollection('flash_deal_products', 1, remoteResponse);
     return remoteResponse;
   }
 

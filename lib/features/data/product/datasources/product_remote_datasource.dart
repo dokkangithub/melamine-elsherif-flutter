@@ -1,5 +1,6 @@
 import '../../../../core/api/api_provider.dart';
 import '../../../../core/utils/constants/app_endpoints.dart';
+import '../models/flash_deal_response_model.dart';
 import '../models/product_model.dart';
 import '../models/product_response_model.dart';
 
@@ -15,7 +16,7 @@ abstract class ProductRemoteDataSource {
 
   Future<ProductResponseModel> getTodaysDealProducts();
 
-  Future<ProductResponseModel> getFlashDealProducts();
+  Future<FlashDealResponseModel> getFlashDealProducts();
 
   Future<ProductResponseModel> getCategoryProducts(
     int id,
@@ -100,11 +101,11 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
   }
 
   @override
-  Future<ProductResponseModel> getFlashDealProducts() async {
+  Future<FlashDealResponseModel> getFlashDealProducts() async {
     final response = await apiProvider.get(
       LaravelApiEndPoint.flashDealProducts,
     );
-    return ProductResponseModel.fromJson(response.data);
+    return FlashDealResponseModel.fromJson(response.data);
   }
 
   @override

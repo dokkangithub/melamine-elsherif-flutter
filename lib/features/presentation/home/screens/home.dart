@@ -13,10 +13,10 @@ import '../../cart/controller/cart_provider.dart';
 import '../../slider/controller/provider.dart';
 import '../widgets/app_bar_widget.dart';
 import '../widgets/banners_widget.dart';
+import '../widgets/flash_deals_widget.dart';
 import '../widgets/plates_widget.dart';
 import '../widgets/second_home_image_widget.dart';
 import '../widgets/summers_deals_widget.dart';
-import '../widgets/flash_deals.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -59,6 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     categoryProvider.getCategories();
     homeProvider.initHomeData();
+    cartProvider.fetchCartCount();
     wishlistProvider.fetchWishlist();
   }
 
@@ -92,24 +93,32 @@ class _HomeScreenState extends State<HomeScreen> {
         body: SingleChildScrollView(
           controller: _scrollController, // Assign the controller here
           child: Column(
-            spacing: 8,
             children: [
-              TopHomeWidget(onShopNowTapped: _scrollToShopNow), // Pass the callback
+              TopHomeWidget(onShopNowTapped: _scrollToShopNow),
+              const SizedBox(height: 8),
               const Padding(
                 padding: EdgeInsets.all(12.0),
                 child: Column(
-                  spacing: 20,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     CategoriesWidget(),
+                    SizedBox(height: 20),
                     PlatesWidgets(),
+                    SizedBox(height: 20),
                     NewProductsWidget(),
+                    SizedBox(height: 20),
                     SimpleBannerCarousel(),
+                    SizedBox(height: 20),
                     BestSellingProductsWidget(),
+                    SizedBox(height: 20),
                     SecondHomeImageWidget(),
+                    SizedBox(height: 20),
                     FeaturedProductsWidget(),
-                    FlashProductsWidget(),
+                    SizedBox(height: 20),
+                    FlashDealsWidget(),
+                    SizedBox(height: 20),
                     SummerDealsWidgets(),
+                    SizedBox(height: 20),
                     AllProductsWidget(),
                   ],
                 ),

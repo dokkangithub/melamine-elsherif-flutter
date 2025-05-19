@@ -1,6 +1,7 @@
 import '../../../../core/database/objectbox_store.dart';
 import '../../../../core/database/timestamp_service.dart';
 import '../../../../objectbox.g.dart';
+import '../models/flash_deal_response_model.dart';
 import '../models/product_entity.dart';
 import '../models/product_model.dart';
 import '../models/product_response_model.dart';
@@ -9,6 +10,8 @@ abstract class ProductLocalDataSource {
   Future<bool> isCollectionCacheValid(String collectionType, int page);
   Future<ProductResponseModel?> getCollectionFromCache(String collectionType, int page);
   Future<void> saveCollection(String collectionType, int page, ProductResponseModel response);
+  Future<FlashDealResponseModel?> getFlashDealsFromCache(String collectionType, int page);
+  Future<void> saveFlashDealCollection(String collectionType, int page, FlashDealResponseModel response);
   Future<void> clearCache();
 }
 
@@ -211,6 +214,63 @@ class ProductLocalDataSourceImpl implements ProductLocalDataSource {
       // Save collection
       objectBox.collectionBox.put(collection);
     });
+  }
+
+  @override
+  Future<FlashDealResponseModel?> getFlashDealsFromCache(String collectionType, int page) async {
+    // For now, just return null as we're waiting for proper implementation
+    // This will force the app to always get data from remote source
+    return null;
+  }
+
+  @override
+  Future<void> saveFlashDealCollection(String collectionType, int page, FlashDealResponseModel response) async {
+    // Simple implementation that just saves products for now
+    // We'll extract all products from flash deals and save them
+    try {
+      final products = <ProductModel>[];
+      
+      // Extract products from all flash deals
+      for (final deal in response.data) {
+        // Add all products from this deal to our list
+        for (final product in deal.products) {
+          if (product is ProductModel) {
+            products.add(product);
+          }
+        }
+      }
+      
+      // If we have products, save them using the existing collection method
+      if (products.isNotEmpty) {
+        // Create a product response model from the extracted products
+        final productResponse = ProductResponseModel(
+          data: products,
+          links: const ProductResponseLinksModel(
+            first: '',
+            last: '',
+            prev: null,
+            next: '',
+          ),
+          meta: MetaModel(
+            currentPage: page,
+            from: 1,
+            lastPage: 1,
+            links: [],
+            path: '',
+            perPage: products.length,
+            to: products.length,
+            total: products.length,
+          ),
+          success: true,
+          status: 200,
+        );
+        
+        // Save using existing method
+        await saveCollection(collectionType, page, productResponse);
+      }
+    } catch (e) {
+      print('Error saving flash deals: $e');
+    }
   }
 
   @override

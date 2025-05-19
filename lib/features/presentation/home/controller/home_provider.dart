@@ -1,6 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:melamine_elsherif/core/services/widget_service.dart';
+import 'package:melamine_elsherif/features/data/product/models/flash_deal_response_model.dart';
+import 'package:melamine_elsherif/features/data/product/models/product_model.dart';
+import 'package:melamine_elsherif/features/domain/product/entities/flash_deal.dart';
 import 'package:melamine_elsherif/features/domain/product/usecases/get_all_products_use_case.dart';
+import 'package:melamine_elsherif/features/domain/product/usecases/get_featured_products_use_case.dart';
+import 'package:melamine_elsherif/features/domain/product/usecases/get_best_selling_products_use_case.dart';
+import 'package:melamine_elsherif/features/domain/product/usecases/get_new_added_products_use_case.dart';
+import 'package:melamine_elsherif/features/domain/product/usecases/get_todays_deal_products_use_case.dart';
+import 'package:melamine_elsherif/features/domain/product/usecases/get_flash_deal_products_use_case.dart';
+import 'package:melamine_elsherif/features/domain/product/usecases/get_category_products_use_case.dart';
+import 'package:melamine_elsherif/features/domain/product/usecases/get_sub_category_products_usecase.dart';
+import 'package:melamine_elsherif/features/domain/product/usecases/get_brand_products_use_case.dart';
+import 'package:melamine_elsherif/features/domain/product/usecases/get_digital_products_use_case.dart';
+import 'package:melamine_elsherif/features/domain/product/usecases/get_related_products_use_case.dart';
+import 'package:melamine_elsherif/features/domain/product/usecases/get_shop_products_use_case.dart';
+import 'package:melamine_elsherif/features/domain/product/usecases/get_top_from_this_seller_products_use_case.dart';
 import '../../../../core/utils/enums/loading_state.dart';
 import '../../../domain/product/entities/product.dart';
 import '../../../domain/product/usecases/get_best_selling_products_use_case.dart';
@@ -37,6 +52,7 @@ class HomeProvider extends ChangeNotifier {
   List<Product> bestSellingProducts = [];
   List<Product> newProducts = [];
   List<Product> todaysDealProducts = [];
+  List<FlashDeal> flashDeals = [];
   List<Product> flashDealProducts = [];
   List<Product> categoryProducts = [];
   List<Product> subCategoryProducts = [];
@@ -320,19 +336,35 @@ class HomeProvider extends ChangeNotifier {
     }
   }
 
-  // Flash Deal Products methods
+  // Updated Flash Deal Products method to handle the new structure
   Future<void> fetchFlashDealProducts({bool refresh = false}) async {
     try {
       flashDealProductsState = LoadingState.loading;
       notifyListeners();
 
       final response = await getFlashDealProductsUseCase(needUpdate: refresh);
-      flashDealProducts = response.data;
+
+
+      flashDeals = response.data;
+
+      final allProducts = <Product>[];
+      for (final deal in response.data) {
+        allProducts.addAll(deal.products);
+      }
+      flashDealProducts = allProducts;
+
 
       flashDealProductsState = LoadingState.loaded;
+      notifyListeners();
+      return;
+
     } catch (e) {
       flashDealProductsState = LoadingState.error;
       flashDealProductsError = e.toString();
+      debugPrint('Error fetching flash deal products: $e');
+      
+      flashDeals = [];
+      flashDealProducts = [];
     } finally {
       notifyListeners();
     }
