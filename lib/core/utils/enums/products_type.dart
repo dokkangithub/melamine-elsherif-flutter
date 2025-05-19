@@ -3,5 +3,5 @@ enum ProductType {
   bestSelling,
   featured,
   newArrival,
-  todaysDeal,
+  flashDeal,
 }

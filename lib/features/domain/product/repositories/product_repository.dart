@@ -6,7 +6,7 @@ abstract class ProductRepository {
   Future<ProductsResponse> getBestSellingProducts(int page, {bool needUpdate = false});
   Future<ProductsResponse> getNewAddedProducts(int page, {bool needUpdate = false});
   Future<ProductsResponse> getTodaysDealProducts({bool needUpdate = false});
-  Future<ProductsResponse> getFlashDealProducts(int id, {bool needUpdate = false});
+  Future<ProductsResponse> getFlashDealProducts({bool needUpdate = false});
   Future<ProductsResponse> getCategoryProducts(int id, int page, {String? name, bool needUpdate = false});
   Future<ProductsResponse> getSubCategoryProducts(int id, int page, {String? name, bool needUpdate = false});
   Future<ProductsResponse> getShopProducts(int id, int page, {String? name, bool needUpdate = false});

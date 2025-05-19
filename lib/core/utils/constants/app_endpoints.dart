@@ -13,7 +13,7 @@ class LaravelApiEndPoint {
   static const String bestSellerProducts = '/products/best-seller';
   static const String newAddedProducts = '/products/addlast';
   static const String todaysDealProducts = '/products/todays-deal';
-  static const String flashDealProducts = '/flash-deal-products/';
+  static const String flashDealProducts = '/flash-deals';
   static const String categoryProducts = '/products/category/';
   static const String subCategoryProducts = '/products/sub-category/';
   static const String shopProducts = '/products/seller/';

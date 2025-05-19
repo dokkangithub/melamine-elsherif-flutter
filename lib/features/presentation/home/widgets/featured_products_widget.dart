@@ -54,12 +54,12 @@ class FeaturedProductsWidget extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             SizedBox(
-              height: 240,
+              height: 300,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
                 itemCount: filteredProducts.length,
                 itemBuilder:
-                    (context, index) => ProductCard(product: filteredProducts[index]),
+                    (context, index) => ProductCard(product: filteredProducts[index],isOutlinedAddToCart: true),
               ),
             ),
           ],

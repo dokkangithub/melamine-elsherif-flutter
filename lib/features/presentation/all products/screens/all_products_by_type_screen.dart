@@ -43,7 +43,7 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
     ProductType.bestSelling: 'best_selling_products',
     ProductType.featured: 'feature_products',
     ProductType.newArrival: 'new_arrival_products',
-    ProductType.todaysDeal: 'today_deals',
+    ProductType.flashDeal: 'today_deals',
   };
 
   @override
@@ -112,7 +112,7 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
       case ProductType.newArrival:
         await provider.fetchNewProducts(refresh: refresh);
         break;
-      case ProductType.todaysDeal:
+      case ProductType.flashDeal:
         await provider.fetchTodaysDealProducts();
         break;
     }
@@ -128,7 +128,7 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
         return provider.hasMoreFeaturedProducts;
       case ProductType.newArrival:
         return provider.hasMoreNewProducts;
-      case ProductType.todaysDeal:
+      case ProductType.flashDeal:
         return false; // No pagination for today's deal
     }
   }
@@ -143,8 +143,8 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
         return provider.featuredProducts;
       case ProductType.newArrival:
         return provider.newProducts;
-      case ProductType.todaysDeal:
-        return provider.todaysDealProducts;
+      case ProductType.flashDeal:
+        return provider.flashDealProducts;
     }
   }
 
@@ -158,8 +158,8 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
         return provider.featuredProductsState;
       case ProductType.newArrival:
         return provider.newProductsState;
-      case ProductType.todaysDeal:
-        return provider.todaysDealProductsState;
+      case ProductType.flashDeal:
+        return provider.flashDealProductsState;
     }
   }
 
@@ -173,8 +173,8 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
         return provider.featuredProductsError;
       case ProductType.newArrival:
         return provider.newProductsError;
-      case ProductType.todaysDeal:
-        return provider.todaysDealProductsError;
+      case ProductType.flashDeal:
+        return provider.flashDealProductsError;
     }
   }
 

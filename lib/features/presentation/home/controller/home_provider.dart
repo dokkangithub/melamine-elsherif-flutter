@@ -126,6 +126,7 @@ class HomeProvider extends ChangeNotifier {
       fetchBestSellingProducts(),
       fetchNewProducts(),
       fetchTodaysDealProducts(),
+      fetchFlashDealProducts(),
     ]);
   }
 
@@ -320,12 +321,12 @@ class HomeProvider extends ChangeNotifier {
   }
 
   // Flash Deal Products methods
-  Future<void> fetchFlashDealProducts(int dealId,{bool refresh = false}) async {
+  Future<void> fetchFlashDealProducts({bool refresh = false}) async {
     try {
       flashDealProductsState = LoadingState.loading;
       notifyListeners();
 
-      final response = await getFlashDealProductsUseCase(dealId,needUpdate: refresh);
+      final response = await getFlashDealProductsUseCase(needUpdate: refresh);
       flashDealProducts = response.data;
 
       flashDealProductsState = LoadingState.loaded;
@@ -599,6 +600,7 @@ class HomeProvider extends ChangeNotifier {
     bestSellingProductsState = LoadingState.loading;
     newProductsState = LoadingState.loading;
     todaysDealProductsState = LoadingState.loading;
+    flashDealProductsState = LoadingState.loading;
     notifyListeners();
     
     // Refresh all data with refresh flag set to true
@@ -609,6 +611,7 @@ class HomeProvider extends ChangeNotifier {
       fetchNewProducts(refresh: true),
       fetchTodaysDealProducts(refresh: true),
       fetchDigitalProducts(refresh: true),
+      fetchFlashDealProducts(refresh: true)
     ]);
     
     // Notify about completed refresh

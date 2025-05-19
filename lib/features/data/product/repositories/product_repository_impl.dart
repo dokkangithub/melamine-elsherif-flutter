@@ -144,27 +144,27 @@ class ProductRepositoryImpl implements ProductRepository {
   }
 
   @override
-  Future<ProductsResponse> getFlashDealProducts(int id, {bool needUpdate = false}) async {
+  Future<ProductsResponse> getFlashDealProducts( {bool needUpdate = false}) async {
     // If needUpdate is true, always go to remote
     if (needUpdate) {
-      final response = await remoteDataSource.getFlashDealProducts(id);
-      await localDataSource.saveCollection('flash_deal_${id}_products', 1, response);
+      final response = await remoteDataSource.getFlashDealProducts();
+      await localDataSource.saveCollection('flash_deal_products', 1, response);
       return response;
     }
 
     // Check if cache is valid
-    final isCacheValid = await localDataSource.isCollectionCacheValid('flash_deal_${id}_products', 1);
+    final isCacheValid = await localDataSource.isCollectionCacheValid('flash_deal_products', 1);
 
     if (isCacheValid) {
-      final cachedData = await localDataSource.getCollectionFromCache('flash_deal_${id}_products', 1);
+      final cachedData = await localDataSource.getCollectionFromCache('flash_deal_products', 1);
       if (cachedData != null) {
         return cachedData;
       }
     }
 
     // Get data from remote and cache it
-    final remoteResponse = await remoteDataSource.getFlashDealProducts(id);
-    await localDataSource.saveCollection('flash_deal_${id}_products', 1, remoteResponse);
+    final remoteResponse = await remoteDataSource.getFlashDealProducts();
+    await localDataSource.saveCollection('flash_deal_products', 1, remoteResponse);
     return remoteResponse;
   }
 

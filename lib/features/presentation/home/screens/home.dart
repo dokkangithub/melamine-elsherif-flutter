@@ -16,7 +16,7 @@ import '../widgets/banners_widget.dart';
 import '../widgets/plates_widget.dart';
 import '../widgets/second_home_image_widget.dart';
 import '../widgets/summers_deals_widget.dart';
-import '../widgets/today_deals.dart';
+import '../widgets/flash_deals.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -108,7 +108,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     BestSellingProductsWidget(),
                     SecondHomeImageWidget(),
                     FeaturedProductsWidget(),
-                    TodayDealsProductsWidget(),
+                    FlashProductsWidget(),
                     SummerDealsWidgets(),
                     AllProductsWidget(),
                   ],

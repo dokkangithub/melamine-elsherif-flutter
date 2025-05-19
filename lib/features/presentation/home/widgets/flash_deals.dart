@@ -12,25 +12,25 @@ import 'package:melamine_elsherif/features/presentation/home/widgets/shimmer/new
 import '../../../../core/utils/product cards/custom_product_card.dart';
 import '../../../../core/utils/product cards/custom_product_row.dart';
 
-class TodayDealsProductsWidget extends StatelessWidget {
-  const TodayDealsProductsWidget({super.key});
+class FlashProductsWidget extends StatelessWidget {
+  const FlashProductsWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Consumer<HomeProvider>(
       builder: (context, homeProvider, child) {
         // Show shimmer while loading
-        if (homeProvider.todaysDealProductsState == LoadingState.loading) {
+        if (homeProvider.flashDealProductsState == LoadingState.loading) {
           return const NewProductsShimmer();
         }
 
         // Show error state
-        if (homeProvider.todaysDealProductsState == LoadingState.error) {
+        if (homeProvider.flashDealProductsState == LoadingState.error) {
           return _buildEmptyState(context, "no_products_available".tr(context));
         }
 
         // Get products data
-        final products = homeProvider.todaysDealProducts;
+        final products = homeProvider.flashDealProducts;
 
         // Show empty state if no products
         if (products.isEmpty) {
@@ -49,7 +49,7 @@ class TodayDealsProductsWidget extends StatelessWidget {
                   context,
                   AppRoutes.allProductsByTypeScreen,
                   arguments: {
-                    'productType': ProductType.todaysDeal,
+                    'productType': ProductType.flashDeal,
                     'title': 'today_deal_products'.tr(context),
                   },
                 );
@@ -62,7 +62,7 @@ class TodayDealsProductsWidget extends StatelessWidget {
                 scrollDirection: Axis.horizontal,
                 itemCount: filteredProducts.length,
                 itemBuilder:
-                    (context, index) => ProductCard(product: filteredProducts[index],isOutlinedAddToCart: true),
+                    (context, index) => ProductItemInRow1(product: filteredProducts[index]),
               ),
             ),
             ///carousal slider

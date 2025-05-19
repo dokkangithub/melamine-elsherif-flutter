@@ -15,7 +15,7 @@ abstract class ProductRemoteDataSource {
 
   Future<ProductResponseModel> getTodaysDealProducts();
 
-  Future<ProductResponseModel> getFlashDealProducts(int id);
+  Future<ProductResponseModel> getFlashDealProducts();
 
   Future<ProductResponseModel> getCategoryProducts(
     int id,
@@ -100,9 +100,9 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
   }
 
   @override
-  Future<ProductResponseModel> getFlashDealProducts(int id) async {
+  Future<ProductResponseModel> getFlashDealProducts() async {
     final response = await apiProvider.get(
-      '${LaravelApiEndPoint.flashDealProducts}$id',
+      LaravelApiEndPoint.flashDealProducts,
     );
     return ProductResponseModel.fromJson(response.data);
   }
