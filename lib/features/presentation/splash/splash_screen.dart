@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:melamine_elsherif/core/config/app_config.dart/app_config.dart';
 import 'package:melamine_elsherif/core/config/themes.dart/theme.dart';
 import 'package:melamine_elsherif/core/utils/constants/app_assets.dart';
@@ -252,25 +253,21 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
                         );
                       },
                     ),
-                    const SizedBox(height: 12),
+                    const SizedBox(height: 10),
                     
-                    // Expanding and Color-changing Divider
+                    // Animated Divider
                     AnimatedBuilder(
                       animation: _dividerController,
                       builder: (context, child) {
-                        return Container(
-                          width: 100 * _dividerScaleAnimation.value,
-                          height: 3,
-                          decoration: BoxDecoration(
-                            color: _dividerColorAnimation.value,
-                            borderRadius: BorderRadius.circular(1.5),
-                            boxShadow: [
-                              BoxShadow(
-                                color: AppTheme.accentColor.withOpacity(0.3 * _dividerScaleAnimation.value),
-                                blurRadius: 4,
-                                spreadRadius: 1,
-                              ),
-                            ],
+                        return Transform.scale(
+                          scaleX: _dividerScaleAnimation.value,
+                          child: Container(
+                            height: 2,
+                            width: 150,
+                            decoration: BoxDecoration(
+                              color: _dividerColorAnimation.value,
+                              borderRadius: BorderRadius.circular(1),
+                            ),
                           ),
                         );
                       },
@@ -279,24 +276,28 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
                 ),
               ),
             ),
-            
-            // Footer with delayed opacity animation
-            AnimatedBuilder(
-              animation: _dividerController,
-              builder: (context, child) {
-                return Opacity(
-                  opacity: _dividerController.value,
-                  child: Padding(
-                    padding: const EdgeInsets.only(bottom: 24.0),
-                    child: Text(
-                      '2025_powered_by_dokkan_agency'.tr(context),
-                      style: context.bodySmall.copyWith(
-                        color: Colors.grey[500],
-                      ),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: AnimatedTextKit(
+                animatedTexts: [
+                  ColorizeAnimatedText(
+                    '2025_powered_by_dokkan_agency'.tr(context),
+                    textStyle: context.displaySmall.copyWith(
+                      fontSize: 12,
+                      color: Colors.grey[600],
                     ),
+                    colors: [
+                      Colors.grey[600]!,
+                      AppTheme.primaryColor,
+                      AppTheme.accentColor,
+                      Colors.grey[600]!,
+                    ],
+                    textAlign: TextAlign.center,
+                    speed: const Duration(milliseconds: 300),
                   ),
-                );
-              },
+                ],
+                isRepeatingAnimation: false,
+              ),
             ),
           ],
         ),
