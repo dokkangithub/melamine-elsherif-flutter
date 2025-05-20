@@ -10,16 +10,21 @@ class LayoutProvider extends ChangeNotifier {
   int _currentIndex = 0;
   bool _isLoading = false;
   final bool _isDrawerOpen = false;
-  late final List<Widget> _mainScreens;
+  late List<Widget> _mainScreens;
   
   // Track if we're coming from a "Buy Now" action to optimize cart loading
   bool _skipCartDataReload = false;
 
   // Initialize screens once
   LayoutProvider() {
+    _updateMainScreens();
+  }
+
+  // Update screens based on current index
+  void _updateMainScreens() {
     _mainScreens = [
       const HomeScreen(),
-      const CategoryScreen(),
+      CategoryScreen(isActive: _currentIndex == 1),
       const WishlistScreen(),
       const CartScreen(),
       const ProfileScreen(),
@@ -40,6 +45,8 @@ class LayoutProvider extends ChangeNotifier {
       _skipCartDataReload = false;
     }
     
+    // Update screens with new active state
+    _updateMainScreens();
     notifyListeners();
   }
 
@@ -51,6 +58,8 @@ class LayoutProvider extends ChangeNotifier {
       _skipCartDataReload = false;
     }
     
+    // Update screens with new active state
+    _updateMainScreens();
     notifyListeners();
   }
   
@@ -59,6 +68,7 @@ class LayoutProvider extends ChangeNotifier {
   void navigateToCartFromBuyNow() {
     _skipCartDataReload = true;
     _currentIndex = 3; // Cart tab index
+    _updateMainScreens(); // Update screens with new active state
     notifyListeners();
   }
 

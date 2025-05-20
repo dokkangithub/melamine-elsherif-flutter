@@ -10,20 +10,33 @@ import '../widgets/shimmer/category_grid_shimmer.dart';
 
 class CategoryScreen extends StatefulWidget {
   final bool needRefresh;
+  final bool isActive;
 
-  const CategoryScreen({super.key, this.needRefresh = false});
+  const CategoryScreen({super.key, this.needRefresh = false, this.isActive = true});
 
   @override
   State<CategoryScreen> createState() => _CategoryScreenState();
 }
 
 class _CategoryScreenState extends State<CategoryScreen> {
+  final GlobalKey _animationKey = GlobalKey();
+  
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<CategoryProvider>().getCategories(needRefresh: widget.needRefresh);
     });
+  }
+
+  @override
+  void didUpdateWidget(CategoryScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.isActive && !oldWidget.isActive) {
+      setState(() {
+        // This will force the CategoryWidget to rebuild with a new key
+      });
+    }
   }
 
   Future<void> _refreshCategories() async {
@@ -37,12 +50,10 @@ class _CategoryScreenState extends State<CategoryScreen> {
         onRefresh: _refreshCategories,
         child: Consumer<CategoryProvider>(
           builder: (context, categoryProvider, child) {
-            // Show shimmer while loading
             if (categoryProvider.categoriesState == LoadingState.loading) {
               return const CategoryGridShimmer();
             }
 
-            // Show error if fetching failed
             if (categoryProvider.categoriesState == LoadingState.error) {
               return ErrorStateWidget(
                 message: 'couldnt_load_categories'.tr(context),
@@ -50,7 +61,6 @@ class _CategoryScreenState extends State<CategoryScreen> {
               );
             }
 
-            // Show categories if data is loaded
             if (categoryProvider.categoriesState == LoadingState.loaded &&
                 categoryProvider.categoriesResponse?.data != null) {
               final categories = categoryProvider.categoriesResponse!.data;
@@ -61,7 +71,11 @@ class _CategoryScreenState extends State<CategoryScreen> {
                 );
               }
 
-              return CategoryWidget(categories: categories);
+              return CategoryWidget(
+                key: _animationKey,
+                categories: categories,
+                triggerAnimation: widget.isActive,
+              );
             }
 
             return EmptyStateWidget(

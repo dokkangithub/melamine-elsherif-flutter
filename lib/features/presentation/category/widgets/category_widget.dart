@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:animate_do/animate_do.dart';
 import 'package:melamine_elsherif/core/config/app_config.dart/app_config.dart';
 import 'package:melamine_elsherif/core/config/routes.dart/routes.dart';
 import 'package:melamine_elsherif/core/config/themes.dart/theme.dart';
@@ -11,21 +12,40 @@ import 'package:melamine_elsherif/features/domain/category/entities/category.dar
 
 class CategoryWidget extends StatefulWidget {
   final List<Category> categories;
+  final bool triggerAnimation;
 
-  const CategoryWidget({super.key, required this.categories});
+  const CategoryWidget({
+    super.key, 
+    required this.categories,
+    this.triggerAnimation = true,
+  });
 
   @override
   State<CategoryWidget> createState() => _CategoryWidgetState();
 }
 
 class _CategoryWidgetState extends State<CategoryWidget> with SingleTickerProviderStateMixin {
+  bool _shouldAnimate = false;
+
   @override
   void initState() {
     super.initState();
+    _shouldAnimate = widget.triggerAnimation;
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarColor: Colors.white,
       statusBarIconBrightness: Brightness.dark,
     ));
+  }
+
+  @override
+  void didUpdateWidget(CategoryWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // When triggerAnimation changes, update animation state
+    if (widget.triggerAnimation != oldWidget.triggerAnimation) {
+      setState(() {
+        _shouldAnimate = widget.triggerAnimation;
+      });
+    }
   }
 
   @override
@@ -39,16 +59,33 @@ class _CategoryWidgetState extends State<CategoryWidget> with SingleTickerProvid
         backgroundColor: Colors.white,
         scrolledUnderElevation: 0,
         elevation: 0,
-        title: Text('categories'.tr(context),
-          style: context.headlineSmall!.copyWith(fontWeight: FontWeight.w700)
-        ),
+        title: _shouldAnimate 
+          ? FadeIn(
+              duration: const Duration(milliseconds: 500),
+              child: Text('categories'.tr(context),
+                style: context.headlineSmall!.copyWith(fontWeight: FontWeight.w700)
+              ),
+            )
+          : Text('categories'.tr(context),
+              style: context.headlineSmall!.copyWith(fontWeight: FontWeight.w700)
+            ),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.search, color: Colors.black),
-            onPressed: () {
-              AppRoutes.navigateTo(context, AppRoutes.searchScreen);
-            },
-          ),
+          _shouldAnimate 
+            ? FadeInRight(
+                duration: const Duration(milliseconds: 500),
+                child: IconButton(
+                  icon: const Icon(Icons.search, color: Colors.black),
+                  onPressed: () {
+                    AppRoutes.navigateTo(context, AppRoutes.searchScreen);
+                  },
+                ),
+              )
+            : IconButton(
+                icon: const Icon(Icons.search, color: Colors.black),
+                onPressed: () {
+                  AppRoutes.navigateTo(context, AppRoutes.searchScreen);
+                },
+              ),
         ],
       ),
       body: Column(
@@ -75,7 +112,12 @@ class _CategoryWidgetState extends State<CategoryWidget> with SingleTickerProvid
                       itemCount: widget.categories.length,
                       itemBuilder: (context, index) {
                         final category = widget.categories[index];
-                        return _buildCategoryCard(context, category);
+                        return _shouldAnimate 
+                          ? FadeInUp(
+                              duration: Duration(milliseconds: 400 + (index * 100)),
+                              child: _buildCategoryCard(context, category),
+                            )
+                          : _buildCategoryCard(context, category);
                       },
                     ),
                   ),
@@ -102,13 +144,20 @@ class _CategoryWidgetState extends State<CategoryWidget> with SingleTickerProvid
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
-          image: DecorationImage(
-            image: NetworkImage(category.banner ?? ''),
-            fit: BoxFit.cover,
-          ),
         ),
         child: Stack(
           children: [
+            // Image
+            ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: CustomImage(
+                imageUrl: category.banner ?? '',
+                width: double.infinity,
+                height: double.infinity,
+                fit: BoxFit.cover,
+                placeholderAsset: AppImages.placeHolder,
+              ),
+            ),
             // Gradient overlay
             Container(
               decoration: BoxDecoration(
@@ -118,7 +167,7 @@ class _CategoryWidgetState extends State<CategoryWidget> with SingleTickerProvid
                   end: Alignment.bottomCenter,
                   colors: [
                     Colors.transparent,
-                    Colors.black.withValues(alpha: 0.5),
+                    Colors.black.withValues(alpha: 0.6),
                   ],
                 ),
               ),
@@ -126,17 +175,25 @@ class _CategoryWidgetState extends State<CategoryWidget> with SingleTickerProvid
             // Text overlay
             Positioned(
               bottom: 16,
-              left: 4,
+              left: 12,
+              right: 12,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     category.name?.toUpperCase() ?? '',
-                    style: context.titleLarge!.copyWith(color: AppTheme.white,fontWeight: FontWeight.w700),
+                    style: context.titleMedium!.copyWith(
+                      color: AppTheme.white,
+                      fontWeight: FontWeight.w700
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  Text('${category.productCount ?? 0} ${'items'.tr(context)}',
-                    style: context.titleSmall!.copyWith(color: AppTheme.white),
-                  ),
+                  // const SizedBox(height: 4),
+                  // Text(
+                  //   '${category.productCount ?? 0} ${'items'.tr(context)}',
+                  //   style: context.titleSmall!.copyWith(color: AppTheme.white),
+                  // ),
                 ],
               ),
             ),
