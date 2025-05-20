@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:animate_do/animate_do.dart';
 import 'package:melamine_elsherif/core/config/themes.dart/theme.dart';
 import 'package:melamine_elsherif/core/utils/extension/text_style_extension.dart';
 import 'package:melamine_elsherif/core/utils/extension/translate_extension.dart';
@@ -21,12 +22,14 @@ class ProductCard extends StatefulWidget {
   final Product product;
   final bool? isOutlinedAddToCart;
   final bool? isBuyNow;
+  final int index;
 
   const ProductCard({
     super.key,
     required this.product,
     this.isOutlinedAddToCart = false,
     this.isBuyNow = false,
+    this.index = 0,
   });
 
   @override
@@ -55,188 +58,192 @@ class _ProductCardState extends State<ProductCard> {
   @override
   Widget build(BuildContext context) {
     print(widget.product.discountedPrice);
-    return InkWell(
-      splashColor: Colors.transparent,
-      highlightColor: Colors.transparent,
-      onTap: () {
-        AppRoutes.navigateTo(
-          context,
-          AppRoutes.productDetailScreen,
-          arguments: {'slug': widget.product.slug},
-        );
-      },
-      child: Stack(
-        alignment: Alignment.topCenter,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: SizedBox(
-              width: 180,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Product image
-                  Expanded(
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(15),
-                      child: AspectRatio(
-                        aspectRatio: 1.5,
-                        child: CustomImage(
-                          imageUrl: widget.product.thumbnailImage,
-                          fit: BoxFit.cover,
+    return FadeInUp(
+      delay: Duration(milliseconds: 100 + (widget.index * 50)),
+      duration: const Duration(milliseconds: 400),
+      child: InkWell(
+        splashColor: Colors.transparent,
+        highlightColor: Colors.transparent,
+        onTap: () {
+          AppRoutes.navigateTo(
+            context,
+            AppRoutes.productDetailScreen,
+            arguments: {'slug': widget.product.slug},
+          );
+        },
+        child: Stack(
+          alignment: Alignment.topCenter,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                width: 180,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Product image
+                    Expanded(
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(15),
+                        child: AspectRatio(
+                          aspectRatio: 1.5,
+                          child: CustomImage(
+                            imageUrl: widget.product.thumbnailImage,
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       ),
                     ),
-                  ),
 
-                  // Product details
-                  Column(
-                    spacing: 2,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(height: 4),
-                      // Rating stars
-                      !widget.isBuyNow!
-                          ? const SizedBox.shrink()
-                          : Row(
-                        children: List.generate(
-                          5,
-                              (index) => const Icon(
-                            Icons.star_outline_sharp,
-                            color: Colors.amber,
-                            size: 16,
-                          ),
-                        ),
-                      ),
-                      // Product name
-                      Text(
-                        widget.product.name,
-                        style: context.titleMedium.copyWith(
-                          color: AppTheme.black,
-                          fontWeight: FontWeight.w400,
-                        ),
-                        maxLines: 1,
-                        textAlign: Directionality.of(context) == TextDirection.rtl ? TextAlign.right : TextAlign.left,
-                      ),
-
-                      // Price and fav icon
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  widget.product.discountedPrice,
-                                  style: context.titleMedium.copyWith(
-                                    color: AppTheme.primaryColor,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                  textAlign: Directionality.of(context) == TextDirection.rtl ? TextAlign.right : TextAlign.left,
-                                ),
-                                Text(
-                                  widget.product.mainPrice,
-                                  style: context.bodyMedium.copyWith(
-                                      color: AppTheme.lightSecondaryTextColor,
-                                      fontWeight: FontWeight.w400,
-                                      decoration: TextDecoration.lineThrough
-                                  ),
-                                  textAlign: Directionality.of(context) == TextDirection.rtl ? TextAlign.right : TextAlign.left,
-                                ),
-                              ],
+                    // Product details
+                    Column(
+                      spacing: 2,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(height: 4),
+                        // Rating stars
+                        !widget.isBuyNow!
+                            ? const SizedBox.shrink()
+                            : Row(
+                          children: List.generate(
+                            5,
+                                (index) => const Icon(
+                              Icons.star_outline_sharp,
+                              color: Colors.amber,
+                              size: 16,
                             ),
                           ),
-                          Consumer<WishlistProvider>(
-                            builder: (context, provider, _) {
-                              final isInWishlist = provider.isProductInWishlist(
-                                widget.product.slug,
-                              );
-
-                              return LikeButton(
-                                isFavorite: isInWishlist,
-                                iconColor: AppTheme.primaryColor,
-                                onPressed: () async {
-                                  (AppStrings.token == null || isInWishlist) ?null:_triggerWishlistAnimation();
-                                  await AppFunctions.toggleWishlistStatus(
-                                    context,
-                                    widget.product.slug,
-                                  );
-                                  final nowInWishlist = Provider.of<WishlistProvider>(context, listen: false)
-                                      .isProductInWishlist(widget.product.slug);
-                                },
-                              );
-                            },
-                          ),
-                        ],
-                      ),
-
-                      isAddingToCart
-                          ? const Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [CustomLoadingWidget()],
-                      )
-                          : CustomButton(
-                        text:
-                        widget.isBuyNow!
-                            ? 'buy_now'.tr(context)
-                            : 'add_to_cart'.tr(context),
-                        textStyle: context.titleSmall.copyWith(
-                            color:
-                            widget.isOutlinedAddToCart!
-                                ? AppTheme.primaryColor
-                                : AppTheme.white,
-                            fontWeight: FontWeight.w600
                         ),
-                        fullWidth: true,
-                        isOutlined: widget.isOutlinedAddToCart!,
-                        padding: const EdgeInsets.all(8),
-                        onPressed: () async {
-                          setState(() {
-                            isAddingToCart = true;
-                          });
+                        // Product name
+                        Text(
+                          widget.product.name,
+                          style: context.titleMedium.copyWith(
+                            color: AppTheme.black,
+                            fontWeight: FontWeight.w400,
+                          ),
+                          maxLines: 1,
+                          textAlign: Directionality.of(context) == TextDirection.rtl ? TextAlign.right : TextAlign.left,
+                        ),
 
-                          // Store the current cart count
-                          final cartProvider = Provider.of<CartProvider>(context, listen: false);
+                        // Price and fav icon
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    widget.product.discountedPrice,
+                                    style: context.titleMedium.copyWith(
+                                      color: AppTheme.primaryColor,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                    textAlign: Directionality.of(context) == TextDirection.rtl ? TextAlign.right : TextAlign.left,
+                                  ),
+                                  Text(
+                                    widget.product.mainPrice,
+                                    style: context.bodyMedium.copyWith(
+                                        color: AppTheme.lightSecondaryTextColor,
+                                        fontWeight: FontWeight.w400,
+                                        decoration: TextDecoration.lineThrough
+                                    ),
+                                    textAlign: Directionality.of(context) == TextDirection.rtl ? TextAlign.right : TextAlign.left,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Consumer<WishlistProvider>(
+                              builder: (context, provider, _) {
+                                final isInWishlist = provider.isProductInWishlist(
+                                  widget.product.slug,
+                                );
 
-                          await AppFunctions.addProductToCart(
-                            context: context,
-                            productId: widget.product.id,
-                            productName: widget.product.name,
-                            productSlug: widget.product.slug,
-                            hasVariation: widget.product.hasVariation,
-                          );
+                                return LikeButton(
+                                  isFavorite: isInWishlist,
+                                  iconColor: AppTheme.primaryColor,
+                                  onPressed: () async {
+                                    (AppStrings.token == null || isInWishlist) ?null:_triggerWishlistAnimation();
+                                    await AppFunctions.toggleWishlistStatus(
+                                      context,
+                                      widget.product.slug,
+                                    );
+                                    final nowInWishlist = Provider.of<WishlistProvider>(context, listen: false)
+                                        .isProductInWishlist(widget.product.slug);
+                                  },
+                                );
+                              },
+                            ),
+                          ],
+                        ),
 
-                          setState(() {
-                            isAddingToCart = false;
-                          });
+                        isAddingToCart
+                            ? const Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [CustomLoadingWidget()],
+                        )
+                            : CustomButton(
+                          text:
+                          widget.isBuyNow!
+                              ? 'buy_now'.tr(context)
+                              : 'add_to_cart'.tr(context),
+                          textStyle: context.titleSmall.copyWith(
+                              color:
+                              widget.isOutlinedAddToCart!
+                                  ? AppTheme.primaryColor
+                                  : AppTheme.white,
+                              fontWeight: FontWeight.w600
+                          ),
+                          fullWidth: true,
+                          isOutlined: widget.isOutlinedAddToCart!,
+                          padding: const EdgeInsets.all(8),
+                          onPressed: () async {
+                            setState(() {
+                              isAddingToCart = true;
+                            });
 
-                          // Only navigate if it's buy now and the product was added successfully
-                          if (widget.isBuyNow! && cartProvider.lastAddToCartSuccess) {
-                            if (context.mounted) {
-                              // Use the optimized navigation that sets a flag to avoid unnecessary API calls
-                              Provider.of<LayoutProvider>(
-                                context,
-                                listen: false,
-                              ).navigateToCartFromBuyNow();
+                            // Store the current cart count
+                            final cartProvider = Provider.of<CartProvider>(context, listen: false);
+
+                            await AppFunctions.addProductToCart(
+                              context: context,
+                              productId: widget.product.id,
+                              productName: widget.product.name,
+                              productSlug: widget.product.slug,
+                              hasVariation: widget.product.hasVariation,
+                            );
+
+                            setState(() {
+                              isAddingToCart = false;
+                            });
+
+                            // Only navigate if it's buy now and the product was added successfully
+                            if (widget.isBuyNow! && cartProvider.lastAddToCartSuccess) {
+                              if (context.mounted) {
+                                // Use the optimized navigation that sets a flag to avoid unnecessary API calls
+                                Provider.of<LayoutProvider>(
+                                  context,
+                                  listen: false,
+                                ).navigateToCartFromBuyNow();
+                              }
                             }
-                          }
-                        },
-                      ),
-                    ],
-                  ),
-                ],
+                          },
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-          if (_showWishlistAnimation)
-            Lottie.asset(
-              AppAnimations.wishlistAnimation,
-              width: 200,
-              height: 200,
-              fit: BoxFit.cover,
-            ),
-        ],
+            if (_showWishlistAnimation)
+              Lottie.asset(
+                AppAnimations.wishlistAnimation,
+                width: 200,
+                height: 200,
+                fit: BoxFit.cover,
+              ),
+          ],
+        ),
       ),
     );
   }

@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:animate_do/animate_do.dart';
 import 'package:melamine_elsherif/core/utils/extension/text_theme_extension.dart';
 import 'package:melamine_elsherif/core/utils/extension/translate_extension.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_button.dart';
-import 'package:melamine_elsherif/core/utils/widgets/custom_cached_image.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_form_field.dart';
 import 'package:melamine_elsherif/features/domain/cart/entities/cart.dart';
-import 'package:melamine_elsherif/features/presentation/cart/widgets/custom_product_in_cart.dart';
 import 'package:melamine_elsherif/features/presentation/cart/widgets/snappable_cart_item.dart';
 import 'package:melamine_elsherif/features/presentation/main%20layout/controller/layout_provider.dart';
 import 'package:provider/provider.dart';
@@ -19,8 +18,13 @@ import '../widgets/shimmer/cart_screen_shimmer.dart';
 
 class CartScreen extends StatefulWidget {
   final bool skipDataRefresh;
+  final bool isActive;
   
-  const CartScreen({super.key, this.skipDataRefresh = false});
+  const CartScreen({
+    super.key, 
+    this.skipDataRefresh = false,
+    this.isActive = false
+  });
 
   /// Factory constructor for direct navigation from Buy Now
   /// that uses the existing cart data to minimize API calls
@@ -40,11 +44,14 @@ class CartScreen extends StatefulWidget {
 
 class _CartScreenState extends State<CartScreen> {
   final TextEditingController _promoCodeController = TextEditingController();
+  final GlobalKey _animationKey = GlobalKey();
   bool _isApplyingCoupon = false;
+  bool _shouldAnimate = false;
 
   @override
   void initState() {
     super.initState();
+    _shouldAnimate = widget.isActive;
     
     // Check if we should skip data loading (either through the direct prop or from LayoutProvider)
     final layoutProvider = Provider.of<LayoutProvider>(context, listen: false);
@@ -57,6 +64,25 @@ class _CartScreenState extends State<CartScreen> {
         cartProvider.fetchCartItems();
         cartProvider.fetchCartCount();
         cartProvider.fetchCartSummary();
+      });
+    }
+  }
+  
+  @override
+  void didUpdateWidget(CartScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    
+    // Reset animation state when screen becomes inactive
+    if (!widget.isActive && oldWidget.isActive) {
+      setState(() {
+        _shouldAnimate = false;
+      });
+    }
+    
+    // Trigger animation when screen becomes active
+    if (widget.isActive && !oldWidget.isActive) {
+      setState(() {
+        _shouldAnimate = true;
       });
     }
   }
@@ -148,9 +174,17 @@ class _CartScreenState extends State<CartScreen> {
         title: Consumer<CartProvider>(
           builder: (context, cartProvider, _) {
             final itemCount = cartProvider.cartItems.length;
-            return Text('${'shopping_cart'.tr(context)} ($itemCount ${'items'.tr(context)})',
-              style: context.titleLarge!.copyWith(fontWeight: FontWeight.w700),
-            );
+            return _shouldAnimate
+              ? FadeIn(
+                  key: ValueKey('animated-title-${DateTime.now().millisecondsSinceEpoch}'),
+                  duration: const Duration(milliseconds: 400),
+                  child: Text('${'shopping_cart'.tr(context)} ($itemCount ${'items'.tr(context)})',
+                    style: context.titleLarge!.copyWith(fontWeight: FontWeight.w700),
+                  ),
+                )
+              : Text('${'shopping_cart'.tr(context)} ($itemCount ${'items'.tr(context)})',
+                  style: context.titleLarge!.copyWith(fontWeight: FontWeight.w700),
+                );
           },
         ),
       ),
@@ -161,10 +195,22 @@ class _CartScreenState extends State<CartScreen> {
           }
 
           if (cartProvider.cartItems.isEmpty) {
-            return const EmptyCartWidget();
+            return _shouldAnimate
+              ? FadeIn(
+                  key: ValueKey('animated-empty-${DateTime.now().millisecondsSinceEpoch}'),
+                  duration: const Duration(milliseconds: 600),
+                  child: const EmptyCartWidget(),
+                )
+              : const EmptyCartWidget();
           }
 
+          // Use a unique key when animation should occur
+          final contentKey = _shouldAnimate 
+            ? ValueKey('animated-content-${DateTime.now().millisecondsSinceEpoch}') 
+            : _animationKey;
+
           return Column(
+            key: contentKey,
             children: [
               // Cart items in an expandable list
               Expanded(
@@ -178,223 +224,44 @@ class _CartScreenState extends State<CartScreen> {
                   itemCount: cartProvider.cartItems.length,
                   itemBuilder: (context, index) {
                     final CartItem item = cartProvider.cartItems[index];
-                    return SnappableCartItem(
-                      item: item,
-                      index: index,
-                      onQuantityChanged: (int quntity) {
-                        _updateQuantity(cartProvider, item.id, quntity);
-                      },
-                      onDelete: (itemId) {
-                        cartProvider.deleteCartItem(itemId);
-                      },
-                    );
+                    
+                    return _shouldAnimate
+                      ? FadeInUp(
+                          delay: Duration(milliseconds: 50 * index),
+                          duration: const Duration(milliseconds: 400),
+                          child: SnappableCartItem(
+                            item: item,
+                            index: index,
+                            onQuantityChanged: (int quantity) {
+                              _updateQuantity(cartProvider, item.id, quantity);
+                            },
+                            onDelete: (itemId) {
+                              cartProvider.deleteCartItem(itemId);
+                            },
+                          ),
+                        )
+                      : SnappableCartItem(
+                          item: item,
+                          index: index,
+                          onQuantityChanged: (int quantity) {
+                            _updateQuantity(cartProvider, item.id, quantity);
+                          },
+                          onDelete: (itemId) {
+                            cartProvider.deleteCartItem(itemId);
+                          },
+                        );
                   },
                 ),
               ),
 
-              // Bottom sections container with a scrollable area if needed
-              Column(
-                children: [
-                  // Order Summary
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const SizedBox(height: 15),
-                        Text('order_summary'.tr(context),
-                          style: context.titleMedium!.copyWith(
-                            fontWeight: FontWeight.w800,
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        _buildSummaryRow(
-                          'subtotal'.tr(context),
-                          '${((cartProvider.cartSummary?.subtotal ?? 0.0) - (cartProvider.cartSummary?.discount ?? 0.0)).toStringAsFixed(2)}'
-                              ' ${cartProvider.cartSummary?.currencySymbol ?? ''}',
-                        ),
-
-                        _buildSummaryRow(
-                          'shipping_fee'.tr(context),
-                          '${cartProvider.cartSummary?.shippingCost.toStringAsFixed(2) ?? '0.00'} ${cartProvider.cartSummary?.currencySymbol ?? ''}',
-                        ),
-                        if (cartProvider.cartSummary?.couponApplied == true)
-                          _buildSummaryRow(
-                            'discount'.tr(context),
-                            '- ${cartProvider.cartSummary?.discount.toStringAsFixed(2) ?? '0.00'} ${cartProvider.cartSummary?.currencySymbol ?? ''}',
-                            textColor: AppTheme.errorColor,
-                          ),
-                        _buildSummaryRow(
-                          'total'.tr(context),
-                          '${cartProvider.cartSummary?.total.toStringAsFixed(2) ?? '0.00'} ${cartProvider.cartSummary?.currencySymbol ?? ''}',
-                          isBold: true,
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  // Discount Coupon Section
-                  Consumer<CouponProvider>(
-                    builder: (context, couponProvider, _) {
-                      final bool hasCoupon =
-                          couponProvider.appliedCoupon?.success == true ||
-                          cartProvider.cartSummary?.couponApplied == true;
-                      final String? couponCode =
-                          couponProvider.appliedCoupon?.couponCode ??
-                          cartProvider.cartSummary?.couponCode;
-
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 8,
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            if (hasCoupon && couponCode != null)
-                              // Applied coupon UI
-                              Container(
-                                padding: const EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                  color: Colors.green.shade50,
-                                  borderRadius: BorderRadius.circular(8),
-                                  border: Border.all(
-                                    color: Colors.green.shade200,
-                                  ),
-                                ),
-                                child: Row(
-                                  children: [
-                                    const Icon(
-                                      Icons.check_circle,
-                                      color: Colors.green,
-                                    ),
-                                    const SizedBox(width: 8),
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            couponCode,
-                                            style: context.titleMedium,
-                                          ),
-                                          Text(
-                                            'coupon_applied'.tr(context),
-                                            style: context.titleSmall,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    TextButton(
-                                      onPressed:
-                                          _isApplyingCoupon
-                                              ? null
-                                              : () =>
-                                                  _removeCoupon(couponProvider),
-                                      style: TextButton.styleFrom(
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 8,
-                                        ),
-                                        foregroundColor: Colors.black87,
-                                      ),
-                                      child: Text(
-                                        'remove'.tr(context),
-                                        style: context.titleSmall!.copyWith(
-                                          color: AppTheme.primaryColor,
-                                          fontWeight: FontWeight.w800,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              )
-                            else
-                              // Coupon input
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: CustomTextFormField(
-                                      controller: _promoCodeController,
-                                      hint: 'enter_promo_code'.tr(context),
-                                    ),
-                                  ),
-                                  const SizedBox(width: 10),
-                                  TextButton(
-                                    onPressed:
-                                        _isApplyingCoupon
-                                            ? null
-                                            : () =>
-                                                _applyCoupon(couponProvider),
-                                    child:
-                                        _isApplyingCoupon
-                                            ? const SizedBox(
-                                              width: 20,
-                                              height: 20,
-                                              child: CircularProgressIndicator(
-                                                strokeWidth: 2,
-                                                valueColor:
-                                                    AlwaysStoppedAnimation<
-                                                      Color
-                                                    >(Colors.white),
-                                              ),
-                                            )
-                                            : Text(
-                                              'apply'.tr(context),
-                                              style: context.titleMedium!
-                                                  .copyWith(
-                                                    color:
-                                                        AppTheme.primaryColor,
-                                                    fontWeight: FontWeight.w800,
-                                                  ),
-                                            ),
-                                  ),
-                                ],
-                              ),
-                          ],
-                        ),
-                      );
-                    },
-                  ),
-
-                  // Checkout Button
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 18,
-                      vertical: 8,
-                    ),
-                    child: CustomButton(
-                      text: 'proceed_to_checkout'.tr(context),
-                      isGradient: true,
-                      fullWidth: true,
-                      borderRadius: 10,
-                      padding: const EdgeInsets.all(2),
-                      onPressed: () {
-                        AppRoutes.navigateTo(
-                          context,
-                          AppRoutes.newCheckoutScreen,
-                        );
-                      },
-                    ),
-                  ),
-
-                  // Secure Checkout Text
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.lock_outline,
-                          size: 14,
-                          color: Colors.grey[600],
-                        ),
-                        const SizedBox(width: 6),
-                        Text('secure_checkout'.tr(context), style: context.bodySmall),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
+              // Bottom sections - animate only once
+              _shouldAnimate
+                ? FadeInUp(
+                    delay: const Duration(milliseconds: 300),
+                    duration: const Duration(milliseconds: 500),
+                    child: _buildCartSummary(context, cartProvider),
+                  )
+                : _buildCartSummary(context, cartProvider),
             ],
           );
         },
@@ -418,6 +285,211 @@ class _CartScreenState extends State<CartScreen> {
 
     // Update cart quantities
     cartProvider.updateCartQuantities(cartIds, quantitiesStr);
+  }
+
+  Widget _buildCartSummary(BuildContext context, CartProvider cartProvider) {
+    return Column(
+      children: [
+        // Order Summary
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 15),
+              Text('order_summary'.tr(context),
+                style: context.titleMedium!.copyWith(
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+              const SizedBox(height: 8),
+              _buildSummaryRow(
+                'subtotal'.tr(context),
+                '${((cartProvider.cartSummary?.subtotal ?? 0.0) - (cartProvider.cartSummary?.discount ?? 0.0)).toStringAsFixed(2)}'
+                    ' ${cartProvider.cartSummary?.currencySymbol ?? ''}',
+              ),
+
+              _buildSummaryRow(
+                'shipping_fee'.tr(context),
+                '${cartProvider.cartSummary?.shippingCost.toStringAsFixed(2) ?? '0.00'} ${cartProvider.cartSummary?.currencySymbol ?? ''}',
+              ),
+              if (cartProvider.cartSummary?.couponApplied == true)
+                _buildSummaryRow(
+                  'discount'.tr(context),
+                  '- ${cartProvider.cartSummary?.discount.toStringAsFixed(2) ?? '0.00'} ${cartProvider.cartSummary?.currencySymbol ?? ''}',
+                  textColor: AppTheme.errorColor,
+                ),
+              _buildSummaryRow(
+                'total'.tr(context),
+                '${cartProvider.cartSummary?.total.toStringAsFixed(2) ?? '0.00'} ${cartProvider.cartSummary?.currencySymbol ?? ''}',
+                isBold: true,
+              ),
+            ],
+          ),
+        ),
+
+        // Discount Coupon Section
+        Consumer<CouponProvider>(
+          builder: (context, couponProvider, _) {
+            final bool hasCoupon =
+                couponProvider.appliedCoupon?.success == true ||
+                cartProvider.cartSummary?.couponApplied == true;
+            final String? couponCode =
+                couponProvider.appliedCoupon?.couponCode ??
+                cartProvider.cartSummary?.couponCode;
+
+            return Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 8,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (hasCoupon && couponCode != null)
+                    // Applied coupon UI
+                    Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: Colors.green.shade50,
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(
+                          color: Colors.green.shade200,
+                        ),
+                      ),
+                      child: Row(
+                        children: [
+                          const Icon(
+                            Icons.check_circle,
+                            color: Colors.green,
+                          ),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment:
+                                  CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  couponCode,
+                                  style: context.titleMedium,
+                                ),
+                                Text(
+                                  'coupon_applied'.tr(context),
+                                  style: context.titleSmall,
+                                ),
+                              ],
+                            ),
+                          ),
+                          TextButton(
+                            onPressed:
+                                _isApplyingCoupon
+                                    ? null
+                                    : () =>
+                                        _removeCoupon(couponProvider),
+                            style: TextButton.styleFrom(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8,
+                              ),
+                              foregroundColor: Colors.black87,
+                            ),
+                            child: Text(
+                              'remove'.tr(context),
+                              style: context.titleSmall!.copyWith(
+                                color: AppTheme.primaryColor,
+                                fontWeight: FontWeight.w800,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  else
+                    // Coupon input
+                    Row(
+                      children: [
+                        Expanded(
+                          child: CustomTextFormField(
+                            controller: _promoCodeController,
+                            hint: 'enter_promo_code'.tr(context),
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        TextButton(
+                          onPressed:
+                              _isApplyingCoupon
+                                  ? null
+                                  : () =>
+                                      _applyCoupon(couponProvider),
+                          child:
+                              _isApplyingCoupon
+                                  ? const SizedBox(
+                                    width: 20,
+                                    height: 20,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                      valueColor:
+                                          AlwaysStoppedAnimation<
+                                            Color
+                                          >(Colors.white),
+                                    ),
+                                  )
+                                  : Text(
+                                    'apply'.tr(context),
+                                    style: context.titleMedium!
+                                        .copyWith(
+                                          color:
+                                              AppTheme.primaryColor,
+                                          fontWeight: FontWeight.w800,
+                                        ),
+                                  ),
+                        ),
+                      ],
+                    ),
+                ],
+              ),
+            );
+          },
+        ),
+
+        // Checkout Button
+        Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 18,
+            vertical: 8,
+          ),
+          child: CustomButton(
+            text: 'proceed_to_checkout'.tr(context),
+            isGradient: true,
+            fullWidth: true,
+            borderRadius: 10,
+            padding: const EdgeInsets.all(2),
+            onPressed: () {
+              AppRoutes.navigateTo(
+                context,
+                AppRoutes.newCheckoutScreen,
+              );
+            },
+          ),
+        ),
+
+        // Secure Checkout Text
+        Padding(
+          padding: const EdgeInsets.only(bottom: 10),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.lock_outline,
+                size: 14,
+                color: Colors.grey[600],
+              ),
+              const SizedBox(width: 6),
+              Text('secure_checkout'.tr(context), style: context.bodySmall),
+            ],
+          ),
+        ),
+      ],
+    );
   }
 
   Widget _buildSummaryRow(

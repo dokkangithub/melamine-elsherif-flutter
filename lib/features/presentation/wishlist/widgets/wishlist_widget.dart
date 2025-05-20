@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:animate_do/animate_do.dart';
 import 'package:melamine_elsherif/core/utils/extension/text_style_extension.dart';
 import 'package:melamine_elsherif/core/utils/helpers.dart';
 import 'package:melamine_elsherif/core/utils/widgets/cutsom_toast.dart';
@@ -14,10 +15,38 @@ import '../../../../core/utils/widgets/custom_cached_image.dart';
 import '../controller/wishlist_provider.dart';
 import 'empty_wishlist_widget.dart';
 
-class WishlistWidget extends StatelessWidget {
+class WishlistWidget extends StatefulWidget {
   final WishlistProvider provider;
+  final bool triggerAnimation;
 
-  const WishlistWidget({super.key, required this.provider});
+  const WishlistWidget({
+    super.key, 
+    required this.provider, 
+    this.triggerAnimation = true
+  });
+
+  @override
+  State<WishlistWidget> createState() => _WishlistWidgetState();
+}
+
+class _WishlistWidgetState extends State<WishlistWidget> {
+  bool _shouldAnimate = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _shouldAnimate = widget.triggerAnimation;
+  }
+  
+  @override
+  void didUpdateWidget(WishlistWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.triggerAnimation != oldWidget.triggerAnimation) {
+      setState(() {
+        _shouldAnimate = widget.triggerAnimation;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,80 +55,62 @@ class WishlistWidget extends StatelessWidget {
         backgroundColor: Colors.white,
         elevation: 0,
         scrolledUnderElevation: 0,
-        title: Text(
-          'my_wishlist'.tr(context),
-          style: context.headlineSmall.copyWith(fontWeight: FontWeight.w800),
-        ),
+        title: _shouldAnimate 
+          ? FadeIn(
+              duration: const Duration(milliseconds: 400),
+              child: Text(
+                'my_wishlist'.tr(context),
+                style: context.headlineSmall.copyWith(fontWeight: FontWeight.w800),
+              ),
+            )
+          : Text(
+              'my_wishlist'.tr(context),
+              style: context.headlineSmall.copyWith(fontWeight: FontWeight.w800),
+            ),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.search, color: Colors.black),
-            onPressed: () {
-              AppRoutes.navigateTo(context, AppRoutes.searchScreen);
-            },
-          ),
+          _shouldAnimate 
+            ? FadeInRight(
+                duration: const Duration(milliseconds: 500),
+                child: IconButton(
+                  icon: const Icon(Icons.search, color: Colors.black),
+                  onPressed: () {
+                    AppRoutes.navigateTo(context, AppRoutes.searchScreen);
+                  },
+                ),
+              )
+            : IconButton(
+                icon: const Icon(Icons.search, color: Colors.black),
+                onPressed: () {
+                  AppRoutes.navigateTo(context, AppRoutes.searchScreen);
+                },
+              ),
         ],
       ),
       body: Column(
         children: [
           // Remove All button
-          provider.wishlistItems.isEmpty
+          widget.provider.wishlistItems.isEmpty
               ? const SizedBox.shrink()
-              : Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 8,
-                ),
-                alignment: Alignment.centerRight,
-                child: InkWell(
-                  onTap: () {
-                    // Get all item keys and trigger snap animation
-                    final wishlistItemKeys = List.generate(
-                      provider.wishlistItems.length,
-                      (index) => GlobalKey<SnappableWishlistItemState>(),
-                    );
-
-                    // Show confirmation with QuickAlert instead of standard AlertDialog
-                    QuickAlert.show(
-                      context: context,
-                      type: QuickAlertType.confirm,
-                      title: 'clear_wishlist'.tr(context),
-                      text: 'clear_wishlist_confirmation'.tr(context),
-                      confirmBtnText: 'clear'.tr(context),
-                      cancelBtnText: 'cancel'.tr(context),
-                      confirmBtnColor: AppTheme.accentColor,
-                      cancelBtnTextStyle: context.titleMedium.copyWith(fontWeight: FontWeight.w600,color: AppTheme.lightSecondaryTextColor),
-                      confirmBtnTextStyle: context.titleMedium.copyWith(fontWeight: FontWeight.w600,color: AppTheme.white),
-                      onConfirmBtnTap: () {
-                        Navigator.pop(context);
-
-                        // Use clearWishlist instead of iterating and removing
-                        provider.clearWishlist();
-
-                        CustomToast.showToast(message: 'wishlist_cleared'.tr(context),type: ToastType.success);
-                      },
-                    );
-                  },
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Icon(
-                        Icons.delete_outline,
-                        color: AppTheme.accentColor,
-                      ),
-                      const SizedBox(width: 4),
-                      Text(
-                        'remove_all'.tr(context),
-                        style: context.titleSmall.copyWith(fontWeight: FontWeight.w700,color: AppTheme.primaryColor),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+              : _shouldAnimate 
+                ? FadeInDown(
+                    delay: const Duration(milliseconds: 200),
+                    duration: const Duration(milliseconds: 400),
+                    child: _buildRemoveAllButton(context),
+                  )
+                : _buildRemoveAllButton(context),
 
           // Wishlist items grid
-          provider.wishlistState != LoadingState.loading
-              ? provider.wishlistItems.isEmpty
-                  ? const Expanded(child: EmptyWishlistWidget())
+          widget.provider.wishlistState != LoadingState.loading
+              ? widget.provider.wishlistItems.isEmpty
+                  ? Expanded(
+                    child: _shouldAnimate
+                      ? FadeIn(
+                          delay: const Duration(milliseconds: 200),
+                          duration: const Duration(milliseconds: 600),
+                          child: const EmptyWishlistWidget(),
+                        )
+                      : const EmptyWishlistWidget(),
+                  )
                   : Expanded(
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
@@ -111,20 +122,80 @@ class WishlistWidget extends StatelessWidget {
                               crossAxisSpacing: 10,
                               mainAxisSpacing: 10,
                             ),
-                        itemCount: provider.wishlistItems.length,
+                        itemCount: widget.provider.wishlistItems.length,
                         itemBuilder: (context, index) {
-                          final item = provider.wishlistItems[index];
+                          final item = widget.provider.wishlistItems[index];
                           // Skip rendering placeholder items that are in loading state
                           if (item.name == "Loading...") {
                             return const SizedBox.shrink();
                           }
-                          return _buildWishlistItem(context, item, provider);
+                          return _shouldAnimate
+                            ? FadeInUp(
+                                delay: Duration(milliseconds: 100 * index % 8),
+                                duration: const Duration(milliseconds: 500),
+                                child: _buildWishlistItem(context, item, widget.provider),
+                              )
+                            : _buildWishlistItem(context, item, widget.provider);
                         },
                       ),
                     ),
                   )
               : const Expanded(child: WishlistScreenShimmer()),
         ],
+      ),
+    );
+  }
+
+  Widget _buildRemoveAllButton(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 16,
+        vertical: 8,
+      ),
+      alignment: Alignment.centerRight,
+      child: InkWell(
+        onTap: () {
+          // Get all item keys and trigger snap animation
+          final wishlistItemKeys = List.generate(
+            widget.provider.wishlistItems.length,
+            (index) => GlobalKey<SnappableWishlistItemState>(),
+          );
+
+          // Show confirmation with QuickAlert instead of standard AlertDialog
+          QuickAlert.show(
+            context: context,
+            type: QuickAlertType.confirm,
+            title: 'clear_wishlist'.tr(context),
+            text: 'clear_wishlist_confirmation'.tr(context),
+            confirmBtnText: 'clear'.tr(context),
+            cancelBtnText: 'cancel'.tr(context),
+            confirmBtnColor: AppTheme.accentColor,
+            cancelBtnTextStyle: context.titleMedium.copyWith(fontWeight: FontWeight.w600,color: AppTheme.lightSecondaryTextColor),
+            confirmBtnTextStyle: context.titleMedium.copyWith(fontWeight: FontWeight.w600,color: AppTheme.white),
+            onConfirmBtnTap: () {
+              Navigator.pop(context);
+              
+              // Use clearWishlist instead of iterating and removing
+              widget.provider.clearWishlist();
+
+              CustomToast.showToast(message: 'wishlist_cleared'.tr(context),type: ToastType.success);
+            },
+          );
+        },
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(
+              Icons.delete_outline,
+              color: AppTheme.accentColor,
+            ),
+            const SizedBox(width: 4),
+            Text(
+              'remove_all'.tr(context),
+              style: context.titleSmall.copyWith(fontWeight: FontWeight.w700,color: AppTheme.primaryColor),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -43,21 +43,21 @@ class WishlistProvider extends ChangeNotifier {
     try {
       // Only show loading state if explicitly requested and initial load is not done
       if (showLoading && !_initialLoadComplete) {
-        wishlistState = LoadingState.loading;
-        notifyListeners();
+      wishlistState = LoadingState.loading;
+      notifyListeners();
       }
 
       final items = await getWishlistUseCase();
-      
+
       wishlistItems = items;
       _updateWishlistTracking();
-      
+
       wishlistState = LoadingState.loaded;
       _initialLoadComplete = true;
     } catch (e) {
       // Only update state to error if we were showing loading
       if (showLoading && !_initialLoadComplete) {
-        wishlistState = LoadingState.error;
+      wishlistState = LoadingState.error;
       }
       wishlistError = e.toString();
     } finally {
@@ -131,7 +131,7 @@ class WishlistProvider extends ChangeNotifier {
       // Perform API call in background
       final result = await addToWishlistUseCase(slug);
       lastActionMessage = result.message;
-      
+
       // Update with server data without showing shimmer
       await fetchWishlist(showLoading: false);
     } catch (e) {
@@ -158,7 +158,7 @@ class WishlistProvider extends ChangeNotifier {
       // Perform API call in background
       final result = await removeFromWishlistUseCase(slug);
       lastActionMessage = result.message;
-      
+
       // No need to refresh list - item is already removed locally
     } catch (e) {
       // If API call fails, we should add the item back
@@ -172,11 +172,11 @@ class WishlistProvider extends ChangeNotifier {
   Future<void> clearWishlist() async {
     // Store items for potential recovery
     final backupItems = List<WishlistItem>.from(wishlistItems);
-    
+
     // Clear local list immediately
     wishlistItems.clear();
-    wishlistStatus.clear();
-    _wishlistSlugs.clear();
+      wishlistStatus.clear();
+      _wishlistSlugs.clear();
     notifyListeners();
     
     try {
@@ -184,7 +184,7 @@ class WishlistProvider extends ChangeNotifier {
       for (var item in backupItems) {
         await removeFromWishlistUseCase(item.slug);
       }
-      
+
       lastActionMessage = "Wishlist cleared successfully";
     } catch (e) {
       // On failure, restore backup and fetch fresh data

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:animate_do/animate_do.dart';
 import 'package:melamine_elsherif/core/utils/constants/app_assets.dart';
 import 'package:melamine_elsherif/core/utils/extension/translate_extension.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_button.dart';
@@ -19,16 +20,21 @@ import '../../../../core/utils/widgets/premium_language_dialog.dart';
 import 'package:radial_button/widget/circle_floating_button.dart';
 
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({super.key});
+  final bool isActive;
+  const ProfileScreen({super.key, this.isActive = false});
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  bool _shouldAnimate = false;
+  final GlobalKey _animationKey = GlobalKey();
+  
   @override
   void initState() {
     super.initState();
+    _shouldAnimate = widget.isActive;
     
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final profileProvider = context.read<ProfileProvider>();
@@ -40,6 +46,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
         context.read<ClubPointProvider>().fetchClubPoints();
       }
     });
+  }
+  
+  @override
+  void didUpdateWidget(ProfileScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    
+    // Reset animation state when screen becomes inactive
+    if (!widget.isActive && oldWidget.isActive) {
+      setState(() {
+        _shouldAnimate = false;
+      });
+    }
+    
+    // Trigger animation when screen becomes active
+    if (widget.isActive && !oldWidget.isActive) {
+      setState(() {
+        _shouldAnimate = true;
+      });
+    }
   }
 
   @override
@@ -57,116 +82,168 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ? FloatingActionButtonLocation.startFloat  // For RTL (Arabic)
         : FloatingActionButtonLocation.endFloat;   // For LTR (English)
 
+    // Create a unique key when animation should occur to force rebuild
+    final contentKey = _shouldAnimate 
+      ? ValueKey('animated-profile-${DateTime.now().millisecondsSinceEpoch}') 
+      : _animationKey;
+
     return Scaffold(
+      key: contentKey, // Using key to force rebuild when animation state changes
       backgroundColor: Colors.white,
       floatingActionButton: _buildFloatingActionButton(context),
       floatingActionButtonLocation: fabLocation,
       body: SafeArea(
         child: SingleChildScrollView(
-        child: Column(
-          children: [
-            const SizedBox(height: 20),
-            // Different UI based on login status
-            isLoggedIn 
-            ? _buildLoggedInUserHeader(context, profileProvider)
-            : _buildGuestUserHeader(context),
+          child: Column(
+            children: [
+              const SizedBox(height: 20),
+              // Different UI based on login status
+              _shouldAnimate 
+                ? FadeInDown(
+                    key: ValueKey('animated-header-${DateTime.now().millisecondsSinceEpoch}'),
+                    duration: const Duration(milliseconds: 500),
+                    child: isLoggedIn 
+                      ? _buildLoggedInUserHeader(context, profileProvider)
+                      : _buildGuestUserHeader(context),
+                  )
+                : isLoggedIn 
+                  ? _buildLoggedInUserHeader(context, profileProvider)
+                  : _buildGuestUserHeader(context),
 
               const SizedBox(height: 16),
 
-            // Stats Section - only for logged in users
+              // Stats Section - only for logged in users
               if (isLoggedIn && !isLoadingCounters && counters != null)
-                Container(
-                  color: Colors.white,
-                  padding: const EdgeInsets.symmetric(vertical: 20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      _buildStatItem(
-                        context,
-                        counters.orderCount.toString(),
-                        'orders'.tr(context),
-                        AppSvgs.profile_bag,
-                      ),
-                      _buildStatItem(
-                        context,
-                        counters.wishlistItemCount.toString(),
-                        'saved'.tr(context),
-                        AppSvgs.profile_fav,
-                      ),
-                      _buildStatItem(
-                        context,
-                        clubPointProvider.clubPointsState == LoadingState.loaded
-                            ? clubPointProvider.totalPoints
-                            : '0',
-                        'points'.tr(context),
-                        AppSvgs.profile_coin,
-                      ),
-                      _buildStatItem(
-                        context,
-                        '${counters.orderCount }',
-                        'reviews'.tr(context),
-                        AppSvgs.profile_star,
-                      ),
-                    ],
-                  ),
-                ),
+                _shouldAnimate
+                  ? FadeInUp(
+                      delay: const Duration(milliseconds: 200),
+                      duration: const Duration(milliseconds: 400),
+                      child: _buildStatsSection(context, counters, clubPointProvider),
+                    )
+                  : _buildStatsSection(context, counters, clubPointProvider),
 
               const SizedBox(height: 10),
 
               // Quick Access Section - only for logged in users
-            if (isLoggedIn && !isLoadingCounters && counters != null)
-              Container(
-                color: Colors.white,
-                height: 100,
-                padding: const EdgeInsets.symmetric(vertical: 8,horizontal: 15),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Expanded(
-                      child: _buildQuickAccessItem(
-                        context,
-                        AppSvgs.profile_bag,
-                        'my_orders'.tr(context),
-                        () => AppRoutes.navigateTo(
-                          context,
-                          AppRoutes.allOrdersListScreen,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: _buildQuickAccessItem(
-                        context,
-                        AppSvgs.profile_location,
-                        'shipping_address'.tr(context),
-                        () => AppRoutes.navigateTo(
-                          context,
-                          AppRoutes.addressListScreen,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              if (isLoggedIn && !isLoadingCounters && counters != null)
+                _shouldAnimate
+                  ? FadeInUp(
+                      delay: const Duration(milliseconds: 300),
+                      duration: const Duration(milliseconds: 400), 
+                      child: _buildQuickAccessSection(context),
+                    )
+                  : _buildQuickAccessSection(context),
 
               const SizedBox(height: 10),
 
               // Menu Items - different for guest vs logged in
-              isLoggedIn 
-                ? _buildLoggedInMenuItems(context)
-                : _buildGuestMenuItems(context),
+              _shouldAnimate
+                ? FadeInUp(
+                    delay: const Duration(milliseconds: 400),
+                    duration: const Duration(milliseconds: 500),
+                    child: isLoggedIn 
+                      ? _buildLoggedInMenuItems(context)
+                      : _buildGuestMenuItems(context),
+                  )
+                : isLoggedIn 
+                  ? _buildLoggedInMenuItems(context)
+                  : _buildGuestMenuItems(context),
 
               const SizedBox(height: 20),
 
-              // Auth Button (Sign Out or Sign In) - different style based on login status
-              isLoggedIn
-                ? _buildSignOutButton(context)
-                : _buildSignInButton(context),
+              // Auth Button (Sign Out or Sign In)
+              _shouldAnimate
+                ? ZoomIn(
+                    delay: const Duration(milliseconds: 500),
+                    duration: const Duration(milliseconds: 300),
+                    child: isLoggedIn
+                      ? _buildSignOutButton(context)
+                      : _buildSignInButton(context),
+                  )
+                : isLoggedIn
+                  ? _buildSignOutButton(context)
+                  : _buildSignInButton(context),
 
               const SizedBox(height: 40),
             ],
           ),
         ),
+      ),
+    );
+  }
+  
+  // Build the stats section with counters
+  Widget _buildStatsSection(BuildContext context, profileCounters, ClubPointProvider clubPointProvider) {
+    return Container(
+      color: Colors.white,
+      padding: const EdgeInsets.symmetric(vertical: 20),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          _buildStatItem(
+            context,
+            profileCounters.orderCount.toString(),
+            'orders'.tr(context),
+            AppSvgs.profile_bag,
+          ),
+          _buildStatItem(
+            context,
+            profileCounters.wishlistItemCount.toString(),
+            'saved'.tr(context),
+            AppSvgs.profile_fav,
+          ),
+          _buildStatItem(
+            context,
+            clubPointProvider.clubPointsState == LoadingState.loaded
+                ? clubPointProvider.totalPoints
+                : '0',
+            'points'.tr(context),
+            AppSvgs.profile_coin,
+          ),
+          _buildStatItem(
+            context,
+            '${profileCounters.orderCount}',
+            'reviews'.tr(context),
+            AppSvgs.profile_star,
+          ),
+        ],
+      ),
+    );
+  }
+  
+  // Build quick access section
+  Widget _buildQuickAccessSection(BuildContext context) {
+    return Container(
+      color: Colors.white,
+      height: 100,
+      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 15),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Expanded(
+            child: _buildQuickAccessItem(
+              context,
+              AppSvgs.profile_bag,
+              'my_orders'.tr(context),
+              () => AppRoutes.navigateTo(
+                context,
+                AppRoutes.allOrdersListScreen,
+              ),
+            ),
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: _buildQuickAccessItem(
+              context,
+              AppSvgs.profile_location,
+              'shipping_address'.tr(context),
+              () => AppRoutes.navigateTo(
+                context,
+                AppRoutes.addressListScreen,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

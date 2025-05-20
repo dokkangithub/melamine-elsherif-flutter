@@ -25,9 +25,9 @@ class LayoutProvider extends ChangeNotifier {
     _mainScreens = [
       const HomeScreen(),
       CategoryScreen(isActive: _currentIndex == 1),
-      const WishlistScreen(),
-      const CartScreen(),
-      const ProfileScreen(),
+      WishlistScreen(isActive: _currentIndex == 2),
+      CartScreen(isActive: _currentIndex == 3),
+      ProfileScreen(isActive: _currentIndex == 4),
     ];
   }
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:animate_do/animate_do.dart';
 import 'package:thanos_snap_effect/thanos_snap_effect.dart';
 import 'package:melamine_elsherif/features/domain/wishlist/entities/wishlist_details.dart';
 import 'package:provider/provider.dart';
@@ -23,6 +24,7 @@ class SnappableWishlistItemState extends State<SnappableWishlistItem>
   late AnimationController _animationController;
   bool _isDeleting = false;
   bool _isCompleted = false;
+  bool _isHovered = false;
 
   @override
   void initState() {
@@ -59,15 +61,23 @@ class SnappableWishlistItemState extends State<SnappableWishlistItem>
 
   @override
   Widget build(BuildContext context) {
-    return Snappable(
-      animation: _animationController,
-      style: const SnappableStyle(
-        particleLifetime: 0.8,
-        fadeOutDuration: 0.4,
-        particleSpeed: 1.0,
-        particleSize: SnappableParticleSize.squareFromRelativeWidth(0.01),
+    return MouseRegion(
+      onEnter: (_) => setState(() => _isHovered = true),
+      onExit: (_) => setState(() => _isHovered = false),
+      child: AnimatedScale(
+        scale: _isHovered ? 1.03 : 1.0,
+        duration: const Duration(milliseconds: 200),
+        child: Snappable(
+          animation: _animationController,
+          style: const SnappableStyle(
+            particleLifetime: 0.8,
+            fadeOutDuration: 0.4,
+            particleSpeed: 1.0,
+            particleSize: SnappableParticleSize.squareFromRelativeWidth(0.01),
+          ),
+          child: widget.child,
+        ),
       ),
-      child: widget.child,
     );
   }
 } 
