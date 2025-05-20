@@ -34,7 +34,8 @@ class FeaturedProductsWidget extends StatelessWidget {
         if (products.isEmpty) {
           return _buildEmptyState();
         }
-        final filteredProducts = products.where((product) => product.published == 1).toList();
+        final filteredProducts = products.where((product) => product.published.toString() == '1').toList();
+
 
         // Show products list
         return Column(
