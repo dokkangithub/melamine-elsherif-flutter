@@ -82,7 +82,7 @@ class FlashDealsWidget extends StatelessWidget {
               arguments: {
                 'productType': ProductType.flashDeal,
                 'title': deal.title,
-                'deal_id': deal.id,
+                'dealId': deal.id,
               },
             );
           },
@@ -98,7 +98,7 @@ class FlashDealsWidget extends StatelessWidget {
           ),
         ),
 
-        const SizedBox(height: 24),
+        const SizedBox(height: 12),
       ],
     );
   }

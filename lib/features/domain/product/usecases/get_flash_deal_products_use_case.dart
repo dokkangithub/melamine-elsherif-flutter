@@ -7,6 +7,6 @@ class GetFlashDealProductsUseCase {
   GetFlashDealProductsUseCase(this.productRepository);
 
   Future<FlashDealResponseModel> call({bool needUpdate = false}) async {
-    return await productRepository.getFlashDealProducts(needUpdate: needUpdate);
+    return await productRepository.getFlashDealProducts(needUpdate: true);
   }
 }

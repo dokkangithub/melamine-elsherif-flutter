@@ -20,11 +20,13 @@ import '../widgets/shimmer/products_grid_shimmer.dart';
 class AllProductsByTypeScreen extends StatefulWidget {
   final ProductType productType;
   final String title;
+  final int? dealId;
 
   const AllProductsByTypeScreen({
     super.key,
     required this.productType,
     required this.title,
+    this.dealId,
   });
 
   @override
@@ -72,6 +74,7 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
       _loadMoreProducts();
     }
   }
+
   Future<void> _loadMoreProducts() async {
     if (_isLoading) return;
     final provider = Provider.of<HomeProvider>(context, listen: false);
@@ -96,9 +99,9 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
   }
 
   Future<void> _fetchProducts(
-      HomeProvider provider, {
-        bool refresh = false,
-      }) async {
+    HomeProvider provider, {
+    bool refresh = false,
+  }) async {
     switch (_selectedProductType) {
       case ProductType.all:
         await provider.fetchAllProducts(refresh: refresh);
@@ -113,7 +116,7 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
         await provider.fetchNewProducts(refresh: refresh);
         break;
       case ProductType.flashDeal:
-        await provider.fetchTodaysDealProducts();
+        await provider.fetchFlashDealProducts(refresh: refresh);
         break;
     }
   }
@@ -144,6 +147,7 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
       case ProductType.newArrival:
         return provider.newProducts;
       case ProductType.flashDeal:
+        // Return all flash deal products
         return provider.flashDealProducts;
     }
   }
@@ -185,33 +189,42 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
         final products = _getProducts(homeProvider);
         final state = _getLoadingState(homeProvider);
         final error = _getErrorMessage(homeProvider);
-
         return Scaffold(
           backgroundColor: Colors.white,
           body: SafeArea(
             child: Column(
               children: [
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20.0,
+                    vertical: 20.0,
+                  ),
                   child: Row(
                     children: [
                       const SizedBox(width: 6),
                       InkWell(
                         onTap: () => Navigator.pop(context),
-                        child: const Icon(Icons.arrow_back_ios, size: 20, color: AppTheme.accentColor),
+                        child: const Icon(
+                          Icons.arrow_back_ios,
+                          size: 20,
+                          color: AppTheme.accentColor,
+                        ),
                       ),
                       Expanded(
                         child: InkWell(
-                          onTap: (){
-                            AppRoutes.navigateTo(context, AppRoutes.searchScreen);
+                          onTap: () {
+                            AppRoutes.navigateTo(
+                              context,
+                              AppRoutes.searchScreen,
+                            );
                           },
                           child: Container(
                             margin: const EdgeInsets.symmetric(horizontal: 10),
                             padding: const EdgeInsets.symmetric(horizontal: 15),
                             height: 45,
                             decoration: BoxDecoration(
-                                color: AppTheme.lightBackgroundColor, 
-                                borderRadius: BorderRadius.circular(10),
+                              color: AppTheme.lightBackgroundColor,
+                              borderRadius: BorderRadius.circular(10),
                             ),
                             child: Row(
                               children: [
@@ -222,7 +235,9 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
                                 Expanded(
                                   child: Text(
                                     'search_for_yours'.tr(context),
-                                    style: context.titleSmall?.copyWith(color: AppTheme.lightSecondaryTextColor),
+                                    style: context.titleSmall?.copyWith(
+                                      color: AppTheme.lightSecondaryTextColor,
+                                    ),
                                     overflow: TextOverflow.ellipsis,
                                     maxLines: 1,
                                   ),
@@ -240,32 +255,41 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   physics: const BouncingScrollPhysics(),
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16.0,
+                    vertical: 12.0,
+                  ),
                   child: Row(
-                    children: ProductType.values.map((type) {
-                      bool isSelected = _selectedProductType == type;
-                      return Padding(
-                        padding: const EdgeInsets.only(right: 8.0),
-                        child: _buildProductTypeChip(
-                          text: _productTypeNames[type]!.tr(context),
-                          isSelected: isSelected,
-                          onTap: () {
-                            setState(() {
-                              _selectedProductType = type;
-                              _fetchProducts(homeProvider, refresh: true);
-                            });
-                          },
-                        ),
-                      );
-                    }).toList(),
+                    children:
+                        ProductType.values.map((type) {
+                          bool isSelected = _selectedProductType == type;
+                          return Padding(
+                            padding: const EdgeInsets.only(right: 8.0),
+                            child: _buildProductTypeChip(
+                              text: _productTypeNames[type]!.tr(context),
+                              isSelected: isSelected,
+                              onTap: () {
+                                setState(() {
+                                  _selectedProductType = type;
+                                  _fetchProducts(homeProvider, refresh: true);
+                                });
+                              },
+                            ),
+                          );
+                        }).toList(),
                   ),
                 ),
 
                 // Products grid
                 Expanded(
-                  child: _buildProductsGrid(products, state, error, homeProvider, error),
+                  child: _buildProductsGrid(
+                    products,
+                    state,
+                    error,
+                    homeProvider,
+                    error,
+                  ),
                 ),
-
               ],
             ),
           ),
@@ -274,7 +298,11 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
     );
   }
 
-  Widget _buildProductTypeChip({required String text, required bool isSelected, required VoidCallback onTap}) {
+  Widget _buildProductTypeChip({
+    required String text,
+    required bool isSelected,
+    required VoidCallback onTap,
+  }) {
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(4.0),
@@ -289,7 +317,10 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
                 text,
                 textAlign: TextAlign.center,
                 style: context.titleMedium?.copyWith(
-                  color: isSelected ? AppTheme.primaryColor : AppTheme.lightSecondaryTextColor,
+                  color:
+                      isSelected
+                          ? AppTheme.primaryColor
+                          : AppTheme.lightSecondaryTextColor,
                   fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
                 ),
               ),
@@ -305,8 +336,13 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
     );
   }
 
-  Widget _buildProductsGrid(List<Product> products, LoadingState state, String errorMessage, HomeProvider homeProvider, String error) {
-
+  Widget _buildProductsGrid(
+    List<Product> products,
+    LoadingState state,
+    String errorMessage,
+    HomeProvider homeProvider,
+    String error,
+  ) {
     if (state == LoadingState.loading && products.isEmpty) {
       return const Center(child: ProductsGridShimmer());
     }
@@ -319,10 +355,11 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
             Text(errorMessage),
             const SizedBox(height: 16),
             ElevatedButton(
-              onPressed: () => _fetchProducts(
-                Provider.of<HomeProvider>(context, listen: false),
-                refresh: true,
-              ),
+              onPressed:
+                  () => _fetchProducts(
+                    Provider.of<HomeProvider>(context, listen: false),
+                    refresh: true,
+                  ),
               child: const Text('Retry'),
             ),
           ],
@@ -333,15 +370,16 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
     if (products.isEmpty) {
       return const Center(child: CustomEmptyWidget());
     }
-    List<Product> filteredProducts=products;
-    if(_selectedProductType!=ProductType.newArrival){
-      filteredProducts = products.where((product) => product.published == 1).toList();
+    List<Product> filteredProducts = products;
+    if (_selectedProductType != ProductType.newArrival) {
+      filteredProducts =
+          products.where((product) => product.published == 1).toList();
     }
     return Column(
       children: [
         Expanded(
           child: ProductsGrid(
-            products: filteredProducts,
+            products: _selectedProductType !=ProductType.flashDeal ? filteredProducts : products,
             state: state,
             error: error,
             isLoading: _isLoading,

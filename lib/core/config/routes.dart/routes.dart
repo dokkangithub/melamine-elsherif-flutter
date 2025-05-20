@@ -129,6 +129,7 @@ class AppRoutes {
           page = AllProductsByTypeScreen(
             productType: args['productType'] as ProductType,
             title: args['title'] as String,
+            dealId: args['dealId'] as int?,
           );
         }
         break;
