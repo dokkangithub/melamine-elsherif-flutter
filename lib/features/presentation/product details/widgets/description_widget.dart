@@ -12,10 +12,18 @@ class DescriptionWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(product.slug);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('key_feature'.tr(context), style: context.headlineSmall!.copyWith(fontWeight: FontWeight.w800)),
+        product.description.isNotEmpty
+            ? Text(
+              'key_feature'.tr(context),
+              style: context.headlineSmall!.copyWith(
+                fontWeight: FontWeight.w800,
+              ),
+            )
+            : const SizedBox.shrink(),
         product.description.isNotEmpty
             ? Html(
               data: product.description,
@@ -27,10 +35,7 @@ class DescriptionWidget extends StatelessWidget {
                 ),
               },
             )
-            : Text(
-              'no_description_available'.tr(context),
-              style: const TextStyle(color: Colors.grey, fontSize: 14),
-            ),
+            : const SizedBox.shrink(),
       ],
     );
   }

@@ -46,7 +46,7 @@ class QuantitySelectorWidget extends StatelessWidget {
                 ),
                 Text(
                   quantity.toString().padLeft(2, '0'),
-                  style: context.displayMedium
+                  style: context.headlineSmall
                 ),
                 IconButton(
                   onPressed: () => provider.setQuantity(quantity + 1),

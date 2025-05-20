@@ -83,8 +83,11 @@ class ProductDetailsModel {
     // Convert specifications from json
     Map<String, String> specifications = {};
     if (json['specifications'] != null) {
-      final specsMap = json['specifications'] as Map<String, dynamic>;
-      specifications = specsMap.map((key, value) => MapEntry(key, value.toString()));
+      // Check if specifications is a Map before attempting to cast it
+      if (json['specifications'] is Map) {
+        final specsMap = json['specifications'] as Map<String, dynamic>;
+        specifications = specsMap.map((key, value) => MapEntry(key, value.toString()));
+      }
     }
 
     return ProductDetailsModel(

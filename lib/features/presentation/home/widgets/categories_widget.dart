@@ -43,18 +43,18 @@ class CategoriesWidget extends StatelessWidget {
 
         // Show categories grid
         return SizedBox(
-          height: 110,
+          height: 140,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // SeeAllWidget(
-              //   title: 'categories'.tr(context),
-              //   onTap: () {
-              //     Provider.of<LayoutProvider>(context, listen: false)
-              //         .currentIndex = 1;
-              //   },
-              // ),
-              // const SizedBox(height: 12),
+              SeeAllWidget(
+                title: 'categories'.tr(context),
+                onTap: () {
+                  Provider.of<LayoutProvider>(context, listen: false)
+                      .currentIndex = 1;
+                },
+              ),
+              const SizedBox(height: 12),
               Expanded(
                 child: GridView.builder(
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(

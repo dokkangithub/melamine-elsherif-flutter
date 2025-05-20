@@ -13,7 +13,7 @@ class ProductSpecificationsSummary extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (product.specifications.isEmpty) {
+    if (product.specifications!.isEmpty) {
       return const SizedBox.shrink();
     }
 
@@ -22,7 +22,7 @@ class ProductSpecificationsSummary extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          for (var entry in product.specifications.entries)
+          for (var entry in product.specifications!.entries)
             Padding(
               padding: const EdgeInsets.only(bottom: 16.0),
               child: RichText(

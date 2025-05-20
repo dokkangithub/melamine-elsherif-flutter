@@ -14,7 +14,7 @@ class SpecificationsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (product.specifications.isEmpty) {
+    if (product.specifications!.isEmpty) {
       return const SizedBox.shrink();
     }
 
@@ -25,7 +25,7 @@ class SpecificationsWidget extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: Text(
             'specifications'.tr(context).toLowerCase(),
-            style: context.titleLarge.copyWith(
+            style: context.headlineSmall.copyWith(
               fontWeight: FontWeight.bold,
               color: Colors.black87,
             ),
@@ -51,7 +51,7 @@ class SpecificationsWidget extends StatelessWidget {
                 width: 1,
               ),
               children: [
-                for (var entry in product.specifications.entries)
+                for (var entry in product.specifications!.entries)
                   TableRow(
                     children: [
                       Padding(

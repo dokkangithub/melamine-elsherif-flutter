@@ -94,7 +94,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     isGradient: true,
                     onPressed:
                         () => productProvider.fetchProductDetails(widget.slug),
-                    child: const Text('Retry'),
+                    child: Text('retry'.tr(context),style: context.titleMedium.copyWith(color: AppTheme.white),),
                   ),
                 ],
               ),
@@ -174,7 +174,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                   const SizedBox(width: 4),
                                   Text(
                                     "(${product.ratingCount} ${'reviews'.tr(context)})",
-                                    style: context.bodyMedium?.copyWith(
+                                    style: context.bodyMedium.copyWith(
                                       color: Colors.grey[600],
                                     ),
                                   ),
@@ -193,14 +193,14 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                   children: [
                                     TextSpan(
                                       text: product.currencySymbol,
-                                      style: context.titleLarge?.copyWith(
+                                      style: context.titleLarge.copyWith(
                                         color: AppTheme.primaryColor,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
                                     TextSpan(
                                       text: product.price.replaceAll(' ${product.currencySymbol}', ''),
-                                      style: context.headlineMedium?.copyWith(
+                                      style: context.headlineMedium.copyWith(
                                         color: AppTheme.primaryColor,
                                         fontWeight: FontWeight.bold,
                                       ),
