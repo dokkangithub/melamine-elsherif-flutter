@@ -73,6 +73,7 @@ class AppSvgs {
   static const String profile_star = '$svgPath/profile_star.svg';
   static const String profile_fav = '$svgPath/profile_fav.svg';
   static const String profile_coin = '$svgPath/profile_coin.svg';
+  static const String profile_wellat = '$svgPath/profile_wellat.svg';
   static const String profile_location = '$svgPath/profile_location.svg';
   static const String profile_about_us = '$svgPath/profile_about_us.svg';
   static const String profile_person = '$svgPath/profile_person.svg';

@@ -29,25 +29,143 @@ class CartProvider extends ChangeNotifier {
     required this.getCartSummaryUseCase,
   });
 
+  // Cart items state
   LoadingState cartState = LoadingState.loading;
   List<CartItem> cartItems = [];
   int cartCount = 0;
-  CartSummary? cartSummary;
   String cartError = '';
+  bool _initialLoadComplete = false;
+  
+  // Synchronization tracking
+  DateTime _lastSyncTime = DateTime.now();
+  bool _needsFullSync = false;
+  Duration _syncThreshold = const Duration(minutes: 2);
+  
+  // Offline mode tracking
+  bool _isOfflineMode = false;
+  bool _hasLocalData = false;
+  int _failedNetworkAttempts = 0;
+  
+  // Cart summary state (separate from cart items)
+  LoadingState summaryState = LoadingState.loading;
+  CartSummary? cartSummary;
+  String summaryError = '';
+  
   ShippingUpdateResponse? shippingUpdateResponse;
   bool isUpdatingShipping = false;
   bool lastAddToCartSuccess = false;
+  
+  // Getters to expose offline state to UI
+  bool get isOfflineMode => _isOfflineMode;
+  bool get hasLocalData => _hasLocalData;
 
-  Future<void> fetchCartItems() async {
+  // Initialize local cart count
+  void _updateLocalCartCount() {
+    cartCount = cartItems.fold(0, (sum, item) => sum + item.quantity);
+    notifyListeners();
+  }
+  
+  // Check if we need to sync with server based on time threshold or force flag
+  bool _shouldSyncWithServer({bool force = false}) {
+    if (force || _needsFullSync) return true;
+    final now = DateTime.now();
+    return now.difference(_lastSyncTime) > _syncThreshold;
+  }
+  
+  // Reset sync status after successful sync
+  void _markAsSynced() {
+    _lastSyncTime = DateTime.now();
+    _needsFullSync = false;
+    _failedNetworkAttempts = 0;
+    _isOfflineMode = false;
+  }
+  
+  // Force a full refresh of cart data while preserving UI state
+  Future<void> forceRefresh() async {
+    _needsFullSync = true;
+    await syncCartWithServer(showLoadingUI: true);
+  }
+  
+  // Enter offline mode when network is unavailable
+  void _enterOfflineMode() {
+    _isOfflineMode = true;
+    _failedNetworkAttempts = 0; // Reset counter after entering offline mode
+    _hasLocalData = cartItems.isNotEmpty || cartSummary != null;
+    notifyListeners();
+  }
+  
+  // Sync local cart with server data
+  Future<void> syncCartWithServer({bool showLoadingUI = false}) async {
+    if (!_shouldSyncWithServer() && !showLoadingUI) return;
+    
     try {
-      cartState = LoadingState.loading;
-      notifyListeners();
+      // Use loading state only if explicitly requested
+      if (showLoadingUI) {
+        cartState = LoadingState.loading;
+        notifyListeners();
+      }
 
-      cartItems = await getCartItemsUseCase();
+      // Get cart items from server
+      final serverItems = await getCartItemsUseCase();
+      
+      // Update local cart
+      cartItems = serverItems;
+      _updateLocalCartCount();
+      
+      // Load cart summary too
+      await fetchCartSummary();
+      
       cartState = LoadingState.loaded;
+      _markAsSynced();
+      _initialLoadComplete = true;
+      _hasLocalData = cartItems.isNotEmpty || cartSummary != null;
     } catch (e) {
-      cartState = LoadingState.error;
+      if (showLoadingUI) {
+        cartState = LoadingState.error;
+      }
       cartError = e.toString();
+      _needsFullSync = true; // Mark for retry on next operation
+      
+      // Handle offline mode transition
+      _failedNetworkAttempts++;
+      if (_failedNetworkAttempts >= 2 && !_isOfflineMode) {
+        _enterOfflineMode();
+      }
+    } finally {
+      notifyListeners();
+    }
+  }
+
+  Future<void> fetchCartItems({bool showLoading = true}) async {
+    try {
+      // Only show loading state if explicitly requested and initial load is not done
+      if (showLoading && !_initialLoadComplete) {
+        cartState = LoadingState.loading;
+        notifyListeners();
+      }
+
+      final items = await getCartItemsUseCase();
+      
+      cartItems = items;
+      _updateLocalCartCount();
+      
+      cartState = LoadingState.loaded;
+      _initialLoadComplete = true;
+      _markAsSynced(); // Mark sync time after fresh fetch
+      _hasLocalData = cartItems.isNotEmpty;
+    } catch (e) {
+      // Only update state to error if we were showing loading
+      if (showLoading && !_initialLoadComplete) {
+        cartState = LoadingState.error;
+      }
+      cartError = e.toString();
+      _needsFullSync = true;
+      
+      // Handle offline mode transition
+      _failedNetworkAttempts++;
+      if (_failedNetworkAttempts >= 2 && !_isOfflineMode && cartItems.isNotEmpty) {
+        _enterOfflineMode();
+      }
     } finally {
       notifyListeners();
     }
@@ -55,21 +173,62 @@ class CartProvider extends ChangeNotifier {
 
   Future<void> fetchCartSummary() async {
     try {
-      cartSummary = await getCartSummaryUseCase();
+      summaryState = LoadingState.loading;
       notifyListeners();
+      
+      cartSummary = await getCartSummaryUseCase();
+      
+      summaryState = LoadingState.loaded;
+      _hasLocalData = cartSummary != null;
     } catch (e) {
-      cartError = e.toString();
+      summaryState = LoadingState.error;
+      summaryError = e.toString();
+      
+      // Handle offline mode
+      _failedNetworkAttempts++;
+      if (_failedNetworkAttempts >= 2 && !_isOfflineMode && cartSummary != null) {
+        _enterOfflineMode();
+      }
+    } finally {
       notifyListeners();
     }
   }
 
   Future<void> fetchCartCount() async {
     try {
-      cartCount = await getCartCountUseCase();
+      // Use server count as a fallback/verification 
+      final serverCount = await getCartCountUseCase();
+      
+      // If counts don't match, we might have desync - schedule a full sync
+      if (serverCount != cartCount) {
+        _needsFullSync = true;
+        syncCartWithServer();
+      }
+      
+      cartCount = serverCount;
+      _failedNetworkAttempts = 0; // Reset counter on successful network call
       notifyListeners();
     } catch (e) {
       cartError = e.toString();
-      notifyListeners();
+      // If server fetch fails, rely on local count
+      _updateLocalCartCount();
+      
+      // Handle offline mode
+      _failedNetworkAttempts++;
+      if (_failedNetworkAttempts >= 2 && !_isOfflineMode) {
+        _enterOfflineMode();
+      }
+    }
+  }
+
+  // Try to exit offline mode by attempting to sync with server
+  Future<bool> tryReconnect() async {
+    try {
+      await fetchCartItems(showLoading: false);
+      await fetchCartSummary();
+      return true;
+    } catch (e) {
+      return false;
     }
   }
 

@@ -46,6 +46,7 @@ class _CartScreenState extends State<CartScreen> {
   final TextEditingController _promoCodeController = TextEditingController();
   bool _isApplyingCoupon = false;
   bool _shouldAnimate = false;
+  bool _isReconnecting = false;
 
   @override
   void initState() {
@@ -81,6 +82,40 @@ class _CartScreenState extends State<CartScreen> {
   void dispose() {
     _promoCodeController.dispose();
     super.dispose();
+  }
+
+  Future<void> _tryReconnect(CartProvider cartProvider) async {
+    if (_isReconnecting) return;
+    
+    setState(() {
+      _isReconnecting = true;
+    });
+    
+    try {
+      final success = await cartProvider.tryReconnect();
+      
+      if (success && mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('reconnected_successfully'.tr(context)),
+            backgroundColor: Colors.green,
+          ),
+        );
+      } else if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('reconnection_failed'.tr(context)),
+            backgroundColor: Colors.orange,
+          ),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isReconnecting = false;
+        });
+      }
+    }
   }
 
   Future<void> _applyCoupon(CouponProvider couponProvider) async {
@@ -179,6 +214,12 @@ class _CartScreenState extends State<CartScreen> {
       ),
       body: Consumer<CartProvider>(
         builder: (context, cartProvider, _) {
+          // Display offline banner if needed
+          Widget? offlineBanner;
+          if (cartProvider.isOfflineMode && cartProvider.hasLocalData) {
+            offlineBanner = _buildOfflineBanner(cartProvider);
+          }
+          
           if (cartProvider.cartState == LoadingState.loading) {
             return const CartScreenShimmer();
           }
@@ -194,6 +235,9 @@ class _CartScreenState extends State<CartScreen> {
 
           return Column(
             children: [
+              // Offline banner (if applicable)
+              if (offlineBanner != null) offlineBanner,
+              
               // Cart items in an expandable list
               Expanded(
                 child: ListView.separated(
@@ -492,6 +536,23 @@ class _CartScreenState extends State<CartScreen> {
               color: textColor ?? AppTheme.black,
               fontWeight: isBold ? FontWeight.w800 : FontWeight.w400,
             ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildOfflineBanner(CartProvider cartProvider) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      color: Colors.yellow,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text('offline_mode_banner'.tr(context)),
+          TextButton(
+            onPressed: () => _tryReconnect(cartProvider),
+            child: Text('try_reconnect'.tr(context)),
           ),
         ],
       ),

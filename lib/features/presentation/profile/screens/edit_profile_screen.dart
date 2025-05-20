@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:melamine_elsherif/core/config/themes.dart/theme.dart';
 import 'package:melamine_elsherif/core/utils/constants/app_assets.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_cached_image.dart';
+import 'package:melamine_elsherif/core/utils/widgets/cutsom_toast.dart';
 import 'package:provider/provider.dart';
 import '../../../../core/utils/constants/app_strings.dart';
 import '../../../../core/utils/enums/loading_state.dart';
@@ -76,8 +77,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           style: context.titleLarge,
         ),
         leading: InkWell(
-          child: Padding(
-            padding: const EdgeInsets.all(18.0),
+          child: const Padding(
+            padding: EdgeInsets.all(18.0),
             child: CustomImage(assetPath: AppSvgs.back),
           ),
           onTap: () => Navigator.pop(context),
@@ -199,6 +200,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 _buildFormField(
                   label: 'phone_number'.tr(context),
                   controller: _phoneController,
+                  readOnly: true,
                   keyboardType: TextInputType.phone,
                 ),
 
@@ -302,14 +304,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         await SecureStorage().save(LocalStorageKey.userName, _fullNameController.text);
       }
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('profile_updated_successfully'.tr(context))),
-      );
+      CustomToast.showToast(message: 'profile_updated_successfully'.tr(context),type: ToastType.success);
       Navigator.pop(context);
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('failed_update_profile'.tr(context))),
-      );
+      CustomToast.showToast(message: 'failed_update_profile'.tr(context),type: ToastType.success);
     }
   }
 
@@ -336,7 +334,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
               if (navigatorContext.mounted) {
                 Navigator.of(navigatorContext).pushAndRemoveUntil(
-                  MaterialPageRoute(builder: (context) => LoginScreen()),
+                  MaterialPageRoute(builder: (context) => const LoginScreen()),
                       (route) => false,
                 );
               }

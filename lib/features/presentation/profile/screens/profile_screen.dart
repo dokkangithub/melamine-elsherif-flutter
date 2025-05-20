@@ -80,7 +80,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
         child: SingleChildScrollView(
         child: Column(
           children: [
-            const SizedBox(height: 20),
             // Different UI based on login status
             _shouldAnimate 
               ? FadeInDown(
@@ -93,19 +92,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ? _buildLoggedInUserHeader(context, profileProvider)
                 : _buildGuestUserHeader(context),
 
-            const SizedBox(height: 16),
 
-            // Stats Section - only for logged in users
-            if (isLoggedIn && !isLoadingCounters && counters != null)
-              _shouldAnimate
-                ? FadeInUp(
-                    delay: const Duration(milliseconds: 200),
-                    duration: const Duration(milliseconds: 400),
-                    child: _buildStatsSection(context, counters, clubPointProvider),
-                  )
-                : _buildStatsSection(context, counters, clubPointProvider),
-
-            const SizedBox(height: 10),
+            // // Stats Section - only for logged in users
+            // if (isLoggedIn && !isLoadingCounters && counters != null)
+            //   _shouldAnimate
+            //     ? FadeInUp(
+            //         delay: const Duration(milliseconds: 200),
+            //         duration: const Duration(milliseconds: 400),
+            //         child: _buildStatsSection(context, counters, clubPointProvider),
+            //       )
+            //     : _buildStatsSection(context, counters, clubPointProvider),
+            //
+            // const SizedBox(height: 10),
 
             // Quick Access Section - only for logged in users
             if (isLoggedIn && !isLoadingCounters && counters != null)
@@ -238,8 +236,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            AppTheme.primaryColor.withOpacity(0.9),
-            AppTheme.primaryColor.withOpacity(0.7),
+            AppTheme.primaryColor.withValues(alpha: 0.9),
+            AppTheme.primaryColor.withValues(alpha: 0.7),
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
@@ -247,7 +245,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: AppTheme.primaryColor.withOpacity(0.3),
+            color: AppTheme.primaryColor.withValues(alpha: 0.3),
             blurRadius: 10,
             offset: const Offset(0, 5),
           ),
@@ -263,7 +261,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               shape: BoxShape.circle,
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
+                  color: Colors.black.withValues(alpha: 0.1),
                   blurRadius: 8,
                   offset: const Offset(0, 3),
                 ),
@@ -292,7 +290,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             'sign_in_to_explore'.tr(context),
             textAlign: TextAlign.center,
             style: context.bodyMedium.copyWith(
-              color: Colors.white.withOpacity(0.9),
+              color: Colors.white.withValues(alpha: 0.9),
             ),
           ),
           const SizedBox(height: 20),
@@ -331,13 +329,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
         horizontal: 15,
         vertical: 20,
       ),
-      child: Row(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           // Profile Image
           Container(
-            width: 70,
-            height: 70,
+            width: 100,
+            height: 100,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               border: Border.all(color: Colors.grey[300]!, width: 1),
@@ -356,27 +354,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
             ),
           ),
-          const SizedBox(width: 16),
+          const SizedBox(height: 10),
           // User Info
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  AppStrings.userName ?? '',
-                  style: context.titleLarge,
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  AppStrings.userEmail ?? '',
-                  style: context.bodyMedium.copyWith(
-                    color: Colors.grey[600],
-                  ),
-                ),
-              ],
+          Text(
+            AppStrings.userName ?? '',
+            style: context.headlineSmall.copyWith(fontWeight: FontWeight.w700),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            AppStrings.userEmail ?? '',
+            style: context.bodyMedium.copyWith(
+              color: Colors.grey[600],
             ),
           ),
-          const SizedBox(width: 16),
+          const SizedBox(height: 10),
           // Edit Button
           CustomButton(
             onPressed: () {
@@ -386,8 +377,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
               );
             },
             isOutlined: true,
+            borderRadius: 25,
             child: Text(
-              'edit'.tr(context),
+              'edit_profile_1'.tr(context),
               style: context.titleSmall.copyWith(
                 color: AppTheme.black,
               ),
@@ -407,7 +399,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
+            color: Colors.grey.withValues(alpha: 0.1),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -501,7 +493,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 width: 40,
                 height: 40,
                 decoration: BoxDecoration(
-                  color: AppTheme.primaryColor.withOpacity(0.1),
+                  color: AppTheme.primaryColor.withValues(alpha: 0.1),
                   shape: BoxShape.circle,
                 ),
                 child: Center(
@@ -564,7 +556,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     AppStrings.token == null
                         ? const SizedBox.shrink()
                         : ProfileMenuItem(
-                      icon: AppSvgs.profile_coin,
+                      icon: AppSvgs.profile_wellat,
                       title: 'my_wallet'.tr(context),
                       onTap: () {
                         AppRoutes.navigateTo(
@@ -643,7 +635,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
             child: Row(
               children: [
-                Icon(
+                const Icon(
                   Icons.info_outline,
                   color: AppTheme.primaryColor,
                   size: 24,
@@ -718,7 +710,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(
+                      const Icon(
               Icons.logout,
                         color: AppTheme.primaryColor
                       ),

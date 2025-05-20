@@ -6,6 +6,7 @@ import 'package:melamine_elsherif/core/utils/extension/translate_extension.dart'
 import 'package:melamine_elsherif/core/utils/widgets/cart_animation_overlay.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_dilog.dart';
 import 'package:melamine_elsherif/core/utils/widgets/cutsom_toast.dart';
+import 'package:melamine_elsherif/features/presentation/profile/controller/profile_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/tap_bounce_container.dart';
@@ -84,7 +85,7 @@ abstract class AppFunctions {
           showCartAddedAnimation(context);
           
           // Refresh cart data asynchronously without waiting
-          _refreshCartDataAsync(cartProvider);
+          _refreshCartDataAsync(cartProvider,context);
         }
       }
     } catch (e) {
@@ -104,10 +105,11 @@ abstract class AppFunctions {
   }
   
   // Helper method to refresh cart data asynchronously
-  static Future<void> _refreshCartDataAsync(CartProvider cartProvider) async {
+  static Future<void> _refreshCartDataAsync(CartProvider cartProvider,context) async {
     await cartProvider.fetchCartItems();
     await cartProvider.fetchCartCount();
     await cartProvider.fetchCartSummary();
+    await Provider.of<ProfileProvider>(context,listen: false).getProfileCounters();
   }
 
   static Future<void> toggleWishlistStatus(
@@ -120,6 +122,7 @@ abstract class AppFunctions {
       final provider = Provider.of<WishlistProvider>(context, listen: false);
 
       await provider.toggleWishlistStatus(context, slug);
+      await Provider.of<ProfileProvider>(context,listen: false).getProfileCounters();
     }
   }
 }
