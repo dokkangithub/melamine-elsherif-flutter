@@ -21,6 +21,7 @@ class AppAnimations {
   static const String wishlistAnimation ='$animationPath/wishlist_animation.json';
   static const String successfullyCart ='$animationPath/successfully_cart.json';
   static const String emptyCart ='$animationPath/empty_cart.json';
+  static const String emptyWishlist ='$animationPath/empty_wishlist.json';
 
 
 

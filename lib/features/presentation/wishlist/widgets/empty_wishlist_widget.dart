@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
+import 'package:melamine_elsherif/core/config/themes.dart/theme.dart';
+import 'package:melamine_elsherif/core/utils/constants/app_assets.dart';
+import 'package:melamine_elsherif/core/utils/extension/text_theme_extension.dart';
+import 'package:melamine_elsherif/core/utils/widgets/custom_button.dart';
 import 'package:melamine_elsherif/features/presentation/main%20layout/screens/main_layout_screen.dart';
 import 'package:provider/provider.dart';
 import '../../../../core/utils/extension/translate_extension.dart';
@@ -13,27 +18,18 @@ class EmptyWishlistWidget extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.favorite_border, size: 80, color: Colors.grey[400]),
-          const SizedBox(height: 16),
-          Text(
-            'wishlist_empty'.tr(context),
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: Colors.grey[700],
-            ),
-          ),
-          const SizedBox(height: 8),
+          Lottie.asset(AppAnimations.emptyWishlist,fit: BoxFit.contain),
           Text(
             'wishlist_empty_message'.tr(context),
             style: TextStyle(fontSize: 14, color: Colors.grey[600]),
           ),
           const SizedBox(height: 24),
-          ElevatedButton(
+          CustomButton(
             onPressed: () {
               Provider.of<LayoutProvider>(context,listen: false).currentIndex=0;
             },
-            child: Text('browse_products'.tr(context)),
+            isGradient: true,
+            child: Text('browse_products'.tr(context),style: context.titleSmall!.copyWith(color: AppTheme.white,fontWeight: FontWeight.w700),),
           ),
         ],
       ),

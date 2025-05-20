@@ -15,10 +15,6 @@ class WishlistScreen extends StatefulWidget {
 }
 
 class _WishlistScreenState extends State<WishlistScreen> {
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +22,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
       body: Consumer<WishlistProvider>(
         builder: (context, provider, child) {
          if (provider.wishlistState == LoadingState.error) {
-            return SizedBox();
+            return const SizedBox.shrink();
           } else {
             return WishlistWidget(provider: provider);
           }
@@ -34,7 +30,4 @@ class _WishlistScreenState extends State<WishlistScreen> {
       ),
     );
   }
-
-
-
 }

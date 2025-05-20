@@ -22,6 +22,7 @@ class SnappableWishlistItemState extends State<SnappableWishlistItem>
     with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
   bool _isDeleting = false;
+  bool _isCompleted = false;
 
   @override
   void initState() {
@@ -32,8 +33,10 @@ class SnappableWishlistItemState extends State<SnappableWishlistItem>
     );
 
     _animationController.addStatusListener((status) {
-      if (status == AnimationStatus.completed && _isDeleting) {
+      if (status == AnimationStatus.completed && _isDeleting && !_isCompleted) {
+        _isCompleted = true;
         final provider = context.read<WishlistProvider>();
+        // Remove from wishlist immediately after animation completes for smooth UX
         provider.removeFromWishlist(widget.slug);
       }
     });
@@ -46,10 +49,12 @@ class SnappableWishlistItemState extends State<SnappableWishlistItem>
   }
 
   void startSnap() {
-    setState(() {
-      _isDeleting = true;
-    });
-    _animationController.forward();
+    if (!_isDeleting) {
+      setState(() {
+        _isDeleting = true;
+      });
+      _animationController.forward();
+    }
   }
 
   @override

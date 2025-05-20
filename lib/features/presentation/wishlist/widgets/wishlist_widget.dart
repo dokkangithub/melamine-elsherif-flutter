@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:melamine_elsherif/core/utils/extension/text_style_extension.dart';
 import 'package:melamine_elsherif/core/utils/helpers.dart';
+import 'package:melamine_elsherif/core/utils/widgets/cutsom_toast.dart';
 import 'package:melamine_elsherif/features/presentation/wishlist/widgets/shimmer/wishlist_screen_shimmer.dart';
 import 'package:melamine_elsherif/features/presentation/wishlist/widgets/snappable_wishlist_item.dart';
 import 'package:quickalert/quickalert.dart';
@@ -70,19 +71,11 @@ class WishlistWidget extends StatelessWidget {
                       confirmBtnTextStyle: context.titleMedium.copyWith(fontWeight: FontWeight.w600,color: AppTheme.white),
                       onConfirmBtnTap: () {
                         Navigator.pop(context);
-                        
-                        // Once confirmed, clear the wishlist
-                        for (var item in provider.wishlistItems) {
-                          provider.removeFromWishlist(item.slug);
-                        }
 
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(
-                              'wishlist_cleared'.tr(context),
-                            ),
-                          ),
-                        );
+                        // Use clearWishlist instead of iterating and removing
+                        provider.clearWishlist();
+
+                        CustomToast.showToast(message: 'wishlist_cleared'.tr(context),type: ToastType.success);
                       },
                     );
                   },
@@ -121,6 +114,10 @@ class WishlistWidget extends StatelessWidget {
                         itemCount: provider.wishlistItems.length,
                         itemBuilder: (context, index) {
                           final item = provider.wishlistItems[index];
+                          // Skip rendering placeholder items that are in loading state
+                          if (item.name == "Loading...") {
+                            return const SizedBox.shrink();
+                          }
                           return _buildWishlistItem(context, item, provider);
                         },
                       ),
