@@ -44,7 +44,6 @@ class CartScreen extends StatefulWidget {
 
 class _CartScreenState extends State<CartScreen> {
   final TextEditingController _promoCodeController = TextEditingController();
-  final GlobalKey _animationKey = GlobalKey();
   bool _isApplyingCoupon = false;
   bool _shouldAnimate = false;
 
@@ -71,15 +70,6 @@ class _CartScreenState extends State<CartScreen> {
   @override
   void didUpdateWidget(CartScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
-    
-    // Reset animation state when screen becomes inactive
-    if (!widget.isActive && oldWidget.isActive) {
-      setState(() {
-        _shouldAnimate = false;
-      });
-    }
-    
-    // Trigger animation when screen becomes active
     if (widget.isActive && !oldWidget.isActive) {
       setState(() {
         _shouldAnimate = true;
@@ -176,7 +166,6 @@ class _CartScreenState extends State<CartScreen> {
             final itemCount = cartProvider.cartItems.length;
             return _shouldAnimate
               ? FadeIn(
-                  key: ValueKey('animated-title-${DateTime.now().millisecondsSinceEpoch}'),
                   duration: const Duration(milliseconds: 400),
                   child: Text('${'shopping_cart'.tr(context)} ($itemCount ${'items'.tr(context)})',
                     style: context.titleLarge!.copyWith(fontWeight: FontWeight.w700),
@@ -197,20 +186,13 @@ class _CartScreenState extends State<CartScreen> {
           if (cartProvider.cartItems.isEmpty) {
             return _shouldAnimate
               ? FadeIn(
-                  key: ValueKey('animated-empty-${DateTime.now().millisecondsSinceEpoch}'),
                   duration: const Duration(milliseconds: 600),
                   child: const EmptyCartWidget(),
                 )
               : const EmptyCartWidget();
           }
 
-          // Use a unique key when animation should occur
-          final contentKey = _shouldAnimate 
-            ? ValueKey('animated-content-${DateTime.now().millisecondsSinceEpoch}') 
-            : _animationKey;
-
           return Column(
-            key: contentKey,
             children: [
               // Cart items in an expandable list
               Expanded(

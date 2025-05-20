@@ -35,15 +35,6 @@ class _WishlistScreenState extends State<WishlistScreen> {
   @override
   void didUpdateWidget(WishlistScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
-    
-    // Reset animation state when screen becomes inactive
-    if (!widget.isActive && oldWidget.isActive) {
-      setState(() {
-        _shouldAnimate = false;
-      });
-    }
-    
-    // Trigger animation when screen becomes active
     if (widget.isActive && !oldWidget.isActive) {
       setState(() {
         _shouldAnimate = true;
@@ -56,12 +47,11 @@ class _WishlistScreenState extends State<WishlistScreen> {
     return Scaffold(
       body: Consumer<WishlistProvider>(
         builder: (context, provider, child) {
-          if (provider.wishlistState == LoadingState.error) {
+         if (provider.wishlistState == LoadingState.error) {
             return const SizedBox.shrink();
           } else {
-            // Using a key to force rebuild when animation state changes
             return WishlistWidget(
-              key: _shouldAnimate ? ValueKey('animated-${DateTime.now().millisecondsSinceEpoch}') : _animationKey,
+              key: _animationKey,
               provider: provider,
               triggerAnimation: _shouldAnimate,
             );

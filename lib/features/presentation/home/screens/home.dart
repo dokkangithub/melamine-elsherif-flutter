@@ -99,26 +99,27 @@ class _HomeScreenState extends State<HomeScreen> {
               const Padding(
                 padding: EdgeInsets.all(12.0),
                 child: Column(
+                  spacing: 20,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     CategoriesWidget(),
-                    SizedBox(height: 20),
+
                     PlatesWidgets(),
-                    SizedBox(height: 20),
+
                     NewProductsWidget(),
-                    SizedBox(height: 20),
+
                     SimpleBannerCarousel(),
-                    SizedBox(height: 20),
+
                     BestSellingProductsWidget(),
-                    SizedBox(height: 20),
+
                     SecondHomeImageWidget(),
-                    SizedBox(height: 20),
+
                     FeaturedProductsWidget(),
-                    SizedBox(height: 20),
+
                     FlashDealsWidget(),
-                    SizedBox(height: 20),
+
                     SummerDealsWidgets(),
-                    SizedBox(height: 20),
+
                     AllProductsWidget(),
                   ],
                 ),

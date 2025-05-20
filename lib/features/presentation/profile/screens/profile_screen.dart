@@ -29,7 +29,6 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   bool _shouldAnimate = false;
-  final GlobalKey _animationKey = GlobalKey();
   
   @override
   void initState() {
@@ -51,15 +50,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void didUpdateWidget(ProfileScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
-    
-    // Reset animation state when screen becomes inactive
-    if (!widget.isActive && oldWidget.isActive) {
-      setState(() {
-        _shouldAnimate = false;
-      });
-    }
-    
-    // Trigger animation when screen becomes active
     if (widget.isActive && !oldWidget.isActive) {
       setState(() {
         _shouldAnimate = true;
@@ -82,94 +72,86 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ? FloatingActionButtonLocation.startFloat  // For RTL (Arabic)
         : FloatingActionButtonLocation.endFloat;   // For LTR (English)
 
-    // Create a unique key when animation should occur to force rebuild
-    final contentKey = _shouldAnimate 
-      ? ValueKey('animated-profile-${DateTime.now().millisecondsSinceEpoch}') 
-      : _animationKey;
-
     return Scaffold(
-      key: contentKey, // Using key to force rebuild when animation state changes
       backgroundColor: Colors.white,
       floatingActionButton: _buildFloatingActionButton(context),
       floatingActionButtonLocation: fabLocation,
       body: SafeArea(
         child: SingleChildScrollView(
-          child: Column(
-            children: [
-              const SizedBox(height: 20),
-              // Different UI based on login status
-              _shouldAnimate 
-                ? FadeInDown(
-                    key: ValueKey('animated-header-${DateTime.now().millisecondsSinceEpoch}'),
-                    duration: const Duration(milliseconds: 500),
-                    child: isLoggedIn 
-                      ? _buildLoggedInUserHeader(context, profileProvider)
-                      : _buildGuestUserHeader(context),
-                  )
-                : isLoggedIn 
-                  ? _buildLoggedInUserHeader(context, profileProvider)
-                  : _buildGuestUserHeader(context),
+        child: Column(
+          children: [
+            const SizedBox(height: 20),
+            // Different UI based on login status
+            _shouldAnimate 
+              ? FadeInDown(
+                  duration: const Duration(milliseconds: 500),
+                  child: isLoggedIn 
+                    ? _buildLoggedInUserHeader(context, profileProvider)
+                    : _buildGuestUserHeader(context),
+                )
+              : isLoggedIn 
+                ? _buildLoggedInUserHeader(context, profileProvider)
+                : _buildGuestUserHeader(context),
 
-              const SizedBox(height: 16),
+            const SizedBox(height: 16),
 
-              // Stats Section - only for logged in users
-              if (isLoggedIn && !isLoadingCounters && counters != null)
-                _shouldAnimate
-                  ? FadeInUp(
-                      delay: const Duration(milliseconds: 200),
-                      duration: const Duration(milliseconds: 400),
-                      child: _buildStatsSection(context, counters, clubPointProvider),
-                    )
-                  : _buildStatsSection(context, counters, clubPointProvider),
-
-              const SizedBox(height: 10),
-
-              // Quick Access Section - only for logged in users
-              if (isLoggedIn && !isLoadingCounters && counters != null)
-                _shouldAnimate
-                  ? FadeInUp(
-                      delay: const Duration(milliseconds: 300),
-                      duration: const Duration(milliseconds: 400), 
-                      child: _buildQuickAccessSection(context),
-                    )
-                  : _buildQuickAccessSection(context),
-
-              const SizedBox(height: 10),
-
-              // Menu Items - different for guest vs logged in
+            // Stats Section - only for logged in users
+            if (isLoggedIn && !isLoadingCounters && counters != null)
               _shouldAnimate
                 ? FadeInUp(
-                    delay: const Duration(milliseconds: 400),
-                    duration: const Duration(milliseconds: 500),
-                    child: isLoggedIn 
-                      ? _buildLoggedInMenuItems(context)
-                      : _buildGuestMenuItems(context),
+                    delay: const Duration(milliseconds: 200),
+                    duration: const Duration(milliseconds: 400),
+                    child: _buildStatsSection(context, counters, clubPointProvider),
                   )
-                : isLoggedIn 
-                  ? _buildLoggedInMenuItems(context)
-                  : _buildGuestMenuItems(context),
+                : _buildStatsSection(context, counters, clubPointProvider),
 
-              const SizedBox(height: 20),
+            const SizedBox(height: 10),
 
-              // Auth Button (Sign Out or Sign In)
+            // Quick Access Section - only for logged in users
+            if (isLoggedIn && !isLoadingCounters && counters != null)
               _shouldAnimate
-                ? ZoomIn(
-                    delay: const Duration(milliseconds: 500),
-                    duration: const Duration(milliseconds: 300),
-                    child: isLoggedIn
-                      ? _buildSignOutButton(context)
-                      : _buildSignInButton(context),
+                ? FadeInUp(
+                    delay: const Duration(milliseconds: 300),
+                    duration: const Duration(milliseconds: 400), 
+                    child: _buildQuickAccessSection(context),
                   )
-                : isLoggedIn
-                  ? _buildSignOutButton(context)
-                  : _buildSignInButton(context),
+                : _buildQuickAccessSection(context),
 
-              const SizedBox(height: 40),
-            ],
-          ),
+            const SizedBox(height: 10),
+
+            // Menu Items - different for guest vs logged in
+            _shouldAnimate
+              ? FadeInUp(
+                  delay: const Duration(milliseconds: 400),
+                  duration: const Duration(milliseconds: 500),
+                  child: isLoggedIn 
+                    ? _buildLoggedInMenuItems(context)
+                    : _buildGuestMenuItems(context),
+                )
+              : isLoggedIn 
+                ? _buildLoggedInMenuItems(context)
+                : _buildGuestMenuItems(context),
+
+            const SizedBox(height: 20),
+
+            // Auth Button (Sign Out or Sign In)
+            _shouldAnimate
+              ? ZoomIn(
+                  delay: const Duration(milliseconds: 500),
+                  duration: const Duration(milliseconds: 300),
+                  child: isLoggedIn
+                    ? _buildSignOutButton(context)
+                    : _buildSignInButton(context),
+                )
+              : isLoggedIn
+                ? _buildSignOutButton(context)
+                : _buildSignInButton(context),
+
+            const SizedBox(height: 40),
+          ],
         ),
       ),
-    );
+    ));
   }
   
   // Build the stats section with counters
