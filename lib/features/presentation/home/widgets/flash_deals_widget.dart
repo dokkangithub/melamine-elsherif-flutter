@@ -53,10 +53,25 @@ class FlashDealsWidget extends StatelessWidget {
     if (products.isEmpty) {
       return const SizedBox.shrink();
     }
-    
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        
+        // Banner image if available
+        if (deal.banner.isNotEmpty && !deal.banner.toString().contains('placeholder'))
+          Padding(
+            padding: const EdgeInsets.only(top: 8.0,bottom: 15),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: CustomImage(
+                imageUrl:  deal.banner,
+                height: 180,
+                width: double.infinity,
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
         // Title and see all option
         SeeAllWidget(
           title: deal.title,
@@ -72,22 +87,6 @@ class FlashDealsWidget extends StatelessWidget {
             );
           },
         ),
-        
-        // Banner image if available
-        if (deal.banner.isNotEmpty && !deal.banner.toString().contains('placeholder'))
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: CustomImage(
-                imageUrl:  deal.banner,
-                height: 120,
-                width: double.infinity,
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
-        
         // Products list
         SizedBox(
           height: 320,

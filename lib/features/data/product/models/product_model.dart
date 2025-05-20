@@ -36,11 +36,11 @@ class ProductModel extends entity.Product {
         json['categories'].map((x) => CategoryModel.fromJson(x)),
       )
           : [],
-      thumbnailImage: json['thumbnail_image'] ?? '',
+      thumbnailImage: json['thumbnail_image'] ?? json['image']??'',
       hasDiscount: json['has_discount'] ?? false,
       discount: json['discount'] ?? '',
       mainPrice: json['main_price'] ?? '',
-      discountedPrice: json['stroked_price'] ?? json['discounted_price'] ??'',
+      discountedPrice: json['stroked_price'] ?? json['discounted_price'] ?? json['discount'] ??'',
       published: json['published'] ?? 0,
       hasVariation: json['has_variation'] ?? false,
       stockQuantity: json['stock_quantity'] ?? 0,

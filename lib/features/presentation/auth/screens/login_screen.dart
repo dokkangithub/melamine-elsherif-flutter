@@ -292,7 +292,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           );
                         },
                           style: ButtonStyle(
-                            overlayColor: MaterialStateProperty.all(Colors.transparent),
+                            overlayColor: WidgetStateProperty.all(Colors.transparent),
                             splashFactory: NoSplash.splashFactory,
                           ),
                         child: const CustomImage(
