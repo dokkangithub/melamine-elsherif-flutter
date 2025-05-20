@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:melamine_elsherif/core/utils/product%20cards/custom_product_card.dart';
 import 'package:provider/provider.dart';
 import 'package:melamine_elsherif/core/utils/widgets/see_all_widget.dart';
 import 'package:melamine_elsherif/core/utils/extension/translate_extension.dart';
@@ -56,57 +57,50 @@ class AllProductsWidget extends StatelessWidget {
         }
 
         // Show products grid
-        return Container(
-          padding: const EdgeInsets.all(10),
-          decoration: BoxDecoration(
-              color: AppTheme.accentColor.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(15)
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SeeAllWidget(
-                title: 'all_products'.tr(context),
-                onTap: () {
-                  AppRoutes.navigateTo(
-                    context,
-                    AppRoutes.allProductsByTypeScreen,
-                    arguments: {
-                      'productType': ProductType.all,
-                      'title': 'all_products'.tr(context),
-                    },
-                  );
-                },
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SeeAllWidget(
+              title: 'all_products'.tr(context),
+              onTap: () {
+                AppRoutes.navigateTo(
+                  context,
+                  AppRoutes.allProductsByTypeScreen,
+                  arguments: {
+                    'productType': ProductType.all,
+                    'title': 'all_products'.tr(context),
+                  },
+                );
+              },
+            ),
+            const SizedBox(height: 12),
+            GridView.builder(
+              physics: const NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                childAspectRatio: 0.6,
+                crossAxisSpacing: 0,
+                mainAxisSpacing: 0,
               ),
-              const SizedBox(height: 12),
-              GridView.builder(
-                physics: const NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  childAspectRatio: 0.75,
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
-                ),
-                itemCount: filteredProducts.length > 8 ? 8 : filteredProducts.length,
-                itemBuilder: (context, index) {
-                  final product = filteredProducts[index];
-                  return ProductGridCard(product: product,availableAddToCart: true);
-                },
-              ),
-              // If we have less than 8 published products and more data available, load more
-              if (filteredProducts.length < 8 && homeProvider.hasMoreAllProducts)
-                Padding(
-                  padding: const EdgeInsets.only(top: 16.0),
-                  child: Center(
-                    child: ElevatedButton(
-                      onPressed: () => homeProvider.fetchAllProducts(),
-                      child: Text('load_more'.tr(context)),
-                    ),
+              itemCount: filteredProducts.length > 8 ? 8 : filteredProducts.length,
+              itemBuilder: (context, index) {
+                final product = filteredProducts[index];
+                return ProductCard(product: product,isOutlinedAddToCart: true);
+              },
+            ),
+            // If we have less than 8 published products and more data available, load more
+            if (filteredProducts.length < 8 && homeProvider.hasMoreAllProducts)
+              Padding(
+                padding: const EdgeInsets.only(top: 16.0),
+                child: Center(
+                  child: ElevatedButton(
+                    onPressed: () => homeProvider.fetchAllProducts(),
+                    child: Text('load_more'.tr(context)),
                   ),
                 ),
-            ],
-          ),
+              ),
+          ],
         );
       },
     );
