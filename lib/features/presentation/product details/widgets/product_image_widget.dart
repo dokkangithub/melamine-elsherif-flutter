@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:animate_do/animate_do.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_cached_image.dart';
 import 'package:melamine_elsherif/features/domain/product%20details/entities/product_details.dart';
 import 'package:melamine_elsherif/features/presentation/product%20details/controller/product_provider.dart';
@@ -51,61 +52,72 @@ class _ProductImageWidgetState extends State<ProductImageWidget> {
           }
         });
 
-        return Stack(
-          children: [
-            // Main image carousel
-            SizedBox(
-              height: widget.height,
-              width: double.infinity,
-              child: PageView.builder(
-                controller: _pageController,
-                itemCount: widget.product.photos.length,
-                onPageChanged: (index) {
-                  provider.currentPhotoIndex = index;
-                },
-                itemBuilder: (context, index) {
-                  return InkWell(
-                    onTap: () => _openGallery(context, provider),
-                    child: CustomImage(
-                      imageUrl: widget.product.photos[index].path,
-                      fit: BoxFit.cover,
-                      height: widget.height,
-                      width: double.infinity,
-                    ),
-                  );
-                },
-              ),
-            ),
-            
-            // Dots indicator positioning at bottom of image
-            if (widget.product.photos.length > 1)
-              Positioned(
-                bottom: 16,
-                left: 0,
-                right: 0,
-                child: Center(
-                  child: SmoothPageIndicator(
+        return FadeIn(
+          duration: const Duration(milliseconds: 800),
+          child: Stack(
+            children: [
+              // Main image carousel
+              SlideInDown(
+                duration: const Duration(milliseconds: 800),
+                from: 30,
+                child: SizedBox(
+                  height: widget.height,
+                  width: double.infinity,
+                  child: PageView.builder(
                     controller: _pageController,
-                    count: widget.product.photos.length,
-                    effect: WormEffect(
-                      dotHeight: 8,
-                      dotWidth: 8,
-                      activeDotColor: Theme.of(context).primaryColor,
-                      dotColor: Colors.white.withOpacity(0.8),
-                      spacing: 8,
-                    ),
-                    onDotClicked: (index) {
-                      _pageController.animateToPage(
-                        index,
-                        duration: const Duration(milliseconds: 300),
-                        curve: Curves.easeInOut,
-                      );
+                    itemCount: widget.product.photos.length,
+                    onPageChanged: (index) {
                       provider.currentPhotoIndex = index;
+                    },
+                    itemBuilder: (context, index) {
+                      return InkWell(
+                        onTap: () => _openGallery(context, provider),
+                        child: CustomImage(
+                          imageUrl: widget.product.photos[index].path,
+                          fit: BoxFit.cover,
+                          height: widget.height,
+                          width: double.infinity,
+                        ),
+                      );
                     },
                   ),
                 ),
               ),
-          ],
+              
+              // Dots indicator positioning at bottom of image
+              if (widget.product.photos.length > 1)
+                Positioned(
+                  bottom: 16,
+                  left: 0,
+                  right: 0,
+                  child: FadeInUp(
+                    delay: const Duration(milliseconds: 400),
+                    duration: const Duration(milliseconds: 800),
+                    child: Center(
+                      child: SmoothPageIndicator(
+                        controller: _pageController,
+                        count: widget.product.photos.length,
+                        effect: WormEffect(
+                          dotHeight: 8,
+                          dotWidth: 8,
+                          activeDotColor: Theme.of(context).primaryColor,
+                          dotColor: Colors.white.withOpacity(0.8),
+                          spacing: 8,
+                        ),
+                        onDotClicked: (index) {
+                          _pageController.animateToPage(
+                            index,
+                            duration: const Duration(milliseconds: 300),
+                            curve: Curves.easeInOut,
+                          );
+                          provider.currentPhotoIndex = index;
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+            ],
+          ),
         );
       },
     );

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:animate_do/animate_do.dart';
 import 'package:melamine_elsherif/core/config/themes.dart/theme.dart';
 import 'package:melamine_elsherif/core/utils/enums/loading_state.dart';
 import 'package:melamine_elsherif/core/utils/extension/text_style_extension.dart';
@@ -190,83 +191,98 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              product.name,
-                              style: context.headlineMedium.copyWith(fontWeight: FontWeight.w900),
+                            FadeInLeft(
+                              duration: const Duration(milliseconds: 700),
+                              child: Text(
+                                product.name,
+                                style: context.headlineMedium.copyWith(fontWeight: FontWeight.w900),
+                              ),
                             ),
                             const SizedBox(height: 10),
                             // Add pricing and ratings UI
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                // Rating and review count
-                                Row(
-                                  children: [
-                                    // Star rating
-                                    Row(
-                                      children: List.generate(5, (index) {
-                                        return Icon(
-                                          index < product.rating.floor()
-                                              ? Icons.star
-                                              : index < product.rating
-                                                  ? Icons.star_half
-                                                  : Icons.star_border,
-                                          color: AppTheme.primaryColor,
-                                          size: 18,
-                                        );
-                                      }),
-                                    ),
-                                    const SizedBox(width: 4),
-                                    Text(
-                                      "(${product.ratingCount} ${'reviews'.tr(context)})",
-                                      style: context.bodyMedium.copyWith(
-                                        color: Colors.grey[600],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 8),
-                            // Price display and fav icon
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                RichText(
-                                  text: TextSpan(
+                            FadeInLeft(
+                              duration: const Duration(milliseconds: 700),
+                              delay: const Duration(milliseconds: 200),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  // Rating and review count
+                                  Row(
                                     children: [
-                                      TextSpan(
-                                        text: product.price,
-                                        style: context.headlineMedium.copyWith(
-                                          color: AppTheme.primaryColor,
-                                          fontWeight: FontWeight.bold,
+                                      // Star rating
+                                      Row(
+                                        children: List.generate(5, (index) {
+                                          return Icon(
+                                            index < product.rating.floor()
+                                                ? Icons.star
+                                                : index < product.rating
+                                                    ? Icons.star_half
+                                                    : Icons.star_border,
+                                            color: AppTheme.primaryColor,
+                                            size: 18,
+                                          );
+                                        }),
+                                      ),
+                                      const SizedBox(width: 4),
+                                      Text(
+                                        "(${product.ratingCount} ${'reviews'.tr(context)})",
+                                        style: context.bodyMedium.copyWith(
+                                          color: Colors.grey[600],
                                         ),
                                       ),
                                     ],
                                   ),
-                                ),
-                                Consumer<WishlistProvider>(
-                                  builder: (context, wishlistProvider, child) {
-                                    return IconButton(
-                                      icon: Icon(
-                                        wishlistProvider.isProductInWishlist(
-                                          widget.slug,
-                                        )
-                                            ? Icons.favorite
-                                            : Icons.favorite_border,
-                                        color: AppTheme.primaryColor,
-                                        size: 32,
-                                      ),
-                                      onPressed: () async {
-                                        await AppFunctions.toggleWishlistStatus(
-                                          context,
-                                          widget.slug,
-                                        );
-                                      },
-                                    );
-                                  },
-                                ),
-                              ],
+                                ],
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            // Price display and fav icon
+                            FadeInLeft(
+                              duration: const Duration(milliseconds: 700),
+                              delay: const Duration(milliseconds: 400),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  RichText(
+                                    text: TextSpan(
+                                      children: [
+                                        TextSpan(
+                                          text: product.price,
+                                          style: context.headlineMedium.copyWith(
+                                            color: AppTheme.primaryColor,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Consumer<WishlistProvider>(
+                                    builder: (context, wishlistProvider, child) {
+                                      return ZoomIn(
+                                        duration: const Duration(milliseconds: 700),
+                                        delay: const Duration(milliseconds: 600),
+                                        child: IconButton(
+                                          icon: Icon(
+                                            wishlistProvider.isProductInWishlist(
+                                              widget.slug,
+                                            )
+                                                ? Icons.favorite
+                                                : Icons.favorite_border,
+                                            color: AppTheme.primaryColor,
+                                            size: 32,
+                                          ),
+                                          onPressed: () async {
+                                            await AppFunctions.toggleWishlistStatus(
+                                              context,
+                                              widget.slug,
+                                            );
+                                          },
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ],
+                              ),
                             ),
                             const SizedBox(height: 16),
 
@@ -274,26 +290,50 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                             if (product.hasVariation) ...[
                               // Color variants
                               if (product.colors.isNotEmpty) ...[
-                                ColorVariantsWidget(product: product),
+                                FadeInUp(
+                                  duration: const Duration(milliseconds: 700),
+                                  delay: const Duration(milliseconds: 500),
+                                  child: ColorVariantsWidget(product: product),
+                                ),
                                 const SizedBox(height: 16),
                               ],
 
                               // Choice options
                               if (product.choiceOptions.isNotEmpty) ...[
-                                ChoiceOptionsWidget(product: product),
+                                FadeInUp(
+                                  duration: const Duration(milliseconds: 700),
+                                  delay: const Duration(milliseconds: 600),
+                                  child: ChoiceOptionsWidget(product: product),
+                                ),
                                 const SizedBox(height: 16),
                               ],
                             ],
 
-                            DescriptionWidget(product: product),
+                            FadeInUp(
+                              duration: const Duration(milliseconds: 700),
+                              delay: const Duration(milliseconds: 700),
+                              child: DescriptionWidget(product: product),
+                            ),
 
                             // Add specifications table widget
-                            SpecificationsWidget(product: product),
+                            FadeInUp(
+                              duration: const Duration(milliseconds: 700),
+                              delay: const Duration(milliseconds: 800),
+                              child: SpecificationsWidget(product: product),
+                            ),
                           ],
                         ),
                       ),
-                      ReviewsSectionWidget(productId: product.id),
-                      RelatedProductsWidget(provider: homeProvider),
+                      FadeInUp(
+                        duration: const Duration(milliseconds: 800),
+                        delay: const Duration(milliseconds: 900),
+                        child: ReviewsSectionWidget(productId: product.id),
+                      ),
+                      FadeInUp(
+                        duration: const Duration(milliseconds: 800),
+                        delay: const Duration(milliseconds: 1000),
+                        child: RelatedProductsWidget(provider: homeProvider),
+                      ),
                       const SizedBox(height: 130),
                     ]),
                   ),
@@ -305,81 +345,84 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 bottom: 0,
                 child: productProvider.isAddingToCart
                     ? const CustomLoadingWidget()
-                    : Container(
-                  padding: const EdgeInsets.all(16.0),
-                  decoration: BoxDecoration(
-                    color: ProductTheme.backgroundColor,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.1),
-                        blurRadius: 10,
-                        offset: const Offset(0, -5),
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      QuantitySelectorWidget(product: product),
-                      SizedBox(
-                        width: double.infinity,
-                        height: 50,
-                        child: CustomButton(
-                          isGradient: true,
-                          onPressed:
-                          productProvider.isAddingToCart ||
-                              !productProvider.canAddToCart
-                              ? null
-                              : () {
-                            // For products with variations
-                            if (product.hasVariation) {
-                              final colorVariant =
-                                  productProvider.selectedColor ?? '';
-                              final choiceVariants =
-                                  productProvider
-                                      .variantPrice
-                                      ?.data
-                                      .variant ??
-                                      '';
+                    : FadeInUp(
+                        duration: const Duration(milliseconds: 800),
+                        child: Container(
+                          padding: const EdgeInsets.all(16.0),
+                          decoration: BoxDecoration(
+                            color: ProductTheme.backgroundColor,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withValues(alpha: 0.1),
+                                blurRadius: 10,
+                                offset: const Offset(0, -5),
+                              ),
+                            ],
+                          ),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              QuantitySelectorWidget(product: product),
+                              SizedBox(
+                                width: double.infinity,
+                                height: 50,
+                                child: CustomButton(
+                                  isGradient: true,
+                                  onPressed:
+                                  productProvider.isAddingToCart ||
+                                      !productProvider.canAddToCart
+                                      ? null
+                                      : () {
+                                    // For products with variations
+                                    if (product.hasVariation) {
+                                      final colorVariant =
+                                          productProvider.selectedColor ?? '';
+                                      final choiceVariants =
+                                          productProvider
+                                              .variantPrice
+                                              ?.data
+                                              .variant ??
+                                              '';
 
-                              AppFunctions.addProductToCart(
-                                context: context,
-                                productSlug: product.slug,
-                                productId: product.id,
-                                productName: product.name,
-                                variant: choiceVariants,
-                                quantity: productProvider.quantity,
-                                color: colorVariant,
-                                hasVariation: false,
-                              );
-                            } else {
-                              AppFunctions.addProductToCart(
-                                context: context,
-                                productSlug: product.slug,
-                                productId: product.id,
-                                productName: product.name,
-                                variant: "",
-                                // No variant for non-variation products
-                                quantity: productProvider.quantity,
-                                color: "",
-                                // No color for non-variation products
-                                hasVariation: false,
-                              );
-                            }
-                          },
-                          child: Center(
-                            child: Text(
-                              productProvider.canAddToCart
-                                  ? 'add_to_cart'.tr(context)
-                                  : 'Out of Stock',
-                              style: context.titleMedium.copyWith(color: AppTheme.white),
-                            ),
+                                      AppFunctions.addProductToCart(
+                                        context: context,
+                                        productSlug: product.slug,
+                                        productId: product.id,
+                                        productName: product.name,
+                                        variant: choiceVariants,
+                                        quantity: productProvider.quantity,
+                                        color: colorVariant,
+                                        hasVariation: false,
+                                      );
+                                    } else {
+                                      AppFunctions.addProductToCart(
+                                        context: context,
+                                        productSlug: product.slug,
+                                        productId: product.id,
+                                        productName: product.name,
+                                        variant: "",
+                                        // No variant for non-variation products
+                                        quantity: productProvider.quantity,
+                                        color: "",
+                                        // No color for non-variation products
+                                        hasVariation: false,
+                                      );
+                                    }
+                                  },
+                                  child: Center(
+                                    child: Text(
+                                      productProvider.canAddToCart
+                                          ? 'add_to_cart'.tr(context)
+                                          : 'Out of Stock',
+                                      style: context.titleMedium.copyWith(color: AppTheme.white),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ),
-                    ],
-                  ),
-                ),
               ),
             ],
           ),
