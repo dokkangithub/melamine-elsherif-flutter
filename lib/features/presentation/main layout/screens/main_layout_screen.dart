@@ -87,7 +87,7 @@ class MainLayoutScreenState extends State<MainLayoutScreen> with SingleTickerPro
         child: AppBar(
           backgroundColor: AppTheme.primaryColor,
           elevation: 0,
-          systemOverlayStyle: SystemUiOverlayStyle(
+          systemOverlayStyle: const SystemUiOverlayStyle(
             statusBarColor: AppTheme.white,
             statusBarIconBrightness: Brightness.dark,
             statusBarBrightness: Brightness.dark,

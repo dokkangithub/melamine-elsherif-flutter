@@ -27,7 +27,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: title != null ? Text(title!,style: context.titleMedium) : null,
+      title: title != null ? Text(title!,style: context.headlineSmall!.copyWith(fontWeight: FontWeight.w700)) : null,
       leading: leading,
       actions: actions,
       backgroundColor: isDark ? Colors.black : AppTheme.white,
@@ -35,6 +35,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       toolbarHeight: title != null || leading != null || actions != null
           ? toolbarHeight
           : 0.0,
+      scrolledUnderElevation: 0,
       systemOverlayStyle: SystemUiOverlayStyle(
         statusBarColor: statusBarColor ?? (isDark ? Colors.black : AppTheme.white),
         statusBarIconBrightness: statusBarIcons ?? (isDark ? Brightness.light : Brightness.dark),
