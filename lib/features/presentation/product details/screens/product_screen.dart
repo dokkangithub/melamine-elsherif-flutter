@@ -147,9 +147,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         children: [
                           Text(
                             product.name,
-                            style: context.displaySmall,
+                            style: context.headlineMedium.copyWith(fontWeight: FontWeight.w900),
                           ),
-                          const SizedBox(height: 8),
+                          const SizedBox(height: 10),
                           // Add pricing and ratings UI
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -166,7 +166,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                             : index < product.rating
                                                 ? Icons.star_half
                                                 : Icons.star_border,
-                                        color: Colors.amber,
+                                        color: AppTheme.primaryColor,
                                         size: 18,
                                       );
                                     }),
@@ -184,7 +184,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                             ],
                           ),
                           const SizedBox(height: 8),
-                          // Price display
+                          // Price display and fav icon
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -192,14 +192,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                 text: TextSpan(
                                   children: [
                                     TextSpan(
-                                      text: product.currencySymbol,
-                                      style: context.titleLarge.copyWith(
-                                        color: AppTheme.primaryColor,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    TextSpan(
-                                      text: product.price.replaceAll(' ${product.currencySymbol}', ''),
+                                      text: product.price,
                                       style: context.headlineMedium.copyWith(
                                         color: AppTheme.primaryColor,
                                         fontWeight: FontWeight.bold,
@@ -218,7 +211,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                           ? Icons.favorite
                                           : Icons.favorite_border,
                                       color: AppTheme.primaryColor,
-                                      size: 28,
+                                      size: 32,
                                     ),
                                     onPressed: () async {
                                       await AppFunctions.toggleWishlistStatus(
@@ -257,7 +250,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     ),
                     ReviewsSectionWidget(productId: product.id),
                     RelatedProductsWidget(provider: homeProvider),
-                    const SizedBox(height: 100),
+                    const SizedBox(height: 130),
                   ],
                 ),
               ),
