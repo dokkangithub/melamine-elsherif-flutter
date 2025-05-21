@@ -36,6 +36,7 @@ class ProductDetailScreen extends StatefulWidget {
 class _ProductDetailScreenState extends State<ProductDetailScreen> {
   bool isFavorite = false;
   final ScrollController _scrollController = ScrollController();
+  bool _showAppBar = false;
 
   @override
   void initState() {
@@ -63,6 +64,21 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         }
       });
     });
+
+    _scrollController.addListener(_onScroll);
+  }
+
+  void _onScroll() {
+    // Toggle app bar visibility based on scroll position
+    if (_scrollController.offset > 300 && !_showAppBar) {
+      setState(() {
+        _showAppBar = true;
+      });
+    } else if (_scrollController.offset <= 300 && _showAppBar) {
+      setState(() {
+        _showAppBar = false;
+      });
+    }
   }
 
   @override
@@ -74,6 +90,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.sizeOf(context).height;
+    final statusBarHeight = MediaQuery.of(context).padding.top;
+    final initialImageHeight = screenHeight * 0.5;
 
     return Consumer2<ProductDetailsProvider, HomeProvider>(
       builder: (context, productProvider, homeProvider, child) {
@@ -113,146 +131,173 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         return Scaffold(
           body: Stack(
             children: [
-              SingleChildScrollView(
+              CustomScrollView(
                 controller: _scrollController,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 25),
-                    Stack(
-                      children: [
-                        ProductImageWidget(
-                          product: product,
-                          height: screenHeight * 0.4,
-                        ),
-                         Positioned(
-                          top: 16,
-                          left: 16,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: AppTheme.lightDividerColor.withValues(alpha: 0.6)
-                            ),
-                              child: const CustomBackButton()),
-                        ),
+                slivers: [
+                  SliverAppBar(
+                    expandedHeight: initialImageHeight,
+                    pinned: true,
+                    floating: false,
+                    snap: false,
+                    stretch: true,
+                    elevation: 0,
+                    scrolledUnderElevation: 0,
+                    collapsedHeight: kToolbarHeight,
+                    backgroundColor: AppTheme.white,
+                    leading: _showAppBar 
+                      ? const CustomBackButton() 
+                      : const SizedBox.shrink(),
+                    title: _showAppBar 
+                      ? Text(
+                          product.name,
+                          style: context.titleLarge.copyWith(color: AppTheme.primaryColor),
+                          overflow: TextOverflow.ellipsis,
+                        ) 
+                      : null,
+                    flexibleSpace: FlexibleSpaceBar(
+                      collapseMode: CollapseMode.parallax,
+                      stretchModes: const [
+                        StretchMode.zoomBackground,
                       ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16.0,
-                        vertical: 8.0,
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                      background: Stack(
+                        fit: StackFit.expand,
                         children: [
-                          Text(
-                            product.name,
-                            style: context.headlineMedium.copyWith(fontWeight: FontWeight.w900),
+                          ProductImageWidget(
+                            product: product,
+                            height: double.infinity,
                           ),
-                          const SizedBox(height: 10),
-                          // Add pricing and ratings UI
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              // Rating and review count
-                              Row(
-                                children: [
-                                  // Star rating
-                                  Row(
-                                    children: List.generate(5, (index) {
-                                      return Icon(
-                                        index < product.rating.floor()
-                                            ? Icons.star
-                                            : index < product.rating
-                                                ? Icons.star_half
-                                                : Icons.star_border,
-                                        color: AppTheme.primaryColor,
-                                        size: 18,
-                                      );
-                                    }),
-                                  ),
-                                  const SizedBox(width: 4),
-                                  Text(
-                                    "(${product.ratingCount} ${'reviews'.tr(context)})",
-                                    style: context.bodyMedium.copyWith(
-                                      color: Colors.grey[600],
-                                    ),
-                                  ),
-                                ],
+                          !_showAppBar ? Positioned(
+                            top: statusBarHeight + 16,
+                            left: 16,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: AppTheme.lightDividerColor.withValues(alpha: 0.6)
                               ),
-                              // Wishlist icon (already exists in another position, can be removed if needed)
-                            ],
-                          ),
-                          const SizedBox(height: 8),
-                          // Price display and fav icon
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              RichText(
-                                text: TextSpan(
+                                child: const CustomBackButton()),
+                          ) : const SizedBox.shrink(),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SliverList(
+                    delegate: SliverChildListDelegate([
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16.0,
+                          vertical: 8.0,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              product.name,
+                              style: context.headlineMedium.copyWith(fontWeight: FontWeight.w900),
+                            ),
+                            const SizedBox(height: 10),
+                            // Add pricing and ratings UI
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                // Rating and review count
+                                Row(
                                   children: [
-                                    TextSpan(
-                                      text: product.price,
-                                      style: context.headlineMedium.copyWith(
-                                        color: AppTheme.primaryColor,
-                                        fontWeight: FontWeight.bold,
+                                    // Star rating
+                                    Row(
+                                      children: List.generate(5, (index) {
+                                        return Icon(
+                                          index < product.rating.floor()
+                                              ? Icons.star
+                                              : index < product.rating
+                                                  ? Icons.star_half
+                                                  : Icons.star_border,
+                                          color: AppTheme.primaryColor,
+                                          size: 18,
+                                        );
+                                      }),
+                                    ),
+                                    const SizedBox(width: 4),
+                                    Text(
+                                      "(${product.ratingCount} ${'reviews'.tr(context)})",
+                                      style: context.bodyMedium.copyWith(
+                                        color: Colors.grey[600],
                                       ),
                                     ),
                                   ],
                                 ),
-                              ),
-                              Consumer<WishlistProvider>(
-                                builder: (context, wishlistProvider, child) {
-                                  return IconButton(
-                                    icon: Icon(
-                                      wishlistProvider.isProductInWishlist(
-                                        widget.slug,
-                                      )
-                                          ? Icons.favorite
-                                          : Icons.favorite_border,
-                                      color: AppTheme.primaryColor,
-                                      size: 32,
-                                    ),
-                                    onPressed: () async {
-                                      await AppFunctions.toggleWishlistStatus(
-                                        context,
-                                        widget.slug,
-                                      );
-                                    },
-                                  );
-                                },
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 16),
+                              ],
+                            ),
+                            const SizedBox(height: 8),
+                            // Price display and fav icon
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                RichText(
+                                  text: TextSpan(
+                                    children: [
+                                      TextSpan(
+                                        text: product.price,
+                                        style: context.headlineMedium.copyWith(
+                                          color: AppTheme.primaryColor,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Consumer<WishlistProvider>(
+                                  builder: (context, wishlistProvider, child) {
+                                    return IconButton(
+                                      icon: Icon(
+                                        wishlistProvider.isProductInWishlist(
+                                          widget.slug,
+                                        )
+                                            ? Icons.favorite
+                                            : Icons.favorite_border,
+                                        color: AppTheme.primaryColor,
+                                        size: 32,
+                                      ),
+                                      onPressed: () async {
+                                        await AppFunctions.toggleWishlistStatus(
+                                          context,
+                                          widget.slug,
+                                        );
+                                      },
+                                    );
+                                  },
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 16),
 
-                          // Display variations
-                          if (product.hasVariation) ...[
-                            // Color variants
-                            if (product.colors.isNotEmpty) ...[
-                              ColorVariantsWidget(product: product),
-                              const SizedBox(height: 16),
+                            // Display variations
+                            if (product.hasVariation) ...[
+                              // Color variants
+                              if (product.colors.isNotEmpty) ...[
+                                ColorVariantsWidget(product: product),
+                                const SizedBox(height: 16),
+                              ],
+
+                              // Choice options
+                              if (product.choiceOptions.isNotEmpty) ...[
+                                ChoiceOptionsWidget(product: product),
+                                const SizedBox(height: 16),
+                              ],
                             ],
 
-                            // Choice options
-                            if (product.choiceOptions.isNotEmpty) ...[
-                              ChoiceOptionsWidget(product: product),
-                              const SizedBox(height: 16),
-                            ],
+                            DescriptionWidget(product: product),
+
+                            // Add specifications table widget
+                            SpecificationsWidget(product: product),
                           ],
-
-                          DescriptionWidget(product: product),
-
-                          // Add specifications table widget
-                          SpecificationsWidget(product: product),
-                        ],
+                        ),
                       ),
-                    ),
-                    ReviewsSectionWidget(productId: product.id),
-                    RelatedProductsWidget(provider: homeProvider),
-                    const SizedBox(height: 130),
-                  ],
-                ),
+                      ReviewsSectionWidget(productId: product.id),
+                      RelatedProductsWidget(provider: homeProvider),
+                      const SizedBox(height: 130),
+                    ]),
+                  ),
+                ],
               ),
               Positioned(
                 left: 0,

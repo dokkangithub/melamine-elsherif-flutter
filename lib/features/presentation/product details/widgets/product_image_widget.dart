@@ -51,55 +51,60 @@ class _ProductImageWidgetState extends State<ProductImageWidget> {
           }
         });
 
-        return Column(
+        return Stack(
           children: [
             // Main image carousel
-            InkWell(
-              onTap: () {
-                _openGallery(context, provider);
-              },
-              child: SizedBox(
-                height: widget.height,
-                child: PageView.builder(
-                  controller: _pageController,
-                  itemCount: widget.product.photos.length,
-                  onPageChanged: (index) {
-                    provider.currentPhotoIndex = index;
-                  },
-                  itemBuilder: (context, index) {
-                    return CustomImage(
-                      imageUrl: widget.product.photos[index].path,
-                      fit: BoxFit.fill,
-                      height: widget.height,
-                      width: double.infinity,
-                    );
-                  },
-                ),
-              ),
-            ),
-            if (widget.product.photos.length > 1) ...[
-              const SizedBox(height: 10),
-              // Dots indicator
-              SmoothPageIndicator(
+            SizedBox(
+              height: widget.height,
+              width: double.infinity,
+              child: PageView.builder(
                 controller: _pageController,
-                count: widget.product.photos.length,
-                effect: WormEffect(
-                  dotHeight: 8,
-                  dotWidth: 8,
-                  activeDotColor: Theme.of(context).primaryColor,
-                  dotColor: Colors.grey.shade400,
-                  spacing: 8,
-                ),
-                onDotClicked: (index) {
-                  _pageController.animateToPage(
-                    index,
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeInOut,
-                  );
+                itemCount: widget.product.photos.length,
+                onPageChanged: (index) {
                   provider.currentPhotoIndex = index;
                 },
+                itemBuilder: (context, index) {
+                  return InkWell(
+                    onTap: () => _openGallery(context, provider),
+                    child: CustomImage(
+                      imageUrl: widget.product.photos[index].path,
+                      fit: BoxFit.cover,
+                      height: widget.height,
+                      width: double.infinity,
+                    ),
+                  );
+                },
               ),
-            ],
+            ),
+            
+            // Dots indicator positioning at bottom of image
+            if (widget.product.photos.length > 1)
+              Positioned(
+                bottom: 16,
+                left: 0,
+                right: 0,
+                child: Center(
+                  child: SmoothPageIndicator(
+                    controller: _pageController,
+                    count: widget.product.photos.length,
+                    effect: WormEffect(
+                      dotHeight: 8,
+                      dotWidth: 8,
+                      activeDotColor: Theme.of(context).primaryColor,
+                      dotColor: Colors.white.withOpacity(0.8),
+                      spacing: 8,
+                    ),
+                    onDotClicked: (index) {
+                      _pageController.animateToPage(
+                        index,
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeInOut,
+                      );
+                      provider.currentPhotoIndex = index;
+                    },
+                  ),
+                ),
+              ),
           ],
         );
       },
