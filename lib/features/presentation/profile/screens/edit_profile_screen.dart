@@ -1,10 +1,12 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:animate_do/animate_do.dart';
 import 'package:melamine_elsherif/core/config/themes.dart/theme.dart';
 import 'package:melamine_elsherif/core/utils/constants/app_assets.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_cached_image.dart';
 import 'package:melamine_elsherif/core/utils/widgets/cutsom_toast.dart';
 import 'package:provider/provider.dart';
+import 'package:quickalert/quickalert.dart';
 import '../../../../core/utils/constants/app_strings.dart';
 import '../../../../core/utils/enums/loading_state.dart';
 import '../../../../core/utils/extension/text_style_extension.dart';
@@ -73,8 +75,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         elevation: 0,
         scrolledUnderElevation: 0,
         centerTitle: true,
-        title: Text('edit_profile'.tr(context),
-          style: context.titleLarge,
+        title: FadeIn(
+          duration: const Duration(milliseconds: 500),
+          child: Text('edit_profile'.tr(context),
+            style: context.titleLarge,
+          ),
         ),
         leading: InkWell(
           child: const Padding(
@@ -84,13 +89,16 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           onTap: () => Navigator.pop(context),
         ),
         actions: [
-          TextButton(
-            onPressed: isUpdating ? null : () => _updateProfile(context, profileProvider),
-            child: Text(
-              'Save',
-              style: context.titleMedium.copyWith(
-                color: AppTheme.primaryColor,
-                fontWeight: FontWeight.w800,
+          FadeIn(
+            duration: const Duration(milliseconds: 500),
+            child: TextButton(
+              onPressed: isUpdating ? null : () => _updateProfile(context, profileProvider),
+              child: Text(
+                'Save',
+                style: context.titleMedium.copyWith(
+                  color: AppTheme.primaryColor,
+                  fontWeight: FontWeight.w800,
+                ),
               ),
             ),
           ),
@@ -105,115 +113,150 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 // Profile Image
-                Center(
-                  child: Stack(
-                    children: [
-                      Container(
-                        width: 120,
-                        height: 120,
-                        decoration: BoxDecoration(
-                          border: Border.all(width: 0.5,color: Colors.grey),
-                          shape: BoxShape.circle,
-                          color: Colors.grey[200],
-                          image: _selectedImage != null
-                              ? DecorationImage(
-                                  image: FileImage(_selectedImage!),
-                                  fit: BoxFit.cover,
-                                )
-                              : profileProvider.profileImageUrl != null
-                                  ? DecorationImage(
-                                      image: NetworkImage(profileProvider.profileImageUrl!),
-                                      fit: BoxFit.cover,
-                                    )
-                                  : null,
+                FadeInDown(
+                  duration: const Duration(milliseconds: 600),
+                  child: Center(
+                    child: Stack(
+                      children: [
+                        Container(
+                          width: 120,
+                          height: 120,
+                          decoration: BoxDecoration(
+                            border: Border.all(width: 0.5,color: Colors.grey),
+                            shape: BoxShape.circle,
+                            color: Colors.grey[200],
+                            image: _selectedImage != null
+                                ? DecorationImage(
+                                    image: FileImage(_selectedImage!),
+                                    fit: BoxFit.cover,
+                                  )
+                                : profileProvider.profileImageUrl != null
+                                    ? DecorationImage(
+                                        image: NetworkImage(profileProvider.profileImageUrl!),
+                                        fit: BoxFit.cover,
+                                      )
+                                    : null,
+                          ),
+                          child: profileProvider.profileImageUrl == null && _selectedImage == null
+                              ? const Icon(Icons.person, size: 80, color: Colors.grey)
+                              : null,
                         ),
-                        child: profileProvider.profileImageUrl == null && _selectedImage == null
-                            ? const Icon(Icons.person, size: 80, color: Colors.grey)
-                            : null,
-                      ),
-                      Positioned(
-                        right: 0,
-                        bottom: 0,
-                        child: GestureDetector(
-                          onTap: _pickImage,
-                          child: Container(
-                            width: 40,
-                            height: 40,
-                            decoration: BoxDecoration(
-                              color: Colors.red[400],
-                              shape: BoxShape.circle,
-                              border: Border.all(color: Colors.white, width: 2),
-                            ),
-                            child: const Icon(
-                              Icons.camera_alt,
-                              color: Colors.white,
-                              size: 20,
+                        Positioned(
+                          right: 0,
+                          bottom: 0,
+                          child: ZoomIn(
+                            delay: const Duration(milliseconds: 400),
+                            duration: const Duration(milliseconds: 500),
+                            child: GestureDetector(
+                              onTap: _pickImage,
+                              child: Container(
+                                width: 40,
+                                height: 40,
+                                decoration: BoxDecoration(
+                                  color: Colors.red[400],
+                                  shape: BoxShape.circle,
+                                  border: Border.all(color: Colors.white, width: 2),
+                                ),
+                                child: const Icon(
+                                  Icons.camera_alt,
+                                  color: Colors.white,
+                                  size: 20,
+                                ),
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-                TextButton(
-                  onPressed: _pickImage,
-                  child: Text(
-                    'Change Photo',
-                    style: context.titleSmall.copyWith(
-                      color: AppTheme.primaryColor,
+                FadeIn(
+                  delay: const Duration(milliseconds: 400),
+                  duration: const Duration(milliseconds: 500),
+                  child: TextButton(
+                    onPressed: _pickImage,
+                    child: Text(
+                      'Change Photo',
+                      style: context.titleSmall.copyWith(
+                        color: AppTheme.primaryColor,
+                      ),
                     ),
                   ),
                 ),
                 const SizedBox(height: 24),
                 
                 // Form Fields
-                _buildFormField(
-                  label: 'Full Name',
-                  controller: _fullNameController,
+                SlideInLeft(
+                  delay: const Duration(milliseconds: 200),
+                  duration: const Duration(milliseconds: 500),
+                  child: _buildFormField(
+                    label: 'Full Name',
+                    controller: _fullNameController,
+                  ),
                 ),
                 const SizedBox(height: 16),
                 
-                _buildFormField(
-                  label: 'username'.tr(context),
-                  readOnly: true,
-                  controller: _fullNameController,
-                  prefix: '@',
+                SlideInLeft(
+                  delay: const Duration(milliseconds: 300),
+                  duration: const Duration(milliseconds: 500),
+                  child: _buildFormField(
+                    label: 'username'.tr(context),
+                    readOnly: true,
+                    controller: _fullNameController,
+                    prefix: '@',
+                  ),
                 ),
                 const SizedBox(height: 16),
                 
-                _buildFormField(
-                  label: 'bio'.tr(context),
-                  controller: _bioController,
-                  maxLines: 4,
-                  hintText: 'write_something_about_yourself'.tr(context),
+                SlideInLeft(
+                  delay: const Duration(milliseconds: 400),
+                  duration: const Duration(milliseconds: 500),
+                  child: _buildFormField(
+                    label: 'bio'.tr(context),
+                    controller: _bioController,
+                    maxLines: 4,
+                    hintText: 'write_something_about_yourself'.tr(context),
+                  ),
                 ),
                 const SizedBox(height: 16),
                 
-                _buildFormField(
-                  label: 'email'.tr(context),
-                  controller: _emailController,
-                  readOnly: true,
-                  keyboardType: TextInputType.emailAddress,
+                SlideInLeft(
+                  delay: const Duration(milliseconds: 500),
+                  duration: const Duration(milliseconds: 500),
+                  child: _buildFormField(
+                    label: 'email'.tr(context),
+                    controller: _emailController,
+                    readOnly: true,
+                    keyboardType: TextInputType.emailAddress,
+                  ),
                 ),
                 const SizedBox(height: 16),
                 
-                _buildFormField(
-                  label: 'phone_number'.tr(context),
-                  controller: _phoneController,
-                  readOnly: true,
-                  keyboardType: TextInputType.phone,
+                SlideInLeft(
+                  delay: const Duration(milliseconds: 600),
+                  duration: const Duration(milliseconds: 500),
+                  child: _buildFormField(
+                    label: 'phone_number'.tr(context),
+                    controller: _phoneController,
+                    readOnly: true,
+                    keyboardType: TextInputType.phone,
+                  ),
                 ),
 
                 const SizedBox(height: 32),
                 
                 // Delete Account
-                CustomButton(
-                  onPressed: () {
-                    _showLogoutConfirmation(context);
-                  },
-                  isOutlined: true,
-                  child: Text('delete_account'.tr(context),
-                    style: context.titleMedium.copyWith(color: AppTheme.primaryColor),
+                FadeInUp(
+                  delay: const Duration(milliseconds: 700),
+                  duration: const Duration(milliseconds: 600),
+                  child: CustomButton(
+                    onPressed: () {
+                      _showLogoutConfirmation(context);
+                    },
+                    isOutlined: true,
+                    child: Text('delete_account'.tr(context),
+                      style: context.titleMedium.copyWith(color: AppTheme.primaryColor),
+                    ),
                   ),
                 ),
                 const SizedBox(height: 40),
@@ -314,38 +357,27 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   void _showLogoutConfirmation(BuildContext context) {
     final navigatorContext = context;
 
-    showDialog(
+    QuickAlert.show(
       context: context,
-      builder:
-          (dialogContext) => AlertDialog(
-        title: Text('delete_account'.tr(context)),
-        content: Text('are_you_sure_you'.tr(context)),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(dialogContext),
-            child: Text('cancel'.tr(navigatorContext),style: context.titleSmall.copyWith(color: AppTheme.darkDividerColor),),
-          ),
-          TextButton(
-            onPressed: () async {
-              Navigator.pop(dialogContext);
-              await navigatorContext.read<AuthProvider>().logout();
-              AppStrings.userId = null;
-              AppStrings.token = null;
+      type: QuickAlertType.warning,
+      title: 'delete_account'.tr(context),
+      text: 'are_you_sure_you'.tr(context),
+      confirmBtnText: 'delete'.tr(navigatorContext),
+      cancelBtnText: 'cancel'.tr(navigatorContext),
+      confirmBtnColor: AppTheme.errorColor,
+      onConfirmBtnTap: () async {
+        Navigator.pop(context); // Close the dialog
+        await navigatorContext.read<AuthProvider>().logout();
+        AppStrings.userId = null;
+        AppStrings.token = null;
 
-              if (navigatorContext.mounted) {
-                Navigator.of(navigatorContext).pushAndRemoveUntil(
-                  MaterialPageRoute(builder: (context) => const LoginScreen()),
-                      (route) => false,
-                );
-              }
-            },
-            child: Text(
-              'delete'.tr(navigatorContext),
-              style: context.titleSmall.copyWith(color: AppTheme.errorColor),
-            ),
-          ),
-        ],
-      ),
+        if (navigatorContext.mounted) {
+          Navigator.of(navigatorContext).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => const LoginScreen()),
+                (route) => false,
+          );
+        }
+      },
     );
   }
 

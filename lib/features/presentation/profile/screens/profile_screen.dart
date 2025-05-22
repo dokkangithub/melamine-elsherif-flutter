@@ -18,6 +18,7 @@ import '../controller/profile_provider.dart';
 import '../widgets/profile_menu_item.dart';
 import '../../../../core/utils/widgets/premium_language_dialog.dart';
 import 'package:radial_button/widget/circle_floating_button.dart';
+import 'package:quickalert/quickalert.dart';
 
 class ProfileScreen extends StatefulWidget {
   final bool isActive;
@@ -771,38 +772,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void _showLogoutConfirmation(BuildContext context) {
     final navigatorContext = context;
 
-    showDialog(
+    QuickAlert.show(
       context: context,
-      builder:
-          (dialogContext) => AlertDialog(
-        title: Text('logout'.tr(navigatorContext),),
-        content: Text('confirm_logout'.tr(navigatorContext)),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(dialogContext),
-            child: Text('cancel'.tr(navigatorContext),style: context.titleSmall.copyWith(color: AppTheme.darkDividerColor),),
-          ),
-          TextButton(
-            onPressed: () async {
-              Navigator.pop(dialogContext);
-              await navigatorContext.read<AuthProvider>().logout();
-              AppStrings.userId = null;
-              AppStrings.token = null;
+      type: QuickAlertType.confirm,
+      title: 'logout'.tr(navigatorContext),
+      text: 'confirm_logout'.tr(navigatorContext),
+      confirmBtnText: 'logout'.tr(navigatorContext),
+      cancelBtnText: 'cancel'.tr(navigatorContext),
+      confirmBtnColor: AppTheme.primaryColor,
+      onConfirmBtnTap: () async {
+        Navigator.pop(context); // Close the dialog
+        await navigatorContext.read<AuthProvider>().logout();
+        AppStrings.userId = null;
+        AppStrings.token = null;
 
-              if (navigatorContext.mounted) {
-                Navigator.of(navigatorContext).pushAndRemoveUntil(
-                  MaterialPageRoute(builder: (context) => const LoginScreen()),
-                      (route) => false,
-                );
-              }
-            },
-            child: Text(
-              'logout'.tr(navigatorContext),
-              style: context.titleSmall.copyWith(color: AppTheme.errorColor),
-            ),
-          ),
-        ],
-      ),
+        if (navigatorContext.mounted) {
+          Navigator.of(navigatorContext).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => const LoginScreen()),
+            (route) => false,
+          );
+        }
+      },
     );
   }
 
