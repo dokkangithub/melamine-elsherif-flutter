@@ -37,7 +37,8 @@ class _SnappableCartItemState extends State<SnappableCartItem>
     );
 
     _animationController.addStatusListener((status) {
-      if (status == AnimationStatus.completed && _isDeleting) {
+      if (status == AnimationStatus.completed && _isDeleting && mounted) {
+        // Ensure we're mounted before calling callback
         widget.onDelete(widget.item.id);
       }
     });
@@ -59,6 +60,7 @@ class _SnappableCartItemState extends State<SnappableCartItem>
   @override
   Widget build(BuildContext context) {
     return Snappable(
+      key: ValueKey('cart_item_${widget.item.id}'),
       animation: _animationController,
       style: const SnappableStyle(
         particleLifetime: 0.8,

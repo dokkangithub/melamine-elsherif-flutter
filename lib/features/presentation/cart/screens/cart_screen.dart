@@ -47,6 +47,8 @@ class _CartScreenState extends State<CartScreen> {
   bool _isApplyingCoupon = false;
   bool _shouldAnimate = false;
   bool _isReconnecting = false;
+  // Track items being deleted to avoid UI jumps
+  final Set<int> _itemsBeingDeleted = {};
 
   @override
   void initState() {
@@ -188,6 +190,22 @@ class _CartScreenState extends State<CartScreen> {
     }
   }
 
+  void _handleItemDelete(int itemId) {
+    // Mark item as being deleted to prevent layout jumps
+    setState(() {
+      _itemsBeingDeleted.add(itemId);
+    });
+    
+    // Perform actual deletion
+    context.read<CartProvider>().deleteCartItem(itemId).then((_) {
+      if (mounted) {
+        setState(() {
+          _itemsBeingDeleted.remove(itemId);
+        });
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -233,6 +251,11 @@ class _CartScreenState extends State<CartScreen> {
               : const EmptyCartWidget();
           }
 
+          // Filter out items that are currently being deleted for visual display
+          final visibleItems = cartProvider.cartItems
+              .where((item) => !_itemsBeingDeleted.contains(item.id))
+              .toList();
+
           return Column(
             children: [
               // Offline banner (if applicable)
@@ -241,40 +264,40 @@ class _CartScreenState extends State<CartScreen> {
               // Cart items in an expandable list
               Expanded(
                 child: ListView.separated(
+                  key: const PageStorageKey('cart_items_list'),
                   padding: const EdgeInsets.symmetric(horizontal: 16),
-                  separatorBuilder:
-                      (context, index) => Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                        child: Divider(color: Colors.grey[300]),
-                      ),
-                  itemCount: cartProvider.cartItems.length,
+                  separatorBuilder: (context, index) => Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                    child: Divider(color: Colors.grey[300]),
+                  ),
+                  itemCount: visibleItems.length,
                   itemBuilder: (context, index) {
-                    final CartItem item = cartProvider.cartItems[index];
+                    final CartItem item = visibleItems[index];
                     
+                    // Use a unique key for each cart item based on its ID
                     return _shouldAnimate
                       ? FadeInUp(
+                          key: ValueKey('cart_animation_${item.id}'),
                           delay: Duration(milliseconds: 50 * index),
                           duration: const Duration(milliseconds: 400),
                           child: SnappableCartItem(
+                            key: ValueKey('cart_item_${item.id}'),
                             item: item,
                             index: index,
                             onQuantityChanged: (int quantity) {
                               _updateQuantity(cartProvider, item.id, quantity);
                             },
-                            onDelete: (itemId) {
-                              cartProvider.deleteCartItem(itemId);
-                            },
+                            onDelete: _handleItemDelete,
                           ),
                         )
                       : SnappableCartItem(
+                          key: ValueKey('cart_item_${item.id}'),
                           item: item,
                           index: index,
                           onQuantityChanged: (int quantity) {
                             _updateQuantity(cartProvider, item.id, quantity);
                           },
-                          onDelete: (itemId) {
-                            cartProvider.deleteCartItem(itemId);
-                          },
+                          onDelete: _handleItemDelete,
                         );
                   },
                 ),
@@ -296,21 +319,19 @@ class _CartScreenState extends State<CartScreen> {
   }
 
   void _updateQuantity(CartProvider cartProvider, int itemId, int newQuantity) {
+    // Get current item to determine if this is an increment or decrement
+    final CartItem? currentItem = cartProvider.cartItems.firstWhere(
+      (item) => item.id == itemId, 
+      orElse: () => null as CartItem,
+    );
+    final bool isDecrement = currentItem != null && newQuantity < currentItem.quantity;
+    
     // Create a list of all cart IDs
-    final cartIds = cartProvider.cartItems
-        .map((i) => i.id.toString())
-        .join(',');
+    final cartIds = itemId.toString(); // Only update this specific item
+    final quantitiesStr = newQuantity.toString(); // New quantity
 
-    // Create updated quantities list
-    final quantities =
-        cartProvider.cartItems
-            .map((i) => i.id == itemId ? newQuantity : i.quantity)
-            .toList();
-
-    final quantitiesStr = quantities.join(',');
-
-    // Update cart quantities
-    cartProvider.updateCartQuantities(cartIds, quantitiesStr);
+    // Update cart quantities with operation type
+    cartProvider.updateCartQuantities(cartIds, quantitiesStr, isDecrement: isDecrement);
   }
 
   Widget _buildCartSummary(BuildContext context, CartProvider cartProvider) {

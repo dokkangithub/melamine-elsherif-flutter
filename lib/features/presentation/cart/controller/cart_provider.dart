@@ -36,6 +36,22 @@ class CartProvider extends ChangeNotifier {
   String cartError = '';
   bool _initialLoadComplete = false;
   
+  // Track items being updated (quantity)
+  Set<int> _itemsUpdatingQuantity = {};
+  // Maps item ID to the operation (true for decrement, false for increment)
+  Map<int, bool> _itemUpdateOperation = {};
+  
+  bool isItemQuantityUpdating(int itemId) => _itemsUpdatingQuantity.contains(itemId);
+  bool isDecrementOperation(int itemId) => _itemUpdateOperation[itemId] == true;
+  bool isIncrementOperation(int itemId) => _itemUpdateOperation[itemId] == false;
+  
+  // Helper to check if specific operation is being updated
+  bool isSpecificOperationUpdating(int itemId, bool isDecrement) {
+    return isItemQuantityUpdating(itemId) && 
+           _itemUpdateOperation.containsKey(itemId) &&
+           _itemUpdateOperation[itemId] == isDecrement;
+  }
+  
   // Synchronization tracking
   DateTime _lastSyncTime = DateTime.now();
   bool _needsFullSync = false;
@@ -232,15 +248,29 @@ class CartProvider extends ChangeNotifier {
     }
   }
 
+  // Optimized cart item deletion to avoid UI jumps
   Future<void> deleteCartItem(int cartId) async {
     try {
-      await deleteCartItemUseCase(cartId);
-      await fetchCartItems();
-      await fetchCartCount();
-      await fetchCartSummary();
+      // Store the current cart items
+      final List<CartItem> currentItems = [...cartItems];
+      
+      // First, optimistically remove the item locally for immediate UI feedback
+      cartItems = currentItems.where((item) => item.id != cartId).toList();
+      _updateLocalCartCount();
       notifyListeners();
+
+      // Then perform the actual server deletion
+      await deleteCartItemUseCase(cartId);
+      
+      // Finally refresh everything to make sure we're in sync
+      await Future.wait([
+        fetchCartItems(showLoading: false),
+        fetchCartSummary(),
+      ]);
     } catch (e) {
       cartError = e.toString();
+      // If there was an error, re-fetch the cart items to restore correct state
+      await fetchCartItems();
       notifyListeners();
     }
   }
@@ -257,15 +287,34 @@ class CartProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> updateCartQuantities(String cartIds, String quantities) async {
+  Future<void> updateCartQuantities(String cartIds, String quantities, {bool isDecrement = false}) async {
     try {
+      // Parse cart IDs to determine which items are being updated
+      final List<int> updatingIds = cartIds.split(',')
+          .map((idStr) => int.tryParse(idStr.trim()))
+          .whereType<int>()
+          .toList();
+      
+      // Mark items as updating and record the operation type
+      _itemsUpdatingQuantity.addAll(updatingIds);
+      
+      // Set operation type for each item being updated
+      for (final id in updatingIds) {
+        _itemUpdateOperation[id] = isDecrement;
+      }
+      
+      notifyListeners();
+      
       await updateCartQuantitiesUseCase(cartIds, quantities);
-      await fetchCartItems();
+      await fetchCartItems(showLoading: false);
       await fetchCartCount();
       await fetchCartSummary();
-      notifyListeners();
     } catch (e) {
       cartError = e.toString();
+    } finally {
+      // Clear updating status
+      _itemsUpdatingQuantity.clear();
+      _itemUpdateOperation.clear();
       notifyListeners();
     }
   }
