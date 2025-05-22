@@ -73,7 +73,6 @@ class AllProductsWidget extends StatelessWidget {
                 );
               },
             ),
-            const SizedBox(height: 12),
             GridView.builder(
               physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,

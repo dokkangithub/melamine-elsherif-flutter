@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:animate_do/animate_do.dart';
 import 'package:melamine_elsherif/core/config/themes.dart/theme.dart';
 import 'package:melamine_elsherif/core/utils/extension/text_theme_extension.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_back_button.dart';
@@ -102,31 +103,34 @@ class _SearchScreenState extends State<SearchScreen> {
           return Column(
             children: [
               const SizedBox(height: 20),
-              Row(
-                children: [
-                  const CustomBackButton(),
-                  Expanded(
-                    child: SearchInputField(
-                      controller: _searchController,
-                      onChanged: (value) {
-                        setState(() {
-                          _isSearchActive = value.isNotEmpty;
-                        });
-                        searchProvider.onSearchQueryChanged(value);
-                        if (value.isEmpty) {
-                          searchProvider.clearFilteredProducts();
-                          searchProvider.fetchFilteredProducts(
-                            refresh: true,
-                            name: '',
-                          );
-                        }
-                      },
-                      onSubmitted: _performSearch,
-                      onClear: _clearSearch,
+              FadeIn(
+                duration: const Duration(milliseconds: 400),
+                child: Row(
+                  children: [
+                    const CustomBackButton(),
+                    Expanded(
+                      child: SearchInputField(
+                        controller: _searchController,
+                        onChanged: (value) {
+                          setState(() {
+                            _isSearchActive = value.isNotEmpty;
+                          });
+                          searchProvider.onSearchQueryChanged(value);
+                          if (value.isEmpty) {
+                            searchProvider.clearFilteredProducts();
+                            searchProvider.fetchFilteredProducts(
+                              refresh: true,
+                              name: '',
+                            );
+                          }
+                        },
+                        onSubmitted: _performSearch,
+                        onClear: _clearSearch,
+                      ),
                     ),
-                  ),
-                  const SizedBox(width: 20),
-                ],
+                    const SizedBox(width: 20),
+                  ],
+                ),
               ),
               const SizedBox(height: 10),
               Expanded(
@@ -152,32 +156,41 @@ class _SearchScreenState extends State<SearchScreen> {
     final String errorMessage = ""; // searchProvider.filteredProductsError;
     if (searchProvider.filteredProductsState == LoadingState.error && searchProvider.filteredProducts.isEmpty) {
         return Center(
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                    Text(errorMessage.isNotEmpty
-                        ? errorMessage
-                        : 'error_loading_products'.tr(context)),
-                    const SizedBox(height: 16),
-                    ElevatedButton(
-                        onPressed: () => _performSearch(_searchController.text),
-                        child: Text('retry'.tr(context)),
-                    ),
-                ],
+            child: FadeIn(
+              duration: const Duration(milliseconds: 500),
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                      Text(errorMessage.isNotEmpty
+                          ? errorMessage
+                          : 'error_loading_products'.tr(context)),
+                      const SizedBox(height: 16),
+                      ElevatedButton(
+                          onPressed: () => _performSearch(_searchController.text),
+                          child: Text('retry'.tr(context)),
+                      ),
+                  ],
+              ),
             ),
         );
     }
 
     if (searchProvider.filteredProducts.isEmpty) {
-      return const CustomEmptyWidget();
+      return FadeIn(
+        duration: const Duration(milliseconds: 400),
+        child: const CustomEmptyWidget(),
+      );
     }
 
     return Column(
       children: [
         Expanded(
-          child: SearchResultsGrid(
-            searchQuery: _searchController.text,
-            scrollController: _scrollControllerForSearchResults,
+          child: FadeInUp(
+            duration: const Duration(milliseconds: 600),
+            child: SearchResultsGrid(
+              searchQuery: _searchController.text,
+              scrollController: _scrollControllerForSearchResults,
+            ),
           ),
         ),
         // TODO: Uncomment and use your actual pagination loading state from SearchProvider
@@ -206,52 +219,55 @@ class _SearchScreenState extends State<SearchScreen> {
       return const SizedBox.shrink();
     }
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'search_suggestions'.tr(context),
-            style: context.titleMedium!.copyWith(fontWeight: FontWeight.w700),
-          ),
-          const SizedBox(height: 8),
-          Wrap(
-            spacing: 8.0,
-            runSpacing: 4.0,
-            children: suggestions.map((suggestion) { 
-              return InkWell(
-                onTap: () {
-                  _searchController.text = suggestion.query; 
-                  _searchController.selection = TextSelection.fromPosition(
-                    TextPosition(offset: _searchController.text.length),
-                  );
-                  _performSearch(suggestion.query); 
-                },
-                splashColor: Colors.transparent,
-                highlightColor: Colors.transparent,
-                hoverColor: Colors.transparent,
-                borderRadius: BorderRadius.circular(16.0),
-                child: Chip(
-                  label: Row(
-                     mainAxisSize: MainAxisSize.min,
-                     children: [
-                       const Icon(Icons.refresh,color: AppTheme.primaryColor, size: 16),
-                       const SizedBox(width: 4),
-                       Text(suggestion.query), 
-                     ],
-                   ),
-                  backgroundColor: Colors.grey[200],
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-                  shape: RoundedRectangleBorder(
-                    side: const BorderSide(color: Colors.red, width: 0.002),
-                    borderRadius: BorderRadius.circular(16.0),
+    return FadeInDown(
+      duration: const Duration(milliseconds: 500),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'search_suggestions'.tr(context),
+              style: context.titleMedium!.copyWith(fontWeight: FontWeight.w700),
+            ),
+            const SizedBox(height: 8),
+            Wrap(
+              spacing: 8.0,
+              runSpacing: 4.0,
+              children: suggestions.map((suggestion) { 
+                return InkWell(
+                  onTap: () {
+                    _searchController.text = suggestion.query; 
+                    _searchController.selection = TextSelection.fromPosition(
+                      TextPosition(offset: _searchController.text.length),
+                    );
+                    _performSearch(suggestion.query); 
+                  },
+                  splashColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
+                  hoverColor: Colors.transparent,
+                  borderRadius: BorderRadius.circular(16.0),
+                  child: Chip(
+                    label: Row(
+                       mainAxisSize: MainAxisSize.min,
+                       children: [
+                         const Icon(Icons.refresh,color: AppTheme.primaryColor, size: 16),
+                         const SizedBox(width: 4),
+                         Text(suggestion.query), 
+                       ],
+                     ),
+                    backgroundColor: Colors.grey[200],
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+                    shape: RoundedRectangleBorder(
+                      side: const BorderSide(color: Colors.red, width: 0.002),
+                      borderRadius: BorderRadius.circular(16.0),
+                    ),
                   ),
-                ),
-              );
-            }).toList(),
-          ),
-        ],
+                );
+              }).toList(),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -268,13 +284,19 @@ class _SearchScreenState extends State<SearchScreen> {
           const SizedBox(height: 16),
           isLoadingPopular
               ? const PopularSearchesShimmer()
-              : PopularSearches(
-                  popularProducts: searchProvider.filteredProducts,
+              : FadeIn(
+                  duration: const Duration(milliseconds: 600),
+                  child: PopularSearches(
+                    popularProducts: searchProvider.filteredProducts,
+                  ),
                 ),
           if (!isLoadingPopular && searchProvider.filteredProducts.isEmpty)
-            const Padding(
-              padding: EdgeInsets.only(top: 32.0),
-              child: CustomEmptyWidget(),
+            FadeInUp(
+              duration: const Duration(milliseconds: 500),
+              child: const Padding(
+                padding: EdgeInsets.only(top: 32.0),
+                child: CustomEmptyWidget(),
+              ),
             ),
         ],
       ),

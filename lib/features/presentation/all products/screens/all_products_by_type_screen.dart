@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:animate_do/animate_do.dart';
 import 'package:melamine_elsherif/core/config/themes.dart/theme.dart';
 import 'package:melamine_elsherif/core/utils/constants/app_assets.dart';
 import 'package:melamine_elsherif/core/utils/enums/products_type.dart';
@@ -194,100 +195,110 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
           body: SafeArea(
             child: Column(
               children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 20.0,
-                    vertical: 20.0,
-                  ),
-                  child: Row(
-                    children: [
-                      const SizedBox(width: 6),
-                      InkWell(
-                        onTap: () => Navigator.pop(context),
-                        child: const Icon(
-                          Icons.arrow_back_ios,
-                          size: 20,
-                          color: AppTheme.accentColor,
+                // App bar with back button and search field
+                FadeIn(
+                  duration: const Duration(milliseconds: 400),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20.0,
+                      vertical: 20.0,
+                    ),
+                    child: Row(
+                      children: [
+                        const SizedBox(width: 6),
+                        InkWell(
+                          onTap: () => Navigator.pop(context),
+                          child: const Icon(
+                            Icons.arrow_back_ios,
+                            size: 20,
+                            color: AppTheme.accentColor,
+                          ),
                         ),
-                      ),
-                      Expanded(
-                        child: InkWell(
-                          onTap: () {
-                            AppRoutes.navigateTo(
-                              context,
-                              AppRoutes.searchScreen,
-                            );
-                          },
-                          child: Container(
-                            margin: const EdgeInsets.symmetric(horizontal: 10),
-                            padding: const EdgeInsets.symmetric(horizontal: 15),
-                            height: 45,
-                            decoration: BoxDecoration(
-                              color: AppTheme.lightBackgroundColor,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Row(
-                              children: [
-                                const CustomImage(
-                                  assetPath: AppSvgs.category_search_icon,
-                                ),
-                                const SizedBox(width: 10),
-                                Expanded(
-                                  child: Text(
-                                    'search_for_yours'.tr(context),
-                                    style: context.titleSmall?.copyWith(
-                                      color: AppTheme.lightSecondaryTextColor,
-                                    ),
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 1,
+                        Expanded(
+                          child: InkWell(
+                            onTap: () {
+                              AppRoutes.navigateTo(
+                                context,
+                                AppRoutes.searchScreen,
+                              );
+                            },
+                            child: Container(
+                              margin: const EdgeInsets.symmetric(horizontal: 10),
+                              padding: const EdgeInsets.symmetric(horizontal: 15),
+                              height: 45,
+                              decoration: BoxDecoration(
+                                color: AppTheme.lightBackgroundColor,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Row(
+                                children: [
+                                  const CustomImage(
+                                    assetPath: AppSvgs.category_search_icon,
                                   ),
-                                ),
-                              ],
+                                  const SizedBox(width: 10),
+                                  Expanded(
+                                    child: Text(
+                                      'search_for_yours'.tr(context),
+                                      style: context.titleSmall?.copyWith(
+                                        color: AppTheme.lightSecondaryTextColor,
+                                      ),
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 1,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
 
                 // Product type tabs - New Style
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  physics: const BouncingScrollPhysics(),
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16.0,
-                    vertical: 12.0,
-                  ),
-                  child: Row(
-                    children:
-                        ProductType.values.map((type) {
-                          bool isSelected = _selectedProductType == type;
-                          return Padding(
-                            padding: const EdgeInsets.only(right: 8.0),
-                            child: _buildProductTypeChip(
-                              text: _productTypeNames[type]!.tr(context),
-                              isSelected: isSelected,
-                              onTap: () {
-                                setState(() {
-                                  _selectedProductType = type;
-                                  _fetchProducts(homeProvider, refresh: true);
-                                });
-                              },
-                            ),
-                          );
-                        }).toList(),
+                FadeInDown(
+                  duration: const Duration(milliseconds: 500),
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    physics: const BouncingScrollPhysics(),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16.0,
+                      vertical: 12.0,
+                    ),
+                    child: Row(
+                      children:
+                          ProductType.values.map((type) {
+                            bool isSelected = _selectedProductType == type;
+                            return Padding(
+                              padding: const EdgeInsets.only(right: 8.0),
+                              child: _buildProductTypeChip(
+                                text: _productTypeNames[type]!.tr(context),
+                                isSelected: isSelected,
+                                onTap: () {
+                                  setState(() {
+                                    _selectedProductType = type;
+                                    _fetchProducts(homeProvider, refresh: true);
+                                  });
+                                },
+                              ),
+                            );
+                          }).toList(),
+                    ),
                   ),
                 ),
 
                 // Products grid
                 Expanded(
-                  child: _buildProductsGrid(
-                    products,
-                    state,
-                    error,
-                    homeProvider,
-                    error,
+                  child: FadeInUp(
+                    duration: const Duration(milliseconds: 600),
+                    child: _buildProductsGrid(
+                      products,
+                      state,
+                      error,
+                      homeProvider,
+                      error,
+                    ),
                   ),
                 ),
               ],
@@ -349,20 +360,23 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
 
     if (state == LoadingState.error && products.isEmpty) {
       return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(errorMessage),
-            const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed:
-                  () => _fetchProducts(
-                    Provider.of<HomeProvider>(context, listen: false),
-                    refresh: true,
-                  ),
-              child: const Text('Retry'),
-            ),
-          ],
+        child: FadeIn(
+          duration: const Duration(milliseconds: 400),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(errorMessage),
+              const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed:
+                    () => _fetchProducts(
+                      Provider.of<HomeProvider>(context, listen: false),
+                      refresh: true,
+                    ),
+                child: const Text('Retry'),
+              ),
+            ],
+          ),
         ),
       );
     }
@@ -388,11 +402,14 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
           ),
         ),
         if (_isLoading)
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16.0),
-            child: Text(
-              'loading_more_products'.tr(context),
-              style: context.titleSmall?.copyWith(color: AppTheme.accentColor),
+          FadeIn(
+            duration: const Duration(milliseconds: 300),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16.0),
+              child: Text(
+                'loading_more_products'.tr(context),
+                style: context.titleSmall?.copyWith(color: AppTheme.accentColor),
+              ),
             ),
           ),
       ],

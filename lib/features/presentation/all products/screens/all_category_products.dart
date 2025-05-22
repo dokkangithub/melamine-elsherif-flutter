@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:animate_do/animate_do.dart';
 import 'package:melamine_elsherif/core/config/themes.dart/theme.dart';
 import 'package:melamine_elsherif/core/utils/enums/loading_state.dart';
 import 'package:melamine_elsherif/core/utils/extension/text_theme_extension.dart';
@@ -170,48 +171,51 @@ class _AllCategoryProductsScreenState extends State<AllCategoryProductsScreen> {
             child: Column(
               children: [
                 // App Bar similar to AllProductsByTypeScreen
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
-                  child: Row(
-                    children: [
-                      const SizedBox(width: 6),
-                      InkWell(
-                        onTap: () => Navigator.pop(context),
-                        child: const Icon(Icons.arrow_back_ios, size: 20, color: AppTheme.accentColor),
-                      ),
-                      Expanded(
-                        child: InkWell(
-                          onTap: (){
-                            AppRoutes.navigateTo(context, AppRoutes.searchScreen);
-                          },
-                          child: Container(
-                            margin: const EdgeInsets.symmetric(horizontal: 10),
-                            padding: const EdgeInsets.symmetric(horizontal: 15),
-                            height: 45,
-                            decoration: BoxDecoration(
-                                color: AppTheme.lightBackgroundColor,
-                                borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Row(
-                              children: [
-                                const CustomImage(
-                                  assetPath: AppSvgs.category_search_icon,
-                                ),
-                                const SizedBox(width: 10),
-                                Expanded(
-                                  child: Text(
-                                    'search_for_yours'.tr(context),
-                                    style: context.titleSmall?.copyWith(color: AppTheme.lightSecondaryTextColor),
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 1,
+                FadeIn(
+                  duration: const Duration(milliseconds: 400),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
+                    child: Row(
+                      children: [
+                        const SizedBox(width: 6),
+                        InkWell(
+                          onTap: () => Navigator.pop(context),
+                          child: const Icon(Icons.arrow_back_ios, size: 20, color: AppTheme.accentColor),
+                        ),
+                        Expanded(
+                          child: InkWell(
+                            onTap: (){
+                              AppRoutes.navigateTo(context, AppRoutes.searchScreen);
+                            },
+                            child: Container(
+                              margin: const EdgeInsets.symmetric(horizontal: 10),
+                              padding: const EdgeInsets.symmetric(horizontal: 15),
+                              height: 45,
+                              decoration: BoxDecoration(
+                                  color: AppTheme.lightBackgroundColor,
+                                  borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Row(
+                                children: [
+                                  const CustomImage(
+                                    assetPath: AppSvgs.category_search_icon,
                                   ),
-                                ),
-                              ],
+                                  const SizedBox(width: 10),
+                                  Expanded(
+                                    child: Text(
+                                      'search_for_yours'.tr(context),
+                                      style: context.titleSmall?.copyWith(color: AppTheme.lightSecondaryTextColor),
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 1,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
 
@@ -227,108 +231,111 @@ class _AllCategoryProductsScreenState extends State<AllCategoryProductsScreen> {
                     child: Text(categoryProvider.errorMessage!),
                   )
                 else
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    physics: const BouncingScrollPhysics(),
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: Row(
-                      children: categoryProvider.filterPageCategoriesResponse?.data
-                          .map((category) {
-                        onCategorySelect() {
-                          if (category.id != null && category.name != null) {
-                            _selectCategory(category.name!, category.id!);
+                  FadeInDown(
+                    duration: const Duration(milliseconds: 500),
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      physics: const BouncingScrollPhysics(),
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Row(
+                        children: categoryProvider.filterPageCategoriesResponse?.data
+                            .map((category) {
+                          onCategorySelect() {
+                            if (category.id != null && category.name != null) {
+                              _selectCategory(category.name!, category.id!);
+                            }
                           }
-                        }
 
-                        return Padding(
-                          padding: const EdgeInsets.only(right: 12.0),
-                          child: InkWell(
-                            onTap: onCategorySelect,
-                            borderRadius: BorderRadius.circular(12.0),
-                            child: SizedBox(
-                              width: 280,
-                              height: 150,
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(12.0),
-                                child: Stack(
-                                  fit: StackFit.expand,
-                                  children: [
-                                    // Background Image
-                                    CustomImage(
-                                      imageUrl: category.bannerMobile,
-                                      fit: BoxFit.fill,
-                                    ),
-                                    // Gradient Overlay for text readability
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        gradient: LinearGradient(
-                                          colors: [
-                                            Colors.black.withValues(alpha: 0.7),
-                                            Colors.black.withValues(alpha: 0.1),
-                                            Colors.transparent
-                                          ],
-                                          stops: const [0.0, 0.5, 1.0],
-                                          begin: Alignment.bottomCenter,
-                                          end: Alignment.topCenter,
+                          return Padding(
+                            padding: const EdgeInsets.only(right: 12.0),
+                            child: InkWell(
+                              onTap: onCategorySelect,
+                              borderRadius: BorderRadius.circular(12.0),
+                              child: SizedBox(
+                                width: 280,
+                                height: 150,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(12.0),
+                                  child: Stack(
+                                    fit: StackFit.expand,
+                                    children: [
+                                      // Background Image
+                                      CustomImage(
+                                        imageUrl: category.bannerMobile,
+                                        fit: BoxFit.fill,
+                                      ),
+                                      // Gradient Overlay for text readability
+                                      Container(
+                                        decoration: BoxDecoration(
+                                          gradient: LinearGradient(
+                                            colors: [
+                                              Colors.black.withValues(alpha: 0.7),
+                                              Colors.black.withValues(alpha: 0.1),
+                                              Colors.transparent
+                                            ],
+                                            stops: const [0.0, 0.5, 1.0],
+                                            begin: Alignment.bottomCenter,
+                                            end: Alignment.topCenter,
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                    // Content: Name, Product Count, Shop Now button
-                                    Positioned(
-                                      bottom: 5,
-                                      left: 0,
-                                      right: 0,
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(10.0),
-                                        child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          crossAxisAlignment: CrossAxisAlignment.end,
-                                          children: [
-                                            Expanded(
-                                              child: Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: [
-                                                  Text(
-                                                    category.name ?? '',
-                                                    style: context.headlineSmall?.copyWith(
-                                                      color: Colors.white,
-                                                      fontWeight: FontWeight.bold,
+                                      // Content: Name, Product Count, Shop Now button
+                                      Positioned(
+                                        bottom: 5,
+                                        left: 0,
+                                        right: 0,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(10.0),
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            crossAxisAlignment: CrossAxisAlignment.end,
+                                            children: [
+                                              Expanded(
+                                                child: Column(
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  mainAxisSize: MainAxisSize.min,
+                                                  children: [
+                                                    Text(
+                                                      category.name ?? '',
+                                                      style: context.headlineSmall?.copyWith(
+                                                        color: Colors.white,
+                                                        fontWeight: FontWeight.bold,
+                                                      ),
+                                                      maxLines: 2,
+                                                      overflow: TextOverflow.ellipsis,
                                                     ),
-                                                    maxLines: 2,
-                                                    overflow: TextOverflow.ellipsis,
-                                                  ),
-                                                  const SizedBox(height: 6),
-                                                  Text(
-                                                    'product_count'.tr(context).replaceAll('{count}', '${category.productCount ?? 0}'),
-                                                    style: context.titleLarge?.copyWith(
-                                                      color: AppTheme.lightDividerColor,
+                                                    const SizedBox(height: 6),
+                                                    Text(
+                                                      'product_count'.tr(context).replaceAll('{count}', '${category.productCount ?? 0}'),
+                                                      style: context.titleLarge?.copyWith(
+                                                        color: AppTheme.lightDividerColor,
+                                                      ),
                                                     ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                            const SizedBox(width: 8),
-                                            CustomButton(
-                                              onPressed: onCategorySelect,
-                                              padding: const EdgeInsets.symmetric(vertical: 8,horizontal: 15),
-                                              child: Text(
-                                                'shop_now'.tr(context),
-                                                style: context.bodyLarge?.copyWith(color: Colors.white)
+                                                  ],
                                                 ),
-                                            ),
-                                          ],
+                                              ),
+                                              const SizedBox(width: 8),
+                                              CustomButton(
+                                                onPressed: onCategorySelect,
+                                                padding: const EdgeInsets.symmetric(vertical: 8,horizontal: 15),
+                                                child: Text(
+                                                  'shop_now'.tr(context),
+                                                  style: context.bodyLarge?.copyWith(color: Colors.white)
+                                                  ),
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        );
-                      }).toList() ??
-                          [], // Provide an empty list if data is null
+                          );
+                        }).toList() ??
+                            [], // Provide an empty list if data is null
+                      ),
                     ),
                   ),
 
@@ -345,48 +352,54 @@ class _AllCategoryProductsScreenState extends State<AllCategoryProductsScreen> {
                     child: Text(categoryProvider.errorMessage!),
                   )
                 else if (categoryProvider.subCategoriesResponse?.data.isNotEmpty ?? false)
-                    SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      physics: const BouncingScrollPhysics(),
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: Row(
-                        children: [
-                          // "All" option for subcategories
-                          _buildSubCategoryChip(
-                            text: 'all'.tr(context),
-                            isSelected: _selectedSubCategoryId == null,
-                            onTap: () {
-                              setState(() {
-                                _selectedSubCategoryId = null;
-                                _selectedSubCategoryName = null;
-                                final provider = Provider.of<HomeProvider>(context, listen: false);
-                                provider.fetchCategoryProducts(_selectedCategoryId, refresh: true, name: _searchQuery);
-                              });
-                            },
-                          ),
-                          // Individual subcategories
-                          ...categoryProvider.subCategoriesResponse!.data.map((subcategory) {
-                            bool isSelected = _selectedSubCategoryId == subcategory.id;
-                            return Padding(
-                              padding: const EdgeInsets.only(left: 8.0), // Add spacing between items
-                              child: _buildSubCategoryChip(
-                                text: subcategory.name ?? '',
-                                isSelected: isSelected,
-                                onTap: () {
-                                  if (subcategory.id != null && subcategory.name != null) {
-                                    _selectSubCategory(subcategory.name!, subcategory.id!);
-                                  }
-                                },
-                              ),
-                            );
-                          }).toList(),
-                        ],
+                    FadeIn(
+                      duration: const Duration(milliseconds: 500),
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        physics: const BouncingScrollPhysics(),
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: Row(
+                          children: [
+                            // "All" option for subcategories
+                            _buildSubCategoryChip(
+                              text: 'all'.tr(context),
+                              isSelected: _selectedSubCategoryId == null,
+                              onTap: () {
+                                setState(() {
+                                  _selectedSubCategoryId = null;
+                                  _selectedSubCategoryName = null;
+                                  final provider = Provider.of<HomeProvider>(context, listen: false);
+                                  provider.fetchCategoryProducts(_selectedCategoryId, refresh: true, name: _searchQuery);
+                                });
+                              },
+                            ),
+                            // Individual subcategories
+                            ...categoryProvider.subCategoriesResponse!.data.map((subcategory) {
+                              bool isSelected = _selectedSubCategoryId == subcategory.id;
+                              return Padding(
+                                padding: const EdgeInsets.only(left: 8.0), // Add spacing between items
+                                child: _buildSubCategoryChip(
+                                  text: subcategory.name ?? '',
+                                  isSelected: isSelected,
+                                  onTap: () {
+                                    if (subcategory.id != null && subcategory.name != null) {
+                                      _selectSubCategory(subcategory.name!, subcategory.id!);
+                                    }
+                                  },
+                                ),
+                              );
+                            }).toList(),
+                          ],
+                        ),
                       ),
                     ),
 
                 //Products grid
                 Expanded(
-                  child: _buildProductsGrid(products, state, error, homeProvider, error),
+                  child: FadeInUp(
+                    duration: const Duration(milliseconds: 600),
+                    child: _buildProductsGrid(products, state, error, homeProvider, error),
+                  ),
                 ),
               ],
             ),
@@ -436,16 +449,19 @@ class _AllCategoryProductsScreenState extends State<AllCategoryProductsScreen> {
 
     if (state == LoadingState.error && products.isEmpty) {
       return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(errorMessage),
-            const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: _retryLoading,
-              child: Text('retry'.tr(context)),
-            ),
-          ],
+        child: FadeIn(
+          duration: const Duration(milliseconds: 400),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(errorMessage),
+              const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: _retryLoading,
+                child: Text('retry'.tr(context)),
+              ),
+            ],
+          ),
         ),
       );
     }
@@ -454,7 +470,7 @@ class _AllCategoryProductsScreenState extends State<AllCategoryProductsScreen> {
       return const Center(child: CustomEmptyWidget());
     }
 
-    final  filteredProducts = products.where((product) => product.published == 1).toList();
+    final filteredProducts = products.where((product) => product.published == 1).toList();
 
     return Column(
       children: [
@@ -469,16 +485,17 @@ class _AllCategoryProductsScreenState extends State<AllCategoryProductsScreen> {
           ),
         ),
         if (_isLoading)
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16.0),
-            child: Text(
-              'loading_more_products'.tr(context),
-              style: context.titleSmall?.copyWith(color: AppTheme.accentColor),
+          FadeIn(
+            duration: const Duration(milliseconds: 300),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16.0),
+              child: Text(
+                'loading_more_products'.tr(context),
+                style: context.titleSmall?.copyWith(color: AppTheme.accentColor),
+              ),
             ),
           ),
       ],
     );
   }
-
-
 }
