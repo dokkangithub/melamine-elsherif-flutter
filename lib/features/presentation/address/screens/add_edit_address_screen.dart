@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:animate_do/animate_do.dart';
 import 'package:melamine_elsherif/core/utils/extension/text_style_extension.dart';
 import 'package:melamine_elsherif/core/utils/extension/translate_extension.dart';
 import 'package:melamine_elsherif/core/utils/widgets/cutsom_toast.dart';
@@ -76,11 +77,17 @@ class _AddEditAddressScreenState extends State<AddEditAddressScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: CustomBackButton(),
+        leading: const CustomBackButton(),
         backgroundColor: AppTheme.white,
-        title: Text(widget.address == null
-            ? 'add_new_address'.tr(context)
-            : 'edit_address'.tr(context),style: context.titleLarge.copyWith(fontWeight: FontWeight.w800)),
+        title: FadeIn(
+          duration: const Duration(milliseconds: 400),
+          child: Text(
+            widget.address == null
+              ? 'add_new_address'.tr(context)
+              : 'edit_address'.tr(context),
+            style: context.titleLarge.copyWith(fontWeight: FontWeight.w800)
+          ),
+        ),
       ),
       body: Consumer<AddressProvider>(
         builder: (context, addressProvider, child) {
@@ -98,47 +105,54 @@ class _AddEditAddressScreenState extends State<AddEditAddressScreen> {
                   // Show shimmer or form fields based on loading state
                   isLoadingInitialData
                       ? const AddressFormShimmer()
-                      : AddressFormFields(
-                        addressController: _addressController,
-                        phoneController: _phoneController,
-                        cityNameController: _cityNameController,
-                        selectedCountryId: _selectedCountryId,
-                        selectedStateId: _selectedStateId,
-                    fullNameController: _fullNameController,
-                        countries:
-                            addressProvider.countries
-                                .map((location) => location.toMap())
-                                .toList(),
-                        states:
-                            addressProvider.states
-                                .map((location) => location.toMap())
-                                .toList(),
-                        isLoading: _isLoading,
-                        onCountryChanged: (value) async {
-                          if (value != null) {
-                            setState(() {
-                              _selectedCountryId = value;
-                              _selectedStateId = null;
-                            });
-                            await addressProvider.fetchStatesByCountry(value);
-                          }
-                        },
-                        onStateChanged: (value) async {
-                          if (value != null) {
-                            setState(() {
-                              _selectedStateId = value;
-                            });
-                          }
-                        },
-                      ),
+                      : FadeInUp(
+                          duration: const Duration(milliseconds: 500),
+                          child: AddressFormFields(
+                            addressController: _addressController,
+                            phoneController: _phoneController,
+                            cityNameController: _cityNameController,
+                            selectedCountryId: _selectedCountryId,
+                            selectedStateId: _selectedStateId,
+                            fullNameController: _fullNameController,
+                            countries:
+                                addressProvider.countries
+                                    .map((location) => location.toMap())
+                                    .toList(),
+                            states:
+                                addressProvider.states
+                                    .map((location) => location.toMap())
+                                    .toList(),
+                            isLoading: _isLoading,
+                            onCountryChanged: (value) async {
+                              if (value != null) {
+                                setState(() {
+                                  _selectedCountryId = value;
+                                  _selectedStateId = null;
+                                });
+                                await addressProvider.fetchStatesByCountry(value);
+                              }
+                            },
+                            onStateChanged: (value) async {
+                              if (value != null) {
+                                setState(() {
+                                  _selectedStateId = value;
+                                });
+                              }
+                            },
+                          ),
+                        ),
 
                   const SizedBox(height: 24),
 
                   // Save button
-                  SaveAddressButton(
-                    isLoading: _isLoading,
-                    onPressed: _saveAddress,
-                    isEditing: widget.address != null,
+                  FadeInUp(
+                    delay: const Duration(milliseconds: 200),
+                    duration: const Duration(milliseconds: 600),
+                    child: SaveAddressButton(
+                      isLoading: _isLoading,
+                      onPressed: _saveAddress,
+                      isEditing: widget.address != null,
+                    ),
                   ),
                 ],
               ),

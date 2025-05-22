@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:animate_do/animate_do.dart';
 import 'package:melamine_elsherif/core/utils/constants/app_assets.dart';
 import 'package:melamine_elsherif/core/utils/extension/text_theme_extension.dart';
 import 'package:melamine_elsherif/core/utils/extension/translate_extension.dart';
@@ -6,6 +7,7 @@ import 'package:melamine_elsherif/core/utils/widgets/custom_back_button.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_button.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_cached_image.dart';
 import 'package:provider/provider.dart';
+import 'package:quickalert/quickalert.dart';
 import '../../../../core/config/themes.dart/theme.dart';
 import '../../../../core/utils/enums/loading_state.dart';
 import '../controller/address_provider.dart';
@@ -38,7 +40,12 @@ class _AddressListScreenState extends State<AddressListScreen> {
       appBar: AppBar(
         leading: const CustomBackButton(),
         backgroundColor: AppTheme.white,
-        title: Text('my_addresses'.tr(context),style: context.titleMedium!.copyWith(fontWeight: FontWeight.w800)),
+        title: FadeIn(
+          duration: const Duration(milliseconds: 400),
+          child: Text('my_addresses'.tr(context), 
+            style: context.titleMedium!.copyWith(fontWeight: FontWeight.w800)
+          ),
+        ),
       ),
       body: Consumer<AddressProvider>(
         builder: (context, addressProvider, child) {
@@ -49,31 +56,37 @@ class _AddressListScreenState extends State<AddressListScreen> {
           // Show error state
           else if (addressProvider.addressState == LoadingState.error) {
             return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(Icons.error_outline, size: 64, color: Colors.red),
-                  const SizedBox(height: 16),
-                  Text('Error: ${addressProvider.addressError}',
-                    style: const TextStyle(color: Colors.red),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 24),
-                  ElevatedButton.icon(
-                    onPressed: () {
-                      addressProvider.fetchAddresses();
-                    },
-                    icon: const Icon(Icons.refresh),
-                    label: Text('try_again'.tr(context)),
-                  ),
-                ],
+              child: FadeIn(
+                duration: const Duration(milliseconds: 500),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(Icons.error_outline, size: 64, color: Colors.red),
+                    const SizedBox(height: 16),
+                    Text('Error: ${addressProvider.addressError}',
+                      style: const TextStyle(color: Colors.red),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 24),
+                    ElevatedButton.icon(
+                      onPressed: () {
+                        addressProvider.fetchAddresses();
+                      },
+                      icon: const Icon(Icons.refresh),
+                      label: Text('try_again'.tr(context)),
+                    ),
+                  ],
+                ),
               ),
             );
           }
           // Show empty state
           else if (addressProvider.addresses.isEmpty) {
-            return EmptyAddressWidget(
-              onAddAddress: () => _navigateToAddAddress(context),
+            return FadeIn(
+              duration: const Duration(milliseconds: 500),
+              child: EmptyAddressWidget(
+                onAddAddress: () => _navigateToAddAddress(context),
+              ),
             );
           }
 
@@ -82,39 +95,44 @@ class _AddressListScreenState extends State<AddressListScreen> {
             padding: const EdgeInsets.all(15.0),
             child: Column(
               children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                  child: CustomButton(
-                    onPressed: () => _navigateToAddAddress(context),
-                    isGradient: true,
-                    fullWidth: true,
-                    child: Row(
-                      children: [
-                        const Icon(Icons.add,color: AppTheme.white,size: 24),
-                        const SizedBox(width: 10),
-                        Text('add_new_address'.tr(context),style: context.titleMedium!.copyWith(color: AppTheme.white)),
-                        const Spacer(),
-                        const Icon(Icons.arrow_forward_ios,color: AppTheme.white,size: 24),
-
-                      ],
+                FadeInDown(
+                  duration: const Duration(milliseconds: 600),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    child: CustomButton(
+                      onPressed: () => _navigateToAddAddress(context),
+                      isGradient: true,
+                      fullWidth: true,
+                      child: Row(
+                        children: [
+                          const Icon(Icons.add, color: AppTheme.white, size: 24),
+                          const SizedBox(width: 10),
+                          Text('add_new_address'.tr(context), style: context.titleMedium!.copyWith(color: AppTheme.white)),
+                          const Spacer(),
+                          const Icon(Icons.arrow_forward_ios, color: AppTheme.white, size: 24),
+                        ],
+                      ),
                     ),
                   ),
                 ),
                 Expanded(
-                  child: AddressListWidget(
-                    addresses: addressProvider.addresses,
-                    isSelectable: widget.isSelectable,
-                    onEdit:
-                        (addressId) => _navigateToEditAddress(context, addressId),
-                    onDelete:
-                        (addressId) => _showDeleteConfirmation(context, addressId),
-                    onSetDefault:
-                        (addressId) =>
-                            addressProvider.makeAddressDefault(addressId),
-                    onSelect:
-                        widget.isSelectable
-                            ? (address) => Navigator.pop(context, address)
-                            : null,
+                  child: FadeInUp(
+                    duration: const Duration(milliseconds: 700),
+                    child: AddressListWidget(
+                      addresses: addressProvider.addresses,
+                      isSelectable: widget.isSelectable,
+                      onEdit:
+                          (addressId) => _navigateToEditAddress(context, addressId),
+                      onDelete:
+                          (addressId) => _showDeleteConfirmation(context, addressId),
+                      onSetDefault:
+                          (addressId) =>
+                              addressProvider.makeAddressDefault(addressId),
+                      onSelect:
+                          widget.isSelectable
+                              ? (address) => Navigator.pop(context, address)
+                              : null,
+                    ),
                   ),
                 ),
               ],
@@ -153,29 +171,18 @@ class _AddressListScreenState extends State<AddressListScreen> {
   }
 
   void _showDeleteConfirmation(BuildContext context, int addressId) {
-    showDialog(
+    QuickAlert.show(
       context: context,
-      builder:
-          (context) => AlertDialog(
-            title: Text('delete_address'.tr(context)),
-            content: Text('delete_address_confirmation'.tr(context)),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: Text('cancel'.tr(context)),
-              ),
-              TextButton(
-                onPressed: () {
-                  context.read<AddressProvider>().deleteAddress(addressId);
-                  Navigator.pop(context);
-                },
-                child: Text(
-                  'delete'.tr(context),
-                  style: const TextStyle(color: Colors.red),
-                ),
-              ),
-            ],
-          ),
+      type: QuickAlertType.warning,
+      title: 'delete_address'.tr(context),
+      text: 'delete_address_confirmation'.tr(context),
+      confirmBtnText: 'delete'.tr(context),
+      cancelBtnText: 'cancel'.tr(context),
+      confirmBtnColor: Colors.red,
+      onConfirmBtnTap: () {
+        Navigator.pop(context);
+        context.read<AddressProvider>().deleteAddress(addressId);
+      },
     );
   }
 }
