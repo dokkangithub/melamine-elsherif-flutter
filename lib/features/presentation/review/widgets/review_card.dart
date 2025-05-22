@@ -23,9 +23,9 @@ class ReviewCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _buildUserInfo(context),
-            const SizedBox(height: 12),
+            const SizedBox(height: 10),
             _buildRating(context),
-            const SizedBox(height: 12),
+            const SizedBox(height: 10),
             _buildComment(context),
           ],
         ),
@@ -87,6 +87,7 @@ class ReviewCard extends StatelessWidget {
   Widget _buildComment(BuildContext context) {
     return Text(
       review.comment,
+      maxLines: 2,
       style: context.titleMedium!.copyWith(color: AppTheme.black),
     );
   }

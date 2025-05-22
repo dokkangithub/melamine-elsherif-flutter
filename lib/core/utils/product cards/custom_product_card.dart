@@ -105,15 +105,15 @@ class _ProductCardState extends State<ProductCard> {
                         !widget.isBuyNow!
                             ? const SizedBox.shrink()
                             : Row(
-                          children: List.generate(
-                            5,
+                              children: List.generate(
+                                5,
                                 (index) => const Icon(
-                              Icons.star_outline_sharp,
-                              color: Colors.amber,
-                              size: 16,
+                                  Icons.star_outline_sharp,
+                                  color: Colors.amber,
+                                  size: 16,
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
                         // Product name
                         Text(
                           widget.product.name,
@@ -122,7 +122,10 @@ class _ProductCardState extends State<ProductCard> {
                             fontWeight: FontWeight.w400,
                           ),
                           maxLines: 1,
-                          textAlign: Directionality.of(context) == TextDirection.rtl ? TextAlign.right : TextAlign.left,
+                          textAlign:
+                              Directionality.of(context) == TextDirection.rtl
+                                  ? TextAlign.right
+                                  : TextAlign.left,
                         ),
 
                         // Price and fav icon
@@ -139,37 +142,51 @@ class _ProductCardState extends State<ProductCard> {
                                       color: AppTheme.primaryColor,
                                       fontWeight: FontWeight.w500,
                                     ),
-                                    textAlign: Directionality.of(context) == TextDirection.rtl ? TextAlign.right : TextAlign.left,
+                                    textAlign:
+                                        Directionality.of(context) ==
+                                                TextDirection.rtl
+                                            ? TextAlign.right
+                                            : TextAlign.left,
                                   ),
                                   Text(
                                     widget.product.mainPrice,
                                     style: context.bodyMedium.copyWith(
-                                        color: AppTheme.lightSecondaryTextColor,
-                                        fontWeight: FontWeight.w400,
-                                        decoration: TextDecoration.lineThrough
+                                      color: AppTheme.lightSecondaryTextColor,
+                                      fontWeight: FontWeight.w400,
+                                      decoration: TextDecoration.lineThrough,
                                     ),
-                                    textAlign: Directionality.of(context) == TextDirection.rtl ? TextAlign.right : TextAlign.left,
+                                    textAlign:
+                                        Directionality.of(context) ==
+                                                TextDirection.rtl
+                                            ? TextAlign.right
+                                            : TextAlign.left,
                                   ),
                                 ],
                               ),
                             ),
                             Consumer<WishlistProvider>(
                               builder: (context, provider, _) {
-                                final isInWishlist = provider.isProductInWishlist(
-                                  widget.product.slug,
-                                );
+                                final isInWishlist = provider
+                                    .isProductInWishlist(widget.product.slug);
 
                                 return LikeButton(
                                   isFavorite: isInWishlist,
                                   iconColor: AppTheme.primaryColor,
                                   onPressed: () async {
-                                    (AppStrings.token == null || isInWishlist) ?null:_triggerWishlistAnimation();
+                                    (AppStrings.token == null || isInWishlist)
+                                        ? null
+                                        : _triggerWishlistAnimation();
                                     await AppFunctions.toggleWishlistStatus(
                                       context,
                                       widget.product.slug,
                                     );
-                                    final nowInWishlist = Provider.of<WishlistProvider>(context, listen: false)
-                                        .isProductInWishlist(widget.product.slug);
+                                    final nowInWishlist =
+                                        Provider.of<WishlistProvider>(
+                                          context,
+                                          listen: false,
+                                        ).isProductInWishlist(
+                                          widget.product.slug,
+                                        );
                                   },
                                 );
                               },
@@ -179,56 +196,65 @@ class _ProductCardState extends State<ProductCard> {
 
                         isAddingToCart
                             ? const Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [CustomLoadingWidget()],
-                        )
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [CustomLoadingWidget()],
+                            )
                             : CustomButton(
-                          text:
-                          widget.isBuyNow!
-                              ? 'buy_now'.tr(context)
-                              : 'add_to_cart'.tr(context),
-                          textStyle: context.titleSmall.copyWith(
-                              color:
-                              widget.isOutlinedAddToCart!
-                                  ? AppTheme.primaryColor
-                                  : AppTheme.white,
-                              fontWeight: FontWeight.w600
-                          ),
-                          fullWidth: true,
-                          isOutlined: widget.isOutlinedAddToCart!,
-                          padding: const EdgeInsets.all(8),
-                          onPressed: () async {
-                            setState(() {
-                              isAddingToCart = true;
-                            });
+                              text:
+                                  widget.product.currentStock < 1
+                                      ? 'out_of_stock'.tr(context)
+                                      : widget.isBuyNow!
+                                      ? 'buy_now'.tr(context)
+                                      : 'add_to_cart'.tr(context),
+                              textStyle: context.titleSmall.copyWith(
+                                color:
+                                    widget.isOutlinedAddToCart!
+                                        ? AppTheme.primaryColor
+                                        : AppTheme.white,
+                                fontWeight: FontWeight.w600,
+                              ),
+                              fullWidth: true,
+                              isOutlined: widget.isOutlinedAddToCart!,
+                              padding: const EdgeInsets.all(8),
+                              onPressed: () async {
+                                if(widget.product.currentStock < 1){
+                                  return;
+                                }
+                                setState(() {
+                                  isAddingToCart = true;
+                                });
 
-                            // Store the current cart count
-                            final cartProvider = Provider.of<CartProvider>(context, listen: false);
-
-                            await AppFunctions.addProductToCart(
-                              context: context,
-                              productId: widget.product.id,
-                              productName: widget.product.name,
-                              productSlug: widget.product.slug,
-                              hasVariation: widget.product.hasVariation,
-                            );
-
-                            setState(() {
-                              isAddingToCart = false;
-                            });
-
-                            // Only navigate if it's buy now and the product was added successfully
-                            if (widget.isBuyNow! && cartProvider.lastAddToCartSuccess) {
-                              if (context.mounted) {
-                                // Use the optimized navigation that sets a flag to avoid unnecessary API calls
-                                Provider.of<LayoutProvider>(
+                                // Store the current cart count
+                                final cartProvider = Provider.of<CartProvider>(
                                   context,
                                   listen: false,
-                                ).navigateToCartFromBuyNow();
-                              }
-                            }
-                          },
-                        ),
+                                );
+
+                                await AppFunctions.addProductToCart(
+                                  context: context,
+                                  productId: widget.product.id,
+                                  productName: widget.product.name,
+                                  productSlug: widget.product.slug,
+                                  hasVariation: widget.product.hasVariation,
+                                );
+
+                                setState(() {
+                                  isAddingToCart = false;
+                                });
+
+                                // Only navigate if it's buy now and the product was added successfully
+                                if (widget.isBuyNow! &&
+                                    cartProvider.lastAddToCartSuccess) {
+                                  if (context.mounted) {
+                                    // Use the optimized navigation that sets a flag to avoid unnecessary API calls
+                                    Provider.of<LayoutProvider>(
+                                      context,
+                                      listen: false,
+                                    ).navigateToCartFromBuyNow();
+                                  }
+                                }
+                              },
+                            ),
                       ],
                     ),
                   ],

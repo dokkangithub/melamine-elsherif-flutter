@@ -413,7 +413,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                     child: Text(
                                       productProvider.canAddToCart
                                           ? 'add_to_cart'.tr(context)
-                                          : 'Out of Stock',
+                                          : 'out_of_stock'.tr(context),
                                       style: context.titleMedium.copyWith(color: AppTheme.white),
                                     ),
                                   ),

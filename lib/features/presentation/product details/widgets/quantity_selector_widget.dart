@@ -60,7 +60,7 @@ class QuantitySelectorWidget extends StatelessWidget {
               height: 20,
               child: CircularProgressIndicator(strokeWidth: 2),
             )
-                : Text('${(price * quantity).toStringAsFixed(2)} ${product.currencySymbol}',
+                : Text('${(price * quantity).toStringAsFixed(2)} ${product.currencySymbol  }',
               style: context.headlineSmall!.copyWith(color: AppTheme.primaryColor,fontWeight: FontWeight.w900),
             ),
           ],
