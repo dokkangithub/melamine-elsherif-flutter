@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../../domain/address/entities/address.dart';
 import '../../../../core/utils/enums/loading_state.dart';
 import '../../../domain/address/usecases/add_address_usecases.dart';
@@ -13,6 +14,7 @@ import '../../../domain/address/usecases/make_address_default_usecase.dart';
 import '../../../domain/address/usecases/update_address_in_cart_usecase.dart';
 import '../../../domain/address/usecases/update_address_location_usecases.dart';
 import '../../../domain/address/usecases/update_address_usecases.dart';
+import '../../checkout/controller/payment_provider.dart';
 
 class AddressProvider extends ChangeNotifier {
   final GetAddressesUseCase getAddressesUseCase;
@@ -203,9 +205,25 @@ class AddressProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> updateAddressInCart(int addressId) async {
+  Future<void> updateAddressInCart(int addressId, {BuildContext? context}) async {
     try {
       await updateAddressInCartUseCase(addressId);
+      
+      // Find the address by ID to get state and address details for shipping update
+      final address = addresses.firstWhere((addr) => addr.id == addressId);
+      
+      // If context is provided, also update shipping type
+      if (context != null) {
+        // Get the PaymentProvider instance
+        final paymentProvider = Provider.of<PaymentProvider>(context, listen: false);
+        
+        // Call updateShippingTypeForGuest with the address details
+        await paymentProvider.updateShippingTypeForGuest(
+          stateId: address.stateId,
+          address: address.address,
+        );
+      }
+      
       notifyListeners();
     } catch (e) {
       addressError = e.toString();

@@ -91,9 +91,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           address: _selectedAddress!.address,
         );
       } else {
-        // Only update address in cart for logged in users
+        // Update address in cart for logged in users and pass context to update shipping
         await context.read<AddressProvider>().updateAddressInCart(
           _selectedAddress!.id,
+          context: context,
         );
       }
       await context.read<CartProvider>().fetchCartSummary();
