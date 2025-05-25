@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:melamine_elsherif/core/utils/extension/text_theme_extension.dart';
 import 'package:melamine_elsherif/core/utils/extension/translate_extension.dart';
 import 'package:provider/provider.dart';
 import 'package:quickalert/quickalert.dart';
+import '../../../../core/config/themes.dart/theme.dart';
 import '../../../../core/utils/enums/loading_state.dart';
 import '../../club_point/controller/club_point_provider.dart';
 import '../controller/wallet_provider.dart';
@@ -68,7 +70,7 @@ class _WalletScreenState extends State<WalletScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title:  Text('my_wallet'.tr(context)),
+        title:  Text('my_wallet'.tr(context),style: context.headlineMedium!.copyWith(color: AppTheme.white),),
       ),
       body: RefreshIndicator(
         onRefresh: () async {
@@ -174,7 +176,7 @@ class _WalletScreenState extends State<WalletScreen> {
                         valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                       ),
                     )
-                        : Text('convert_to_wallet'.tr(context),
+                        : Text('convert_to_wallet'.tr(context),style: context.titleMedium!.copyWith(color: AppTheme.white),
                     ),
                   ),),
                   ],

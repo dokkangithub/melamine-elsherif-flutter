@@ -4,6 +4,7 @@ import 'package:melamine_elsherif/core/config/routes.dart/routes.dart';
 import 'package:melamine_elsherif/core/config/themes.dart/theme.dart';
 import 'package:melamine_elsherif/core/utils/constants/app_assets.dart';
 import 'package:melamine_elsherif/core/utils/constants/app_strings.dart';
+import 'package:melamine_elsherif/core/utils/extension/text_theme_extension.dart';
 import 'package:melamine_elsherif/core/utils/extension/translate_extension.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_cached_image.dart';
 import 'package:provider/provider.dart';
@@ -39,8 +40,10 @@ class BottomNavBarWidget extends StatelessWidget {
             showSelectedLabels: true,
             showUnselectedLabels: true,
             enableFeedback: false,
-            selectedFontSize: 12.0,
-            unselectedFontSize: 12.0,
+            selectedFontSize: 10.0,
+            unselectedFontSize: 10.0,
+            selectedLabelStyle:  const TextStyle(fontSize: 12,fontFamily: 'Dokkan',fontWeight: FontWeight.w700),
+            unselectedLabelStyle:  const TextStyle(fontSize: 10,fontFamily: 'Dokkan'),
             elevation: 0,
             items: [
               BottomNavigationBarItem(

@@ -53,19 +53,19 @@ class AppTheme {
     textTheme: const TextTheme(
       displayLarge: TextStyle(
         color: black,
-        fontSize: 30,
+        fontSize: 28,
         fontWeight: FontWeight.w500,
         fontFamily: 'Dokkan',
       ),
       displayMedium: TextStyle(
         color: black,
-        fontSize: 26,
+        fontSize: 24,
         fontWeight: FontWeight.w500,
         fontFamily: 'Dokkan',
       ),
       displaySmall: TextStyle(
         color: black,
-        fontSize: 22,
+        fontSize: 20,
         fontWeight: FontWeight.w400,
         fontFamily: 'Dokkan',
       ),

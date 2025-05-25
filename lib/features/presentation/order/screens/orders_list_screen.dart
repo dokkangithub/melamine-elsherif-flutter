@@ -3,6 +3,7 @@ import 'package:melamine_elsherif/core/config/routes.dart/routes.dart';
 import 'package:melamine_elsherif/core/config/themes.dart/theme.dart';
 import 'package:melamine_elsherif/core/utils/extension/text_theme_extension.dart';
 import 'package:melamine_elsherif/core/utils/extension/translate_extension.dart';
+import 'package:melamine_elsherif/core/utils/widgets/custom_back_button.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_button.dart';
 import 'package:provider/provider.dart';
 import '../../../../core/utils/constants/app_assets.dart';
@@ -24,7 +25,7 @@ class _OrdersListScreenState extends State<OrdersListScreen> with SingleTickerPr
   late TabController _tabController;
   
   // Filter categories
-  final List<String> _tabs = ['All Orders', 'Processing', 'Shipped', 'Delivered'];
+  final List<String> _tabs = ['all_orders', 'processing', 'shipped', 'delivered'];
   
   @override
   void initState() {
@@ -67,18 +68,9 @@ class _OrdersListScreenState extends State<OrdersListScreen> with SingleTickerPr
         centerTitle: true,
         title: Text(
           'orders'.tr(context),
-          style: const TextStyle(
-            color: Colors.black,
-            fontWeight: FontWeight.bold,
-          ),
+          style: context.headlineMedium,
         ),
-        leading: InkWell(
-          child: const Padding(
-            padding: EdgeInsets.all(20.0),
-            child: CustomImage(assetPath: AppSvgs.back),
-          ),
-          onTap: () => Navigator.pop(context),
-        ),
+        leading: const CustomBackButton(respectDirection: true)
       ),
       body: Column(
         children: [
@@ -246,10 +238,10 @@ class _OrdersListScreenState extends State<OrdersListScreen> with SingleTickerPr
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
       child: Text(
-        text,
+        text.tr(context),
         style: const TextStyle(
-          fontSize: 14,
-          fontWeight: FontWeight.w500,
+          fontSize: 12,
+          fontWeight: FontWeight.w300,
         ),
       ),
     );
@@ -273,6 +265,7 @@ class _OrdersListScreenState extends State<OrdersListScreen> with SingleTickerPr
   
   Widget _buildOrderCard(BuildContext context, Order order) {
     final status = getStatusInfo(order.deliveryStatus, order.deliveryStatusString);
+    final bool isRtl = Directionality.of(context) == TextDirection.rtl;
 
     // Use the actual order code instead of generating a random one
     String formattedOrderNumber = order.code;
@@ -320,6 +313,7 @@ class _OrdersListScreenState extends State<OrdersListScreen> with SingleTickerPr
                     onPressed: (){},
                     padding: const EdgeInsets.all(6),
                     backgroundColor: status.color,
+                    borderColor: Colors.transparent,
                     child: Text(status.label.tr(context),
                       style: context.titleSmall!.copyWith(color: AppTheme.white),
                     ),
@@ -355,8 +349,8 @@ class _OrdersListScreenState extends State<OrdersListScreen> with SingleTickerPr
                         style: context.titleSmall!.copyWith(color: AppTheme.primaryColor, fontWeight: FontWeight.w800),
                       ),
                       const SizedBox(width: 4),
-                      const Icon(
-                        Icons.arrow_forward_ios,
+                      Icon(
+                        isRtl ? Icons.arrow_forward_ios: Icons.arrow_back_ios ,
                         size: 14,
                         color: AppTheme.primaryColor,
                       ),

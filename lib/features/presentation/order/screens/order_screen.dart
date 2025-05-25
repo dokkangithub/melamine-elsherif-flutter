@@ -3,6 +3,7 @@ import 'package:melamine_elsherif/core/config/themes.dart/theme.dart';
 import 'package:melamine_elsherif/core/utils/constants/app_assets.dart';
 import 'package:melamine_elsherif/core/utils/extension/text_theme_extension.dart';
 import 'package:melamine_elsherif/core/utils/extension/translate_extension.dart';
+import 'package:melamine_elsherif/core/utils/widgets/custom_back_button.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_cached_image.dart';
 import 'package:provider/provider.dart';
 import 'package:quickalert/quickalert.dart';
@@ -32,6 +33,8 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final bool isRtl = Directionality.of(context) == TextDirection.rtl;
+    
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -39,13 +42,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
         elevation: 0,
         centerTitle: true,
         scrolledUnderElevation: 0,
-        leading: InkWell(
-          child: const Padding(
-            padding: EdgeInsets.all(20.0),
-            child: CustomImage(assetPath: AppSvgs.back),
-          ),
-          onTap: () => Navigator.pop(context),
-        ),
+        leading: const CustomBackButton(respectDirection: true),
         title: Text(
           'order_details'.tr(context),
           style: context.headlineSmall,
@@ -212,74 +209,74 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                 ),
               ),
               
-              // Support and Cancel Buttons
-              Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.1),
-                      spreadRadius: 1,
-                      blurRadius: 3,
-                      offset: const Offset(0, -1),
-                    ),
-                  ],
-                ),
-                child: Column(
-                  children: [
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          // Contact support logic
-                          _showContactSupportDialog(context);
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppTheme.primaryColor,
-                          padding: const EdgeInsets.symmetric(vertical: 16),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
-                        child: Text(
-                          'contact_support'.tr(context),
-                          style: context.titleMedium!.copyWith(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    SizedBox(
-                      width: double.infinity,
-                      child: TextButton(
-                        onPressed: () {
-                          // Cancel order logic
-                          _showCancelOrderDialog(context);
-                        },
-                        child: Text(
-                          'cancel_order'.tr(context),
-                          style: context.titleMedium!.copyWith(
-                            color: Colors.black87,
-                          ),
-                        ),
-                      ),
-                    ),
-                    // Bottom indicator
-                    Container(
-                      margin: const EdgeInsets.only(top: 8),
-                      width: 120,
-                      height: 5,
-                      decoration: BoxDecoration(
-                        color: Colors.black,
-                        borderRadius: BorderRadius.circular(2.5),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              /// Support and Cancel Buttons
+              // Container(
+              //   padding: const EdgeInsets.all(16),
+              //   decoration: BoxDecoration(
+              //     color: Colors.white,
+              //     boxShadow: [
+              //       BoxShadow(
+              //         color: Colors.grey.withOpacity(0.1),
+              //         spreadRadius: 1,
+              //         blurRadius: 3,
+              //         offset: const Offset(0, -1),
+              //       ),
+              //     ],
+              //   ),
+              //   child: Column(
+              //     children: [
+              //       SizedBox(
+              //         width: double.infinity,
+              //         child: ElevatedButton(
+              //           onPressed: () {
+              //             // Contact support logic
+              //             _showContactSupportDialog(context);
+              //           },
+              //           style: ElevatedButton.styleFrom(
+              //             backgroundColor: AppTheme.primaryColor,
+              //             padding: const EdgeInsets.symmetric(vertical: 16),
+              //             shape: RoundedRectangleBorder(
+              //               borderRadius: BorderRadius.circular(8),
+              //             ),
+              //           ),
+              //           child: Text(
+              //             'contact_support'.tr(context),
+              //             style: context.titleMedium!.copyWith(
+              //               fontWeight: FontWeight.bold,
+              //               color: Colors.white,
+              //             ),
+              //           ),
+              //         ),
+              //       ),
+              //       const SizedBox(height: 8),
+              //       SizedBox(
+              //         width: double.infinity,
+              //         child: TextButton(
+              //           onPressed: () {
+              //             // Cancel order logic
+              //             _showCancelOrderDialog(context);
+              //           },
+              //           child: Text(
+              //             'cancel_order'.tr(context),
+              //             style: context.titleMedium!.copyWith(
+              //               color: Colors.black87,
+              //             ),
+              //           ),
+              //         ),
+              //       ),
+              //       // Bottom indicator
+              //       Container(
+              //         margin: const EdgeInsets.only(top: 8),
+              //         width: 120,
+              //         height: 5,
+              //         decoration: BoxDecoration(
+              //           color: Colors.black,
+              //           borderRadius: BorderRadius.circular(2.5),
+              //         ),
+              //       ),
+              //     ],
+              //   ),
+              // ),
             ],
           );
         },
@@ -314,7 +311,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
     return Text(
       label,
       style: context.titleSmall!.copyWith(
-        fontWeight: FontWeight.w600,
+        fontWeight: FontWeight.w400,
         color: color,
       ),
     );
@@ -493,12 +490,12 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                   Padding(
                     padding: const EdgeInsets.only(bottom: 4),
                     child: Text(
-                      'variation'.tr(context) + ': ${item.variation}',
+                      '${'variation'.tr(context)}: ${item.variation}',
                       style: context.titleSmall!.copyWith(fontWeight: FontWeight.w600),
                     ),
                   ),
                 Text(
-                  'quantity'.tr(context) + ': ${item.quantity}',
+                  '${'quantity'.tr(context)}: ${item.quantity}',
                   style: context.titleSmall!.copyWith(fontWeight: FontWeight.w600,color: AppTheme.black),
                 ),
                 const SizedBox(height: 8),
@@ -602,13 +599,14 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                   orderDetails.paymentType,
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
+                    fontSize: 14
                   ),
                 ),
                 Text(
-                  'date'.tr(context) + ': ${orderDetails.date}',
+                  '${'date'.tr(context)}: ${orderDetails.date}',
                   style: TextStyle(
                     color: Colors.grey[600],
-                    fontSize: 14,
+                    fontSize: 13,
                   ),
                 ),
               ],
@@ -624,8 +622,8 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
               paymentStatus,
               style: TextStyle(
                 color: statusColor,
-                fontWeight: FontWeight.bold,
-                fontSize: 14,
+                fontWeight: FontWeight.normal,
+                fontSize: 11,
               ),
             ),
           ),
