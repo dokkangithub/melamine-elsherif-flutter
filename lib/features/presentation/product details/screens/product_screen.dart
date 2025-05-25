@@ -146,7 +146,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     collapsedHeight: kToolbarHeight,
                     backgroundColor: AppTheme.white,
                     leading: _showAppBar 
-                      ? const CustomBackButton() 
+                      ? const CustomBackButton(respectDirection: true) 
                       : const SizedBox.shrink(),
                     title: _showAppBar 
                       ? Text(
@@ -169,13 +169,14 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           ),
                           !_showAppBar ? Positioned(
                             top: statusBarHeight + 16,
-                            left: 16,
+                            left: Directionality.of(context) == TextDirection.rtl ? null : 16,
+                            right: Directionality.of(context) == TextDirection.rtl ? 16 : null,
                             child: Container(
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 color: AppTheme.lightDividerColor.withValues(alpha: 0.6)
                               ),
-                                child: const CustomBackButton()),
+                                child: const CustomBackButton(respectDirection: true)),
                           ) : const SizedBox.shrink(),
                         ],
                       ),

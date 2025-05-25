@@ -101,6 +101,7 @@ class PaymentMethodSection extends StatelessWidget {
       bool isSelected,
       ) {
     Widget paymentIcon;
+    bool isArabic = Directionality.of(context) == TextDirection.rtl;
 
     // Default icon handling with error fallback
     paymentIcon = CustomImage(
@@ -109,6 +110,11 @@ class PaymentMethodSection extends StatelessWidget {
       height: 24,
       fit: BoxFit.contain,
     );
+
+    // Translate payment method name based on language
+    String paymentMethodName = isArabic 
+        ? _getArabicPaymentMethodName(paymentType.paymentTypeKey)
+        : paymentType.name;
 
     return Card(
       elevation: 0.5,
@@ -126,10 +132,60 @@ class PaymentMethodSection extends StatelessWidget {
             ),
             paymentIcon,
             const SizedBox(width: 12),
-            Text(paymentType.name, style: context.titleSmall),
+            Text(paymentMethodName, style: context.titleSmall),
           ],
         ),
       ),
     );
+  }
+
+  // Helper method to get Arabic translations for payment methods
+  String _getArabicPaymentMethodName(String paymentTypeKey) {
+    switch (paymentTypeKey) {
+      case 'cash_on_delivery':
+        return 'الدفع عند الاستلام';
+      case 'wallet':
+        return 'المحفظة';
+      case 'cash_payment':
+        return 'الدفع نقدا';
+      case 'bank_payment':
+        return 'تحويل بنكي';
+      case 'kashier':
+        return 'الدفع الالكترونى';
+      case 'paypal':
+        return 'باي بال';
+      case 'stripe':
+        return 'سترايب';
+      case 'paytm':
+        return 'باي تي إم';
+      case 'sslcommerz':
+        return 'إس إس إل كوميرز';
+      case 'instamojo':
+        return 'انستاموجو';
+      case 'razorpay':
+        return 'رازورباي';
+      case 'paystack':
+        return 'بايستاك';
+      case 'voguepay':
+        return 'فوجباي';
+      case 'payhere':
+        return 'باي هير';
+      case 'ngenius':
+        return 'إن جينيوس';
+      case 'iyzico':
+        return 'إيزيكو';
+      case 'bkash':
+        return 'بي كاش';
+      case 'nagad':
+        return 'ناجاد';
+      case 'flutterwave':
+        return 'فلاترويف';
+      case 'mpesa':
+        return 'إم بيسا';
+      case 'mercadopago':
+        return 'ميركادو باجو';
+      default:
+        return paymentTypeKey; // Fallback to original key if no translation available
+    }
   }
 }
