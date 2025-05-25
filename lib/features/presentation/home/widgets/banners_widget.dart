@@ -84,7 +84,7 @@ class _SimpleBannerCarouselState extends State<SimpleBannerCarousel> {
                       borderRadius: BorderRadius.circular(12),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.1), // Fixed from withValues
+                          color: Colors.black.withValues(alpha: 0.1), // Fixed from withValues
                           spreadRadius: 1,
                           blurRadius: 10,
                           offset: const Offset(0, 5),
@@ -104,25 +104,25 @@ class _SimpleBannerCarouselState extends State<SimpleBannerCarousel> {
                   );
                 },
               ),
-              if (sliders.length > 1) ...[
-                const SizedBox(height: 12),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: sliders.asMap().entries.map((entry) {
-                    return Container(
-                      width: 8.0,
-                      height: 8.0,
-                      margin: const EdgeInsets.symmetric(horizontal: 4.0),
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Theme.of(context).primaryColor.withOpacity(
-                          _currentIndex == entry.key ? 1.0 : 0.4,
-                        ), // Fixed from withValues
-                      ),
-                    );
-                  }).toList(),
-                ),
-              ],
+              // if (sliders.length > 1) ...[
+              //   const SizedBox(height: 12),
+              //   Row(
+              //     mainAxisAlignment: MainAxisAlignment.center,
+              //     children: sliders.asMap().entries.map((entry) {
+              //       return Container(
+              //         width: 8.0,
+              //         height: 8.0,
+              //         margin: const EdgeInsets.symmetric(horizontal: 4.0),
+              //         decoration: BoxDecoration(
+              //           shape: BoxShape.circle,
+              //           color: Theme.of(context).primaryColor.withOpacity(
+              //             _currentIndex == entry.key ? 1.0 : 0.4,
+              //           ), // Fixed from withValues
+              //         ),
+              //       );
+              //     }).toList(),
+              //   ),
+              // ],
             ],
           ),
         );

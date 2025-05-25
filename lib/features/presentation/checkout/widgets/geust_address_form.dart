@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:melamine_elsherif/core/config/themes.dart/theme.dart';
 import 'package:melamine_elsherif/core/utils/constants/app_strings.dart';
+import 'package:melamine_elsherif/core/utils/extension/text_theme_extension.dart';
+import 'package:melamine_elsherif/core/utils/widgets/custom_back_button.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_button.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_form_field.dart';
+import 'package:melamine_elsherif/core/utils/widgets/custom_loading.dart';
 import 'package:provider/provider.dart';
 import '../../../../core/utils/extension/translate_extension.dart';
 import '../../../domain/address/entities/address.dart';
@@ -163,6 +167,7 @@ class _GuestAddressFormScreenState extends State<GuestAddressFormScreen> {
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
         elevation: 0,
+        leading: const CustomBackButton(),
       ),
       body: Consumer<AddressProvider>(
         builder: (context, addressProvider, child) {
@@ -284,13 +289,14 @@ class _GuestAddressFormScreenState extends State<GuestAddressFormScreen> {
                 const SizedBox(height: 16),
 
                 // Save Button
-                CustomButton(
+                _isLoading
+                    ? const CustomLoadingWidget()
+                    : CustomButton(
                   onPressed: _isLoading ? null : _saveAddress,
-                  child: _isLoading
-                      ? const CircularProgressIndicator(color: Colors.white)
-                      : Text(
+                  child: Text(
                     'save_address'.tr(context),
-                    style: const TextStyle(fontSize: 16),
+                    textAlign: TextAlign.center,
+                    style: context.titleMedium!.copyWith(color: AppTheme.white),
                   ),
                 ),
               ],
