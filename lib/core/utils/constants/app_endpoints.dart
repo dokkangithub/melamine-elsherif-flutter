@@ -70,7 +70,5 @@ class LaravelApiEndPoint {
   static const String purchaseHistoryItems = '/purchase-history-items';
   static const String searchSuggestions = '/get-search-suggestions';
   static const String subCategory = '/sub-categories/';
-
-
-
+  static const String businessSettings = '/business-settings';
 }

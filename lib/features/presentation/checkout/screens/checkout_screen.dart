@@ -21,6 +21,8 @@ import '../widgets/geust_address_form.dart';
 import '../widgets/shipping_address_section.dart';
 import '../widgets/payment_method_section.dart';
 import '../widgets/order_summary_section.dart';
+import '../../../../core/services/business_settings_service.dart';
+import '../../../../core/di/injection_container.dart';
 
 class CheckoutScreen extends StatefulWidget {
   const CheckoutScreen({super.key});
@@ -32,6 +34,7 @@ class CheckoutScreen extends StatefulWidget {
 class _CheckoutScreenState extends State<CheckoutScreen> {
   Address? _selectedAddress;
   bool _isProcessingPayment = false;
+  bool _isGuestCheckoutAllowed = false;
   
   bool get _isGuestUser => AppStrings.token == null;
 
@@ -46,6 +49,11 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   }
 
   void _loadData() async {
+    // Check if guest checkout is enabled in business settings
+    final businessSettingsService = sl<BusinessSettingsService>();
+    await businessSettingsService.init();
+    _isGuestCheckoutAllowed = businessSettingsService.guestCheckoutActive;
+
     final addressProvider = context.read<AddressProvider>();
     final paymentProvider = context.read<PaymentProvider>();
     final cartProvider = context.read<CartProvider>();
@@ -127,10 +135,33 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     );
 
     if (result != null && result is Address) {
+      // If an address was explicitly selected in the address list
       setState(() {
         _selectedAddress = result;
       });
       await _updateShippingWithSelectedAddress(context.read<PaymentProvider>());
+    } else {
+      // If no address was explicitly selected, get the default address
+      // This handles the case when a user sets a new default address but doesn't select it
+      final addressProvider = context.read<AddressProvider>();
+      
+      // Refresh addresses to get the latest default
+      await addressProvider.fetchAddresses();
+      
+      if (addressProvider.addresses.isNotEmpty) {
+        final defaultAddress = addressProvider.addresses.firstWhere(
+          (addr) => addr.isDefault,
+          orElse: () => addressProvider.addresses.first,
+        );
+        
+        // Only update if the default address is different from the current selection
+        if (_selectedAddress == null || defaultAddress.id != _selectedAddress!.id) {
+          setState(() {
+            _selectedAddress = defaultAddress;
+          });
+          await _updateShippingWithSelectedAddress(context.read<PaymentProvider>());
+        }
+      }
     }
   }
 

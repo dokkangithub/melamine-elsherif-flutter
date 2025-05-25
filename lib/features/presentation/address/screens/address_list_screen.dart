@@ -39,17 +39,40 @@ class _AddressListScreenState extends State<AddressListScreen> {
   Future<void> _handleSetDefault(int addressId) async {
     final addressProvider = context.read<AddressProvider>();
     
-    // First make the address default
-    await addressProvider.makeAddressDefault(addressId);
-    
-    // Then update address in cart and shipping
-    await addressProvider.updateAddressInCart(
-      addressId,
-      context: context,
-    );
-    
-    // Update cart summary to reflect shipping changes
-    await context.read<CartProvider>().fetchCartSummary();
+    try {
+      // First make the address default
+      await addressProvider.makeAddressDefault(addressId);
+      
+      // Then update address in cart and shipping
+      await addressProvider.updateAddressInCart(
+        addressId,
+        context: context,
+      );
+      
+      // Update cart summary to reflect shipping changes
+      await context.read<CartProvider>().fetchCartSummary();
+      
+      // Show a confirmation message
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('address_set_as_default'.tr(context)),
+            backgroundColor: AppTheme.successColor,
+            duration: const Duration(seconds: 2),
+          ),
+        );
+      }
+    } catch (e) {
+      // Show error message if something went wrong
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('error_setting_default_address'.tr(context)),
+            backgroundColor: AppTheme.errorColor,
+          ),
+        );
+      }
+    }
   }
 
   @override

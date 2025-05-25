@@ -30,24 +30,24 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   bool _shouldAnimate = false;
-  
+
   @override
   void initState() {
     super.initState();
     _shouldAnimate = widget.isActive;
-    
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final profileProvider = context.read<ProfileProvider>();
       profileProvider.getUserProfile();
       profileProvider.getProfileCounters();
-      
+
       // Load club points data
       if (AppStrings.token != null) {
         context.read<ClubPointProvider>().fetchClubPoints();
       }
     });
   }
-  
+
   @override
   void didUpdateWidget(ProfileScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
@@ -66,7 +66,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final isLoggedIn = AppStrings.token != null;
     final isLoadingCounters =
         profileProvider.countersState == LoadingState.loading;
-    
+
     // Get the text direction to adjust the FAB position accordingly
     final TextDirection textDirection = Directionality.of(context);
     final FloatingActionButtonLocation fabLocation = textDirection == TextDirection.rtl
@@ -74,85 +74,85 @@ class _ProfileScreenState extends State<ProfileScreen> {
         : FloatingActionButtonLocation.endFloat;   // For LTR (English)
 
     return Scaffold(
-      backgroundColor: Colors.white,
-      floatingActionButton: _buildFloatingActionButton(context),
-      floatingActionButtonLocation: fabLocation,
-      body: SafeArea(
-        child: SingleChildScrollView(
-        child: Column(
-          children: [
-            // Different UI based on login status
-            _shouldAnimate 
-              ? FadeInDown(
+        backgroundColor: Colors.white,
+        floatingActionButton: _buildFloatingActionButton(context),
+        floatingActionButtonLocation: fabLocation,
+        body: SafeArea(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                // Different UI based on login status
+                _shouldAnimate
+                    ? FadeInDown(
                   duration: const Duration(milliseconds: 500),
-                  child: isLoggedIn 
+                  child: isLoggedIn
+                      ? _buildLoggedInUserHeader(context, profileProvider)
+                      : _buildGuestUserHeader(context),
+                )
+                    : isLoggedIn
                     ? _buildLoggedInUserHeader(context, profileProvider)
                     : _buildGuestUserHeader(context),
-                )
-              : isLoggedIn 
-                ? _buildLoggedInUserHeader(context, profileProvider)
-                : _buildGuestUserHeader(context),
 
 
-            // // Stats Section - only for logged in users
-            // if (isLoggedIn && !isLoadingCounters && counters != null)
-            //   _shouldAnimate
-            //     ? FadeInUp(
-            //         delay: const Duration(milliseconds: 200),
-            //         duration: const Duration(milliseconds: 400),
-            //         child: _buildStatsSection(context, counters, clubPointProvider),
-            //       )
-            //     : _buildStatsSection(context, counters, clubPointProvider),
-            //
-            // const SizedBox(height: 10),
+                // // Stats Section - only for logged in users
+                // if (isLoggedIn && !isLoadingCounters && counters != null)
+                //   _shouldAnimate
+                //     ? FadeInUp(
+                //         delay: const Duration(milliseconds: 200),
+                //         duration: const Duration(milliseconds: 400),
+                //         child: _buildStatsSection(context, counters, clubPointProvider),
+                //       )
+                //     : _buildStatsSection(context, counters, clubPointProvider),
+                //
+                // const SizedBox(height: 10),
 
-            // Quick Access Section - only for logged in users
-            if (isLoggedIn && !isLoadingCounters && counters != null)
-              _shouldAnimate
-                ? FadeInUp(
+                // Quick Access Section - only for logged in users
+                if (isLoggedIn && !isLoadingCounters && counters != null)
+                  _shouldAnimate
+                      ? FadeInUp(
                     delay: const Duration(milliseconds: 300),
-                    duration: const Duration(milliseconds: 400), 
+                    duration: const Duration(milliseconds: 400),
                     child: _buildQuickAccessSection(context),
                   )
-                : _buildQuickAccessSection(context),
+                      : _buildQuickAccessSection(context),
 
-            const SizedBox(height: 10),
+                const SizedBox(height: 10),
 
-            // Menu Items - different for guest vs logged in
-            _shouldAnimate
-              ? FadeInUp(
+                // Menu Items - different for guest vs logged in
+                _shouldAnimate
+                    ? FadeInUp(
                   delay: const Duration(milliseconds: 400),
                   duration: const Duration(milliseconds: 500),
-                  child: isLoggedIn 
+                  child: isLoggedIn
+                      ? _buildLoggedInMenuItems(context)
+                      : _buildGuestMenuItems(context),
+                )
+                    : isLoggedIn
                     ? _buildLoggedInMenuItems(context)
                     : _buildGuestMenuItems(context),
-                )
-              : isLoggedIn 
-                ? _buildLoggedInMenuItems(context)
-                : _buildGuestMenuItems(context),
 
-            const SizedBox(height: 20),
+                const SizedBox(height: 20),
 
-            // Auth Button (Sign Out or Sign In)
-            _shouldAnimate
-              ? ZoomIn(
+                // Auth Button (Sign Out or Sign In)
+                _shouldAnimate
+                    ? ZoomIn(
                   delay: const Duration(milliseconds: 500),
                   duration: const Duration(milliseconds: 300),
                   child: isLoggedIn
+                      ? _buildSignOutButton(context)
+                      : _buildSignInButton(context),
+                )
+                    : isLoggedIn
                     ? _buildSignOutButton(context)
                     : _buildSignInButton(context),
-                )
-              : isLoggedIn
-                ? _buildSignOutButton(context)
-                : _buildSignInButton(context),
 
-            const SizedBox(height: 40),
-          ],
-        ),
-      ),
-    ));
+                const SizedBox(height: 40),
+              ],
+            ),
+          ),
+        ));
   }
-  
+
   // Build the stats section with counters
   Widget _buildStatsSection(BuildContext context, profileCounters, ClubPointProvider clubPointProvider) {
     return Container(
@@ -191,7 +191,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
     );
   }
-  
+
   // Build quick access section
   Widget _buildQuickAccessSection(BuildContext context) {
     return Container(
@@ -206,7 +206,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               context,
               AppSvgs.profile_bag,
               'my_orders'.tr(context),
-              () => AppRoutes.navigateTo(
+                  () => AppRoutes.navigateTo(
                 context,
                 AppRoutes.allOrdersListScreen,
               ),
@@ -218,7 +218,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               context,
               AppSvgs.profile_location,
               'shipping_address'.tr(context),
-              () => AppRoutes.navigateTo(
+                  () => AppRoutes.navigateTo(
                 context,
                 AppRoutes.addressListScreen,
               ),
@@ -275,7 +275,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
           ),
           const SizedBox(height: 16),
-          
+
           // Welcome text
           Text(
             'welcome_to_elsherif'.tr(context),
@@ -285,7 +285,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
           ),
           const SizedBox(height: 8),
-          
+
           // Description
           Text(
             'sign_in_to_explore'.tr(context),
@@ -295,7 +295,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
           ),
           const SizedBox(height: 20),
-          
+
           // Sign in button in header
           ElevatedButton(
             onPressed: () {
@@ -345,14 +345,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
               borderRadius: BorderRadius.circular(45),
               child: profileProvider.profileImageUrl != null
                   ? CustomImage(
-                      imageUrl: profileProvider.profileImageUrl!,
-                      fit: BoxFit.cover,
-                    )
+                imageUrl: profileProvider.profileImageUrl!,
+                fit: BoxFit.cover,
+              )
                   : const Icon(
-                      Icons.person,
-                      size: 40,
-                      color: Colors.grey,
-                    ),
+                Icons.person,
+                size: 40,
+                color: Colors.grey,
+              ),
             ),
           ),
           const SizedBox(height: 10),
@@ -413,7 +413,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             AppSvgs.profile_language,
             'language_region'.tr(context),
             'personalize_experience'.tr(context),
-            () {
+                () {
               LanguageDialog.show(context);
             },
           ),
@@ -423,12 +423,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
             AppSvgs.profile_help,
             'help_support'.tr(context),
             'get_assistance'.tr(context),
-            () async {
+                () async {
               final Uri url = Uri.parse('https://melaminefront.dokkan.design/pages/contact-us');
               if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
                 if (context.mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('could_not_launch_website'.tr(context)))
+                      SnackBar(content: Text('could_not_launch_website'.tr(context)))
                   );
                 }
               }
@@ -440,12 +440,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
             AppSvgs.profile_about_us,
             'about_us'.tr(context),
             'learn_about_elsherif'.tr(context),
-            () async {
+                () async {
               final Uri url = Uri.parse('https://melaminefront.dokkan.design/pages/about-us');
               if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
                 if (context.mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('could_not_launch_website'.tr(context)))
+                      SnackBar(content: Text('could_not_launch_website'.tr(context)))
                   );
                 }
               }
@@ -457,12 +457,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
             AppSvgs.profile_privacy,
             'our_website'.tr(context),
             'browse_products'.tr(context),
-            () async {
+                () async {
               final Uri url = Uri.parse('https://melaminefront.dokkan.design/');
               if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
                 if (context.mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('could_not_launch_website'.tr(context)))
+                      SnackBar(content: Text('could_not_launch_website'.tr(context)))
                   );
                 }
               }
@@ -475,12 +475,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   // Enhanced menu item for guest users
   Widget _buildGuestMenuItem(
-    BuildContext context,
-    String icon,
-    String title,
-    String subtitle,
-    VoidCallback onTap,
-  ) {
+      BuildContext context,
+      String icon,
+      String title,
+      String subtitle,
+      VoidCallback onTap,
+      ) {
     return Material(
       color: Colors.transparent,
       child: InkWell(
@@ -527,8 +527,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
               ),
               Icon(
-                Directionality.of(context) == TextDirection.rtl 
-                    ? Icons.arrow_back_ios 
+                Directionality.of(context) == TextDirection.rtl
+                    ? Icons.arrow_back_ios
                     : Icons.arrow_forward_ios,
                 size: 16,
                 color: Colors.grey[400],
@@ -544,78 +544,78 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget _buildLoggedInMenuItems(BuildContext context) {
     return Container(
       color: Colors.white,
-                child: Column(
-                  children: [
-                    ProfileMenuItem(
-                      icon: AppSvgs.profile_person,
-                      title: 'personal_information'.tr(context),
-                      onTap: () {
-                        AppRoutes.navigateTo(
-                          context,
-                          AppRoutes.editProfileScreen,
-                        );
-                      },
-                    ),
-                    AppStrings.token == null
-                        ? const SizedBox.shrink()
-                        : ProfileMenuItem(
-                      icon: AppSvgs.profile_wellat,
-                      title: 'my_wallet'.tr(context),
-                      onTap: () {
-                        AppRoutes.navigateTo(
-                          context,
-                          AppRoutes.walletScreen,
-                        );
-                      },
-                    ),
-                    ProfileMenuItem(
-                      icon: AppSvgs.profile_privacy,
-                      title: 'our_website'.tr(context),
-                      onTap: () async {
-                        final Uri url = Uri.parse('https://melaminefront.dokkan.design/');
-                        if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
-                          if (context.mounted) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text('could_not_launch_website'.tr(context)))
-                            );
-                          }
-                        }
-                      },
-                    ),
-                    ProfileMenuItem(
-                      icon: AppSvgs.profile_language,
-                      title: 'language_region'.tr(context),
-                      onTap: () {
+      child: Column(
+        children: [
+          ProfileMenuItem(
+            icon: AppSvgs.profile_person,
+            title: 'personal_information'.tr(context),
+            onTap: () {
+              AppRoutes.navigateTo(
+                context,
+                AppRoutes.editProfileScreen,
+              );
+            },
+          ),
+          AppStrings.token == null
+              ? const SizedBox.shrink()
+              : ProfileMenuItem(
+            icon: AppSvgs.profile_wellat,
+            title: 'my_wallet'.tr(context),
+            onTap: () {
+              AppRoutes.navigateTo(
+                context,
+                AppRoutes.walletScreen,
+              );
+            },
+          ),
+          ProfileMenuItem(
+            icon: AppSvgs.profile_privacy,
+            title: 'our_website'.tr(context),
+            onTap: () async {
+              final Uri url = Uri.parse('https://melaminefront.dokkan.design/');
+              if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('could_not_launch_website'.tr(context)))
+                  );
+                }
+              }
+            },
+          ),
+          ProfileMenuItem(
+            icon: AppSvgs.profile_language,
+            title: 'language_region'.tr(context),
+            onTap: () {
               LanguageDialog.show(context);
-                      },
-                    ),
-                    ProfileMenuItem(
-                      icon: AppSvgs.profile_help,
-                      title: 'help_support'.tr(context),
-                      onTap: () async {
-                        final Uri url = Uri.parse('https://melaminefront.dokkan.design/pages/contact-us');
-                        if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
-                          if (context.mounted) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text('could_not_launch_website'.tr(context)))
-                            );
-                          }
-                        }
-                      },
-                    ),
-                    ProfileMenuItem(
-                      icon: AppSvgs.profile_about_us,
-                      title: 'about_us'.tr(context),
-                      onTap: () async {
-                        final Uri url = Uri.parse('https://melaminefront.dokkan.design/pages/about-us');
-                        if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
-                          if (context.mounted) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text('could_not_launch_website'.tr(context)))
-                            );
-                          }
-                        }
-                      },
+            },
+          ),
+          ProfileMenuItem(
+            icon: AppSvgs.profile_help,
+            title: 'help_support'.tr(context),
+            onTap: () async {
+              final Uri url = Uri.parse('https://melaminefront.dokkan.design/pages/contact-us');
+              if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('could_not_launch_website'.tr(context)))
+                  );
+                }
+              }
+            },
+          ),
+          ProfileMenuItem(
+            icon: AppSvgs.profile_about_us,
+            title: 'about_us'.tr(context),
+            onTap: () async {
+              final Uri url = Uri.parse('https://melaminefront.dokkan.design/pages/about-us');
+              if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('could_not_launch_website'.tr(context)))
+                  );
+                }
+              }
+            },
           ),
         ],
       ),
@@ -649,11 +649,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     'account_benefits'.tr(context),
                     style: context.bodyMedium,
                   ),
-                    ),
-                  ],
                 ),
-              ),
-              const SizedBox(height: 20),
+              ],
+            ),
+          ),
+          const SizedBox(height: 20),
 
           // Sign in button
           CustomButton(
@@ -679,7 +679,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
           ),
           const SizedBox(height: 12),
-          
+
           // Create account text button
           TextButton(
             onPressed: () {
@@ -701,39 +701,39 @@ class _ProfileScreenState extends State<ProfileScreen> {
   // Sign out button - extracted from original code
   Widget _buildSignOutButton(BuildContext context) {
     return Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 8,
-                ),
-                child: CustomButton(
-                  onPressed: () {
-                      _showLogoutConfirmation(context);
-                  },
-                  isOutlined: true,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(
-              Icons.logout,
-                        color: AppTheme.primaryColor
-                      ),
-                      const SizedBox(width: 6),
-                      Text(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 16,
+        vertical: 8,
+      ),
+      child: CustomButton(
+        onPressed: () {
+          _showLogoutConfirmation(context);
+        },
+        isOutlined: true,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(
+                Icons.logout,
+                color: AppTheme.primaryColor
+            ),
+            const SizedBox(width: 6),
+            Text(
               'sign_out'.tr(context),
-                        style: context.titleMedium.copyWith(color: AppTheme.primaryColor),
-                      ),
-                    ],
+              style: context.titleMedium.copyWith(color: AppTheme.primaryColor),
+            ),
+          ],
         ),
       ),
     );
   }
 
   Widget _buildStatItem(
-    BuildContext context,
-    String value,
-    String label,
-    String icon,
-  ) {
+      BuildContext context,
+      String value,
+      String label,
+      String icon,
+      ) {
     return Column(
       children: [
         CustomImage(assetPath: icon),
@@ -749,11 +749,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Widget _buildQuickAccessItem(
-    BuildContext context,
-    String icon,
-    String label,
-    VoidCallback onTap,
-  ) {
+      BuildContext context,
+      String icon,
+      String label,
+      VoidCallback onTap,
+      ) {
     return InkWell(
       onTap: onTap,
       child: Container(
@@ -791,7 +791,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         if (navigatorContext.mounted) {
           Navigator.of(navigatorContext).pushAndRemoveUntil(
             MaterialPageRoute(builder: (context) => const LoginScreen()),
-            (route) => false,
+                (route) => false,
           );
         }
       },
@@ -826,7 +826,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         child: const Icon(Icons.facebook),
       ),
     ];
-    
+
     return CircleFloatingButton.floatingActionButton(
       items: socialMediaItems,
       color: AppTheme.primaryColor,

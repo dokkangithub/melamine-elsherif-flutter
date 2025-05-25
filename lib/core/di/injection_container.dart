@@ -155,6 +155,13 @@ import '../utils/local_storage/local_storage_keys.dart';
 import '../../features/di/wallet_injection.dart';
 import '../../core/network/network_info.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
+// Business Module Imports
+import '../../features/data/business/datasources/business_remote_datasource.dart';
+import '../../features/data/business/repositories/business_repository_impl.dart';
+import '../../features/domain/business/repositories/business_repository.dart';
+import '../../features/domain/business/usecases/get_business_settings_usecase.dart';
+import '../../features/presentation/business/controller/business_provider.dart';
+import '../services/business_settings_service.dart';
 
 
 final sl = GetIt.instance;
@@ -573,4 +580,30 @@ Future<void> setupDependencies() async {
 
   // Initialize Wallet dependencies
   await initWalletDependencies();
+
+  // Business settings dependencies
+  // Data Sources
+  sl.registerLazySingleton<BusinessRemoteDataSource>(
+    () => BusinessRemoteDataSourceImpl(apiProvider: sl<RestApiProvider>()),
+  );
+
+  // Repositories
+  sl.registerLazySingleton<BusinessRepository>(
+    () => BusinessRepositoryImpl(remoteDataSource: sl<BusinessRemoteDataSource>()),
+  );
+
+  // Use Cases
+  sl.registerLazySingleton<GetBusinessSettingsUseCase>(
+    () => GetBusinessSettingsUseCase(sl<BusinessRepository>()),
+  );
+
+  // Providers
+  sl.registerLazySingleton<BusinessProvider>(
+    () => BusinessProvider(getBusinessSettingsUseCase: sl<GetBusinessSettingsUseCase>()),
+  );
+
+  // Register BusinessSettingsService
+  sl.registerLazySingleton<BusinessSettingsService>(
+    () => BusinessSettingsService(),
+  );
 }
