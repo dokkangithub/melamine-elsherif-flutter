@@ -526,12 +526,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ],
                 ),
               ),
-              Icon(
-                Directionality.of(context) == TextDirection.rtl
-                    ? Icons.arrow_back_ios
-                    : Icons.arrow_forward_ios,
-                size: 16,
-                color: Colors.grey[400],
+              Transform.rotate(
+                angle: Directionality.of(context) == TextDirection.rtl ? 3.14159 : 0,
+                child: Icon(
+                  Icons.arrow_forward_ios,
+                  size: 16,
+                  color: Colors.grey[400],
+                ),
               ),
             ],
           ),
