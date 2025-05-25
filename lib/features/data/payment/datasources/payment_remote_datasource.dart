@@ -379,7 +379,8 @@ class PaymentRemoteDataSourceImpl implements PaymentRemoteDataSource {
       const int shippingId = 123;
 
       final data = {
-        "temp_user_id": AppStrings.tempUserId,
+        if (AppStrings.userId==null) "temp_user_id": AppStrings.tempUserId,
+        if (AppStrings.userId != null) "user_id": AppStrings.userId,
         "address": address,
         "shipping_type": shippingType,
         "shipping_id": shippingId.toString(),

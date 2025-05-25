@@ -21,8 +21,6 @@ import '../widgets/geust_address_form.dart';
 import '../widgets/shipping_address_section.dart';
 import '../widgets/payment_method_section.dart';
 import '../widgets/order_summary_section.dart';
-import '../../../../core/services/business_settings_service.dart';
-import '../../../../core/di/injection_container.dart';
 
 class CheckoutScreen extends StatefulWidget {
   const CheckoutScreen({super.key});
@@ -34,7 +32,6 @@ class CheckoutScreen extends StatefulWidget {
 class _CheckoutScreenState extends State<CheckoutScreen> {
   Address? _selectedAddress;
   bool _isProcessingPayment = false;
-  bool _isGuestCheckoutAllowed = false;
   
   bool get _isGuestUser => AppStrings.token == null;
 
@@ -49,11 +46,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   }
 
   void _loadData() async {
-    // Check if guest checkout is enabled in business settings
-    final businessSettingsService = sl<BusinessSettingsService>();
-    await businessSettingsService.init();
-    _isGuestCheckoutAllowed = businessSettingsService.guestCheckoutActive;
-
     final addressProvider = context.read<AddressProvider>();
     final paymentProvider = context.read<PaymentProvider>();
     final cartProvider = context.read<CartProvider>();
