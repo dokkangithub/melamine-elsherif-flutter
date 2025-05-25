@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
   // Colors
@@ -48,92 +47,81 @@ class AppTheme {
     scaffoldBackgroundColor: white,
     cardColor: lightCardColor,
     dividerColor: lightDividerColor,
+    fontFamily: 'Dokkan',
 
-    // Correctly apply Google Fonts
-    textTheme: GoogleFonts.nunitoTextTheme(ThemeData.light().textTheme).copyWith(
-      displayLarge: GoogleFonts.nunito(
-        textStyle: const TextStyle(
-          color: black,
-          fontSize: 32,
-          fontWeight: FontWeight.w500,
-        ),
+    // Apply custom Dokkan font
+    textTheme: const TextTheme(
+      displayLarge: TextStyle(
+        color: black,
+        fontSize: 30,
+        fontWeight: FontWeight.w500,
+        fontFamily: 'Dokkan',
       ),
-      displayMedium: GoogleFonts.nunito(
-        textStyle: const TextStyle(
-          color: black,
-          fontSize: 28,
-          fontWeight: FontWeight.w500,
-        ),
+      displayMedium: TextStyle(
+        color: black,
+        fontSize: 26,
+        fontWeight: FontWeight.w500,
+        fontFamily: 'Dokkan',
       ),
-      displaySmall: GoogleFonts.nunito(
-        textStyle: const TextStyle(
-          color: black,
-          fontSize: 24,
-          fontWeight: FontWeight.w600,
-        ),
+      displaySmall: TextStyle(
+        color: black,
+        fontSize: 22,
+        fontWeight: FontWeight.w600,
+        fontFamily: 'Dokkan',
       ),
-      headlineMedium: GoogleFonts.nunito(
-        textStyle: const TextStyle(
-          color: black,
-          fontSize: 20,
-          fontWeight: FontWeight.w500,
-        ),
+      headlineMedium: TextStyle(
+        color: black,
+        fontSize: 18,
+        fontWeight: FontWeight.w500,
+        fontFamily: 'Dokkan',
       ),
-      headlineSmall: GoogleFonts.nunito(
-        textStyle: const TextStyle(
-          color: black,
-          fontSize: 18,
-          fontWeight: FontWeight.w500,
-        ),
+      headlineSmall: TextStyle(
+        color: black,
+        fontSize: 16,
+        fontWeight: FontWeight.w500,
+        fontFamily: 'Dokkan',
       ),
-      titleLarge: GoogleFonts.nunito(
-        textStyle: const TextStyle(
-          color: black,
-          fontSize: 16,
-          fontWeight: FontWeight.w500,
-        ),
+      titleLarge: TextStyle(
+        color: black,
+        fontSize: 14,
+        fontWeight: FontWeight.w500,
+        fontFamily: 'Dokkan',
       ),
-      titleMedium: GoogleFonts.nunito(
-        textStyle: const TextStyle(
-          color: black,
-          fontSize: 15,
-          fontWeight: FontWeight.w500,
-        ),
+      titleMedium: TextStyle(
+        color: black,
+        fontSize: 13,
+        fontWeight: FontWeight.w500,
+        fontFamily: 'Dokkan',
       ),
-      titleSmall: GoogleFonts.nunito(
-        textStyle: const TextStyle(
-          color: black,
-          fontSize: 14,
-          fontWeight: FontWeight.w500,
-        ),
+      titleSmall: TextStyle(
+        color: black,
+        fontSize: 12,
+        fontWeight: FontWeight.w500,
+        fontFamily: 'Dokkan',
       ),
-      bodyLarge: GoogleFonts.nunito(
-        textStyle: const TextStyle(
-          color: black,
-          fontSize: 13,
-          fontWeight: FontWeight.w500,
-        ),
+      bodyLarge: TextStyle(
+        color: black,
+        fontSize: 11,
+        fontWeight: FontWeight.w500,
+        fontFamily: 'Dokkan',
       ),
-      bodyMedium: GoogleFonts.nunito(
-        textStyle: const TextStyle(
-          color: black,
-          fontSize: 12,
-          fontWeight: FontWeight.w500,
-        ),
+      bodyMedium: TextStyle(
+        color: black,
+        fontSize: 10,
+        fontWeight: FontWeight.w500,
+        fontFamily: 'Dokkan',
       ),
-      bodySmall: GoogleFonts.nunito(
-        textStyle: const TextStyle(
-          color: black,
-          fontSize: 11,
-          fontWeight: FontWeight.w500,
-        ),
+      bodySmall: TextStyle(
+        color: black,
+        fontSize: 9,
+        fontWeight: FontWeight.w500,
+        fontFamily: 'Dokkan',
       ),
-      labelLarge: GoogleFonts.nunito(
-        textStyle: const TextStyle(
-          color: black,
-          fontSize: 10,
-          fontWeight: FontWeight.w500,
-        ),
+      labelLarge: TextStyle(
+        color: black,
+        fontSize: 8,
+        fontWeight: FontWeight.w500,
+        fontFamily: 'Dokkan',
       ),
     ),
 
@@ -145,8 +133,10 @@ class AppTheme {
         elevation: 2,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        textStyle: GoogleFonts.nunito(
-          textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+        textStyle: const TextStyle(
+          fontSize: 16, 
+          fontWeight: FontWeight.w500,
+          fontFamily: 'Dokkan',
         ),
       ),
     ),
@@ -157,8 +147,10 @@ class AppTheme {
         side: const BorderSide(color: primaryColor),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        textStyle: GoogleFonts.nunito(
-          textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+        textStyle: const TextStyle(
+          fontSize: 16, 
+          fontWeight: FontWeight.w500,
+          fontFamily: 'Dokkan',
         ),
       ),
     ),
@@ -167,8 +159,10 @@ class AppTheme {
       style: TextButton.styleFrom(
         foregroundColor: primaryColor,
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        textStyle: GoogleFonts.nunito(
-          textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+        textStyle: const TextStyle(
+          fontSize: 16, 
+          fontWeight: FontWeight.w500,
+          fontFamily: 'Dokkan',
         ),
       ),
     ),
@@ -198,14 +192,20 @@ class AppTheme {
         borderRadius: BorderRadius.circular(8),
         borderSide: const BorderSide(color: errorColor, width: 2),
       ),
-      labelStyle: GoogleFonts.nunito(
-        textStyle: const TextStyle(color: lightSecondaryTextColor, fontSize: 16),
+      labelStyle: const TextStyle(
+        color: lightSecondaryTextColor, 
+        fontSize: 16,
+        fontFamily: 'Dokkan',
       ),
-      hintStyle: GoogleFonts.nunito(
-        textStyle: const TextStyle(color: lightSecondaryTextColor, fontSize: 16),
+      hintStyle: const TextStyle(
+        color: lightSecondaryTextColor, 
+        fontSize: 16,
+        fontFamily: 'Dokkan',
       ),
-      errorStyle: GoogleFonts.nunito(
-        textStyle: const TextStyle(color: errorColor, fontSize: 12),
+      errorStyle: const TextStyle(
+        color: errorColor, 
+        fontSize: 12,
+        fontFamily: 'Dokkan',
       ),
     ),
 
@@ -218,30 +218,33 @@ class AppTheme {
     ),
 
     // App Bar Theme
-    appBarTheme: AppBarTheme(
+    appBarTheme: const AppBarTheme(
       color: primaryColor,
       elevation: 0,
       centerTitle: true,
-      titleTextStyle: GoogleFonts.nunito(
-        textStyle: const TextStyle(
-          color: Colors.white,
-          fontSize: 20,
-          fontWeight: FontWeight.w600,
-        ),
+      titleTextStyle: TextStyle(
+        color: Colors.white,
+        fontSize: 20,
+        fontWeight: FontWeight.w600,
+        fontFamily: 'Dokkan',
       ),
-      iconTheme: const IconThemeData(color: Colors.white),
+      iconTheme: IconThemeData(color: Colors.white),
     ),
 
     // Bottom Navigation Bar Theme
-    bottomNavigationBarTheme: BottomNavigationBarThemeData(
+    bottomNavigationBarTheme: const BottomNavigationBarThemeData(
       backgroundColor: lightCardColor,
       selectedItemColor: primaryColor,
       unselectedItemColor: lightSecondaryTextColor,
-      selectedLabelStyle: GoogleFonts.nunito(
-        textStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
+      selectedLabelStyle: TextStyle(
+        fontSize: 12, 
+        fontWeight: FontWeight.w500,
+        fontFamily: 'Dokkan',
       ),
-      unselectedLabelStyle: GoogleFonts.nunito(
-        textStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
+      unselectedLabelStyle: TextStyle(
+        fontSize: 12, 
+        fontWeight: FontWeight.w500,
+        fontFamily: 'Dokkan',
       ),
       elevation: 8,
     ),

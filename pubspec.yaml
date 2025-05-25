@@ -186,6 +186,9 @@ flutter:
         - asset: assets/fonts/zain/Zain-LightItalic.ttf
           weight: 300
           style: italic
+    - family: Dokkan
+      fonts:
+        - asset: assets/fonts/Dokkan-Regular.ttf
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package

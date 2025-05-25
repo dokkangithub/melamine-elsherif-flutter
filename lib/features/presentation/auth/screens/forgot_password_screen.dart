@@ -11,7 +11,6 @@ import 'package:animate_do/animate_do.dart';
 import '../../../../core/utils/constants/app_assets.dart';
 import '../../../../core/utils/extension/translate_extension.dart';
 import '../../../../core/utils/widgets/custom_snackbar.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
   const ForgotPasswordScreen({super.key});
@@ -155,9 +154,10 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       controller: _controller,
                       decoration: InputDecoration(
                         hintText: _isSendingEmail ? 'enter_your_email'.tr(context) : 'enter_your_phone_number'.tr(context),
-                        hintStyle: GoogleFonts.inter(
+                        hintStyle: TextStyle(
                           fontSize: 14,
                           color: Colors.grey[500],
+                          fontFamily: 'Dokkan',
                         ),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
@@ -180,9 +180,10 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                         : TextInputType.phone,
                       textDirection: Directionality.of(context),
                       textAlign: Directionality.of(context) == TextDirection.rtl ? TextAlign.right : TextAlign.left,
-                      style: GoogleFonts.inter(
+                      style: const TextStyle(
                         fontSize: 14,
                         color: Colors.black,
+                        fontFamily: 'Dokkan',
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {

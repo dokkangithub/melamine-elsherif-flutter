@@ -5,6 +5,7 @@ import 'package:melamine_elsherif/core/utils/constants/app_assets.dart';
 import 'package:melamine_elsherif/core/utils/enums/products_type.dart';
 import 'package:melamine_elsherif/core/utils/extension/text_theme_extension.dart';
 import 'package:melamine_elsherif/core/utils/extension/translate_extension.dart';
+import 'package:melamine_elsherif/core/utils/widgets/custom_button.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_cached_image.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_empty_widgets.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_form_field.dart';
@@ -367,13 +368,13 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
             children: [
               Text(errorMessage),
               const SizedBox(height: 16),
-              ElevatedButton(
+              CustomButton(
                 onPressed:
                     () => _fetchProducts(
                       Provider.of<HomeProvider>(context, listen: false),
                       refresh: true,
                     ),
-                child: const Text('Retry'),
+                child: Text('retry'.tr(context)),
               ),
             ],
           ),

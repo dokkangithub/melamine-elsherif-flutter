@@ -107,7 +107,9 @@ class _SearchScreenState extends State<SearchScreen> {
                 duration: const Duration(milliseconds: 400),
                 child: Row(
                   children: [
+                    const SizedBox(width: 20),
                     const CustomBackButton(),
+                    const SizedBox(width: 10),
                     Expanded(
                       child: SearchInputField(
                         controller: _searchController,

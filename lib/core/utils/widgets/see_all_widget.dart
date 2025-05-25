@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:melamine_elsherif/core/config/themes.dart/theme.dart';
 import 'package:melamine_elsherif/core/utils/extension/text_style_extension.dart';
 import 'package:melamine_elsherif/core/utils/extension/translate_extension.dart';
@@ -21,9 +20,7 @@ class SeeAllWidget extends StatelessWidget {
       children: [
         Text(
           title,
-          style: GoogleFonts.nunito(
-            textStyle: Theme.of(context).textTheme.headlineSmall!.copyWith(fontWeight: FontWeight.w700),
-          ),
+          style: Theme.of(context).textTheme.headlineSmall!.copyWith(fontWeight: FontWeight.w700),
         ),
         InkWell(
           onTap: onTap,
