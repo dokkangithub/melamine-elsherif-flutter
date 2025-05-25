@@ -527,7 +527,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
               ),
               Icon(
-                Icons.arrow_forward_ios,
+                Directionality.of(context) == TextDirection.rtl 
+                    ? Icons.arrow_back_ios 
+                    : Icons.arrow_forward_ios,
                 size: 16,
                 color: Colors.grey[400],
               ),

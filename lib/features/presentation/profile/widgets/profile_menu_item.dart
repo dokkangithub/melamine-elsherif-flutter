@@ -21,6 +21,8 @@ class ProfileMenuItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bool isRtl = Directionality.of(context) == TextDirection.rtl;
+    
     return InkWell(
       onTap: onTap,
       child: Padding(
@@ -39,7 +41,13 @@ class ProfileMenuItem extends StatelessWidget {
                 ),
               ),
             ),
-            const CustomImage(assetPath: AppSvgs.profile_back),
+            isRtl
+                ? Transform(
+                    alignment: Alignment.center,
+                    transform: Matrix4.rotationY(3.14159), // Flip horizontally
+                    child: const CustomImage(assetPath: AppSvgs.profile_back),
+                  )
+                : const CustomImage(assetPath: AppSvgs.profile_back),
           ],
         ),
       ),

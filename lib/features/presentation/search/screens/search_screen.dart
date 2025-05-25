@@ -108,7 +108,7 @@ class _SearchScreenState extends State<SearchScreen> {
                 child: Row(
                   children: [
                     const SizedBox(width: 20),
-                    const CustomBackButton(),
+                    const CustomBackButton(respectDirection: true),
                     const SizedBox(width: 10),
                     Expanded(
                       child: SearchInputField(
