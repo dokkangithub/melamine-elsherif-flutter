@@ -66,7 +66,7 @@ class CategoriesWidget extends StatelessWidget {
                   itemCount: 4,
                   physics: const NeverScrollableScrollPhysics(),
                   itemBuilder: (context, index) => CategoryCard(
-                    imageUrl: categories[index].banner ?? '',
+                    imageUrl: categories[index].coverImage ?? '',
                     name: categories[index].name ?? 'Category',
                     onTap: () {
                       AppRoutes.navigateTo(
