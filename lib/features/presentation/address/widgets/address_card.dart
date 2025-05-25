@@ -12,13 +12,13 @@ class AddressCard extends StatelessWidget {
   final String? userName;
 
   const AddressCard({
-    Key? key,
+    super.key,
     required this.address,
     required this.isSelected,
     required this.onTap,
     required this.onEdit,
     this.userName,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -77,8 +77,8 @@ class AddressCard extends StatelessWidget {
               ),
             ),
             Positioned(
-              top: 4,
-              right: 4,
+              top: -8,
+              right: -8,
               child: IconButton(
                 icon: const Icon(
                   Icons.edit,

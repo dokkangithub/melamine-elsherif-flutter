@@ -314,7 +314,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             padding: const EdgeInsets.all(20.0),
             child: Transform.rotate(
               angle: Directionality.of(context) == TextDirection.rtl ? 3.14159 : 0,
-              child: CustomImage(assetPath: AppSvgs.back),
+              child: const CustomImage(assetPath: AppSvgs.back),
             ),
           ),
           onTap: () => Navigator.pop(context),

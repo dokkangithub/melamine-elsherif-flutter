@@ -40,18 +40,19 @@ class _AddEditAddressScreenState extends State<AddEditAddressScreen> {
   void initState() {
     super.initState();
 
+    // Default country to Egypt (ID: 1)
+    _selectedCountryId = 1;
+
     // If editing an existing address, populate the form
     if (widget.address != null) {
       _addressController.text = widget.address!.address;
       _phoneController.text = widget.address!.phone;
       _cityNameController.text = widget.address!.cityName;
-
-      _selectedCountryId = widget.address!.countryId;
       _selectedStateId = widget.address!.stateId;
     }
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _loadCountries();
+      _loadCountryData();
     });
   }
 
@@ -63,13 +64,15 @@ class _AddEditAddressScreenState extends State<AddEditAddressScreen> {
     super.dispose();
   }
 
-  void _loadCountries() async {
+  void _loadCountryData() async {
     final addressProvider = context.read<AddressProvider>();
-    await addressProvider.fetchCountries();
-
-    // If editing, load states
-    if (widget.address != null && _selectedCountryId != null) {
-      await addressProvider.fetchStatesByCountry(_selectedCountryId!);
+    
+    // Always load states for Egypt (ID: 1)
+    await addressProvider.fetchStatesByCountry(1);
+    
+    // If editing and we have a state ID, use it
+    if (widget.address != null && _selectedStateId != null) {
+      // State is already selected from the widget.address
     }
   }
 
@@ -177,7 +180,7 @@ class _AddEditAddressScreenState extends State<AddEditAddressScreen> {
           // Add new address
           await addressProvider.addAddress(
             address: _addressController.text,
-            countryId: _selectedCountryId!,
+            countryId: 64, // Egypt is always selected
             stateId: _selectedStateId!,
             cityName: cityName,
             phone: _phoneController.text,
@@ -194,7 +197,7 @@ class _AddEditAddressScreenState extends State<AddEditAddressScreen> {
           await addressProvider.updateAddress(
             id: widget.address!.id,
             address: _addressController.text,
-            countryId: _selectedCountryId!,
+            countryId: 1, // Egypt is always selected
             stateId: _selectedStateId!,
             cityName: cityName,
             phone: _phoneController.text,

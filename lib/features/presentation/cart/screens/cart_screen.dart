@@ -352,8 +352,7 @@ class _CartScreenState extends State<CartScreen> {
               const SizedBox(height: 8),
               _buildSummaryRow(
                 'subtotal'.tr(context),
-                '${((cartProvider.cartSummary?.subtotal ?? 0.0) - (cartProvider.cartSummary?.discount ?? 0.0)).toStringAsFixed(2)}'
-                    ' ${cartProvider.cartSummary?.currencySymbol ?? ''}',
+                '${cartProvider.cartSummary?.subtotal ?? 0.0}',
               ),
 
               _buildSummaryRow(
@@ -368,7 +367,7 @@ class _CartScreenState extends State<CartScreen> {
                 ),
               _buildSummaryRow(
                 'total'.tr(context),
-                '${cartProvider.cartSummary?.total.toStringAsFixed(2) ?? '0.00'} ${cartProvider.cartSummary?.currencySymbol ?? ''}',
+                '${cartProvider.cartSummary!.total.toStringAsFixed(2) ?? '0.00'} ${cartProvider.cartSummary?.currencySymbol ?? ''}',
                 isBold: true,
               ),
             ],

@@ -29,7 +29,7 @@ class CartItem {
 }
 
 class CartSummary {
-  final double subtotal;
+  final String subtotal;
   final double tax;
   final double shippingCost;
   final double total;

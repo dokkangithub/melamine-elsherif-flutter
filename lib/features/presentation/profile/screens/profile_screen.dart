@@ -781,6 +781,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
       text: 'confirm_logout'.tr(navigatorContext),
       confirmBtnText: 'logout'.tr(navigatorContext),
       cancelBtnText: 'cancel'.tr(navigatorContext),
+      confirmBtnTextStyle: context.bodySmall.copyWith(color: AppTheme.white),
+      cancelBtnTextStyle: context.bodyMedium.copyWith(color: AppTheme.primaryColor),
       confirmBtnColor: AppTheme.primaryColor,
       onConfirmBtnTap: () async {
         Navigator.pop(context); // Close the dialog
@@ -871,7 +873,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Future<void> _openWhatsApp() async {
-    final phoneNumber = '201064440808'; // Adding Egypt country code
+    const phoneNumber = '201064440808'; // Adding Egypt country code
     final url = Uri.parse('https://wa.me/$phoneNumber');
     if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
       if (context.mounted) {

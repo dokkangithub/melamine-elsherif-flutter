@@ -64,7 +64,7 @@ class CartItemModel {
 }
 
 class CartSummaryModel {
-  final double subtotal;
+  final String subtotal;
   final double tax;
   final double shippingCost;
   final double discount;
@@ -107,9 +107,7 @@ class CartSummaryModel {
     }
 
     return CartSummaryModel(
-      subtotal: json['grand_total_value'] != null
-          ? (json['grand_total_value'] as num).toDouble()
-          : parsePrice(json['sub_total']),
+      subtotal: json['sub_total'],
       tax: parsePrice(json['tax']),
       shippingCost: parsePrice(json['shipping_cost']),
       discount: parsePrice(json['discount']),

@@ -91,51 +91,7 @@ class AddressFormFields extends StatelessWidget {
         ),
         const SizedBox(height: 20),
 
-        // Country dropdown
-        customText('country'.tr(context), context),
-        DropdownButtonFormField<int>(
-          value: selectedCountryId,
-          hint: Text('select_your_country'.tr(context)),
-          isExpanded: true,
-          decoration: InputDecoration(
-            contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-            border: OutlineInputBorder(
-              borderSide: const BorderSide(color: AppTheme.darkDividerColor, width: 1.0),
-              borderRadius: BorderRadius.circular(4),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderSide: const BorderSide(color: AppTheme.darkDividerColor, width: 1.0),
-              borderRadius: BorderRadius.circular(4),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderSide: const BorderSide(color: AppTheme.primaryColor, width: 1.0),
-              borderRadius: BorderRadius.circular(4),
-            ),
-            errorBorder: OutlineInputBorder(
-              borderSide: const BorderSide(color: AppTheme.errorColor, width: 1.0),
-              borderRadius: BorderRadius.circular(4),
-            ),
-            filled: false,
-          ),
-          validator: (value) {
-            if (value == null) {
-              return 'please_select_country'.tr(context);
-            }
-            return null;
-          },
-          items: countries.map((country) {
-            return DropdownMenuItem<int>(
-              value: country['id'] as int,
-              child: Text(country['name'] as String),
-            );
-          }).toList(),
-          onChanged: (value) {
-            if (value != null) {
-              onCountryChanged(value);
-            }
-          },
-          icon: const Icon(Icons.keyboard_arrow_down, color: Colors.black54),
-        ),
+        // Country field is removed - Egypt is automatically selected
         const SizedBox(height: 20),
 
         // State dropdown

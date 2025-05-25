@@ -69,7 +69,7 @@ class OrderSummarySection extends StatelessWidget {
                   context: context,
                   label: 'subtotal'.tr(context),
                   value:
-                      '${(cartSummary.subtotal + cartSummary.discount - cartSummary.tax).toStringAsFixed(2)} ${cartSummary.currencySymbol}',
+                      '${(cartSummary.subtotal)}',
                 ),
                 const SizedBox(height: 12),
                 _buildPriceRow(
