@@ -65,16 +65,20 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       ]);
 
       if (addressProvider.addresses.isNotEmpty && mounted) {
-        final defaultAddress = addressProvider.addresses.firstWhere(
+        // First try to find a default address
+        Address? defaultAddress = addressProvider.addresses.firstWhere(
           (addr) => addr.isDefault,
           orElse: () => addressProvider.addresses.first,
         );
 
-        setState(() {
-          _selectedAddress = defaultAddress;
-        });
+        if (defaultAddress != null) {
+          setState(() {
+            _selectedAddress = defaultAddress;
+          });
 
-        await _updateShippingWithSelectedAddress(paymentProvider);
+          // Update shipping with the default address
+          await _updateShippingWithSelectedAddress(paymentProvider);
+        }
       }
     }
   }

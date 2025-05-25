@@ -15,6 +15,7 @@ import '../widgets/address_list_widget.dart';
 import '../widgets/shimmer/address_list_shimmer.dart';
 import '../widgets/empty_address_widget.dart';
 import 'add_edit_address_screen.dart';
+import '../../cart/controller/cart_provider.dart';
 
 class AddressListScreen extends StatefulWidget {
   final bool isSelectable;
@@ -32,6 +33,23 @@ class _AddressListScreenState extends State<AddressListScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<AddressProvider>().fetchAddresses();
     });
+  }
+
+  // Handle setting an address as default and update shipping
+  Future<void> _handleSetDefault(int addressId) async {
+    final addressProvider = context.read<AddressProvider>();
+    
+    // First make the address default
+    await addressProvider.makeAddressDefault(addressId);
+    
+    // Then update address in cart and shipping
+    await addressProvider.updateAddressInCart(
+      addressId,
+      context: context,
+    );
+    
+    // Update cart summary to reflect shipping changes
+    await context.read<CartProvider>().fetchCartSummary();
   }
 
   @override
@@ -126,8 +144,7 @@ class _AddressListScreenState extends State<AddressListScreen> {
                       onDelete:
                           (addressId) => _showDeleteConfirmation(context, addressId),
                       onSetDefault:
-                          (addressId) =>
-                              addressProvider.makeAddressDefault(addressId),
+                          (addressId) => _handleSetDefault(addressId),
                       onSelect:
                           widget.isSelectable
                               ? (address) => Navigator.pop(context, address)
