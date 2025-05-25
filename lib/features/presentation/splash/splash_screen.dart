@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:melamine_elsherif/core/config/app_config.dart/app_config.dart';
 import 'package:melamine_elsherif/core/config/themes.dart/theme.dart';
+import 'package:melamine_elsherif/core/services/business_settings_service.dart';
 import 'package:melamine_elsherif/core/utils/constants/app_assets.dart';
 import 'package:melamine_elsherif/core/utils/extension/text_style_extension.dart';
 import 'package:melamine_elsherif/core/utils/extension/translate_extension.dart';
@@ -39,11 +40,14 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
   late Animation<double> _dividerScaleAnimation;
   late Animation<Color?> _dividerColorAnimation;
 
+  // Loading flags
+  bool _isBusinessSettingsLoaded = false;
+
   @override
   void initState() {
     super.initState();
     _setupAnimations();
-    _checkNavigationPath();
+    _preloadData();
   }
 
   void _setupAnimations() {
@@ -167,6 +171,32 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
     });
   }
 
+  // Preload all necessary data
+  Future<void> _preloadData() async {
+    // Load business settings
+    try {
+      final businessSettingsService = sl<BusinessSettingsService>();
+      debugPrint('Splash screen: Loading business settings...');
+      await businessSettingsService.init();
+      
+      // Verify we got the banner images
+      final bannerImages = businessSettingsService.getHomeBannerImages();
+      debugPrint('Splash screen: Loaded business settings. Banner images: ${bannerImages.length}');
+      
+      setState(() {
+        _isBusinessSettingsLoaded = true;
+      });
+    } catch (e) {
+      debugPrint('Splash screen: Error loading business settings: $e');
+      setState(() {
+        _isBusinessSettingsLoaded = true; // Still mark as loaded to avoid blocking the app
+      });
+    }
+    
+    // Check navigation after preloading and animations
+    _checkNavigationPath();
+  }
+
   Future<void> _checkNavigationPath() async {
     // Increased delay to allow animations to complete
     await Future.delayed(const Duration(seconds: 4));
@@ -253,29 +283,33 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
                         );
                       },
                     ),
-                    const SizedBox(height: 10),
-                    
-                    // Animated Divider
-                    AnimatedBuilder(
-                      animation: _dividerController,
-                      builder: (context, child) {
-                        return Transform.scale(
-                          scaleX: _dividerScaleAnimation.value,
-                          child: Container(
-                            height: 2,
-                            width: 150,
-                            decoration: BoxDecoration(
-                              color: _dividerColorAnimation.value,
-                              borderRadius: BorderRadius.circular(1),
-                            ),
-                          ),
-                        );
-                      },
-                    ),
+                    // const SizedBox(height: 15),
+                    //
+                    // // Loading Status Text
+                    // AnimatedBuilder(
+                    //   animation: _textController,
+                    //   builder: (context, child) {
+                    //     return FadeTransition(
+                    //       opacity: _textOpacityAnimation,
+                    //       child: Padding(
+                    //         padding: const EdgeInsets.only(top: 30),
+                    //         child: Text(
+                    //           _isBusinessSettingsLoaded
+                    //             ? 'Ready'.tr(context)
+                    //             : 'Loading...'.tr(context),
+                    //           style: context.bodySmall.copyWith(
+                    //             color: Colors.grey[500],
+                    //           ),
+                    //         ),
+                    //       ),
+                    //     );
+                    //   },
+                    // ),
                   ],
                 ),
               ),
             ),
+            // Footer
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: AnimatedTextKit(

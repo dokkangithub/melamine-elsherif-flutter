@@ -38,9 +38,8 @@ class _TopHomeWidgetState extends State<TopHomeWidget> {
   Future<void> _loadBannerImages() async {
     try {
       final businessSettingsService = sl<BusinessSettingsService>();
-      await businessSettingsService.init();
       
-      // Get banner images from business settings using the dedicated method
+      // The business settings should already be initialized in SplashScreen
       final homeSliderImages = businessSettingsService.getHomeBannerImages();
       debugPrint('Retrieved banner images: $homeSliderImages');
       
@@ -75,11 +74,14 @@ class _TopHomeWidgetState extends State<TopHomeWidget> {
       children: [
         isLoading
             ? Container(
-                height: 220,
+                height: 300,
                 width: double.infinity,
-                color: Colors.grey[300],
-                child: const Center(
-                  child: CircularProgressIndicator(),
+                color: Colors.grey[100],
+                child: CustomImage(
+                  assetPath: AppImages.home_banner,
+                  fit: BoxFit.cover,
+                  width: double.infinity,
+                  height: double.infinity,
                 ),
               )
             : CarouselSlider.builder(
