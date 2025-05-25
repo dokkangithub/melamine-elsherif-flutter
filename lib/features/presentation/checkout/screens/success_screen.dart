@@ -146,7 +146,7 @@ class SuccessScreen extends StatelessWidget {
                 borderRadius: 8,
                 child: Center(
                   child: Text(
-                    "track_order",
+                    "track_order".tr(context),
                     style: context.headlineSmall?.copyWith(
                       color: Colors.white,
                       fontWeight: FontWeight.w500,

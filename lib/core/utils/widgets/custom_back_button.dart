@@ -8,7 +8,7 @@ class CustomBackButton extends StatelessWidget {
   
   const CustomBackButton({
     super.key,
-    this.respectDirection = false,
+    this.respectDirection = true,
   });
 
   @override
