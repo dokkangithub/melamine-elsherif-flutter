@@ -487,5 +487,16 @@
   "onboarding_explore_collection": "EXPLORE THE FULL COLLECTION",
   "onboarding_from_dinnerware": "From dinnerware to hotel-grade serving sets—discover it all.",
   "onboarding_get_started": "Get Started",
-  "onboarding_next": "Next"
+  "onboarding_next": "Next",
+  "porcelain_collection_title": "The new porcelain collection",
+  "porcelain_collection_subtitle": "Discover the collection",
+  "shop_by_category": "Shop by Category",
+  "luxurious_dining_table": "Everything you need for a luxurious dining table",
+  "table_setting": "Table Setting",
+  "tableware": "Tableware",
+  "serving_essentials": "Serving Essentials",
+  "glassware": "Glassware",
+  "special_offers": "Special Offers",
+  "accessories": "Accessories",
+  "products_count": "{count} Products"
 }
