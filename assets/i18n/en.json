@@ -534,5 +534,8 @@
   "active_orders": "Active Orders",
   "1234_park_avenue": "1234 Park Avenue",
   "saved_items": "Saved Items",
-  "search_addresses": "Search addresses"
+  "search_addresses": "Search addresses",
+  "credit_card_payment": "Credit Card Payment",
+  "cash_payment": "Cash Payment",
+  "wallet_payment": "Wallet Payment"
 }

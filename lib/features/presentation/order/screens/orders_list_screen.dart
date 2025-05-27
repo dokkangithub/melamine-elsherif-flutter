@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:melamine_elsherif/core/config/routes.dart/routes.dart';
-import 'package:melamine_elsherif/core/config/themes.dart/theme.dart';
-import 'package:melamine_elsherif/core/utils/extension/text_theme_extension.dart';
+import 'package:melamine_elsherif/core/utils/extension/text_style_extension.dart';
 import 'package:melamine_elsherif/core/utils/extension/translate_extension.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_back_button.dart';
-import 'package:melamine_elsherif/core/utils/widgets/custom_button.dart';
 import 'package:provider/provider.dart';
-import '../../../../core/utils/constants/app_assets.dart';
 import '../../../../core/utils/enums/loading_state.dart';
-import '../../../../core/utils/widgets/custom_cached_image.dart';
 import '../../../domain/order/entities/order.dart';
 import '../controller/order_provider.dart';
 import '../widgets/shimmer/orders_list_shimmer.dart';
@@ -67,18 +64,19 @@ class _OrdersListScreenState extends State<OrdersListScreen> with SingleTickerPr
         scrolledUnderElevation: 0,
         centerTitle: true,
         title: Text(
-          'orders'.tr(context),
-          style: context.headlineMedium,
+          'my_orders'.tr(context),
+          style: context.displayLarge.copyWith(
+            fontFamily:  GoogleFonts.cormorantGaramond().fontFamily,
+            color: Colors.black87,
+            fontWeight: FontWeight.w500,
+          ),
         ),
-        leading: const CustomBackButton(respectDirection: true)
+        leading: const CustomBackButton(),
       ),
       body: Column(
         children: [
-          const Divider(height: 1, thickness: 1, color: Color(0xFFEEEEEE)),
           // Tab bar for order categories
           Container(
-            height: 48,
-            margin: const EdgeInsets.only(top: 8, bottom: 8),
             decoration: const BoxDecoration(
               border: Border(
                 bottom: BorderSide(
@@ -90,18 +88,20 @@ class _OrdersListScreenState extends State<OrdersListScreen> with SingleTickerPr
             child: TabBar(
               controller: _tabController,
               isScrollable: true,
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              labelColor: Colors.white,
-              unselectedLabelColor: Colors.black87,
-              indicator: BoxDecoration(
-                color: const Color(0xFFBD5B4D),
-                borderRadius: BorderRadius.circular(24),
+              indicatorColor: const Color(0xFFCB997E),
+              indicatorSize: TabBarIndicatorSize.tab,
+              indicatorWeight: 3,
+              dividerHeight: 0,
+              labelColor: Colors.black87,
+              labelStyle: context.titleMedium.copyWith(
+                fontWeight: FontWeight.w500,
               ),
-              dividerColor: Colors.transparent,
-              indicatorSize: TabBarIndicatorSize.label,
+              unselectedLabelColor: Colors.grey,
+              unselectedLabelStyle: context.titleMedium.copyWith(
+                fontWeight: FontWeight.w400,
+              ),
               tabAlignment: TabAlignment.start,
-              labelPadding: const EdgeInsets.symmetric(horizontal: 8),
-              tabs: _tabs.map((tab) => _buildTab(tab.tr(context))).toList(),
+              tabs: _tabs.map((tab) => Tab(text: tab.tr(context))).toList(),
               onTap: (index) {
                 // Handle tab selection for filtering orders
                 setState(() {});
@@ -191,58 +191,35 @@ class _OrdersListScreenState extends State<OrdersListScreen> with SingleTickerPr
                   );
                 }
 
-                return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 0.0),
-                  child: RefreshIndicator(
-                    onRefresh: () => provider.fetchOrders(),
-                    child: ListView.builder(
-                      controller: _scrollController,
-                      padding: EdgeInsets.zero,
-                      itemCount: filteredOrders.length +
-                          (provider.isLoadingMore ? 1 : 0),
-                      itemBuilder: (context, index) {
-                        if (index == filteredOrders.length) {
-                          return const Padding(
-                            padding: EdgeInsets.symmetric(vertical: 16.0),
-                            child: Center(child: CircularProgressIndicator()),
-                          );
-                        }
-
-                        final order = filteredOrders[index];
-                        return _buildOrderCard(context, order);
-                      },
+                return RefreshIndicator(
+                  onRefresh: () => provider.fetchOrders(),
+                  child: ListView.separated(
+                    controller: _scrollController,
+                    padding: const EdgeInsets.symmetric(vertical: 0),
+                    itemCount: filteredOrders.length +
+                        (provider.isLoadingMore ? 1 : 0),
+                    separatorBuilder: (context, index) => const Divider(
+                      height: 1,
+                      thickness: 1,
+                      color: Color(0xFFEEEEEE),
                     ),
+                    itemBuilder: (context, index) {
+                      if (index == filteredOrders.length) {
+                        return const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 16.0),
+                          child: Center(child: CircularProgressIndicator()),
+                        );
+                      }
+
+                      final order = filteredOrders[index];
+                      return _buildOrderCard(context, order);
+                    },
                   ),
                 );
               },
             ),
           ),
-          
-          // Bottom indicator
-          Container(
-            margin: const EdgeInsets.symmetric(vertical: 16),
-            width: 120,
-            height: 5,
-            decoration: BoxDecoration(
-              color: Colors.black,
-              borderRadius: BorderRadius.circular(2.5),
-            ),
-          ),
         ],
-      ),
-    );
-  }
-  
-  // Helper to build a tab
-  Widget _buildTab(String text) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-      child: Text(
-        text.tr(context),
-        style: const TextStyle(
-          fontSize: 12,
-          fontWeight: FontWeight.w300,
-        ),
       ),
     );
   }
@@ -251,26 +228,50 @@ class _OrdersListScreenState extends State<OrdersListScreen> with SingleTickerPr
   List<Order> _filterOrders(List<Order> orders, int tabIndex) {
     if (tabIndex == 0) return orders; // All orders
     
-    String status;
+    List<String> statuses = [];
     if (tabIndex == 1) {
-      status = 'pending'; // Processing
+      // Processing tab - show orders with "pending" or "قيد الانتظار" status
+      statuses = ['pending', 'قيد الانتظار'];
     } else if (tabIndex == 2) {
-      status = 'picked_up'; // Shipped
+      // Shipped tab - show orders with "picked_up", "on_the_way", "On The Way" status
+      statuses = ['picked_up', 'on_the_way', 'On The Way'];
     } else {
-      status = 'delivered'; // Delivered
+      // Delivered tab - show orders with "delivered" status
+      statuses = ['delivered'];
     }
     
-    return orders.where((order) => order.deliveryStatus.toLowerCase() == status).toList();
+    return orders.where((order) => 
+      statuses.contains(order.deliveryStatus) || 
+      statuses.contains(order.deliveryStatus.toLowerCase()) ||
+      statuses.contains(order.deliveryStatusString)
+    ).toList();
   }
   
   Widget _buildOrderCard(BuildContext context, Order order) {
     final status = getStatusInfo(order.deliveryStatus, order.deliveryStatusString);
-    final bool isRtl = Directionality.of(context) == TextDirection.rtl;
-
-    // Use the actual order code instead of generating a random one
-    String formattedOrderNumber = order.code;
     
-    return GestureDetector(
+    // Format the date to "May 25, 2025" style
+    String formattedDate = order.date;
+    
+    // Get payment type icon based on payment_type
+    IconData paymentIcon = Icons.credit_card;
+    String paymentType = order.paymentType ?? 'Cash Payment';
+    String paymentTypeKey = 'credit_card_payment';
+    
+    if (paymentType.toLowerCase().contains('cash')) {
+      paymentIcon = Icons.money;
+      paymentTypeKey = 'cash_payment';
+    } else if (paymentType.toLowerCase().contains('wallet')) {
+      paymentIcon = Icons.account_balance_wallet;
+      paymentTypeKey = 'wallet_payment';
+    } else if (paymentType.toLowerCase().contains('visa') || 
+               paymentType.toLowerCase().contains('mastercard') || 
+               paymentType.toLowerCase().contains('credit')) {
+      paymentIcon = Icons.credit_card;
+      paymentTypeKey = 'credit_card_payment';
+    }
+    
+    return InkWell(
       onTap: () {
         AppRoutes.navigateTo(
           context,
@@ -278,88 +279,87 @@ class _OrdersListScreenState extends State<OrdersListScreen> with SingleTickerPr
           arguments: {'orderId': order.id},
         );
       },
-      child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: Colors.grey[200]!),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.05),
-              spreadRadius: 0,
-              blurRadius: 4,
-              offset: const Offset(0, 2),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Order number and price
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  order.code,
+                  style: context.titleMedium.copyWith(
+                    color: Colors.black87,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                Text(
+                  order.grandTotal,
+                  style: context.titleLarge.copyWith(
+                    color: Colors.black87,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+            
+            const SizedBox(height: 8),
+            
+            // Date
+            Text(
+              formattedDate,
+              style: context.bodyLarge.copyWith(
+                color: Colors.grey[600],
+              ),
+            ),
+            
+            const SizedBox(height: 16),
+            
+            // Payment method and status with right arrow
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                // Payment icon and payment type text
+                Row(
+                  children: [
+                    Icon(
+                      paymentIcon,
+                      size: 20,
+                      color: Colors.grey[800],
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      paymentTypeKey.tr(context),
+                      style: context.bodyMedium.copyWith(
+                        color: Colors.grey[800],
+                      ),
+                    ),
+                  ],
+                ),
+                
+                // Status and arrow
+                Row(
+                  children: [
+                    Text(
+                      status.label.tr(context),
+                      style: context.titleMedium.copyWith(
+                        color: status.color,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Icon(
+                      Icons.arrow_forward_ios,
+                      size: 14,
+                      color: status.color,
+                    ),
+                  ],
+                ),
+              ],
             ),
           ],
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Order number and status
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: Text(
-                      formattedOrderNumber,
-                      style: context.titleSmall!.copyWith(color: AppTheme.black, fontWeight: FontWeight.w800),
-                    ),
-                  ),
-                  CustomButton(
-                    onPressed: (){},
-                    padding: const EdgeInsets.all(6),
-                    backgroundColor: status.color,
-                    borderColor: Colors.transparent,
-                    child: Text(status.label.tr(context),
-                      style: context.titleSmall!.copyWith(color: AppTheme.white),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 12),
-              
-              // Date and price
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    order.date,
-                    style: context.bodyMedium!.copyWith(color: AppTheme.darkDividerColor),
-                  ),
-                  Text(
-                    '${order.grandTotal} L.E',
-                    style: context.titleSmall!.copyWith(fontWeight: FontWeight.w800, color: AppTheme.black),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20),
-              
-              // View details
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  // View details with arrow
-                  Row(
-                    children: [
-                      Text('view_details'.tr(context),
-                        style: context.titleSmall!.copyWith(color: AppTheme.primaryColor, fontWeight: FontWeight.w800),
-                      ),
-                      const SizedBox(width: 4),
-                      Icon(
-                        isRtl ? Icons.arrow_forward_ios: Icons.arrow_back_ios ,
-                        size: 14,
-                        color: AppTheme.primaryColor,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ],
-          ),
         ),
       ),
     );
@@ -367,16 +367,18 @@ class _OrdersListScreenState extends State<OrdersListScreen> with SingleTickerPr
   
   // Helper to get status color and label
   StatusInfo getStatusInfo(String status, String statusString) {
-    switch (status.toLowerCase()) {
-      case 'pending':
-        return StatusInfo('processing', const Color(0xFFBD5B4D));
-      case 'picked_up':
-      case 'on_the_way':
-        return StatusInfo('shipped', Colors.blue);
-      case 'delivered':
-        return StatusInfo('delivered', Colors.green);
-      default:
-        return StatusInfo(statusString.toLowerCase(), Colors.orange);
+    // Handle arabic and english status values
+    String statusLower = status.toLowerCase();
+    
+    if (statusLower == 'pending' || statusLower.contains('انتظار')) {
+      return StatusInfo('processing', const Color(0xFFCB997E));
+    } else if (statusLower == 'picked_up' || statusLower == 'on_the_way' || status == 'On The Way') {
+      return StatusInfo('in_transit', const Color(0xFF2196F3));
+    } else if (statusLower == 'delivered') {
+      return StatusInfo('delivered', const Color(0xFF4CAF50));
+    } else {
+      // Use the status string provided by API if available
+      return StatusInfo(statusString, const Color(0xFFFF9800));
     }
   }
 
@@ -427,10 +429,10 @@ class _OrdersListScreenState extends State<OrdersListScreen> with SingleTickerPr
                   Navigator.pushReplacementNamed(context, AppRoutes.homeScreen);
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
+                  backgroundColor: const Color(0xFFCB997E),
                   foregroundColor: Colors.white,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(4),
+                    borderRadius: BorderRadius.circular(8),
                   ),
                 ),
                 child: Text('start_shopping'.tr(context),

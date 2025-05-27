@@ -415,7 +415,7 @@
   "privacy_security": "الخصوصية والأمان",
   "privacy_policy": "سياسة الخصوصية",
   "proceed_to_checkout": "المتابعة إلى الدفع",
-  "processing": "جاري المعالجة",
+  "processing": "قيد المعالجة",
   "all_orders": "كل الطلبات",
   "rate_this_product": "قيم هذا المنتج",
   "rate_this_product_details": "قيم تفاصيل هذا المنتج",
@@ -533,5 +533,8 @@
   "active_orders": " طلبات نشطة",
   "1234_park_avenue": "١٢٣٤ شارع بارك",
   "saved_items": "العناصر المحفوظة",
-  "search_addresses": "بحث العناوين"
+  "search_addresses": "بحث العناوين",
+  "credit_card_payment": "الدفع ببطاقة الائتمان",
+  "cash_payment": "الدفع نقداً",
+  "wallet_payment": "الدفع بالمحفظة"
 }
