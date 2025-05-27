@@ -23,6 +23,7 @@ class CustomButton extends StatelessWidget {
   final bool fullWidth; // Added parameter for full width
   final bool isGradient; // New parameter for gradient style
   final List<Color>? gradientColors; // Allow custom gradient colors
+  final double? height; // New parameter for custom height
 
   const CustomButton({
     super.key,
@@ -44,6 +45,7 @@ class CustomButton extends StatelessWidget {
     this.fullWidth = false,
     this.isGradient = false,
     this.gradientColors,
+    this.height,
   }) : assert(text != null || child != null, 'Either text or child must be provided');
 
   @override
@@ -63,9 +65,9 @@ class CustomButton extends StatelessWidget {
       // Return gradient style button
       return Container(
         width: fullWidth ? double.infinity : null,
-        height: 45,
+        height: height ?? 45,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(borderRadius ?? 10.0),
+          borderRadius: BorderRadius.circular(borderRadius ?? 0.0),
           gradient: LinearGradient(
             colors: colors,
             begin: Alignment.centerLeft,
@@ -82,7 +84,7 @@ class CustomButton extends StatelessWidget {
         child: MaterialButton(
           padding: padding ?? const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(borderRadius ?? 10.0),
+            borderRadius: BorderRadius.circular(borderRadius ?? 0.0),
           ),
           onPressed: isLoading ? null : onPressed,
           splashColor: splashColor ?? colors[0].withValues(alpha: 0.3),
@@ -105,7 +107,7 @@ class CustomButton extends StatelessWidget {
       color: isOutlined ? Colors.transparent : buttonColor,
       elevation: isOutlined ? 0 : (elevation ?? 4.0),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(borderRadius ?? 10.0),
+        borderRadius: BorderRadius.circular(borderRadius ?? 0.0),
         side: BorderSide(color: this.borderColor!, width: 0.5),
       ),
       child: InkWell(
@@ -114,6 +116,7 @@ class CustomButton extends StatelessWidget {
         borderRadius: BorderRadius.circular(borderRadius ?? 10.0),
         child: Container(
           width: fullWidth ? double.infinity : null,
+          height: height,
           padding: padding ?? const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
           decoration: BoxDecoration(
             gradient: isOutlined
@@ -126,7 +129,7 @@ class CustomButton extends StatelessWidget {
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
-            borderRadius: BorderRadius.circular(borderRadius ?? 25.0),
+            borderRadius: BorderRadius.circular(borderRadius ?? 0.0),
           ),
           child: isLoading
               ? const Center(

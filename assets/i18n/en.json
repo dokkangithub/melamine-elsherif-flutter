@@ -280,7 +280,7 @@
   "address_added_successfully": "Address added successfully",
   "address_updated_successfully": "Address updated successfully",
   "brands": "Brands",
-  "browse_products": "Browse products",
+  "browse_products": "Browse our extensive catalog",
   "shopping_cart": "Shopping Cart",
   "clear_wishlist": "Clear wishlist?",
   "clear_wishlist_confirmation": "Are you sure you want to clear your wishlist?",
@@ -475,5 +475,15 @@
   
   "splash_alsherif": "ALSHERIF",
   "splash_melamine": "MELAMINE",
-  "splash_tagline": "Elegance. Efficiency. Performance."
+  "splash_arabic_text": "arschir al-milamin",
+  "splash_tagline": "Elegance. Efficiency. Performance.",
+  
+  "onboarding_designed_for_modern_living": "DESIGNED FOR MODERN LIVING",
+  "onboarding_elegant_durable": "Elegant, durable, and made for everyday luxury.",
+  "onboarding_crafted_to_impress": "CRAFTED TO IMPRESS",
+  "onboarding_premium_melamine": "Premium melamine and porcelain sets that elevate your table.",
+  "onboarding_explore_collection": "EXPLORE THE FULL COLLECTION",
+  "onboarding_from_dinnerware": "From dinnerware to hotel-grade serving sets—discover it all.",
+  "onboarding_get_started": "Get Started",
+  "onboarding_next": "Next"
 }

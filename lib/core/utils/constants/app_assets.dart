@@ -14,6 +14,12 @@ class AppImages {
   static const String linearAppLogo = '$imagesPath/linear_app_logo.png';
   static const String wallet_icon = '$imagesPath/wallet.png';
   static const String splashBackground = '$imagesPath/splash_background.png';
+  
+  // New onboarding background images
+  static const String onboardingBg1 = '$imagesPath/onboarding_bg1.jpg';
+  static const String onboardingBg2 = '$imagesPath/onboarding_bg2.jpg';
+  static const String onboardingBg3 = '$imagesPath/onboarding_bg3.jpg';
+  static const String melamineLogoWhite = '$imagesPath/melamine_logo_white.png';
 }
 
 class AppAnimations {
@@ -99,6 +105,10 @@ class AppSvgs {
   static const String on2_1 = '$svgPath/on2_1.svg';
   static const String on2_2 = '$svgPath/on2_2.svg';
   static const String on2_3 = '$svgPath/on2_3.svg';
+  
+  // New onboarding icons
+  static const String onboardingDot = '$svgPath/onboarding_dot.svg';
+  static const String onboardingDotActive = '$svgPath/onboarding_dot_active.svg';
 }
 
 class AppIcons {

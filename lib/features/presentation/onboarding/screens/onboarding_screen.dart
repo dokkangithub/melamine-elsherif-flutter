@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:melamine_elsherif/core/utils/constants/app_assets.dart';
 import 'package:melamine_elsherif/core/utils/local_storage/local_storage_keys.dart';
 import 'package:melamine_elsherif/core/config/routes.dart/routes.dart';
 import 'package:melamine_elsherif/core/di/injection_container.dart';
 import 'package:melamine_elsherif/core/utils/local_storage/secure_storage.dart';
 import 'package:melamine_elsherif/core/config/themes.dart/theme.dart';
+import 'package:melamine_elsherif/core/utils/extension/text_style_extension.dart';
+import 'package:melamine_elsherif/core/utils/extension/translate_extension.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_button.dart';
-import '../widgets/onboarding_content.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -23,36 +26,19 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   final List<Map<String, dynamic>> onboardingData = [
     {
-      'title': 'Shop Smarter, Live Better',
-      'description': 'Discover millions of products from trusted sellers worldwide',
-      'image': AppImages.onboarding1,
-      'type': ContentType.image,
+      'title': 'onboarding_designed_for_modern_living',
+      'description': 'onboarding_elegant_durable',
+      'image': AppImages.onboardingBg1,
     },
     {
-      'type': ContentType.features,
-      'features': [
-        FeatureItem(
-          icon: AppSvgs.on2_1,
-          title: 'Fast Delivery',
-          description: 'Get your orders delivered within 24 hours',
-        ),
-        FeatureItem(
-          icon: AppSvgs.on2_2,
-          title: 'Secure Payments',
-          description: 'Shop safely with multiple payment options',
-        ),
-        FeatureItem(
-          icon: AppSvgs.on2_3,
-          title: '24/7 Support',
-          description: 'Our team is here to help you anytime',
-        ),
-      ],
+      'title': 'onboarding_crafted_to_impress',
+      'description': 'onboarding_premium_melamine',
+      'image': AppImages.onboardingBg2,
     },
     {
-      'title': 'Ready to Start Shopping?',
-      'description': 'Join millions of happy shoppers today',
-      'image': AppImages.onboarding3,
-      'type': ContentType.final_page,
+      'title': 'onboarding_explore_collection',
+      'description': 'onboarding_from_dinnerware',
+      'image': AppImages.onboardingBg3,
     },
   ];
 
@@ -74,118 +60,150 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
       );
+    } else {
+      _completeOnboarding();
     }
-  }
-
-  void _onSkipPressed() {
-    _completeOnboarding();
-    AppRoutes.navigateToAndRemoveUntil(context, AppRoutes.login);
-  }
-
-  void _onSignUpPressed() {
-    _completeOnboarding();
-    AppRoutes.navigateToAndRemoveUntil(context, AppRoutes.signUp);
-  }
-
-  void _onLoginPressed() {
-    _completeOnboarding();
-    AppRoutes.navigateToAndRemoveUntil(context, AppRoutes.login);
   }
 
   Future<void> _completeOnboarding() async {
     // Mark onboarding as completed in secure storage
     await sl<SecureStorage>().save(LocalStorageKey.hasCompletedOnboarding, true);
+    if (mounted) {
+      AppRoutes.navigateToAndRemoveUntil(context, AppRoutes.mainLayoutScreen);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
-        toolbarHeight: 0.0,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
         systemOverlayStyle: const SystemUiOverlayStyle(
-          statusBarColor: AppTheme.white,
-          statusBarIconBrightness: Brightness.dark
+          statusBarColor: Colors.transparent,
+          statusBarIconBrightness: Brightness.light,
         ),
       ),
-      body: SafeArea(
-        child: Stack(
-          children: [
-
-            Column(
+      body: Stack(
+        children: [
+          // Page View for full-screen background images
+          PageView.builder(
+            controller: _pageController,
+            onPageChanged: _onPageChanged,
+            itemCount: onboardingData.length,
+            itemBuilder: (context, index) {
+              final item = onboardingData[index];
+              return _buildOnboardingPage(
+                context,
+                item['image'],
+                item['title'],
+                item['description'],
+                index == onboardingData.length - 1,
+              );
+            },
+          ),
+          
+          // Bottom navigation with dots and next/get started button
+          Positioned(
+            bottom: 40,
+            left: 0,
+            right: 0,
+            child: Column(
               children: [
-                // Add space for the skip button
-                const SizedBox(height: 60),
-                
-                // PageView for content
-                Expanded(
-                  child: PageView.builder(
-                    controller: _pageController,
-                    onPageChanged: _onPageChanged,
-                    itemCount: onboardingData.length,
-                    itemBuilder: (context, index) {
-                      final item = onboardingData[index];
-                      final ContentType type = item['type'] as ContentType;
-                      
-                      return OnboardingContent(
-                        title: item['title'] ?? '',
-                        description: item['description'] ?? '',
-                        image: item['image'] ?? '',
-                        contentType: type,
-                        features: type == ContentType.features 
-                            ? (item['features'] as List<FeatureItem>) 
-                            : null,
-                        onSignUp: type == ContentType.final_page ? _onSignUpPressed : null,
-                        onLogin: type == ContentType.final_page ? _onLoginPressed : null,
-                      );
-                    },
+                // Page indicator
+                SmoothPageIndicator(
+                  controller: _pageController,
+                  count: onboardingData.length,
+                  effect: const WormEffect(
+                    dotHeight: 8,
+                    dotWidth: 8,
+                    activeDotColor: Colors.white,
+                    dotColor: Colors.white54,
+                    spacing: 8,
                   ),
                 ),
-                
-                // Bottom navigation with dots and next button in column
-                if (_currentPage < 2) 
-                  Padding(
-                    padding: const EdgeInsets.all(24.0),
-                    child: Column(
-                      children: [
-                        // Dots in a row but centered
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: List.generate(
-                            onboardingData.length,
-                            (index) => _buildDot(index),
-                          ),
-                        ),
-                        const SizedBox(height: 20),
-                        // Next button with full width
-                        CustomButton(
-                          text: 'Next',
-                          onPressed: _onNextPressed,
-                          isGradient: true,
-                          backgroundColor: AppTheme.primaryColor,
-                          fullWidth: true,
-                        ),
-                      ],
-                    ),
+                const SizedBox(height: 60),
+                // Next/Get Started button
+                Padding(
+                  padding: EdgeInsets.only(left: MediaQuery.sizeOf(context).width/2),
+                  child: CustomButton(
+                    text: _currentPage == onboardingData.length - 1 
+                        ? 'onboarding_get_started'.tr(context)
+                        : 'onboarding_next'.tr(context),
+                    onPressed: _onNextPressed,
+                    backgroundColor: Colors.white,
+                    textColor: Colors.black87,
+                    fullWidth: true,
+                    height: 50,
                   ),
+                ),
+                const SizedBox(height: 60),
               ],
             ),
-          ],
-        ),
+          ),
+
+        ],
       ),
     );
   }
 
-  Widget _buildDot(int index) {
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 200),
-      margin: const EdgeInsets.only(right: 5),
-      height: 8,
-      width: _currentPage == index ? 24 : 8,
+  Widget _buildOnboardingPage(
+    BuildContext context,
+    String image,
+    String title,
+    String description,
+    bool isLastPage,
+  ) {
+    return Container(
       decoration: BoxDecoration(
-        color: _currentPage == index 
-            ? AppTheme.primaryColor 
-            : Colors.grey[300],
-        borderRadius: BorderRadius.circular(4),
+        image: DecorationImage(
+          image: AssetImage(image),
+          fit: BoxFit.cover,
+        ),
+      ),
+      child: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Colors.black.withValues(alpha: 0.3),
+              Colors.black.withValues(alpha: 0.7),
+            ],
+          ),
+        ),
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const SizedBox(height: 150),
+                Text(
+                  title.tr(context),
+                  textAlign: TextAlign.center,
+                  style: context.displayLarge.copyWith(
+                    color: Colors.white,
+                    fontWeight: FontWeight.normal,
+                    letterSpacing: 1.2,
+                    fontFamily: GoogleFonts.montserrat().fontFamily,
+                  ),
+                ),
+                const SizedBox(height: 50),
+                Text(
+                  description.tr(context),
+                  textAlign: TextAlign.center,
+                  style: context.headlineSmall.copyWith(
+                    color: Colors.white.withValues(alpha: 0.6),
+                    fontWeight: FontWeight.normal,
+                    fontFamily: GoogleFonts.montserrat().fontFamily,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
