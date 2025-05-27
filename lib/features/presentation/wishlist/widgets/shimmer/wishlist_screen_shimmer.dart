@@ -13,17 +13,35 @@ class WishlistScreenShimmer extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Remove All button shimmer
+            Align(
+              alignment: Alignment.centerRight,
+              child: Shimmer.fromColors(
+                baseColor: Colors.grey[300]!,
+                highlightColor: Colors.grey[100]!,
+                child: Container(
+                  width: 100,
+                  height: 20,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                ),
+              ),
+            ),
+            
+            const SizedBox(height: 16),
+            
+            // Products grid shimmer
             Expanded(
               child: GridView.builder(
-                physics: const NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
+                padding: const EdgeInsets.only(bottom: 20),
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  childAspectRatio: 0.7,
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
+                  crossAxisCount: 1,
+                  childAspectRatio: 1.4,
+                  mainAxisSpacing: 16,
                 ),
-                itemCount: 8,
+                itemCount: 4,
                 itemBuilder: (context, index) {
                   return const ShimmerProductItemInWishList();
                 },

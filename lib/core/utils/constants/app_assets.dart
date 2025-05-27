@@ -95,6 +95,7 @@ class AppSvgs {
   static const String back = '$svgPath/back.svg';
   static const String colored_search_icon = '$svgPath/colored_search_icon.svg';
   static const String location_icon = '$svgPath/location_icon.svg';
+  static const String empty_wishlist = '$svgPath/empty_wishlist.svg';
 
 
 

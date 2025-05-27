@@ -44,20 +44,18 @@ class _WishlistScreenState extends State<WishlistScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Consumer<WishlistProvider>(
-        builder: (context, provider, child) {
-         if (provider.wishlistState == LoadingState.error) {
-            return const SizedBox.shrink();
-          } else {
-            return WishlistWidget(
-              key: _animationKey,
-              provider: provider,
-              triggerAnimation: _shouldAnimate,
-            );
-          }
-        },
-      ),
+    return Consumer<WishlistProvider>(
+      builder: (context, provider, child) {
+        if (provider.wishlistState == LoadingState.error) {
+          return const SizedBox.shrink();
+        } else {
+          return WishlistWidget(
+            key: _animationKey,
+            provider: provider,
+            triggerAnimation: _shouldAnimate,
+          );
+        }
+      },
     );
   }
 }

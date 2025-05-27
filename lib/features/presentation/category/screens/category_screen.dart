@@ -43,7 +43,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
       appBar: AppBar(
         title: Text(
           'category'.tr(context),
-          style: context.displaySmall,
+          style: context.displaySmall!.copyWith(fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
         scrolledUnderElevation: 0,
