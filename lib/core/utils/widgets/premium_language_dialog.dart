@@ -1,225 +1,216 @@
 import 'package:flutter/material.dart';
+import 'package:melamine_elsherif/core/config/themes.dart/theme.dart';
+import 'package:melamine_elsherif/core/providers/localization/language_provider.dart';
 import 'package:melamine_elsherif/core/utils/extension/text_theme_extension.dart';
-import 'package:melamine_elsherif/core/utils/widgets/custom_cached_image.dart';
+import 'package:melamine_elsherif/core/utils/extension/translate_extension.dart';
+import 'package:melamine_elsherif/core/utils/widgets/custom_button.dart';
 import 'package:provider/provider.dart';
-import 'package:lottie/lottie.dart';
-import 'package:flutter_neumorphic_plus/flutter_neumorphic.dart';
-import '../../config/themes.dart/theme.dart';
-import '../../providers/localization/app_localizations.dart';
-import '../../providers/localization/language_provider.dart';
-import '../../utils/extension/translate_extension.dart';
-import '../../utils/helpers.dart';
 
-class LanguageDialog extends StatefulWidget {
-  const LanguageDialog({super.key});
-
-  static Future<void> show(BuildContext context) async {
-    await showDialog(
+class LanguageDialog {
+  static void show(BuildContext context) {
+    showDialog(
       context: context,
       builder: (BuildContext context) {
-        return const LanguageDialog();
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          elevation: 0,
+          backgroundColor: Colors.transparent,
+          child: _CustomLanguageDialog(),
+        );
       },
     );
   }
-
-  @override
-  State<LanguageDialog> createState() => _LanguageDialogState();
 }
 
-class _LanguageDialogState extends State<LanguageDialog> with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _animation;
+class _CustomLanguageDialog extends StatefulWidget {
+  @override
+  _CustomLanguageDialogState createState() => _CustomLanguageDialogState();
+}
+
+class _CustomLanguageDialogState extends State<_CustomLanguageDialog> {
+  late String _selectedLanguage;
 
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 500),
-    );
-
-    _animation = CurvedAnimation(
-      parent: _controller,
-      curve: Curves.easeOutBack,
-    );
-
-    _controller.forward();
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
+    final provider = Provider.of<LanguageProvider>(context, listen: false);
+    _selectedLanguage = provider.locale.languageCode;
   }
 
   @override
   Widget build(BuildContext context) {
-    return ScaleTransition(
-      scale: _animation,
-      child: Consumer<LanguageProvider>(
-        builder: (context, languageProvider, _) {
-          return Dialog(
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 360),
-              child: Neumorphic(
-                style: NeumorphicStyle(
-                  depth: 10,
-                  intensity: 0.4,
-                  surfaceIntensity: 0.3,
-                  shape: NeumorphicShape.concave,
-                  boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(24)),
-                  lightSource: LightSource.topLeft,
-                  color: Theme.of(context).cardColor,
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Header with icon and title
+          Row(
+            children: [
+               Text(
+                '文',
+                style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87,
                 ),
-                child: Container(
-                  padding: const EdgeInsets.all(20),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      // Title with animation
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'select_language'.tr(context),
-                            style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 24),
+              ),
+              const SizedBox(width: 12),
+              Text(
+                'change_lang_title'.tr(context),
+                style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87,
+                ),
+              ),
+            ],
+          ),
 
-                      // English option with USA flag
-                      _buildLanguageOption(
-                        context,
-                        languageProvider,
-                        languageCode: 'en',
-                        countryCode: 'US',
-                        languageName: 'English',
-                        flagAsset: 'assets/flags/usa_flag.png',
-                      ),
+          const SizedBox(height: 24),
 
-                      const SizedBox(height: 16),
+          // Description text
+          Text(
+            'change_lang_subtitle'.tr(context),
+            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+              color: Colors.black54,
+              height: 1.5,
+            ),
+          ),
 
-                      // Arabic option with Egypt flag
-                      _buildLanguageOption(
-                        context,
-                        languageProvider,
-                        languageCode: 'ar',
-                        countryCode: 'Eg',
-                        languageName: 'العربية',
-                        flagAsset: 'assets/flags/egypt_flag.png',
-                      ),
+          const SizedBox(height: 32),
 
-                      const SizedBox(height: 24),
+          // Language options
+          _buildLanguageOption('English', 'en'),
+          const SizedBox(height: 20),
+          _buildLanguageOption('العربية', 'ar'),
 
-                      // Actions
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          NeumorphicButton(
-                            style: NeumorphicStyle(
-                              depth: -3,
-                              intensity: 0.7,
-                              shape: NeumorphicShape.flat,
-                              boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(12)),
-                              color: Colors.grey.shade200,
-                            ),
-                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                            child: Text(
-                              'cancel'.tr(context),
-                              style: const TextStyle(
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                        ],
-                      ),
-                    ],
+
+          const SizedBox(height: 40),
+
+          // Action buttons
+          Row(
+            children: [
+              Expanded(
+                child: CustomButton(
+                  onPressed: () => Navigator.pop(context),
+                  isOutlined: true,
+                  child: Text(
+                    'cancel'.tr(context),
+                    textAlign: TextAlign.center,
+                    style: context.titleLarge,
                   ),
                 ),
               ),
-            ),
-          );
-        },
+              const SizedBox(width: 16),
+              Expanded(
+                child: CustomButton(
+                  onPressed: _changeLanguage,
+                  child: Text(
+                    textAlign: TextAlign.center,
+                    'confirm'.tr(context),
+                    style: context.titleLarge!.copyWith(color: AppTheme.white),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
 
-  Widget _buildLanguageOption(
-      BuildContext context,
-      LanguageProvider provider, {
-        required String languageCode,
-        required String countryCode,
-        required String languageName,
-        required String flagAsset,
-      }) {
-    final isSelected = provider.locale.languageCode == languageCode;
+  Widget _buildLanguageOption(String language, String code) {
+    final isSelected = _selectedLanguage == code;
 
-    return GestureDetector(
-      onTap: () async {
-        // Visual confirmation of selection before dialog closes
-        final isDirectionChange = provider.isDirectionChange(languageCode);
-
-        // Start closing animation
-        _controller.reverse().then((_) {
-          Navigator.of(context).pop();
+    return InkWell(
+      onTap: () {
+        setState(() {
+          _selectedLanguage = code;
         });
-
-        // Wait before changing language to allow animation to complete
-        await Future.delayed(const Duration(milliseconds: 300));
-
-        // Use the helper function to change language and refresh data
-        await AppFunctions.changeLanguage(context, languageCode, countryCode);
       },
-      child: Neumorphic(
-        style: NeumorphicStyle(
-          depth: isSelected ? 4 : -3,
-          intensity: 0.7,
-          surfaceIntensity: 0.4,
-          shape: isSelected ? NeumorphicShape.convex : NeumorphicShape.concave,
-          boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(16)),
-          lightSource: LightSource.topLeft,
-          color: isSelected
-              ? AppTheme.primaryColor.withOpacity(0.1)
-              : Theme.of(context).cardColor,
-          border: isSelected
-              ? NeumorphicBorder(color: AppTheme.primaryColor.withOpacity(0.3), width: 1)
-              : const NeumorphicBorder.none(),
-        ),
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-          child: Row(
-            children: [
-              // Country flag with 3D effect
-              CustomImage(assetPath: flagAsset,height: 30,width: 30),
-              const SizedBox(width: 16),
-
-              // Language name
-              Expanded(
-                child: Text(
-                  languageName,
-                  style: context.titleLarge!.copyWith(fontWeight: isSelected?FontWeight.w800:FontWeight.normal),
+      child: Row(
+        children: [
+          Container(
+            width: 24,
+            height: 24,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              border: Border.all(
+                color: isSelected ? const Color(0xFFCB997E) : Colors.grey.shade300,
+                width: isSelected ? 0 : 1,
+              ),
+              color: isSelected ? Colors.transparent : Colors.transparent,
+            ),
+            child: isSelected
+                ? Container(
+              margin: const EdgeInsets.all(2),
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                color: Color(0xFFCB997E),
+              ),
+              child: const Center(
+                child: Icon(
+                  Icons.check,
+                  size: 16,
+                  color: Colors.white,
                 ),
               ),
-
-              // Selection indicator
-              if (isSelected)
-                const Icon(
-                  Icons.check_circle,
-                  color: AppTheme.primaryColor,
-                  size: 24,
-                )
-            ],
+            )
+                : null,
           ),
-        ),
+          const SizedBox(width: 16),
+          Text(
+            language,
+            style: Theme.of(context).textTheme.titleLarge?.copyWith(
+              fontWeight: FontWeight.w500,
+              color: Colors.black87,
+              fontSize: 18,
+            ),
+          ),
+        ],
       ),
     );
+  }
+
+  void _changeLanguage() {
+    final provider = Provider.of<LanguageProvider>(context, listen: false);
+    final currentLanguageCode = provider.locale.languageCode;
+
+    if (_selectedLanguage != currentLanguageCode) {
+      // Check if the selected language is one of the supported languages
+      final supportedLanguages = provider.languages.map((lang) => lang.languageCode).toList();
+
+      if (!supportedLanguages.contains(_selectedLanguage)) {
+        // Show a message for unsupported languages
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('This language is not supported yet. Coming soon!'),
+            duration: Duration(seconds: 2),
+          ),
+        );
+        Navigator.pop(context);
+        return;
+      }
+
+      // Get the country code from the provider's language models
+      final languageModel = provider.languages.firstWhere(
+            (lang) => lang.languageCode == _selectedLanguage,
+      );
+
+      // Change language using the provider's method
+      provider.changeLanguage(_selectedLanguage, languageModel.countryCode ?? 'US');
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('language_changed_successfully'.tr(context))),
+      );
+    }
+    Navigator.pop(context);
   }
 }

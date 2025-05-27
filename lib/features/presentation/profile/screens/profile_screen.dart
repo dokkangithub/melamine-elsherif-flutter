@@ -794,7 +794,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             context: context,
             icon: AppSvgs.profile_bag,
             title: 'my_orders'.tr(context),
-            subtitle: '${Provider.of<ProfileProvider>(context,listen: false).profileCounters!.orderCount} active_orders'.tr(context),
+            subtitle: '${Provider.of<ProfileProvider>(context,listen: false).profileCounters!.orderCount}${'active_orders'.tr(context)}',
             onTap: () {
               AppRoutes.navigateTo(
                 context,
@@ -842,7 +842,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             context: context,
             icon: AppSvgs.profile_fav,
             title: 'saved_items'.tr(context),
-            subtitle: '${Provider.of<ProfileProvider>(context,listen: false).profileCounters!.wishlistItemCount} items'.tr(context),
+            subtitle: '${Provider.of<ProfileProvider>(context,listen: false).profileCounters!.wishlistItemCount}${'items'.tr(context)}',
             onTap: () {
               AppRoutes.navigateTo(
                 context,
@@ -1030,7 +1030,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 
                 // Chevron
-                Icon(
+                const Icon(
                   Icons.chevron_right,
                   color: Colors.black45,
                   size: 22,
