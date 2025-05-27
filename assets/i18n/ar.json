@@ -505,5 +505,18 @@
   "remove_item": "إزالة العنصر؟",
   "remove_item_confirmation": "ستؤدي هذه العملية إلى إزالة العنصر المحدد من سلة التسوق الخاصة بك.",
   "item_removed_from_wishlist": "تمت إزالة العنصر من قائمة الرغبات",
-  "your_cart_is_empty": "السلة الخاصة بك فارغة"
+  "your_cart_is_empty": "السلة الخاصة بك فارغة",
+  "welcome_to_melamen_el_sherief": "مرحبًا بك في ميلامين الشريف",
+  "discover_elegance_and_durability_designed_for_modern_living": "اكتشف الأناقة والمتانة المصممة للحياة العصرية.",
+  "get_assistance_with_orders_and_products": "احصل على المساعدة بخصوص الطلبات والمنتجات",
+  "learn_about_our_company_and_values": "تعرف على شركتنا وقيمنا",
+  "personalize_your_app_experience": "خصص تجربة التطبيق الخاصة بك",
+  "browse_our_complete_collection": "تصفح مجموعتنا الكاملة",
+  "contact_us": "اتصل بنا",
+  "reach_our_customer_service_team": "تواصل مع فريق خدمة العملاء",
+  "could_not_make_call": "تعذر إجراء المكالمة",
+  "could_not_open_whatsapp": "تعذر فتح واتساب",
+  "access_your_orders_wishlist_and_personalized_offers": "الوصول إلى طلباتك وقائمة رغباتك والعروض المخصصة.",
+  "elegance_efficiency_and_performance_designed_for_you": "الأناقة والكفاءة والأداء — مصممة لك.",
+  "search_addresses": "بحث العناوين"
 }

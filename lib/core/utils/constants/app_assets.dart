@@ -97,6 +97,9 @@ class AppSvgs {
   static const String colored_search_icon = '$svgPath/colored_search_icon.svg';
   static const String location_icon = '$svgPath/location_icon.svg';
   static const String empty_wishlist = '$svgPath/empty_wishlist.svg';
+  static const String youtube = '$svgPath/youtube.svg';
+  static const String call = '$svgPath/call.svg';
+  static const String whatsapp = '$svgPath/whatsapp.svg';
 
 
 
