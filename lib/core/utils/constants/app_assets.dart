@@ -100,6 +100,8 @@ class AppSvgs {
   static const String youtube = '$svgPath/youtube.svg';
   static const String call = '$svgPath/call.svg';
   static const String whatsapp = '$svgPath/whatsapp.svg';
+  static const String edit_profile = '$svgPath/edit_profile.svg';
+  static const String profile_cover = '$svgPath/profile_cover.svg';
 
 
 

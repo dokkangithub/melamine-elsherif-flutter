@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:melamine_elsherif/core/config/themes.dart/theme.dart';
 import 'package:melamine_elsherif/core/utils/constants/app_assets.dart';
+import 'package:melamine_elsherif/core/utils/widgets/custom_back_button.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_cached_image.dart';
 import 'package:melamine_elsherif/core/utils/widgets/cutsom_toast.dart';
 import 'package:provider/provider.dart';
@@ -78,16 +79,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         title: FadeIn(
           duration: const Duration(milliseconds: 500),
           child: Text('edit_profile'.tr(context),
-            style: context.titleLarge,
+            style: context.headlineMedium,
           ),
         ),
-        leading: InkWell(
-          child: const Padding(
-            padding: EdgeInsets.all(18.0),
-            child: CustomImage(assetPath: AppSvgs.back),
-          ),
-          onTap: () => Navigator.pop(context),
-        ),
+        leading: const CustomBackButton(),
         actions: [
           FadeIn(
             duration: const Duration(milliseconds: 500),
@@ -95,7 +90,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               onPressed: isUpdating ? null : () => _updateProfile(context, profileProvider),
               child: Text(
                 'Save',
-                style: context.titleMedium.copyWith(
+                style: context.headlineSmall.copyWith(
                   color: AppTheme.primaryColor,
                   fontWeight: FontWeight.w800,
                 ),
@@ -153,7 +148,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                 width: 40,
                                 height: 40,
                                 decoration: BoxDecoration(
-                                  color: Colors.red[400],
+                                  color: Colors.black87,
                                   shape: BoxShape.circle,
                                   border: Border.all(color: Colors.white, width: 2),
                                 ),
@@ -176,7 +171,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   child: TextButton(
                     onPressed: _pickImage,
                     child: Text(
-                      'Change Photo',
+                      'change_photo'.tr(context),
                       style: context.titleSmall.copyWith(
                         color: AppTheme.primaryColor,
                       ),
@@ -190,7 +185,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   delay: const Duration(milliseconds: 200),
                   duration: const Duration(milliseconds: 500),
                   child: _buildFormField(
-                    label: 'Full Name',
+                    label: 'full_name'.tr(context),
                     controller: _fullNameController,
                   ),
                 ),
@@ -204,18 +199,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     readOnly: true,
                     controller: _fullNameController,
                     prefix: '@',
-                  ),
-                ),
-                const SizedBox(height: 16),
-                
-                SlideInLeft(
-                  delay: const Duration(milliseconds: 400),
-                  duration: const Duration(milliseconds: 500),
-                  child: _buildFormField(
-                    label: 'bio'.tr(context),
-                    controller: _bioController,
-                    maxLines: 4,
-                    hintText: 'write_something_about_yourself'.tr(context),
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -254,8 +237,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       _showLogoutConfirmation(context);
                     },
                     isOutlined: true,
+                    fullWidth: true,
                     child: Text('delete_account'.tr(context),
-                      style: context.titleMedium.copyWith(color: AppTheme.primaryColor),
+                      textAlign: TextAlign.center,
+                      style: context.titleMedium.copyWith(color: AppTheme.black,fontWeight: FontWeight.w600),
                     ),
                   ),
                 ),

@@ -8,6 +8,7 @@ import 'package:melamine_elsherif/core/utils/extension/translate_extension.dart'
 import 'package:melamine_elsherif/core/utils/widgets/custom_button.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_cached_image.dart';
 import 'package:melamine_elsherif/core/utils/widgets/language_switcher.dart';
+import 'package:melamine_elsherif/features/presentation/wallet/controller/wallet_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../../core/config/routes.dart/routes.dart';
@@ -125,67 +126,68 @@ class _ProfileScreenState extends State<ProfileScreen> {
       );
     }
 
-    // Original layout for logged in users
-    final TextDirection textDirection = Directionality.of(context);
-    final FloatingActionButtonLocation fabLocation = textDirection == TextDirection.rtl
-        ? FloatingActionButtonLocation.startFloat  // For RTL (Arabic)
-        : FloatingActionButtonLocation.endFloat;   // For LTR (English)
-
+    // Layout for logged-in users to match the design
     return Scaffold(
-        backgroundColor: Colors.white,
-        floatingActionButton: _buildFloatingActionButton(context),
-        floatingActionButtonLocation: fabLocation,
-        body: SafeArea(
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                // Different UI based on login status
-                _shouldAnimate
-                    ? FadeInDown(
-                  duration: const Duration(milliseconds: 500),
-                  child: _buildLoggedInUserHeader(context, profileProvider)
-                )
-                    : _buildLoggedInUserHeader(context, profileProvider),
-
-                const SizedBox(height: 10),
-
-                // Quick Access Section - only for logged in users
-                if (!isLoadingCounters && counters != null)
-                  _shouldAnimate
-                      ? FadeInUp(
-                    delay: const Duration(milliseconds: 300),
-                    duration: const Duration(milliseconds: 400),
-                    child: _buildQuickAccessSection(context),
-                  )
-                      : _buildQuickAccessSection(context),
-
-                const SizedBox(height: 10),
-
-                // Menu Items
-                _shouldAnimate
-                    ? FadeInUp(
-                  delay: const Duration(milliseconds: 400),
-                  duration: const Duration(milliseconds: 500),
-                  child: _buildLoggedInMenuItems(context)
-                )
-                    : _buildLoggedInMenuItems(context),
-
-                const SizedBox(height: 20),
-
-                // Sign Out button
-                _shouldAnimate
-                    ? ZoomIn(
-                  delay: const Duration(milliseconds: 500),
-                  duration: const Duration(milliseconds: 300),
-                  child: _buildSignOutButton(context)
-                )
-                    : _buildSignOutButton(context),
-
-                const SizedBox(height: 40),
-              ],
-            ),
+      backgroundColor: Colors.grey[50],
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Header with user info
+              _shouldAnimate
+                  ? FadeInDown(
+                      duration: const Duration(milliseconds: 500),
+                      child: _buildLoggedInUserHeader(context, profileProvider),
+                    )
+                  : _buildLoggedInUserHeader(context, profileProvider),
+              
+              // User dashboard (orders, wallet, address, saved items)
+              _shouldAnimate
+                  ? FadeInUp(
+                      delay: const Duration(milliseconds: 200),
+                      duration: const Duration(milliseconds: 500),
+                      child: _buildUserDashboard(context),
+                    )
+                  : _buildUserDashboard(context),
+              
+              // Section divider
+              const Divider(height: 16, thickness: 8, color: Color(0xFFF5F5F5)),
+              
+              // Account tools section
+              _shouldAnimate
+                  ? FadeInUp(
+                      delay: const Duration(milliseconds: 300),
+                      duration: const Duration(milliseconds: 500),
+                      child: _buildAccountToolsSection(context),
+                    )
+                  : _buildAccountToolsSection(context),
+              
+              // Section divider
+              const Divider(height: 16, thickness: 8, color: Color(0xFFF5F5F5)),
+              
+              // Contact & Social section
+              _shouldAnimate
+                  ? FadeInUp(
+                      delay: const Duration(milliseconds: 400),
+                      duration: const Duration(milliseconds: 500),
+                      child: _buildContactSocialSection(context),
+                    )
+                  : _buildContactSocialSection(context),
+              
+              // Logout button
+              _shouldAnimate
+                  ? FadeInUp(
+                      delay: const Duration(milliseconds: 500),
+                      duration: const Duration(milliseconds: 500),
+                      child: _buildSignOutButton(context),
+                    )
+                  : _buildSignOutButton(context),
+            ],
           ),
-        ));
+        ),
+      ),
+    );
   }
 
   // Build the stats section with counters
@@ -310,20 +312,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
         const SizedBox(height: 50),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24),
-          child: SizedBox(
-            width: double.infinity,
-            height: 56,
-            child: CustomButton(
-              onPressed: () {
-                AppRoutes.navigateTo(context, AppRoutes.login);
-              },
-              child: Text(
-                textAlign: TextAlign.center,
-                'sign_in'.tr(context),
-                style: context.headlineMedium.copyWith(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w500,
-                ),
+          child: CustomButton(
+            onPressed: () {
+              AppRoutes.navigateTo(context, AppRoutes.login);
+            },
+            fullWidth: true,
+            child: Text(
+              textAlign: TextAlign.center,
+              'sign_in'.tr(context),
+              style: context.headlineMedium.copyWith(
+                color: Colors.white,
+                fontWeight: FontWeight.w500,
               ),
             ),
           ),
@@ -360,69 +359,120 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  // Logged in user header - extracted from original code
+  // Logged in user header that matches the image
   Widget _buildLoggedInUserHeader(BuildContext context, ProfileProvider profileProvider) {
     return Container(
-      alignment: Alignment.center,
       color: Colors.white,
-      padding: const EdgeInsets.symmetric(
-        horizontal: 15,
-        vertical: 20,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
+      child: Stack(
         children: [
-          // Profile Image
+          // Background cover image
+          Positioned.fill(
+            child: SvgPicture.asset(
+              AppSvgs.profile_cover,
+              width: double.infinity,
+              fit: BoxFit.cover,
+            ),
+          ),
+          
+          // Backdrop filter for visual effect
+          Positioned.fill(
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 1.0, sigmaY: 1.0),
+              child: Container(
+                color: Colors.white.withValues(alpha: 0.7),
+              ),
+            ),
+          ),
+          
+          // Content
           Container(
-            width: 100,
-            height: 100,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              border: Border.all(color: Colors.grey[300]!, width: 1),
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(45),
-              child: profileProvider.profileImageUrl != null
-                  ? CustomImage(
-                imageUrl: profileProvider.profileImageUrl!,
-                fit: BoxFit.cover,
-              )
-                  : const Icon(
-                Icons.person,
-                size: 40,
-                color: Colors.grey,
-              ),
-            ),
-          ),
-          const SizedBox(height: 10),
-          // User Info
-          Text(
-            AppStrings.userName ?? '',
-            style: context.headlineSmall.copyWith(fontWeight: FontWeight.w700),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            AppStrings.userEmail ?? '',
-            style: context.bodyMedium.copyWith(
-              color: Colors.grey[600],
-            ),
-          ),
-          const SizedBox(height: 10),
-          // Edit Button
-          CustomButton(
-            onPressed: () {
-              AppRoutes.navigateTo(
-                context,
-                AppRoutes.editProfileScreen,
-              );
-            },
-            isOutlined: true,
-            borderRadius: 25,
-            child: Text(
-              'edit_profile_1'.tr(context),
-              style: context.titleSmall.copyWith(
-                color: AppTheme.black,
-              ),
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                
+                const SizedBox(height: 40),
+                
+                // User image and info
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Profile Image
+                    Container(
+                      width: 70,
+                      height: 70,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(color: Colors.white, width: 2),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.1),
+                            blurRadius: 10,
+                            offset: const Offset(0, 5),
+                          ),
+                        ],
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(35),
+                        child: profileProvider.profileImageUrl != null
+                            ? CustomImage(
+                                imageUrl: profileProvider.profileImageUrl!,
+                                fit: BoxFit.cover,
+                              )
+                            : const Icon(
+                                Icons.person,
+                                size: 40,
+                                color: Colors.grey,
+                              ),
+                      ),
+                    ),
+                    
+                    const SizedBox(width: 16),
+                    
+                    // User info with email
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            AppStrings.userName ?? '',
+                            style: context.headlineMedium.copyWith(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black87,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            AppStrings.userEmail ?? '',
+                            style: context.titleMedium.copyWith(
+                              color: Colors.black54,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    // Edit button
+                    InkWell(
+                      onTap: () {
+                        AppRoutes.navigateTo(
+                          context,
+                          AppRoutes.editProfileScreen,
+                        );
+                      },
+                      child: const CustomImage(
+                        assetPath: AppSvgs.edit_profile,
+                        width: 20,
+                        height: 20,
+                      ),
+                    ),
+                  ],
+                ),
+                
+                const SizedBox(height: 8),
+              ],
             ),
           ),
         ],
@@ -528,115 +578,33 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  // Menu items for logged in users - extracted from original code
-  Widget _buildLoggedInMenuItems(BuildContext context) {
-    return Container(
-      color: Colors.white,
-      child: Column(
-        children: [
-          ProfileMenuItem(
-            icon: AppSvgs.profile_person,
-            title: 'personal_information'.tr(context),
-            onTap: () {
-              AppRoutes.navigateTo(
-                context,
-                AppRoutes.editProfileScreen,
-              );
-            },
-          ),
-          AppStrings.token == null
-              ? const SizedBox.shrink()
-              : ProfileMenuItem(
-            icon: AppSvgs.profile_wellat,
-            title: 'my_wallet'.tr(context),
-            onTap: () {
-              AppRoutes.navigateTo(
-                context,
-                AppRoutes.walletScreen,
-              );
-            },
-          ),
-          ProfileMenuItem(
-            icon: AppSvgs.profile_privacy,
-            title: 'our_website'.tr(context),
-            onTap: () async {
-              final Uri url = Uri.parse('https://melaminefront.dokkan.design/');
-              if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
-                if (context.mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('could_not_launch_website'.tr(context)))
-                  );
-                }
-              }
-            },
-          ),
-          ProfileMenuItem(
-            icon: AppSvgs.profile_language,
-            title: 'language_region'.tr(context),
-            onTap: () {
-              LanguageDialog.show(context);
-            },
-          ),
-          ProfileMenuItem(
-            icon: AppSvgs.profile_help,
-            title: 'help_support'.tr(context),
-            onTap: () async {
-              final Uri url = Uri.parse('https://melaminefront.dokkan.design/pages/contact-us');
-              if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
-                if (context.mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('could_not_launch_website'.tr(context)))
-                  );
-                }
-              }
-            },
-          ),
-          ProfileMenuItem(
-            icon: AppSvgs.profile_about_us,
-            title: 'about_us'.tr(context),
-            onTap: () async {
-              final Uri url = Uri.parse('https://melaminefront.dokkan.design/pages/about-us');
-              if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
-                if (context.mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('could_not_launch_website'.tr(context)))
-                  );
-                }
-              }
-            },
-          ),
-        ],
-      ),
-    );
-  }
-
-  // Sign in button with enhanced styling
 
   // Sign out button - extracted from original code
   Widget _buildSignOutButton(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 16,
-        vertical: 8,
-      ),
-      child: CustomButton(
-        onPressed: () {
-          _showLogoutConfirmation(context);
-        },
-        isOutlined: true,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(
-                Icons.logout,
-                color: AppTheme.primaryColor
-            ),
-            const SizedBox(width: 6),
-            Text(
-              'sign_out'.tr(context),
-              style: context.titleMedium.copyWith(color: AppTheme.primaryColor),
-            ),
-          ],
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
+      child: SizedBox(
+        width: double.infinity,
+        height: 56,
+        child: CustomButton(
+          onPressed: () {
+            _showLogoutConfirmation(context);
+          },
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(Icons.logout, color: Colors.white),
+              const SizedBox(width: 10),
+              Text(
+                'logout'.tr(context).toUpperCase(),
+                textAlign: TextAlign.center,
+                style: context.titleLarge.copyWith(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -714,44 +682,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget _buildFloatingActionButton(BuildContext context) {
-    // Create items list for social media actions
-    var socialMediaItems = [
-      FloatingActionButton(
-        heroTag: "youtube",
-        backgroundColor: Colors.red,
-        onPressed: _launchYouTube,
-        child: const Icon(Icons.play_arrow),
-      ),
-      FloatingActionButton(
-        heroTag: "phone",
-        backgroundColor: Colors.green,
-        onPressed: _makePhoneCall,
-        child: const Icon(Icons.call),
-      ),
-      FloatingActionButton(
-        heroTag: "whatsapp",
-        backgroundColor: Colors.green.shade700,
-        onPressed: _openWhatsApp,
-        child: const Icon(Icons.chat),
-      ),
-      FloatingActionButton(
-        heroTag: "facebook",
-        backgroundColor: Colors.blue,
-        onPressed: _openFacebook,
-        child: const Icon(Icons.facebook),
-      ),
-    ];
-
-    return CircleFloatingButton.floatingActionButton(
-      items: socialMediaItems,
-      color: AppTheme.primaryColor,
-      icon: Icons.add,
-      duration: const Duration(milliseconds: 500),
-      curveAnim: Curves.easeOutBack,
-      useOpacity: true,
-    );
-  }
 
   Future<void> _launchYouTube() async {
     final Uri url = Uri.parse('https://www.youtube.com/watch?v=aQSHPRcZdrA');
@@ -848,6 +778,374 @@ class _ProfileScreenState extends State<ProfileScreen> {
           color: Colors.black54,
           fontWeight: FontWeight.w500,
           height: 1.5,
+        ),
+      ),
+    );
+  }
+
+  // Build user dashboard items (orders, wallet, address, saved items)
+  Widget _buildUserDashboard(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+      child: Column(
+        children: [
+          // My Orders
+          _buildDashboardItem(
+            context: context,
+            icon: AppSvgs.profile_bag,
+            title: 'my_orders'.tr(context),
+            subtitle: '${Provider.of<ProfileProvider>(context,listen: false).profileCounters!.orderCount} active_orders'.tr(context),
+            onTap: () {
+              AppRoutes.navigateTo(
+                context,
+                AppRoutes.allOrdersListScreen,
+              );
+            },
+          ),
+          
+          const SizedBox(height: 24),
+          
+          // My Wallet
+          _buildDashboardItem(
+            context: context,
+            icon: AppSvgs.profile_wellat,
+            title: 'my_wallet'.tr(context),
+            subtitle: '',
+            onTap: () {
+              AppRoutes.navigateTo(
+                context,
+                AppRoutes.walletScreen,
+              );
+            },
+          ),
+          
+          const SizedBox(height: 24),
+          
+          // Shipping Address
+          _buildDashboardItem(
+            context: context,
+            icon: AppSvgs.profile_location,
+            title: 'shipping_address'.tr(context),
+            subtitle: ''.tr(context),
+            onTap: () {
+              AppRoutes.navigateTo(
+                context,
+                AppRoutes.addressListScreen,
+              );
+            },
+          ),
+          
+          const SizedBox(height: 24),
+          
+          // Saved Items
+          _buildDashboardItem(
+            context: context,
+            icon: AppSvgs.profile_fav,
+            title: 'saved_items'.tr(context),
+            subtitle: '${Provider.of<ProfileProvider>(context,listen: false).profileCounters!.wishlistItemCount} items'.tr(context),
+            onTap: () {
+              AppRoutes.navigateTo(
+                context,
+                AppRoutes.wishListScreen,
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  }
+  
+  // Dashboard item widget
+  Widget _buildDashboardItem({
+    required BuildContext context,
+    required String icon,
+    required String title,
+    required String subtitle,
+    required VoidCallback onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      child: Row(
+        children: [
+          // Icon
+          SvgPicture.asset(
+            icon,
+            width: 26,
+            height: 26,
+            color: const Color(0xFF223843),
+          ),
+          
+          const SizedBox(width: 16),
+          
+          // Text content
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: context.titleLarge.copyWith(
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black87,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  subtitle,
+                  style: context.bodyMedium.copyWith(
+                    color: Colors.black54,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+  
+  // Account tools section header
+  Widget _buildSectionHeader(BuildContext context, String title) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+      child: Text(
+        title,
+        style: context.headlineSmall.copyWith(
+          fontWeight: FontWeight.bold,
+          color: Colors.black87,
+        ),
+      ),
+    );
+  }
+
+  // Account tools section
+  Widget _buildAccountToolsSection(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Section header
+        _buildSectionHeader(context, 'account_tools'.tr(context)),
+        
+        // Divider
+        const Divider(height: 1),
+        
+        // Change Language
+        _buildToolItem(
+          context: context,
+          icon: AppSvgs.profile_language,
+          title: 'change_language'.tr(context),
+          onTap: () {
+            LanguageDialog.show(context);
+          },
+        ),
+        
+        // Help & Support
+        _buildToolItem(
+          context: context,
+          icon: AppSvgs.profile_help,
+          title: 'help_support'.tr(context),
+          onTap: () async {
+            final Uri url = Uri.parse('https://melaminefront.dokkan.design/pages/contact-us');
+            if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+              if (context.mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('could_not_launch_website'.tr(context)))
+                );
+              }
+            }
+          },
+        ),
+        
+        // About Us
+        _buildToolItem(
+          context: context,
+          icon: AppSvgs.profile_about_us,
+          title: 'about_us'.tr(context),
+          onTap: () async {
+            final Uri url = Uri.parse('https://melaminefront.dokkan.design/pages/about-us');
+            if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+              if (context.mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('could_not_launch_website'.tr(context)))
+                );
+              }
+            }
+          },
+        ),
+        
+        // Visit Website
+        _buildToolItem(
+          context: context,
+          icon: AppSvgs.profile_privacy,
+          title: 'visit_website'.tr(context),
+          onTap: () async {
+            final Uri url = Uri.parse('https://melaminefront.dokkan.design/');
+            if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+              if (context.mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('could_not_launch_website'.tr(context)))
+                );
+              }
+            }
+          },
+        ),
+      ],
+    );
+  }
+  
+  // Tool item widget
+  Widget _buildToolItem({
+    required BuildContext context,
+    required String icon,
+    required String title,
+    required VoidCallback onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+            child: Row(
+              children: [
+                // Icon
+                SvgPicture.asset(
+                  icon,
+                  width: 22,
+                  height: 22,
+                  color: const Color(0xFF223843),
+                ),
+                
+                const SizedBox(width: 16),
+                
+                // Title
+                Expanded(
+                  child: Text(
+                    title,
+                    style: context.titleMedium.copyWith(
+                      fontWeight: FontWeight.w500,
+                      color: Colors.black87,
+                    ),
+                  ),
+                ),
+                
+                // Chevron
+                Icon(
+                  Icons.chevron_right,
+                  color: Colors.black45,
+                  size: 22,
+                ),
+              ],
+            ),
+          ),
+          const Divider(height: 1),
+        ],
+      ),
+    );
+  }
+
+  // Contact & Social section
+  Widget _buildContactSocialSection(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Section header
+        _buildSectionHeader(context, 'contact_social'.tr(context)),
+        
+        // Social buttons in a grid
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+          child: Row(
+            children: [
+              // WhatsApp
+              Expanded(
+                child: _buildContactButton(
+                  context: context,
+                  icon: AppSvgs.whatsapp,
+                  title: 'whatsapp'.tr(context),
+                  onTap: _openWhatsApp,
+                ),
+              ),
+              
+              const SizedBox(width: 16),
+              
+              // Call Us
+              Expanded(
+                child: _buildContactButton(
+                  context: context,
+                  icon: AppSvgs.call,
+                  title: 'call_us'.tr(context),
+                  onTap: _makePhoneCall,
+                ),
+              ),
+            ],
+          ),
+        ),
+        
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+          child: Row(
+            children: [
+              // Facebook
+              Expanded(
+                child: _buildContactButton(
+                  context: context,
+                  icon: AppSvgs.facebook,
+                  title: 'facebook'.tr(context),
+                  onTap: _openFacebook,
+                ),
+              ),
+              
+              const SizedBox(width: 16),
+              
+              // YouTube
+              Expanded(
+                child: _buildContactButton(
+                  context: context,
+                  icon: AppSvgs.youtube,
+                  title: 'youtube'.tr(context),
+                  onTap: _launchYouTube,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+  
+  // Contact button widget
+  Widget _buildContactButton({
+    required BuildContext context,
+    required String icon,
+    required String title,
+    required VoidCallback onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.grey[300]!),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Column(
+          children: [
+            SvgPicture.asset(
+              icon,
+              width: 24,
+              height: 24,
+              color: const Color(0xFF223843),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              title,
+              style: context.titleSmall.copyWith(
+                fontWeight: FontWeight.w500,
+                color: Colors.black87,
+              ),
+            ),
+          ],
         ),
       ),
     );

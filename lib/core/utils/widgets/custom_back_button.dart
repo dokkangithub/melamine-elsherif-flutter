@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:melamine_elsherif/core/config/themes.dart/theme.dart';
 import 'package:melamine_elsherif/core/utils/constants/app_assets.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_cached_image.dart';
 
@@ -27,15 +28,9 @@ class CustomBackButton extends StatelessWidget {
             ? Transform(
                 alignment: Alignment.center,
                 transform: Matrix4.rotationY(3.14159), // Flip horizontally (pi radians)
-                child: const CustomImage(
-                  assetPath: AppSvgs.back,
-                  fit: BoxFit.cover,
-                ),
+                child: const Icon(Icons.arrow_back_ios,color: AppTheme.primaryColor,size: 22),
               )
-            : const CustomImage(
-                assetPath: AppSvgs.back,
-                fit: BoxFit.cover,
-              )
+            : const Icon(Icons.arrow_back_ios,color: AppTheme.primaryColor,size: 22),
     );
   }
 }

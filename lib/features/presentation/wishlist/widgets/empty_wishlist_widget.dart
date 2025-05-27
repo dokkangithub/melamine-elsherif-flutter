@@ -96,6 +96,7 @@ class EmptyWishlistWidget extends StatelessWidget {
                       },
                       child: Text(
                         'browse_products'.tr(context),
+                        textAlign: TextAlign.center,
                         style: context.titleMedium?.copyWith(
                           color: Colors.white,
                           fontWeight: FontWeight.w600,
