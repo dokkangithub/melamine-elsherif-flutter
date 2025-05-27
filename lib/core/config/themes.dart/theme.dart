@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
   // Colors
@@ -47,81 +48,74 @@ class AppTheme {
     scaffoldBackgroundColor: white,
     cardColor: lightCardColor,
     dividerColor: lightDividerColor,
-    fontFamily: 'Dokkan',
+    fontFamily: GoogleFonts.playfairDisplay().fontFamily,
 
-    // Apply custom Dokkan font
-    textTheme: const TextTheme(
-      displayLarge: TextStyle(
+    // Apply Playfair Display font
+    textTheme: TextTheme(
+      displayLarge: GoogleFonts.playfairDisplay(
         color: black,
         fontSize: 28,
         fontWeight: FontWeight.w500,
-        fontFamily: 'Dokkan',
       ),
-      displayMedium: TextStyle(
+      displayMedium: GoogleFonts.playfairDisplay(
         color: black,
         fontSize: 24,
         fontWeight: FontWeight.w500,
-        fontFamily: 'Dokkan',
       ),
-      displaySmall: TextStyle(
+      displaySmall: GoogleFonts.playfairDisplay(
         color: black,
         fontSize: 20,
         fontWeight: FontWeight.w400,
-        fontFamily: 'Dokkan',
       ),
-      headlineMedium: TextStyle(
+      headlineLarge: GoogleFonts.playfairDisplay(
+        color: black,
+        fontSize: 22,
+        fontWeight: FontWeight.w500,
+      ),
+      headlineMedium: GoogleFonts.playfairDisplay(
         color: black,
         fontSize: 18,
         fontWeight: FontWeight.w400,
-        fontFamily: 'Dokkan',
       ),
-      headlineSmall: TextStyle(
+      headlineSmall: GoogleFonts.playfairDisplay(
         color: black,
         fontSize: 16,
         fontWeight: FontWeight.w300,
-        fontFamily: 'Dokkan',
       ),
-      titleLarge: TextStyle(
+      titleLarge: GoogleFonts.playfairDisplay(
         color: black,
         fontSize: 14,
         fontWeight: FontWeight.w300,
-        fontFamily: 'Dokkan',
       ),
-      titleMedium: TextStyle(
+      titleMedium: GoogleFonts.playfairDisplay(
         color: black,
         fontSize: 13,
         fontWeight: FontWeight.w300,
-        fontFamily: 'Dokkan',
       ),
-      titleSmall: TextStyle(
+      titleSmall: GoogleFonts.playfairDisplay(
         color: black,
         fontSize: 12,
         fontWeight: FontWeight.w300,
-        fontFamily: 'Dokkan',
       ),
-      bodyLarge: TextStyle(
+      bodyLarge: GoogleFonts.playfairDisplay(
         color: black,
         fontSize: 11,
         fontWeight: FontWeight.w300,
-        fontFamily: 'Dokkan',
       ),
-      bodyMedium: TextStyle(
+      bodyMedium: GoogleFonts.playfairDisplay(
         color: black,
         fontSize: 10,
         fontWeight: FontWeight.w300,
-        fontFamily: 'Dokkan',
       ),
-      bodySmall: TextStyle(
+      bodySmall: GoogleFonts.playfairDisplay(
         color: black,
         fontSize: 9,
         fontWeight: FontWeight.w300,
-        fontFamily: 'Dokkan',
       ),
-      labelLarge: TextStyle(
+      labelLarge: GoogleFonts.playfairDisplay(
         color: black,
         fontSize: 8,
         fontWeight: FontWeight.w300,
-        fontFamily: 'Dokkan',
       ),
     ),
 
@@ -133,10 +127,9 @@ class AppTheme {
         elevation: 2,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        textStyle: const TextStyle(
+        textStyle: GoogleFonts.playfairDisplay(
           fontSize: 16, 
           fontWeight: FontWeight.w500,
-          fontFamily: 'Dokkan',
         ),
       ),
     ),
@@ -147,10 +140,9 @@ class AppTheme {
         side: const BorderSide(color: primaryColor),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        textStyle: const TextStyle(
+        textStyle: GoogleFonts.playfairDisplay(
           fontSize: 16, 
           fontWeight: FontWeight.w500,
-          fontFamily: 'Dokkan',
         ),
       ),
     ),
@@ -159,10 +151,9 @@ class AppTheme {
       style: TextButton.styleFrom(
         foregroundColor: primaryColor,
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        textStyle: const TextStyle(
+        textStyle: GoogleFonts.playfairDisplay(
           fontSize: 16, 
           fontWeight: FontWeight.w500,
-          fontFamily: 'Dokkan',
         ),
       ),
     ),
@@ -192,20 +183,17 @@ class AppTheme {
         borderRadius: BorderRadius.circular(8),
         borderSide: const BorderSide(color: errorColor, width: 2),
       ),
-      labelStyle: const TextStyle(
+      labelStyle: GoogleFonts.playfairDisplay(
         color: lightSecondaryTextColor, 
         fontSize: 16,
-        fontFamily: 'Dokkan',
       ),
-      hintStyle: const TextStyle(
+      hintStyle: GoogleFonts.playfairDisplay(
         color: lightSecondaryTextColor, 
         fontSize: 16,
-        fontFamily: 'Dokkan',
       ),
-      errorStyle: const TextStyle(
+      errorStyle: GoogleFonts.playfairDisplay(
         color: errorColor, 
         fontSize: 12,
-        fontFamily: 'Dokkan',
       ),
     ),
 
@@ -218,33 +206,30 @@ class AppTheme {
     ),
 
     // App Bar Theme
-    appBarTheme: const AppBarTheme(
+    appBarTheme: AppBarTheme(
       color: primaryColor,
       elevation: 0,
       centerTitle: true,
-      titleTextStyle: TextStyle(
+      titleTextStyle: GoogleFonts.playfairDisplay(
         color: Colors.white,
         fontSize: 20,
         fontWeight: FontWeight.w600,
-        fontFamily: 'Dokkan',
       ),
-      iconTheme: IconThemeData(color: Colors.white),
+      iconTheme: const IconThemeData(color: Colors.white),
     ),
 
     // Bottom Navigation Bar Theme
-    bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+    bottomNavigationBarTheme: BottomNavigationBarThemeData(
       backgroundColor: lightCardColor,
       selectedItemColor: primaryColor,
       unselectedItemColor: lightSecondaryTextColor,
-      selectedLabelStyle: TextStyle(
+      selectedLabelStyle: GoogleFonts.playfairDisplay(
         fontSize: 12, 
         fontWeight: FontWeight.w500,
-        fontFamily: 'Dokkan',
       ),
-      unselectedLabelStyle: TextStyle(
+      unselectedLabelStyle: GoogleFonts.playfairDisplay(
         fontSize: 12, 
         fontWeight: FontWeight.w500,
-        fontFamily: 'Dokkan',
       ),
       elevation: 8,
     ),

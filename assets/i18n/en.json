@@ -471,6 +471,9 @@
   "personalize_experience": "Personalize your app experience",
   "get_assistance": "Get help with orders and products",
   "learn_about_elsherif": "Learn about our company and values",
-  "browse_products": "Browse our extensive catalog",
-  "product_count": "{count} products"
+  "product_count": "{count} products",
+  
+  "splash_alsherif": "ALSHERIF",
+  "splash_melamine": "MELAMINE",
+  "splash_tagline": "Elegance. Efficiency. Performance."
 }

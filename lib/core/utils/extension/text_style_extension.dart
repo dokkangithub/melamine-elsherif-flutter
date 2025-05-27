@@ -4,6 +4,7 @@ extension TextStyleExtension on BuildContext {
   TextStyle get displayLarge => Theme.of(this).textTheme.displayLarge!;
   TextStyle get displayMedium => Theme.of(this).textTheme.displayMedium!;
   TextStyle get displaySmall => Theme.of(this).textTheme.displaySmall!;
+  TextStyle get headlineLarge => Theme.of(this).textTheme.headlineLarge!;
   TextStyle get headlineMedium => Theme.of(this).textTheme.headlineMedium!;
   TextStyle get headlineSmall => Theme.of(this).textTheme.headlineSmall!;
   TextStyle get titleLarge => Theme.of(this).textTheme.titleLarge!;

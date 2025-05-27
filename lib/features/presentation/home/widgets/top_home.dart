@@ -77,7 +77,7 @@ class _TopHomeWidgetState extends State<TopHomeWidget> {
                 height: 300,
                 width: double.infinity,
                 color: Colors.grey[100],
-                child: CustomImage(
+                child: const CustomImage(
                   assetPath: AppImages.home_banner,
                   fit: BoxFit.cover,
                   width: double.infinity,

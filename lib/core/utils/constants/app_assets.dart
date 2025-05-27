@@ -13,6 +13,7 @@ class AppImages {
   static const String summers_deals_image = '$imagesPath/summers_deals_image.png';
   static const String linearAppLogo = '$imagesPath/linear_app_logo.png';
   static const String wallet_icon = '$imagesPath/wallet.png';
+  static const String splashBackground = '$imagesPath/splash_background.png';
 }
 
 class AppAnimations {
