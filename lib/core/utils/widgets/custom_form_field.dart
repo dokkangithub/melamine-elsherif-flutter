@@ -52,7 +52,7 @@ class CustomTextFormField extends StatefulWidget {
     this.minLines,
     this.maxLength,
     this.textStyle,
-    this.borderRadius = 10.0,
+    this.borderRadius = 0.0,
   });
 
   @override

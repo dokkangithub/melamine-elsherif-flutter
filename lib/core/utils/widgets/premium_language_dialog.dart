@@ -8,6 +8,7 @@ import '../../config/themes.dart/theme.dart';
 import '../../providers/localization/app_localizations.dart';
 import '../../providers/localization/language_provider.dart';
 import '../../utils/extension/translate_extension.dart';
+import '../../utils/helpers.dart';
 
 class LanguageDialog extends StatefulWidget {
   const LanguageDialog({super.key});
@@ -174,8 +175,8 @@ class _LanguageDialogState extends State<LanguageDialog> with SingleTickerProvid
         // Wait before changing language to allow animation to complete
         await Future.delayed(const Duration(milliseconds: 300));
 
-        // Change the language
-        await provider.changeLanguage(languageCode, countryCode);
+        // Use the helper function to change language and refresh data
+        await AppFunctions.changeLanguage(context, languageCode, countryCode);
       },
       child: Neumorphic(
         style: NeumorphicStyle(

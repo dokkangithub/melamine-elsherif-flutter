@@ -65,7 +65,7 @@ class CustomButton extends StatelessWidget {
       // Return gradient style button
       return Container(
         width: fullWidth ? double.infinity : null,
-        height: height ?? 45,
+        height: height ?? 50,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(borderRadius ?? 0.0),
           gradient: LinearGradient(

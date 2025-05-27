@@ -20,6 +20,8 @@ class AppImages {
   static const String onboardingBg2 = '$imagesPath/onboarding_bg2.jpg';
   static const String onboardingBg3 = '$imagesPath/onboarding_bg3.jpg';
   static const String melamineLogoWhite = '$imagesPath/melamine_logo_white.png';
+  static const String loginBackground = 'assets/images/login_background.png';
+  static const String signupBackground = 'assets/images/signup_background.png';
 }
 
 class AppAnimations {

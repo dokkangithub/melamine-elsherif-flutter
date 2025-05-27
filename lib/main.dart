@@ -1,7 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:melamine_elsherif/core/services/widget_service.dart';
 import 'package:melamine_elsherif/core/utils/constants/app_strings.dart';
+import 'package:melamine_elsherif/core/utils/helpers/ui_helper.dart';
 import 'package:melamine_elsherif/features/presentation/home/controller/home_provider.dart';
 import 'package:melamine_elsherif/features/presentation/search/controller/search_provider.dart';
 import 'package:uuid/uuid.dart';
@@ -62,6 +64,10 @@ Future<void> checkAndGenerateTempUserId() async {
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  
+  // Set system UI overlay style for the entire app using our helper
+  UIHelper.setTransparentStatusBar();
+  
   await SharedPrefs.init();
   await setupDependencies();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
@@ -123,36 +129,39 @@ class MyApp extends StatelessWidget {
       builder: (context, languageProvider, child) {
         debugPrint('Building MyApp with locale: ${languageProvider.locale.languageCode}');
         
-        return MaterialApp(
-          title: AppConfig().appName,
-          debugShowCheckedModeBanner: false,
-          theme: AppTheme.lightTheme,
-          themeMode: ThemeMode.light,
-          locale: languageProvider.locale,
-          supportedLocales: const [
-            Locale('en', 'US'),
-            Locale('ar', 'EG'),
-          ],
-          localizationsDelegates: const [
-            AppLocalizations.delegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-          localeResolutionCallback: (locale, supportedLocales) {
-            debugPrint('Resolving locale: ${locale?.languageCode}');
-            
-            for (var supportedLocale in supportedLocales) {
-              if (supportedLocale.languageCode == locale?.languageCode) {
-                debugPrint('Resolved to supported locale: ${supportedLocale.languageCode}');
-                return supportedLocale;
+        // Wrap the MaterialApp with our helper to ensure consistent status bar styling
+        return UIHelper.wrapWithStatusBarConfig(
+          MaterialApp(
+            title: AppConfig().appName,
+            debugShowCheckedModeBanner: false,
+            theme: AppTheme.lightTheme,
+            themeMode: ThemeMode.light,
+            locale: languageProvider.locale,
+            supportedLocales: const [
+              Locale('en', 'US'),
+              Locale('ar', 'EG'),
+            ],
+            localizationsDelegates: const [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            localeResolutionCallback: (locale, supportedLocales) {
+              debugPrint('Resolving locale: ${locale?.languageCode}');
+              
+              for (var supportedLocale in supportedLocales) {
+                if (supportedLocale.languageCode == locale?.languageCode) {
+                  debugPrint('Resolved to supported locale: ${supportedLocale.languageCode}');
+                  return supportedLocale;
+                }
               }
-            }
-            debugPrint('No matching locale, using default: ${supportedLocales.first.languageCode}');
-            return supportedLocales.first;
-          },
-          onGenerateRoute: AppRoutes.generateRoute,
-          initialRoute: route,
+              debugPrint('No matching locale, using default: ${supportedLocales.first.languageCode}');
+              return supportedLocales.first;
+            },
+            onGenerateRoute: AppRoutes.generateRoute,
+            initialRoute: route,
+          ),
         );
       },
     );
