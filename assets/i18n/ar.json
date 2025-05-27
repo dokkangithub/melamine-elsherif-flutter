@@ -500,5 +500,8 @@
   "decorative_accessories": "إكسسوارات ديكور",
   "clear_wishlist": "مسح قائمة الرغبات",
   "clear_wishlist_confirmation": "هل أنت متأكد أنك تريد مسح قائمة رغباتك؟",
-  "wishlist_cleared": "تم مسح قائمة الرغبات بنجاح"
+  "wishlist_cleared": "تم مسح قائمة الرغبات بنجاح",
+  "remove_item": "إزالة العنصر؟",
+  "remove_item_confirmation": "ستؤدي هذه العملية إلى إزالة العنصر المحدد من سلة التسوق الخاصة بك.",
+  "item_removed_from_wishlist": "تمت إزالة العنصر من قائمة الرغبات"
 }

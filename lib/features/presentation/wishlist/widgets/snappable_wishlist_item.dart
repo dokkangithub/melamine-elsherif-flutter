@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:thanos_snap_effect/thanos_snap_effect.dart';
+import 'package:melamine_elsherif/core/config/themes.dart/theme.dart';
+import 'package:melamine_elsherif/core/utils/extension/translate_extension.dart';
+import 'package:melamine_elsherif/core/utils/widgets/cutsom_toast.dart';
+import 'package:melamine_elsherif/core/widgets/custom_confirmation_dialog.dart';
 import 'package:melamine_elsherif/features/domain/wishlist/entities/wishlist_details.dart';
 import 'package:provider/provider.dart';
 import '../controller/wishlist_provider.dart';
@@ -56,7 +60,27 @@ class SnappableWishlistItemState extends State<SnappableWishlistItem>
         _isDeleting = true;
       });
       _animationController.forward();
+      CustomToast.showToast(message: 'item_removed_from_wishlist'.tr(context), type: ToastType.success);
     }
+  }
+
+  void _showRemoveItemDialog(BuildContext context) {
+    showCustomConfirmationDialog(
+      context: context,
+      title: 'remove_item'.tr(context),
+      message: 'remove_item_confirmation'.tr(context),
+      confirmText: 'remove'.tr(context),
+      cancelText: 'cancel'.tr(context),
+      icon: Icons.delete_outline,
+      confirmButtonColor: AppTheme.accentColor,
+      onConfirm: () {
+        setState(() {
+          _isDeleting = true;
+        });
+        _animationController.forward();
+        CustomToast.showToast(message: 'item_removed_from_wishlist'.tr(context), type: ToastType.success);
+      },
+    );
   }
 
   @override

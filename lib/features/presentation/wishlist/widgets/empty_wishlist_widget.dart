@@ -3,6 +3,7 @@ import 'package:animate_do/animate_do.dart';
 import 'package:melamine_elsherif/core/config/themes.dart/theme.dart';
 import 'package:melamine_elsherif/core/utils/constants/app_assets.dart';
 import 'package:melamine_elsherif/core/utils/extension/text_theme_extension.dart';
+import 'package:melamine_elsherif/core/utils/widgets/custom_button.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_cached_image.dart';
 import 'package:provider/provider.dart';
 import '../../../../core/utils/extension/translate_extension.dart';
@@ -89,18 +90,10 @@ class EmptyWishlistWidget extends StatelessWidget {
                   child: SizedBox(
                     width: double.infinity,
                     height: 52,
-                    child: ElevatedButton(
+                    child: CustomButton(
                       onPressed: () {
                         Provider.of<LayoutProvider>(context, listen: false).currentIndex = 0;
                       },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppTheme.accentColor,
-                        foregroundColor: Colors.white,
-                        elevation: 0,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                      ),
                       child: Text(
                         'browse_products'.tr(context),
                         style: context.titleMedium?.copyWith(

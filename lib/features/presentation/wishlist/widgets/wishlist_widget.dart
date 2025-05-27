@@ -6,13 +6,13 @@ import 'package:melamine_elsherif/core/utils/widgets/custom_button.dart';
 import 'package:melamine_elsherif/core/utils/widgets/cutsom_toast.dart';
 import 'package:melamine_elsherif/features/presentation/wishlist/widgets/shimmer/wishlist_screen_shimmer.dart';
 import 'package:melamine_elsherif/features/presentation/wishlist/widgets/snappable_wishlist_item.dart';
-import 'package:quickalert/quickalert.dart';
 import '../../../../core/config/routes.dart/routes.dart';
 import '../../../../core/config/themes.dart/theme.dart';
 import '../../../../core/utils/constants/app_assets.dart';
 import '../../../../core/utils/enums/loading_state.dart';
 import '../../../../core/utils/extension/translate_extension.dart';
 import '../../../../core/utils/widgets/custom_cached_image.dart';
+import '../../../../core/widgets/custom_confirmation_dialog.dart';
 import '../../../domain/wishlist/entities/wishlist_details.dart';
 import '../controller/wishlist_provider.dart';
 import 'empty_wishlist_widget.dart';
@@ -131,7 +131,6 @@ class _WishlistWidgetState extends State<WishlistWidget> {
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(8),
           boxShadow: [
             BoxShadow(
               color: Colors.grey.withValues(alpha: 0.1),
@@ -150,7 +149,6 @@ class _WishlistWidgetState extends State<WishlistWidget> {
                   GestureDetector(
                     onTap: () => _navigateToProductDetails(context, wishlistItem.slug),
                     child: ClipRRect(
-                      borderRadius: const BorderRadius.vertical(top: Radius.circular(8)),
                       child: CustomImage(
                         imageUrl: wishlistItem.thumbnailImage,
                         width: double.infinity,
@@ -160,22 +158,22 @@ class _WishlistWidgetState extends State<WishlistWidget> {
                     ),
                   ),
                   
-                  // Favorite icon
+                  // Remove button
                   Positioned(
                     top: 8,
                     right: 8,
-                    child: GestureDetector(
+                    child: InkWell(
                       onTap: () {
                         snappableKey.currentState?.startSnap();
                       },
                       child: Container(
-                        padding: const EdgeInsets.all(8),
-                        decoration: const BoxDecoration(
-                          color: Colors.white,
+                        padding: const EdgeInsets.all(6),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withValues(alpha: 0.8),
                           shape: BoxShape.circle,
                         ),
                         child: const Icon(
-                          Icons.favorite,
+                          Icons.favorite_outlined,
                           color: AppTheme.primaryColor,
                           size: 20,
                         ),
@@ -296,18 +294,15 @@ class _WishlistWidgetState extends State<WishlistWidget> {
   }
   
   void _showClearWishlistDialog(BuildContext context) {
-    QuickAlert.show(
+    showCustomConfirmationDialog(
       context: context,
-      type: QuickAlertType.confirm,
       title: 'clear_wishlist'.tr(context),
-      text: 'clear_wishlist_confirmation'.tr(context),
-      confirmBtnText: 'clear'.tr(context),
-      cancelBtnText: 'cancel'.tr(context),
-      confirmBtnColor: AppTheme.accentColor,
-      cancelBtnTextStyle: context.titleMedium.copyWith(fontWeight: FontWeight.w600, color: AppTheme.lightSecondaryTextColor),
-      confirmBtnTextStyle: context.titleMedium.copyWith(fontWeight: FontWeight.w600, color: AppTheme.white),
-      onConfirmBtnTap: () {
-        Navigator.pop(context);
+      message: 'clear_wishlist_confirmation'.tr(context),
+      confirmText: 'clear'.tr(context),
+      cancelText: 'cancel'.tr(context),
+      icon: Icons.delete_outline,
+      confirmButtonColor: AppTheme.accentColor,
+      onConfirm: () {
         widget.provider.clearWishlist();
         CustomToast.showToast(message: 'wishlist_cleared'.tr(context), type: ToastType.success);
       },
