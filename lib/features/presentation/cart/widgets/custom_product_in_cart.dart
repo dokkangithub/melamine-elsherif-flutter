@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:melamine_elsherif/core/config/themes.dart/theme.dart';
 import 'package:melamine_elsherif/core/utils/constants/app_assets.dart';
 import 'package:melamine_elsherif/core/utils/extension/text_style_extension.dart';
@@ -31,111 +32,110 @@ class ProductItemInCart extends StatelessWidget {
     return Consumer<CartProvider>(
       builder: (context, cartProvider, child) {
         final bool isUpdating = cartProvider.isItemQuantityUpdating(item.id);
-
         return Padding(
           padding: const EdgeInsets.symmetric(vertical: 8.0),
           child: SizedBox(
-            height: 100,
-            child: Padding(
-              padding: const EdgeInsets.all(6.0),
-              child: Row(
-                children: [
-                  // Product Image
-                  Expanded(
-                      flex: 2,
-                      child: _productImage()),
-                  const SizedBox(width: 8),
-                  // Product Details
-                  Expanded(
+            height: 130,
+            child: Row(
+              children: [
+                // Product Image
+                Expanded(
                     flex: 3,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          item.productName,
-                          style: context.titleLarge.copyWith(
-                            fontWeight: FontWeight.w500,
-                          ),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
+                    child: _productImage()),
+                const SizedBox(width: 8),
+                // Product Details
+                Expanded(
+                  flex: 3,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const SizedBox(height: 8),
+                      Text(
+                        item.productName.toUpperCase(),
+                        style: context.titleLarge.copyWith(
+                          fontWeight: FontWeight.w600,
                         ),
-                        if (item.variant.isNotEmpty)
-                          Padding(
-                            padding: const EdgeInsets.only(top: 4.0),
-                            child: Text(item.variant,
-                              style: context.bodySmall.copyWith(color: Colors.grey[600]),
-                            ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      if (item.variant.isNotEmpty)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 4.0),
+                          child: Text(item.variant,
+                            style: context.titleSmall.copyWith(color: Colors.grey[600]),
                           ),
-                        const Spacer(),
-                        // Quantity Controls
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            _buildQuantityButton(
-                              icon: Icons.remove,
-                              onPressed: () {
-                                if (item.quantity > item.lowerLimit && onQuantityChanged != null && !isUpdating) {
-                                  onQuantityChanged!(item.quantity - 1);
-                                }
-                              },
-                              enabled: item.quantity > item.lowerLimit && !cartProvider.isSpecificOperationUpdating(item.id, true) && !cartProvider.isSpecificOperationUpdating(item.id, false),
-                              context: context,
-                              isUpdating: cartProvider.isSpecificOperationUpdating(item.id, true),
-                              isDecrement: true,
-                            ),
-                            SizedBox(
-                              width: 40,
-                              child: Center(
-                                child: Text('${item.quantity}',
-                                  style: context.titleLarge.copyWith(
-                                    fontWeight: FontWeight.w600,
-                                  ),
+                        ),
+                      const Spacer(),
+                      // Quantity Controls
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          _buildQuantityButton(
+                            icon: Icons.remove,
+                            onPressed: () {
+                              if (item.quantity > item.lowerLimit && onQuantityChanged != null && !isUpdating) {
+                                onQuantityChanged!(item.quantity - 1);
+                              }
+                            },
+                            enabled: item.quantity > item.lowerLimit && !cartProvider.isSpecificOperationUpdating(item.id, true) && !cartProvider.isSpecificOperationUpdating(item.id, false),
+                            context: context,
+                            isUpdating: cartProvider.isSpecificOperationUpdating(item.id, true),
+                            isDecrement: true,
+                          ),
+                          SizedBox(
+                            width: 40,
+                            child: Center(
+                              child: Text('${item.quantity}',
+                                style: context.headlineMedium.copyWith(
+                                  fontWeight: FontWeight.w400,
                                 ),
                               ),
                             ),
-                            _buildQuantityButton(
-                              icon: Icons.add,
-                              onPressed: () {
-                                if (item.quantity < item.upperLimit && onQuantityChanged != null && !isUpdating) {
-                                  onQuantityChanged!(item.quantity + 1);
-                                }
-                              },
-                              enabled: item.quantity < item.upperLimit && !cartProvider.isSpecificOperationUpdating(item.id, true) && !cartProvider.isSpecificOperationUpdating(item.id, false),
-                              context: context,
-                              isUpdating: cartProvider.isSpecificOperationUpdating(item.id, false),
-                              isDecrement: false,
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    flex: 2,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        //delete item
-                        InkWell(
-                          onTap: cartProvider.isItemQuantityUpdating(item.id) ? null : (){
-                            onDelete(item.id);
-                          },
-                          child: const CustomImage(assetPath: AppSvgs.delete_icon),
-                        ),
-                        const Spacer(),
-                        Text(
-                          '${item.currencySymbol}${(double.parse(item.discountedPrice) * item.quantity).toStringAsFixed(2)}',
-                          style: context.titleSmall.copyWith(
-                            color: AppTheme.black,
-                            fontWeight: FontWeight.w800,
                           ),
-                        ),
-                      ],
-                    ),
+                          _buildQuantityButton(
+                            icon: Icons.add,
+                            onPressed: () {
+                              if (item.quantity < item.upperLimit && onQuantityChanged != null && !isUpdating) {
+                                onQuantityChanged!(item.quantity + 1);
+                              }
+                            },
+                            enabled: item.quantity < item.upperLimit && !cartProvider.isSpecificOperationUpdating(item.id, true) && !cartProvider.isSpecificOperationUpdating(item.id, false),
+                            context: context,
+                            isUpdating: cartProvider.isSpecificOperationUpdating(item.id, false),
+                            isDecrement: false,
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 15),
+                    ],
                   ),
-                ],
-              ),
+                ),
+                const SizedBox(width: 8),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    const SizedBox(height: 8),
+                    //delete item
+                    InkWell(
+                      onTap: cartProvider.isItemQuantityUpdating(item.id) ? null : (){
+                        onDelete(item.id);
+                      },
+                      child: const Icon(Icons.delete_outlined),
+                    ),
+                    const Spacer(),
+                    Text(
+                      '${item.currencySymbol}${(double.parse(item.discountedPrice) * item.quantity).toStringAsFixed(2)}',
+                      style: context.titleLarge.copyWith(
+                        color: AppTheme.primaryColor,
+                        fontWeight: FontWeight.w800,
+                        fontFamily:  GoogleFonts.inter().fontFamily,
+                      ),
+                    ),
+                    const SizedBox(height: 15),
+                  ],
+                ),
+              ],
             ),
           ),
         );
@@ -146,8 +146,7 @@ class ProductItemInCart extends StatelessWidget {
   Widget _productImage() {
     return CustomImage(
       imageUrl: item.thumbnailImage,
-      height: 100,
-      borderRadius: BorderRadius.circular(15),
+      height: 120,
       fit: BoxFit.cover,
     );
   }
@@ -160,13 +159,10 @@ class ProductItemInCart extends StatelessWidget {
     required bool isDecrement,
     bool enabled = true,
   }) {
-    return CustomButton(
-      onPressed: enabled ? onPressed : null,
-      padding: const EdgeInsets.all(6),
-      borderRadius: 8,
-      isOutlined: true,
+    return InkWell(
+      onTap: enabled ? onPressed : null,
       child: isUpdating
-          ? SizedBox(
+          ? const SizedBox(
               width: 16,
               height: 16,
               child: CustomLoadingWidget(
@@ -177,8 +173,8 @@ class ProductItemInCart extends StatelessWidget {
             )
           : Icon(
               icon,
-              size: 16,
-              color: AppTheme.primaryColor,
+              size: 20,
+              color: AppTheme.black,
             ),
     );
   }

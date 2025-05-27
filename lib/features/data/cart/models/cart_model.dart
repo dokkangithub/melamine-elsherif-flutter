@@ -34,7 +34,7 @@ class CartItemModel {
       id: json['id'] ?? 0,
       productName: json['product_name'] ?? '',
       thumbnailImage: json['product_thumbnail_image'] ?? '',
-      variant: json['variant'] ?? '',
+      variant: json['variation'] ?? '',
       mainPrice: json['product_main_price'],
       discountedPrice: json['product_discounted_price'],
       discount: json['product_discount'],

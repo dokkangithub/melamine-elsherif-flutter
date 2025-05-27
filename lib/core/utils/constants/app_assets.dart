@@ -42,6 +42,7 @@ class AppSvgs {
   static const String EyeOn = '$svgPath/EyeOn.svg';
   static const String EyeOff = '$svgPath/EyeOff.svg';
   static const String emptyCart = '$svgPath/emptyCart.svg';
+  static const String empty_cart = '$svgPath/empty_cart.svg';
   static const String above_second_home_image = '$svgPath/above_second_home_image.svg';
   static const String category_star = '$svgPath/category_star.svg';
   static const String porcelain_collection = '$svgPath/porcelain_collection.svg';

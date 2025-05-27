@@ -170,6 +170,9 @@
   "tax": "الضريبة",
   "total_cost": "التكلفة الإجمالية",
   "cart_empty": "السلة الخاصة بك فارغة",
+  "cart_empty_message": "سلة تسوّقك بانتظار لمسة من الأناقة.",
+  "cart_empty_subtitle": "ابدأ في تنسيق مجموعة أدوات المائدة المثالية الخاصة بك",
+  "app_name": "ميلامين الشريف",
   "add_items_to_cart": "أضف عناصر إلى السلة الخاصة بك لرؤيتها هنا",
   "continue_shopping": "مواصلة التسوق",
   "error_loading_cart": "خطأ في تحميل السلة",
@@ -308,8 +311,6 @@
   "wishlist_empty": "قائمة الرغبات فارغة",
   "wishlist_empty_message": "قائمة رغباتك تنتظر أن تحبها.",
   "wishlist_empty_subtitle": "احفظ تصميماتك المفضلة لوقت لاحق.",
-  "your_cart_is_empty": "السلة الخاصة بك فارغة",
-  "app_name": "ميلامين الشريف",
   "search_addresses": "بحث العناوين",
   "work": "العمل",
   "other": "أخرى",
@@ -503,5 +504,6 @@
   "wishlist_cleared": "تم مسح قائمة الرغبات بنجاح",
   "remove_item": "إزالة العنصر؟",
   "remove_item_confirmation": "ستؤدي هذه العملية إلى إزالة العنصر المحدد من سلة التسوق الخاصة بك.",
-  "item_removed_from_wishlist": "تمت إزالة العنصر من قائمة الرغبات"
+  "item_removed_from_wishlist": "تمت إزالة العنصر من قائمة الرغبات",
+  "your_cart_is_empty": "السلة الخاصة بك فارغة"
 }

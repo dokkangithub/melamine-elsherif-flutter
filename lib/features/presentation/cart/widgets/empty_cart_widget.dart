@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
+import 'package:animate_do/animate_do.dart';
 import 'package:melamine_elsherif/core/config/themes.dart/theme.dart';
 import 'package:melamine_elsherif/core/utils/constants/app_assets.dart';
-import 'package:melamine_elsherif/core/utils/extension/text_theme_extension.dart';
+import 'package:melamine_elsherif/core/utils/extension/text_style_extension.dart';
 import 'package:melamine_elsherif/core/utils/extension/translate_extension.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_button.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_cached_image.dart';
 import 'package:provider/provider.dart';
-
 import '../../main layout/controller/layout_provider.dart';
 
 class EmptyCartWidget extends StatelessWidget {
@@ -15,43 +14,103 @@ class EmptyCartWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          // Card(
-          //   elevation: 4,
-          //   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(200)),
-          //   child: const Padding(
-          //     padding: EdgeInsets.all(50.0),
-          //     child: CustomImage(
-          //       assetPath: AppSvgs.emptyCart,
-          //       height: 100,
-          //       width: 100,
-          //
-          //     ),
-          //   ),
-          // ),
-          Lottie.asset(AppAnimations.emptyCart,fit: BoxFit.cover,height: 250,width: 250),
-          const SizedBox(height: 16),
-          Text(
-            'your_cart_is_empty'.tr(context),
-            style: context.headlineSmall,
+    final screenHeight = MediaQuery.of(context).size.height;
+
+    return Stack(
+      children: [
+        // Background image with blend mode overlay
+        ColorFiltered(
+          colorFilter: ColorFilter.mode(
+            Colors.white.withValues(alpha: 0.85),
+            BlendMode.lighten,
           ),
-          const SizedBox(height: 8),
-          Text(
-            'add_items_to_cart'.tr(context),
-            style: context.bodyMedium!.copyWith(color: AppTheme.darkDividerColor),
+          child: const CustomImage(
+            assetPath: AppSvgs.empty_cart,
+            fit: BoxFit.cover,
+            width: double.infinity,
+            height: double.infinity,
           ),
-          const SizedBox(height: 24),
-          CustomButton(
-            onPressed: () {
-              Provider.of<LayoutProvider>(context,listen: false).currentIndex=0;
-            },
-            child: Text('continue_shopping'.tr(context),style: context.titleSmall?.copyWith(color: AppTheme.white)),
+        ),
+        
+        // Content overlay
+        Container(
+          width: double.infinity,
+          height: double.infinity,
+          color: Colors.transparent,
+          child: Column(
+            children: [
+              // Top space - approximately 40% of screen height
+              SizedBox(height: screenHeight * 0.35),
+              
+              // Text content
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 32.0),
+                child: Column(
+                  children: [
+                    FadeIn(
+                      duration: const Duration(milliseconds: 500),
+                      child: Text(
+                        'cart_empty_message'.tr(context),
+                        style: context.displaySmall.copyWith(
+                          color: Colors.black87,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 24,
+                          height: 1.3,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    FadeIn(
+                      delay: const Duration(milliseconds: 200),
+                      duration: const Duration(milliseconds: 500),
+                      child: Text(
+                        'cart_empty_subtitle'.tr(context),
+                        style: context.titleMedium.copyWith(
+                          color: Colors.black45,
+                          fontWeight: FontWeight.w400,
+                          fontSize: 16,
+                          height: 1.4,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              
+              // Expandable space before button
+              const SizedBox(height: 50),
+              
+              // Button at bottom
+              Padding(
+                padding: const EdgeInsets.all(24.0),
+                child: FadeInUp(
+                  duration: const Duration(milliseconds: 600),
+                  child: SizedBox(
+                    width: double.infinity,
+                    height: 52,
+                    child: CustomButton(
+                      onPressed: () {
+                        Provider.of<LayoutProvider>(context, listen: false).currentIndex = 0;
+                      },
+                      child: Text(
+                        'continue_shopping'.tr(context),
+                        textAlign: TextAlign.center,
+                        style: context.titleLarge.copyWith(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
+                          letterSpacing: 0.2,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

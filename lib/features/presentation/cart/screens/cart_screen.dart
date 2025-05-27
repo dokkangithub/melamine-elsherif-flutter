@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:melamine_elsherif/core/utils/extension/text_theme_extension.dart';
 import 'package:melamine_elsherif/core/utils/extension/translate_extension.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_button.dart';
@@ -208,59 +209,56 @@ class _CartScreenState extends State<CartScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        scrolledUnderElevation: 0,
-        title: Consumer<CartProvider>(
-          builder: (context, cartProvider, _) {
-            final itemCount = cartProvider.cartItems.length;
-            return _shouldAnimate
+    return Consumer<CartProvider>(
+      builder: (context, cartProvider, _) {
+        // Display loading shimmer if needed
+        if (cartProvider.cartState == LoadingState.loading) {
+          return Scaffold(
+            appBar: AppBar(
+              backgroundColor: Colors.white,
+              elevation: 0,
+              scrolledUnderElevation: 0,
+              title: Text(
+                'my_cart'.tr(context),
+                style: context.displaySmall!.copyWith(fontWeight: FontWeight.bold),
+              ),
+              centerTitle: true,
+            ),
+            body: const CartScreenShimmer(),
+          );
+        }
+
+        // Display empty cart if needed
+        if (cartProvider.cartItems.isEmpty) {
+          return _shouldAnimate
+            ? FadeIn(
+                duration: const Duration(milliseconds: 600),
+                child: const EmptyCartWidget(),
+              )
+            : const EmptyCartWidget();
+        }
+
+        // Display cart with items
+        return Scaffold(
+          backgroundColor: Colors.white,
+          appBar: AppBar(
+            backgroundColor: Colors.white,
+            elevation: 0,
+            scrolledUnderElevation: 0,
+            title: _shouldAnimate
               ? FadeIn(
                   duration: const Duration(milliseconds: 400),
-                  child: Text('${'shopping_cart'.tr(context)} ($itemCount ${'items'.tr(context)})',
-                    style: context.titleLarge!.copyWith(fontWeight: FontWeight.w700),
+                  child: Text('my_cart'.tr(context),
+                    style: context.displaySmall!.copyWith(fontWeight: FontWeight.bold),
                   ),
                 )
-              : Text('${'shopping_cart'.tr(context)} ($itemCount ${'items'.tr(context)})',
-                  style: context.titleLarge!.copyWith(fontWeight: FontWeight.w700),
-                );
-          },
-        ),
-      ),
-      body: Consumer<CartProvider>(
-        builder: (context, cartProvider, _) {
-          // Display offline banner if needed
-          Widget? offlineBanner;
-          if (cartProvider.isOfflineMode && cartProvider.hasLocalData) {
-            offlineBanner = _buildOfflineBanner(cartProvider);
-          }
-          
-          if (cartProvider.cartState == LoadingState.loading) {
-            return const CartScreenShimmer();
-          }
-
-          if (cartProvider.cartItems.isEmpty) {
-            return _shouldAnimate
-              ? FadeIn(
-                  duration: const Duration(milliseconds: 600),
-                  child: const EmptyCartWidget(),
-                )
-              : const EmptyCartWidget();
-          }
-
-          // Filter out items that are currently being deleted for visual display
-          final visibleItems = cartProvider.cartItems
-              .where((item) => !_itemsBeingDeleted.contains(item.id))
-              .toList();
-
-          return Column(
+              : Text('my_cart'.tr(context),
+                style: context.displaySmall!.copyWith(fontWeight: FontWeight.bold),
+              ),
+            centerTitle: true,
+          ),
+          body: Column(
             children: [
-              // Offline banner (if applicable)
-              if (offlineBanner != null) offlineBanner,
-              
               // Cart items in an expandable list
               Expanded(
                 child: ListView.separated(
@@ -270,8 +268,15 @@ class _CartScreenState extends State<CartScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 15.0),
                     child: Divider(color: Colors.grey[300]),
                   ),
-                  itemCount: visibleItems.length,
+                  itemCount: cartProvider.cartItems
+                      .where((item) => !_itemsBeingDeleted.contains(item.id))
+                      .length,
                   itemBuilder: (context, index) {
+                    // Filter out items that are currently being deleted for visual display
+                    final visibleItems = cartProvider.cartItems
+                        .where((item) => !_itemsBeingDeleted.contains(item.id))
+                        .toList();
+                    
                     final CartItem item = visibleItems[index];
                     
                     // Use a unique key for each cart item based on its ID
@@ -312,9 +317,9 @@ class _CartScreenState extends State<CartScreen> {
                   )
                 : _buildCartSummary(context, cartProvider),
             ],
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 
@@ -344,12 +349,7 @@ class _CartScreenState extends State<CartScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 15),
-              Text('order_summary'.tr(context),
-                style: context.titleMedium!.copyWith(
-                  fontWeight: FontWeight.w800,
-                ),
-              ),
-              const SizedBox(height: 8),
+              const Divider(color: AppTheme.lightDividerColor),
               _buildSummaryRow(
                 'subtotal'.tr(context),
                 '${cartProvider.cartSummary?.subtotal ?? 0.0}',
@@ -505,10 +505,7 @@ class _CartScreenState extends State<CartScreen> {
           ),
           child: CustomButton(
             text: 'proceed_to_checkout'.tr(context),
-            isGradient: true,
             fullWidth: true,
-            borderRadius: 10,
-            padding: const EdgeInsets.all(2),
             onPressed: () {
               AppRoutes.navigateTo(
                 context,
@@ -549,12 +546,13 @@ class _CartScreenState extends State<CartScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(label, style: context.titleSmall),
+          Text(label, style: context.titleMedium),
           Text(
             value,
-            style: context.titleSmall!.copyWith(
+            style: context.titleMedium!.copyWith(
               color: textColor ?? AppTheme.black,
-              fontWeight: isBold ? FontWeight.w800 : FontWeight.w400,
+              fontWeight: isBold ? FontWeight.w800 : FontWeight.w500,
+              fontFamily:  GoogleFonts.inter().fontFamily,
             ),
           ),
         ],
@@ -562,20 +560,4 @@ class _CartScreenState extends State<CartScreen> {
     );
   }
 
-  Widget _buildOfflineBanner(CartProvider cartProvider) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      color: Colors.yellow,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text('offline_mode_banner'.tr(context)),
-          TextButton(
-            onPressed: () => _tryReconnect(cartProvider),
-            child: Text('try_reconnect'.tr(context)),
-          ),
-        ],
-      ),
-    );
-  }
 }
