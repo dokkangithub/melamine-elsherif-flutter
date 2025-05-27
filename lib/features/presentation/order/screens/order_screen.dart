@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:melamine_elsherif/core/config/themes.dart/theme.dart';
 import 'package:melamine_elsherif/core/utils/constants/app_assets.dart';
 import 'package:melamine_elsherif/core/utils/extension/text_theme_extension.dart';
@@ -45,7 +46,11 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
         leading: const CustomBackButton(respectDirection: true),
         title: Text(
           'order_details'.tr(context),
-          style: context.headlineSmall,
+          style: context.displayLarge!.copyWith(
+            fontFamily:  GoogleFonts.cormorantGaramond().fontFamily,
+            color: Colors.black87,
+            fontWeight: FontWeight.w500,
+          ),
         ),
       ),
       body: Consumer<OrderProvider>(
@@ -128,9 +133,11 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           _buildSimpleOrderStep('ordered'.tr(context), true),
-                          _buildSimpleOrderStep('shipped'.tr(context), 
+                          _buildSimpleOrderStep('in_transit'.tr(context), 
                               orderDetails.deliveryStatus.toLowerCase() == 'picked_up' || 
-                              orderDetails.deliveryStatus.toLowerCase() == 'delivered'),
+                              orderDetails.deliveryStatus.toLowerCase() == 'on_the_way' ||
+                              orderDetails.deliveryStatus == 'On The Way' ||
+                              orderDetails.deliveryStatus.toLowerCase().contains('انتظار')),
                           _buildSimpleOrderStep('delivered'.tr(context), 
                               orderDetails.deliveryStatus.toLowerCase() == 'delivered'),
                         ],
@@ -286,46 +293,27 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
   
   // Status Badge
   Widget _buildStatusBadge(String status) {
-    Color color;
-    String label;
-    
-    switch (status.toLowerCase()) {
-      case 'pending':
-      case 'confirmed':
-        color = AppTheme.primaryColor;
-        label = 'in_transit'.tr(context);
-        break;
-      case 'picked_up':
-        color = Colors.blue;
-        label = 'shipped'.tr(context);
-        break;
-      case 'delivered':
-        color = Colors.green;
-        label = 'delivered'.tr(context);
-        break;
-      default:
-        color = Colors.orange;
-        label = 'processing'.tr(context);
-    }
+    final statusInfo = getStatusInfo(status, '');
     
     return Text(
-      label,
+      statusInfo.label.tr(context),
       style: context.titleSmall!.copyWith(
         fontWeight: FontWeight.w400,
-        color: color,
+        color: statusInfo.color,
       ),
     );
   }
   
   // Order Progress Bar
   Widget _buildOrderProgressBar(String status) {
+    String statusLower = status.toLowerCase();
     int progress = 0;
     
-    if (status.toLowerCase() == 'pending' || status.toLowerCase() == 'confirmed') {
+    if (statusLower == 'pending' || statusLower.contains('انتظار')) {
       progress = 1;
-    } else if (status.toLowerCase() == 'picked_up') {
+    } else if (statusLower == 'picked_up' || statusLower == 'on_the_way' || status == 'On The Way') {
       progress = 2;
-    } else if (status.toLowerCase() == 'delivered') {
+    } else if (statusLower == 'delivered') {
       progress = 3;
     }
     
@@ -379,6 +367,23 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
         ],
       ),
     );
+  }
+  
+  // Helper to get status color and label
+  StatusInfo getStatusInfo(String status, String statusString) {
+    // Handle arabic and english status values
+    String statusLower = status.toLowerCase();
+    
+    if (statusLower == 'pending' || statusLower.contains('انتظار')) {
+      return StatusInfo('processing', const Color(0xFFCB997E));
+    } else if (statusLower == 'picked_up' || statusLower == 'on_the_way' || status == 'On The Way') {
+      return StatusInfo('in_transit', const Color(0xFF2196F3));
+    } else if (statusLower == 'delivered') {
+      return StatusInfo('delivered', const Color(0xFF4CAF50));
+    } else {
+      // Use the status string provided by API if available
+      return StatusInfo(statusString.isNotEmpty ? statusString : 'processing', const Color(0xFFFF9800));
+    }
   }
   
   // Order Step
@@ -574,6 +579,24 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
     final statusColor = paymentStatus == 'paid'.tr(context) ? Colors.green[700] : Colors.orange[700];
     final bgColor = paymentStatus == 'paid'.tr(context) ? Colors.green[50] : Colors.orange[50];
     
+    // Get payment type icon based on payment_type
+    IconData paymentIcon = Icons.credit_card;
+    String paymentType = orderDetails.paymentType ?? 'Cash Payment';
+    String paymentTypeKey = 'credit_card_payment';
+    
+    if (paymentType.toLowerCase().contains('cash')) {
+      paymentIcon = Icons.money;
+      paymentTypeKey = 'cash_payment';
+    } else if (paymentType.toLowerCase().contains('wallet')) {
+      paymentIcon = Icons.account_balance_wallet;
+      paymentTypeKey = 'wallet_payment';
+    } else if (paymentType.toLowerCase().contains('visa') || 
+               paymentType.toLowerCase().contains('mastercard') || 
+               paymentType.toLowerCase().contains('credit')) {
+      paymentIcon = Icons.credit_card;
+      paymentTypeKey = 'credit_card_payment';
+    }
+    
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -584,9 +607,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
       child: Row(
         children: [
           Icon(
-            orderDetails.paymentType.toLowerCase().contains('cash') 
-                ? Icons.money 
-                : Icons.credit_card,
+            paymentIcon,
             color: Colors.grey[600],
             size: 24,
           ),
@@ -596,7 +617,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  orderDetails.paymentType,
+                  paymentTypeKey.tr(context),
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 14
@@ -658,9 +679,17 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
     
     final deliveryStatus = orderDetails.deliveryStatus.toLowerCase();
     final confirmedDate = formatDate(orderDate);
-    final shippedDate = deliveryStatus == 'picked_up' || deliveryStatus == 'delivered'
+    
+    // Determine if in transit (picked up, on the way, etc.)
+    final isInTransit = deliveryStatus == 'picked_up' || 
+                         deliveryStatus == 'on_the_way' || 
+                         orderDetails.deliveryStatus == 'On The Way' ||
+                         deliveryStatus.contains('انتظار');
+                         
+    final shippedDate = isInTransit || deliveryStatus == 'delivered'
         ? formatDate(orderDate.add(const Duration(days: 1)))
         : 'pending'.tr(context);
+        
     final deliveredDate = deliveryStatus == 'delivered'
         ? formatDate(orderDate.add(const Duration(days: 3)))
         : 'expected_in_3_5_days'.tr(context);
@@ -669,16 +698,16 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
       {
         'icon': Icons.check_circle,
         'color': Colors.green,
-        'title': 'order_delivered'.tr(context),
+        'title': 'delivered'.tr(context),
         'date': deliveredDate,
         'active': deliveryStatus == 'delivered',
       },
       {
         'icon': Icons.local_shipping,
         'color': Colors.blue,
-        'title': 'order_shipped'.tr(context),
+        'title': 'in_transit'.tr(context),
         'date': shippedDate,
-        'active': deliveryStatus == 'picked_up' || deliveryStatus == 'delivered',
+        'active': isInTransit || deliveryStatus == 'delivered',
       },
       {
         'icon': Icons.check,
@@ -817,4 +846,12 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
       },
     );
   }
+}
+
+// Helper class for status information
+class StatusInfo {
+  final String label;
+  final Color color;
+  
+  StatusInfo(this.label, this.color);
 }

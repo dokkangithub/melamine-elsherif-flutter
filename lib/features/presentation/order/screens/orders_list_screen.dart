@@ -5,6 +5,7 @@ import 'package:melamine_elsherif/core/utils/extension/text_style_extension.dart
 import 'package:melamine_elsherif/core/utils/extension/translate_extension.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_back_button.dart';
 import 'package:provider/provider.dart';
+import '../../../../core/config/themes.dart/theme.dart';
 import '../../../../core/utils/enums/loading_state.dart';
 import '../../../domain/order/entities/order.dart';
 import '../controller/order_provider.dart';
@@ -20,15 +21,15 @@ class OrdersListScreen extends StatefulWidget {
 class _OrdersListScreenState extends State<OrdersListScreen> with SingleTickerProviderStateMixin {
   final ScrollController _scrollController = ScrollController();
   late TabController _tabController;
-  
+
   // Filter categories
   final List<String> _tabs = ['all_orders', 'processing', 'shipped', 'delivered'];
-  
+
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: _tabs.length, vsync: this);
-    
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<OrderProvider>().fetchOrders();
     });
@@ -74,160 +75,160 @@ class _OrdersListScreenState extends State<OrdersListScreen> with SingleTickerPr
         leading: const CustomBackButton(),
       ),
       body: Column(
-        children: [
-          // Tab bar for order categories
-          Container(
-            decoration: const BoxDecoration(
-              border: Border(
-                bottom: BorderSide(
-                  color: Color(0xFFEEEEEE),
-                  width: 1,
-                ),
-              ),
-            ),
-            child: TabBar(
-              controller: _tabController,
-              isScrollable: true,
-              indicatorColor: const Color(0xFFCB997E),
-              indicatorSize: TabBarIndicatorSize.tab,
-              indicatorWeight: 3,
-              dividerHeight: 0,
-              labelColor: Colors.black87,
-              labelStyle: context.titleMedium.copyWith(
-                fontWeight: FontWeight.w500,
-              ),
-              unselectedLabelColor: Colors.grey,
-              unselectedLabelStyle: context.titleMedium.copyWith(
-                fontWeight: FontWeight.w400,
-              ),
-              tabAlignment: TabAlignment.start,
-              tabs: _tabs.map((tab) => Tab(text: tab.tr(context))).toList(),
-              onTap: (index) {
-                // Handle tab selection for filtering orders
-                setState(() {});
-              },
-            ),
-          ),
-          
-          // Order list
-          Expanded(
-            child: Consumer<OrderProvider>(
-              builder: (context, provider, child) {
-                if (provider.ordersState == LoadingState.loading &&
-                    provider.orders.isEmpty) {
-                  return const OrdersListShimmer();
-                }
+          children: [
+      // Tab bar for order categories
+      Container(
+      decoration: const BoxDecoration(
+      border: Border(
+      bottom: BorderSide(
+      color: Color(0xFFEEEEEE),
+      width: 1,
+    ),
+    ),
+    ),
+    child: TabBar(
+    controller: _tabController,
+    isScrollable: true,
+    indicatorColor: AppTheme.primaryColor,
+    indicatorSize: TabBarIndicatorSize.tab,
+    indicatorWeight: 3,
+    dividerHeight: 0,
+    labelColor: Colors.black87,
+    labelStyle: context.titleMedium.copyWith(
+    fontWeight: FontWeight.w500,
+    ),
+    unselectedLabelColor: Colors.grey,
+    unselectedLabelStyle: context.titleMedium.copyWith(
+    fontWeight: FontWeight.w400,
+    ),
+    tabAlignment: TabAlignment.start,
+    tabs: _tabs.map((tab) => Tab(text: tab.tr(context))).toList(),
+    onTap: (index) {
+    // Handle tab selection for filtering orders
+    setState(() {});
+    },
+    ),
+    ),
 
-                if (provider.ordersState == LoadingState.error) {
-                  return Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(provider.ordersError),
-                        const SizedBox(height: 16),
-                        ElevatedButton(
-                          onPressed: () => provider.fetchOrders(),
-                          child: Text('try_again'.tr(context)),
-                        ),
-                      ],
-                    ),
-                  );
-                }
+    // Order list
+    Expanded(
+    child: Consumer<OrderProvider>(
+    builder: (context, provider, child) {
+    if (provider.ordersState == LoadingState.loading &&
+    provider.orders.isEmpty) {
+    return const OrdersListShimmer();
+    }
 
-                if (provider.orders.isEmpty) {
-                  return _buildEmptyOrdersState(context);
-                }
+    if (provider.ordersState == LoadingState.error) {
+    return Center(
+    child: Column(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: [
+    Text(provider.ordersError),
+    const SizedBox(height: 16),
+    ElevatedButton(
+    onPressed: () => provider.fetchOrders(),
+    child: Text('try_again'.tr(context)),
+    ),
+    ],
+    ),
+    );
+    }
 
-                // Filter orders based on the selected tab
-                final filteredOrders = _filterOrders(provider.orders, _tabController.index);
-                
-                if (filteredOrders.isEmpty) {
-                  final tabName = _tabs[_tabController.index].toLowerCase();
-                  return Center(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 32),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          // Icon in a circular light background
-                          Container(
-                            width: 100,
-                            height: 100,
-                            decoration: const BoxDecoration(
-                              color: Color(0xFFF7F9FC),
-                              shape: BoxShape.circle,
-                            ),
-                            child: Center(
-                              child: Icon(
-                                tabName == 'shipped' ? Icons.local_shipping_outlined : 
-                                tabName == 'delivered' ? Icons.check_circle_outline : 
-                                Icons.pending_outlined,
-                                size: 40,
-                                color: Colors.grey[400],
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 20),
-                          Text('no_${tabName.toLowerCase()}_orders'.tr(context),
-                            style: const TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,
-                            ),
-                          ),
-                          const SizedBox(height: 12),
-                          Text(
-                            'you_dont_have_any_${tabName.toLowerCase()}_orders_at_the_moment'.tr(context),
-                            style: const TextStyle(
-                              fontSize: 14,
-                              color: Colors.grey,
-                              height: 1.4,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                }
+    if (provider.orders.isEmpty) {
+    return _buildEmptyOrdersState(context);
+    }
 
-                return RefreshIndicator(
-                  onRefresh: () => provider.fetchOrders(),
-                  child: ListView.separated(
-                    controller: _scrollController,
-                    padding: const EdgeInsets.symmetric(vertical: 0),
-                    itemCount: filteredOrders.length +
-                        (provider.isLoadingMore ? 1 : 0),
-                    separatorBuilder: (context, index) => const Divider(
-                      height: 1,
-                      thickness: 1,
-                      color: Color(0xFFEEEEEE),
-                    ),
-                    itemBuilder: (context, index) {
-                      if (index == filteredOrders.length) {
-                        return const Padding(
-                          padding: EdgeInsets.symmetric(vertical: 16.0),
-                          child: Center(child: CircularProgressIndicator()),
-                        );
-                      }
+    // Filter orders based on the selected tab
+    final filteredOrders = _filterOrders(provider.orders, _tabController.index);
 
-                      final order = filteredOrders[index];
-                      return _buildOrderCard(context, order);
-                    },
-                  ),
-                );
-              },
-            ),
-          ),
-        ],
-      ),
+    if (filteredOrders.isEmpty) {
+    final tabName = _tabs[_tabController.index].toLowerCase();
+    return Center(
+    child: Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 32),
+    child: Column(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: [
+    // Icon in a circular light background
+    Container(
+    width: 100,
+    height: 100,
+    decoration: const BoxDecoration(
+    color: Color(0xFFF7F9FC),
+    shape: BoxShape.circle,
+    ),
+    child: Center(
+    child: Icon(
+    tabName == 'shipped' ? Icons.local_shipping_outlined :
+    tabName == 'delivered' ? Icons.check_circle_outline :
+    Icons.pending_outlined,
+    size: 40,
+    color: Colors.grey[400],
+    ),
+    ),
+    ),
+    const SizedBox(height: 20),
+    Text('no_${tabName.toLowerCase()}_orders'.tr(context),
+    style: const TextStyle(
+    fontSize: 18,
+    fontWeight: FontWeight.bold,
+    color: Colors.black,
+    ),
+    ),
+    const SizedBox(height: 12),
+    Text(
+    'you_dont_have_any_${tabName.toLowerCase()}_orders_at_the_moment'.tr(context),
+    style: const TextStyle(
+    fontSize: 14,
+    color: Colors.grey,
+    height: 1.4,
+    ),
+    textAlign: TextAlign.center,
+    ),
+    ],
+    ),
+    ),
+    );
+    }
+
+    return RefreshIndicator(
+    onRefresh: () => provider.fetchOrders(),
+    child: ListView.separated(
+    controller: _scrollController,
+    padding: const EdgeInsets.symmetric(vertical: 0),
+    itemCount: filteredOrders.length +
+    (provider.isLoadingMore ? 1 : 0),
+    separatorBuilder: (context, index) => const Divider(
+    height: 1,
+    thickness: 1,
+    color: Color(0xFFEEEEEE),
+    ),
+    itemBuilder: (context, index) {
+    if (index == filteredOrders.length) {
+    return const Padding(
+    padding: EdgeInsets.symmetric(vertical: 16.0),
+    child: Center(child: CircularProgressIndicator()),
+    );
+    }
+
+    final order = filteredOrders[index];
+    return _buildOrderCard(context, order);
+    },
+    ),
+    );
+    },
+    ),
+    ),
+    ],
+    ),
     );
   }
-  
+
   // Helper to filter orders based on tab selection
   List<Order> _filterOrders(List<Order> orders, int tabIndex) {
     if (tabIndex == 0) return orders; // All orders
-    
+
     List<String> statuses = [];
     if (tabIndex == 1) {
       // Processing tab - show orders with "pending" or "قيد الانتظار" status
@@ -239,38 +240,38 @@ class _OrdersListScreenState extends State<OrdersListScreen> with SingleTickerPr
       // Delivered tab - show orders with "delivered" status
       statuses = ['delivered'];
     }
-    
-    return orders.where((order) => 
-      statuses.contains(order.deliveryStatus) || 
-      statuses.contains(order.deliveryStatus.toLowerCase()) ||
-      statuses.contains(order.deliveryStatusString)
+
+    return orders.where((order) =>
+    statuses.contains(order.deliveryStatus) ||
+        statuses.contains(order.deliveryStatus.toLowerCase()) ||
+        statuses.contains(order.deliveryStatusString)
     ).toList();
   }
-  
+
   Widget _buildOrderCard(BuildContext context, Order order) {
     final status = getStatusInfo(order.deliveryStatus, order.deliveryStatusString);
-    
+
     // Format the date to "May 25, 2025" style
     String formattedDate = order.date;
-    
+
     // Get payment type icon based on payment_type
     IconData paymentIcon = Icons.credit_card;
     String paymentType = order.paymentType ?? 'Cash Payment';
     String paymentTypeKey = 'credit_card_payment';
-    
+
     if (paymentType.toLowerCase().contains('cash')) {
       paymentIcon = Icons.money;
       paymentTypeKey = 'cash_payment';
     } else if (paymentType.toLowerCase().contains('wallet')) {
       paymentIcon = Icons.account_balance_wallet;
       paymentTypeKey = 'wallet_payment';
-    } else if (paymentType.toLowerCase().contains('visa') || 
-               paymentType.toLowerCase().contains('mastercard') || 
-               paymentType.toLowerCase().contains('credit')) {
+    } else if (paymentType.toLowerCase().contains('visa') ||
+        paymentType.toLowerCase().contains('mastercard') ||
+        paymentType.toLowerCase().contains('credit')) {
       paymentIcon = Icons.credit_card;
       paymentTypeKey = 'credit_card_payment';
     }
-    
+
     return InkWell(
       onTap: () {
         AppRoutes.navigateTo(
@@ -304,9 +305,9 @@ class _OrdersListScreenState extends State<OrdersListScreen> with SingleTickerPr
                 ),
               ],
             ),
-            
+
             const SizedBox(height: 8),
-            
+
             // Date
             Text(
               formattedDate,
@@ -314,9 +315,9 @@ class _OrdersListScreenState extends State<OrdersListScreen> with SingleTickerPr
                 color: Colors.grey[600],
               ),
             ),
-            
+
             const SizedBox(height: 16),
-            
+
             // Payment method and status with right arrow
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -338,7 +339,7 @@ class _OrdersListScreenState extends State<OrdersListScreen> with SingleTickerPr
                     ),
                   ],
                 ),
-                
+
                 // Status and arrow
                 Row(
                   children: [
@@ -364,14 +365,14 @@ class _OrdersListScreenState extends State<OrdersListScreen> with SingleTickerPr
       ),
     );
   }
-  
+
   // Helper to get status color and label
   StatusInfo getStatusInfo(String status, String statusString) {
     // Handle arabic and english status values
     String statusLower = status.toLowerCase();
-    
+
     if (statusLower == 'pending' || statusLower.contains('انتظار')) {
-      return StatusInfo('processing', const Color(0xFFCB997E));
+      return StatusInfo('processing', AppTheme.primaryColor,);
     } else if (statusLower == 'picked_up' || statusLower == 'on_the_way' || status == 'On The Way') {
       return StatusInfo('in_transit', const Color(0xFF2196F3));
     } else if (statusLower == 'delivered') {
@@ -406,7 +407,7 @@ class _OrdersListScreenState extends State<OrdersListScreen> with SingleTickerPr
               ),
             ),
             const SizedBox(height: 20),
-             Text('no_orders_yet'.tr(context),
+            Text('no_orders_yet'.tr(context),
               style: context.titleMedium,
             ),
             const SizedBox(height: 12),
@@ -429,7 +430,7 @@ class _OrdersListScreenState extends State<OrdersListScreen> with SingleTickerPr
                   Navigator.pushReplacementNamed(context, AppRoutes.homeScreen);
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFFCB997E),
+                  backgroundColor: AppTheme.primaryColor,
                   foregroundColor: Colors.white,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
@@ -454,6 +455,6 @@ class _OrdersListScreenState extends State<OrdersListScreen> with SingleTickerPr
 class StatusInfo {
   final String label;
   final Color color;
-  
+
   StatusInfo(this.label, this.color);
 }
