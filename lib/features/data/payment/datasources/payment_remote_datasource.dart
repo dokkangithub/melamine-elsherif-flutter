@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:melamine_elsherif/core/utils/constants/app_strings.dart';
+import 'package:melamine_elsherif/core/utils/extension/translate_extension.dart';
+import 'package:melamine_elsherif/core/utils/widgets/custom_loading.dart';
 import '../../../../core/api/api_provider.dart';
 import '../../../../core/utils/constants/app_endpoints.dart';
 import '../../../presentation/checkout/screens/success_screen.dart';
@@ -187,7 +189,6 @@ class PaymentRemoteDataSourceImpl implements PaymentRemoteDataSource {
   }) async {
 
     try {
-      showLoadingDialog(context);
 
       final data = {
         "name": AppStrings.userName,
@@ -205,7 +206,6 @@ class PaymentRemoteDataSourceImpl implements PaymentRemoteDataSource {
         if (AppStrings.userId != null) "user_id": AppStrings.userId,
       };
 
-      print(data);
 
       final response = await apiProvider.post(
         LaravelApiEndPoint.orderStore,
@@ -214,10 +214,6 @@ class PaymentRemoteDataSourceImpl implements PaymentRemoteDataSource {
 
       print("Raw response from /order/store: ${response.data}");
 
-      // Hide loading dialog
-      if (Navigator.canPop(context)) {
-        Navigator.of(context, rootNavigator: true).pop();
-      }
 
       final orderResponse = OrderResponseModel.fromJson(response.data);
 
@@ -242,10 +238,7 @@ class PaymentRemoteDataSourceImpl implements PaymentRemoteDataSource {
 
       return orderResponse;
     } catch (e) {
-      // Ensure loading dialog is closed in case of error
-      if (Navigator.canPop(context)) {
-        Navigator.of(context, rootNavigator: true).pop();
-      }
+
 
       print("Error in createCashOrder: $e");
       return OrderResponseModel(
@@ -267,7 +260,6 @@ class PaymentRemoteDataSourceImpl implements PaymentRemoteDataSource {
     required BuildContext context,
   }) async {
     try {
-      showLoadingDialog(context);
 
       final data = {
         "name": AppStrings.userName,
@@ -285,19 +277,13 @@ class PaymentRemoteDataSourceImpl implements PaymentRemoteDataSource {
         if (AppStrings.userId != null) "user_id": AppStrings.userId,
       };
 
-      print(data);
 
       final response = await apiProvider.post(
         LaravelApiEndPoint.orderStore,
         data: data,
       );
 
-      print("Raw response from /order/store (wallet payment): ${response.data}");
 
-      // Hide loading dialog
-      if (Navigator.canPop(context)) {
-        Navigator.of(context, rootNavigator: true).pop();
-      }
 
       final orderResponse = OrderResponseModel.fromJson(response.data);
 
@@ -351,23 +337,6 @@ class PaymentRemoteDataSourceImpl implements PaymentRemoteDataSource {
     }
   }
 
-  // Loading dialog helper
-  void showLoadingDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder:
-          (context) => const AlertDialog(
-            content: Row(
-              children: [
-                CircularProgressIndicator(),
-                SizedBox(width: 20),
-                Text('Processing your order...'),
-              ],
-            ),
-          ),
-    );
-  }
 
   @override
   Future<Map<String, dynamic>> updateShippingTypeInCart({

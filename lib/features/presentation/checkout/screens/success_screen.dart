@@ -36,7 +36,7 @@ class SuccessScreen extends StatelessWidget {
               const SizedBox(height: 60),
               
               // Success check icon
-              Lottie.asset(AppAnimations.successCheckout,fit: BoxFit.contain,height: 200,width: 200),
+              Lottie.asset(AppAnimations.successCheckout,fit: BoxFit.contain,height: 200,width: 200,repeat: false),
               const SizedBox(height: 40),
 
               // Thank you heading
@@ -76,15 +76,14 @@ class SuccessScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text('order_number'.tr(context),
-                          style: context.titleSmall?.copyWith(
-                            color: Colors.grey[600],
+                          style: context.titleLarge?.copyWith(
                           ),
                         ),
                         Text(
                           orderNumber,
-                          style: context.titleSmall?.copyWith(
+                          style: context.titleLarge?.copyWith(
                             color: Colors.black,
-                            fontWeight: FontWeight.w500,
+                            fontWeight: FontWeight.w800,
                           ),
                         ),
                       ],
@@ -96,15 +95,14 @@ class SuccessScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text('estimated_delivery'.tr(context),
-                          style: context.titleSmall?.copyWith(
-                            color: Colors.grey[600],
+                          style: context.titleLarge?.copyWith(
                           ),
                         ),
                         Text(
                           '3-5 ${"days".tr(context)}',
-                          style: context.titleSmall?.copyWith(
+                          style: context.titleLarge?.copyWith(
                             color: Colors.black,
-                            fontWeight: FontWeight.w500,
+                            fontWeight: FontWeight.w800,
                           ),
                         ),
                       ],
