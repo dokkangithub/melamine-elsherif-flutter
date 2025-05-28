@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:melamine_elsherif/core/utils/extension/text_theme_extension.dart';
 import 'package:provider/provider.dart';
 import 'package:melamine_elsherif/core/utils/widgets/see_all_widget.dart';
 import 'package:melamine_elsherif/core/utils/extension/translate_extension.dart';
@@ -7,6 +8,7 @@ import 'package:melamine_elsherif/core/utils/enums/loading_state.dart';
 import 'package:melamine_elsherif/core/utils/enums/products_type.dart';
 import 'package:melamine_elsherif/features/presentation/home/controller/home_provider.dart';
 import 'package:melamine_elsherif/features/presentation/home/widgets/shimmer/featured_products_shimmer.dart';
+import 'package:melamine_elsherif/features/presentation/home/widgets/featured_product_card.dart';
 
 import '../../../../core/utils/product cards/custom_product_card.dart';
 
@@ -36,39 +38,38 @@ class FeaturedProductsWidget extends StatelessWidget {
         }
         final filteredProducts = products.where((product) => product.published.toString() == '1').toList();
 
-
         // Show products list
-        return Column(
-          children: [
-            SeeAllWidget(
-              title: 'feature_products'.tr(context),
-              onTap: () {
-                AppRoutes.navigateTo(
-                  context,
-                  AppRoutes.allProductsByTypeScreen,
-                  arguments: {
-                    'productType': ProductType.featured,
-                    'title': 'feature_products'.tr(context),
-                  },
-                );
-              },
-            ),
-            const SizedBox(height: 10),
-            SizedBox(
-              height: 300,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: filteredProducts.length,
-                itemBuilder:
-                    (context, index) => ProductCard(product: filteredProducts[index],isOutlinedAddToCart: true),
+        return Padding(
+          padding: const EdgeInsets.only(top: 16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(bottom: 16.0, left: 16.0, right: 16.0),
+                child: Text(
+                  'featured_collection'.tr(context),
+                  style: context.headlineMedium,
+                ),
               ),
-            ),
-          ],
+              SizedBox(
+                height: 340,
+                child: ListView.builder(
+                  padding: const EdgeInsets.only(left: 16.0),
+                  scrollDirection: Axis.horizontal,
+                  itemCount: filteredProducts.length,
+                  itemBuilder: (context, index) => 
+                    FeaturedProductCard(
+                      product: filteredProducts[index],
+                      width: 220,
+                    ),
+                ),
+              ),
+            ],
+          ),
         );
       },
     );
   }
-
 
   Widget _buildEmptyState() {
     return const SizedBox.shrink();

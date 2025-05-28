@@ -89,43 +89,50 @@ class _HomeScreenState extends State<HomeScreen> {
         ]);
       },
       child: Scaffold(
-        appBar: const AppBarWidget(),
-        body: SingleChildScrollView(
-          controller: _scrollController, // Assign the controller here
-          child: Column(
-            children: [
-              TopHomeWidget(onShopNowTapped: _scrollToShopNow),
-              const SizedBox(height: 8),
-              const Padding(
-                padding: EdgeInsets.all(12.0),
-                child: Column(
-                  spacing: 20,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const TopHomeWidget(),
+            Expanded(
+              child: SingleChildScrollView(
+                controller: _scrollController, // Assign the controller here
+                child: const Column(
                   children: [
-                    CategoriesWidget(),
+                    Padding(
+                      padding: EdgeInsets.all(12.0),
+                      child: Column(
+                        spacing: 20,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
 
-                    PlatesWidgets(),
+                          FeaturedProductsWidget(),
 
-                    NewProductsWidget(),
+                          CategoriesWidget(),
 
-                    SimpleBannerCarousel(),
+                          PlatesWidgets(),
 
-                    BestSellingProductsWidget(),
+                          NewProductsWidget(),
 
-                    SecondHomeImageWidget(),
+                          SimpleBannerCarousel(),
 
-                    FeaturedProductsWidget(),
+                          BestSellingProductsWidget(),
 
-                    FlashDealsWidget(),
+                          SecondHomeImageWidget(),
 
-                    SummerDealsWidgets(),
 
-                    AllProductsWidget(),
+                          FlashDealsWidget(),
+
+                          SummerDealsWidgets(),
+
+                          AllProductsWidget(),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
