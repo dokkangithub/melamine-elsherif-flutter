@@ -16,6 +16,7 @@ import 'package:melamine_elsherif/features/domain/product/entities/product.dart'
 import 'package:provider/provider.dart';
 import '../../../../core/config/routes.dart/routes.dart';
 import '../../../../core/utils/enums/loading_state.dart';
+import '../../../../core/utils/widgets/custom_back_button.dart';
 import '../../home/controller/home_provider.dart';
 import '../../wishlist/controller/wishlist_provider.dart';
 import '../widgets/shimmer/products_grid_shimmer.dart';
@@ -251,12 +252,7 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
         ),
       ),
       centerTitle: true,
-      leading: IconButton(
-        icon: const Icon(Icons.menu, color: Colors.black),
-        onPressed: () {
-          Navigator.pop(context);
-        },
-      ),
+      leading: const CustomBackButton(),
       actions: [
         IconButton(
           icon: const Icon(Icons.search, color: Colors.black),
@@ -315,10 +311,11 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
         ),
         child: Text(
           title,
-          style: TextStyle(
-            color: isSelected ? AppTheme.primaryColor : Colors.grey,
-            fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-          ),
+          style: context.titleSmall!.copyWith(
+            color: isSelected ? AppTheme.primaryColor : AppTheme.darkDividerColor,
+            fontWeight: isSelected ? FontWeight.w900 : FontWeight.w500,
+
+          )
         ),
       ),
     );
@@ -417,7 +414,7 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
           borderRadius: BorderRadius.circular(0),
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.1),
+              color: Colors.grey.withValues(alpha: 0.1),
               spreadRadius: 1,
               blurRadius: 2,
               offset: const Offset(0, 1),
@@ -482,7 +479,7 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
                     children: [
                       Text(
                         product.discountedPrice,
-                        style: context.titleMedium!.copyWith(color: AppTheme.darkDividerColor,fontWeight: FontWeight.w600),
+                        style: context.titleLarge!.copyWith(color: AppTheme.primaryColor, fontWeight: FontWeight.w900),
                       ),
                       const SizedBox(width: 6),
                       product.hasDiscount? Text(

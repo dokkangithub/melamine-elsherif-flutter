@@ -30,7 +30,7 @@ class ProductsGridShimmer extends StatelessWidget {
                 borderRadius: BorderRadius.circular(0),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.grey.withOpacity(0.1),
+                    color: Colors.grey.withValues(alpha: 0.1),
                     spreadRadius: 1,
                     blurRadius: 2,
                     offset: const Offset(0, 1),
@@ -65,14 +65,14 @@ class ProductsGridShimmer extends StatelessWidget {
                         // Second line of product name
                         Container(
                           width: 100,
-                          height: 14,
+                          height: 12,
                           color: Colors.white,
                         ),
                         const SizedBox(height: 8),
                         // Price
                         Container(
                           width: 80,
-                          height: 16,
+                          height: 14,
                           color: Colors.white,
                         ),
                       ],
