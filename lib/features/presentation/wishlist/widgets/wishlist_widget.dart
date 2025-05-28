@@ -76,24 +76,25 @@ class _WishlistWidgetState extends State<WishlistWidget> {
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Column(
                 children: [
-                  // Remove All button
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: TextButton.icon(
-                      onPressed: () => _showClearWishlistDialog(context),
-                      icon: const Icon(Icons.delete_outline, color: AppTheme.accentColor),
-                      label: Text(
-                        'remove_all'.tr(context),
-                        style: context.titleSmall.copyWith(
-                          color: AppTheme.accentColor,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      style: TextButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-                      ),
-                    ),
-                  ),
+                  const SizedBox(height: 20),
+                  /// Remove All button
+                  // Align(
+                  //   alignment: Alignment.centerRight,
+                  //   child: TextButton.icon(
+                  //     onPressed: () => _showClearWishlistDialog(context),
+                  //     icon: const Icon(Icons.delete_outline, color: AppTheme.accentColor),
+                  //     label: Text(
+                  //       'remove_all'.tr(context),
+                  //       style: context.titleSmall.copyWith(
+                  //         color: AppTheme.accentColor,
+                  //         fontWeight: FontWeight.w600,
+                  //       ),
+                  //     ),
+                  //     style: TextButton.styleFrom(
+                  //       padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                  //     ),
+                  //   ),
+                  // ),
                   
                   // Products grid
                   Expanded(

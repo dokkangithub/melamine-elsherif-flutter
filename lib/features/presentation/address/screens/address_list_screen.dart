@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
-import 'package:melamine_elsherif/core/utils/constants/app_assets.dart';
-import 'package:melamine_elsherif/core/utils/extension/text_theme_extension.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:melamine_elsherif/core/utils/extension/text_style_extension.dart';
 import 'package:melamine_elsherif/core/utils/extension/translate_extension.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_back_button.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_button.dart';
-import 'package:melamine_elsherif/core/utils/widgets/custom_cached_image.dart';
 import 'package:provider/provider.dart';
-import 'package:quickalert/quickalert.dart';
 import '../../../../core/config/themes.dart/theme.dart';
 import '../../../../core/utils/enums/loading_state.dart';
+import '../../../../core/widgets/custom_confirmation_dialog.dart';
 import '../controller/address_provider.dart';
-import '../widgets/address_list_widget.dart';
+import '../widgets/address_item.dart';
 import '../widgets/shimmer/address_list_shimmer.dart';
 import '../widgets/empty_address_widget.dart';
 import 'add_edit_address_screen.dart';
@@ -78,13 +77,21 @@ class _AddressListScreenState extends State<AddressListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppTheme.white,
       appBar: AppBar(
         leading: const CustomBackButton(),
         backgroundColor: AppTheme.white,
+        elevation: 0,
+        scrolledUnderElevation: 0,
+        centerTitle: true,
         title: FadeIn(
           duration: const Duration(milliseconds: 400),
-          child: Text('my_addresses'.tr(context), 
-            style: context.titleMedium!.copyWith(fontWeight: FontWeight.w800)
+          child: Text(
+            'my_addresses'.tr(context), 
+            style: context.displaySmall.copyWith(
+              fontFamily: GoogleFonts.playfairDisplay().fontFamily,
+              fontWeight: FontWeight.w600,
+            )
           ),
         ),
       ),
@@ -132,53 +139,58 @@ class _AddressListScreenState extends State<AddressListScreen> {
           }
 
           // Show address list
-          return Padding(
-            padding: const EdgeInsets.all(15.0),
-            child: Column(
-              children: [
-                FadeInDown(
-                  duration: const Duration(milliseconds: 600),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                    child: CustomButton(
-                      onPressed: () => _navigateToAddAddress(context),
-                      isGradient: true,
-                      fullWidth: true,
-                      child: Row(
-                        children: [
-                          const Icon(Icons.add, color: AppTheme.white, size: 24),
-                          const SizedBox(width: 10),
-                          Text('add_new_address'.tr(context), style: context.titleMedium!.copyWith(color: AppTheme.white)),
-                          const Spacer(),
-                          const Icon(Icons.arrow_forward_ios, color: AppTheme.white, size: 24),
-                        ],
-                      ),
-                    ),
-                  ),
+          return Column(
+            children: [
+              Expanded(
+                child: ListView.builder(
+                  padding: const EdgeInsets.all(16),
+                  itemCount: addressProvider.addresses.length,
+                  itemBuilder: (context, index) {
+                    final address = addressProvider.addresses[index];
+                    return AddressItem(
+                      address: address,
+                      isDefault: address.isDefault,
+                      onEdit: () => _navigateToEditAddress(context, address.id),
+                      onDelete: () => _showDeleteConfirmation(context, address.id),
+                      onSetDefault: () => _handleSetDefault(address.id),
+                      onSelect: widget.isSelectable 
+                        ? () => Navigator.pop(context, address)
+                        : null,
+                    );
+                  },
                 ),
-                Expanded(
-                  child: FadeInUp(
-                    duration: const Duration(milliseconds: 700),
-                    child: AddressListWidget(
-                      addresses: addressProvider.addresses,
-                      isSelectable: widget.isSelectable,
-                      onEdit:
-                          (addressId) => _navigateToEditAddress(context, addressId),
-                      onDelete:
-                          (addressId) => _showDeleteConfirmation(context, addressId),
-                      onSetDefault:
-                          (addressId) => _handleSetDefault(addressId),
-                      onSelect:
-                          widget.isSelectable
-                              ? (address) => Navigator.pop(context, address)
-                              : null,
-                    ),
-                  ),
-                ),
-              ],
-            ),
+              ),
+              _buildAddNewAddressButton(),
+            ],
           );
         },
+      ),
+    );
+  }
+
+  Widget _buildAddNewAddressButton() {
+    return Container(
+      width: double.infinity,
+      margin: const EdgeInsets.all(16),
+      child: InkWell(
+        onTap: () => _navigateToAddAddress(context),
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 14),
+          decoration: BoxDecoration(
+            color: const Color(0xFFB0A88E),
+            borderRadius: BorderRadius.circular(0),
+          ),
+          child: Center(
+            child: Text(
+              'add_new_address'.tr(context),
+              style: context.titleLarge.copyWith(
+                color: Colors.white,
+                fontWeight: FontWeight.w600,
+                fontFamily: GoogleFonts.playfairDisplay().fontFamily,
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -211,16 +223,15 @@ class _AddressListScreenState extends State<AddressListScreen> {
   }
 
   void _showDeleteConfirmation(BuildContext context, int addressId) {
-    QuickAlert.show(
+    showCustomConfirmationDialog(
       context: context,
-      type: QuickAlertType.warning,
       title: 'delete_address'.tr(context),
-      text: 'delete_address_confirmation'.tr(context),
-      confirmBtnText: 'delete'.tr(context),
-      cancelBtnText: 'cancel'.tr(context),
-      confirmBtnColor: Colors.red,
-      onConfirmBtnTap: () {
-        Navigator.pop(context);
+      message: 'delete_address_confirmation'.tr(context),
+      confirmText: 'delete'.tr(context),
+      cancelText: 'cancel'.tr(context),
+      confirmButtonColor: AppTheme.errorColor,
+      icon: Icons.delete_outline,
+      onConfirm: () {
         context.read<AddressProvider>().deleteAddress(addressId);
       },
     );

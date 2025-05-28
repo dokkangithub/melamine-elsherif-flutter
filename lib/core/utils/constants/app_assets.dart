@@ -101,6 +101,7 @@ class AppSvgs {
   static const String call = '$svgPath/call.svg';
   static const String whatsapp = '$svgPath/whatsapp.svg';
   static const String edit_profile = '$svgPath/edit_profile.svg';
+  static const String color_edit_profile = '$svgPath/colored_edit_icon.svg';
   static const String profile_cover = '$svgPath/profile_cover.svg';
 
 
@@ -124,17 +125,7 @@ class AppSvgs {
 class AppIcons {
   static const String iconPath = 'assets/icons';
 
-  static const String google = '$iconPath/google.png';
-  static const String facebook = '$iconPath/facebook.png';
-  static const String apple = '$iconPath/apple.png';
-  static const String cart = '$iconPath/Shopping-cart.png';
-  static const String profile = '$iconPath/user.png';
-  static const String home = '$iconPath/home.png';
-  static const String category = '$iconPath/categories.png';
-  static const String heart = '$iconPath/heart.png';
   static const String filter = '$iconPath/filter.png';
-  static const String delete = '$iconPath/delete.svg';
-  static const String backButton = '$iconPath/back_button.svg';
 
 
 

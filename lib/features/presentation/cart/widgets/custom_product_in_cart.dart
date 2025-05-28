@@ -121,7 +121,12 @@ class ProductItemInCart extends StatelessWidget {
                       onTap: cartProvider.isItemQuantityUpdating(item.id) ? null : (){
                         onDelete(item.id);
                       },
-                      child: const Icon(Icons.delete_outlined),
+                      child: const CustomImage(
+                        assetPath: AppSvgs.delete_icon,
+                        width: 20,
+                        height: 20,
+                        fit: BoxFit.contain,
+                      ),
                     ),
                     const Spacer(),
                     Text(

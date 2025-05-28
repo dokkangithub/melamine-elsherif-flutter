@@ -190,81 +190,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  // Build the stats section with counters
-  Widget _buildStatsSection(BuildContext context, profileCounters, ClubPointProvider clubPointProvider) {
-    return Container(
-      color: Colors.white,
-      padding: const EdgeInsets.symmetric(vertical: 20),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          _buildStatItem(
-            context,
-            profileCounters.orderCount.toString(),
-            'orders'.tr(context),
-            AppSvgs.profile_bag,
-          ),
-          _buildStatItem(
-            context,
-            profileCounters.wishlistItemCount.toString(),
-            'saved'.tr(context),
-            AppSvgs.profile_fav,
-          ),
-          _buildStatItem(
-            context,
-            clubPointProvider.clubPointsState == LoadingState.loaded
-                ? clubPointProvider.totalPoints
-                : '0',
-            'points'.tr(context),
-            AppSvgs.profile_coin,
-          ),
-          _buildStatItem(
-            context,
-            '${profileCounters.orderCount}',
-            'reviews'.tr(context),
-            AppSvgs.profile_star,
-          ),
-        ],
-      ),
-    );
-  }
-
-  // Build quick access section
-  Widget _buildQuickAccessSection(BuildContext context) {
-    return Container(
-      color: Colors.white,
-      height: 100,
-      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 15),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          Expanded(
-            child: _buildQuickAccessItem(
-              context,
-              AppSvgs.profile_bag,
-              'my_orders'.tr(context),
-                  () => AppRoutes.navigateTo(
-                context,
-                AppRoutes.allOrdersListScreen,
-              ),
-            ),
-          ),
-          const SizedBox(width: 10),
-          Expanded(
-            child: _buildQuickAccessItem(
-              context,
-              AppSvgs.profile_location,
-              'shipping_address'.tr(context),
-                  () => AppRoutes.navigateTo(
-                context,
-                AppRoutes.addressListScreen,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 
   // Guest user header that exactly matches the image
   Widget _buildGuestUserHeader(BuildContext context) {
@@ -392,16 +317,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
 
-                const SizedBox(height: 40),
+                const SizedBox(height: 30),
 
                 // User image and info
                 Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     // Profile Image
                     Container(
-                      width: 70,
-                      height: 70,
+                      width: 80,
+                      height: 80,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         border: Border.all(color: Colors.white, width: 2),
