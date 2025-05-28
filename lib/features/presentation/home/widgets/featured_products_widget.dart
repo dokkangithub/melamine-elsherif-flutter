@@ -52,7 +52,7 @@ class FeaturedProductsWidget extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                height: 340,
+                height: 290,
                 child: ListView.builder(
                   padding: const EdgeInsets.only(left: 16.0),
                   scrollDirection: Axis.horizontal,

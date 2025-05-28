@@ -47,6 +47,7 @@ class FeaturedProductCard extends StatelessWidget {
             // Collection Text
             Text(
               product.name,
+              maxLines: 2,
               style: context.titleLarge!.copyWith(fontWeight: FontWeight.w600),
             ),
             

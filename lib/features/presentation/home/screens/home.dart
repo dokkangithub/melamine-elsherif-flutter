@@ -11,10 +11,8 @@ import 'package:melamine_elsherif/features/presentation/home/widgets/new_product
 import 'package:melamine_elsherif/features/presentation/home/widgets/all_products_widget.dart';
 import '../../cart/controller/cart_provider.dart';
 import '../../slider/controller/provider.dart';
-import '../widgets/app_bar_widget.dart';
 import '../widgets/banners_widget.dart';
 import '../widgets/flash_deals_widget.dart';
-import '../widgets/plates_widget.dart';
 import '../widgets/second_home_image_widget.dart';
 import '../widgets/summers_deals_widget.dart';
 
@@ -107,9 +105,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
                           FeaturedProductsWidget(),
 
-                          CategoriesWidget(),
+                          SimpleBannerCarousel(),
 
-                          PlatesWidgets(),
+                          CategoriesWidget(),
 
                           NewProductsWidget(),
 

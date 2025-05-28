@@ -92,7 +92,7 @@ class _SimpleBannerCarouselState extends State<SimpleBannerCarousel> {
                       ],
                     ),
                     child: ClipRRect(
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(0),
                       child: InkWell(
                         onTap: () {},
                         child: CustomImage(
@@ -104,25 +104,6 @@ class _SimpleBannerCarouselState extends State<SimpleBannerCarousel> {
                   );
                 },
               ),
-              // if (sliders.length > 1) ...[
-              //   const SizedBox(height: 12),
-              //   Row(
-              //     mainAxisAlignment: MainAxisAlignment.center,
-              //     children: sliders.asMap().entries.map((entry) {
-              //       return Container(
-              //         width: 8.0,
-              //         height: 8.0,
-              //         margin: const EdgeInsets.symmetric(horizontal: 4.0),
-              //         decoration: BoxDecoration(
-              //           shape: BoxShape.circle,
-              //           color: Theme.of(context).primaryColor.withOpacity(
-              //             _currentIndex == entry.key ? 1.0 : 0.4,
-              //           ), // Fixed from withValues
-              //         ),
-              //       );
-              //     }).toList(),
-              //   ),
-              // ],
             ],
           ),
         );
