@@ -68,22 +68,6 @@ class NewProductsWidget extends StatelessWidget {
                     (context, index) => ProductCard(product: products[index],isOutlinedAddToCart: true),
               ),
             ),
-            ///gridView
-            // GridView.builder(
-            //   physics: const NeverScrollableScrollPhysics(),
-            //   shrinkWrap: true,
-            //   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            //     crossAxisCount: 2,
-            //     childAspectRatio: 0.75,
-            //     crossAxisSpacing: 16,
-            //     mainAxisSpacing: 16,
-            //   ),
-            //   itemCount: products.length > 8 ? 8 : products.length,
-            //   itemBuilder: (context, index) {
-            //     final product = products[index];
-            //     return ProductGridCard(product: product);
-            //   },
-            // ),
           ],
         );
       },

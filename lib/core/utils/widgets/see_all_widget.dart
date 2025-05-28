@@ -20,13 +20,14 @@ class SeeAllWidget extends StatelessWidget {
       children: [
         Text(
           title,
-          style: Theme.of(context).textTheme.headlineSmall!.copyWith(fontWeight: FontWeight.w700),
+
+          style: Theme.of(context).textTheme.headlineMedium!.copyWith(fontWeight: FontWeight.w700,letterSpacing: 1.2),
         ),
         InkWell(
           onTap: onTap,
           child: Text(
-            'see_all'.tr(context),
-            style: context.titleSmall.copyWith(
+            'see_all'.tr(context).toUpperCase(),
+            style: context.titleLarge.copyWith(
               color: AppTheme.primaryColor,
             ),
           ),

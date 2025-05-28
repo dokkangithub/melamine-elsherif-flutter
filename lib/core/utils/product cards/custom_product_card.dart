@@ -83,14 +83,11 @@ class _ProductCardState extends State<ProductCard> {
                   children: [
                     // Product image
                     Expanded(
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(15),
-                        child: AspectRatio(
-                          aspectRatio: 1.5,
-                          child: CustomImage(
-                            imageUrl: widget.product.thumbnailImage,
-                            fit: BoxFit.cover,
-                          ),
+                      child: AspectRatio(
+                        aspectRatio: 1.5,
+                        child: CustomImage(
+                          imageUrl: widget.product.thumbnailImage,
+                          fit: BoxFit.cover,
                         ),
                       ),
                     ),
@@ -117,9 +114,9 @@ class _ProductCardState extends State<ProductCard> {
                         // Product name
                         Text(
                           widget.product.name,
-                          style: context.titleMedium.copyWith(
+                          style: context.titleLarge.copyWith(
                             color: AppTheme.black,
-                            fontWeight: FontWeight.w400,
+                            fontWeight: FontWeight.w600,
                           ),
                           maxLines: 1,
                           textAlign:
@@ -128,19 +125,21 @@ class _ProductCardState extends State<ProductCard> {
                                   : TextAlign.left,
                         ),
 
+                        const SizedBox(height: 4),
                         // Price and fav icon
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Expanded(
-                              child: Column(
+                              child: Row(
+                                spacing: 4,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
                                     widget.product.discountedPrice,
-                                    style: context.titleMedium.copyWith(
+                                    style: context.titleLarge.copyWith(
                                       color: AppTheme.primaryColor,
-                                      fontWeight: FontWeight.w500,
+                                      fontWeight: FontWeight.w600,
                                     ),
                                     textAlign:
                                         Directionality.of(context) ==
@@ -150,7 +149,7 @@ class _ProductCardState extends State<ProductCard> {
                                   ),
                                   Text(
                                     widget.product.mainPrice,
-                                    style: context.bodyMedium.copyWith(
+                                    style: context.titleMedium.copyWith(
                                       color: AppTheme.lightSecondaryTextColor,
                                       fontWeight: FontWeight.w400,
                                       decoration: TextDecoration.lineThrough,
@@ -200,18 +199,19 @@ class _ProductCardState extends State<ProductCard> {
                               children: [CustomLoadingWidget()],
                             )
                             : CustomButton(
+                          height: 40,
                               text:
                                   widget.product.currentStock < 1
                                       ? 'out_of_stock'.tr(context)
                                       : widget.isBuyNow!
                                       ? 'buy_now'.tr(context)
                                       : 'add_to_cart'.tr(context),
-                              textStyle: context.titleSmall.copyWith(
+                              textStyle: context.titleLarge.copyWith(
                                 color:
                                     widget.isOutlinedAddToCart!
                                         ? AppTheme.primaryColor
                                         : AppTheme.white,
-                                fontWeight: FontWeight.w600,
+                                fontWeight: FontWeight.w900,
                               ),
                               fullWidth: true,
                               isOutlined: widget.isOutlinedAddToCart!,
