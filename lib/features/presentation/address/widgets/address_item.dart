@@ -34,7 +34,7 @@ class AddressItem extends StatelessWidget {
         decoration: BoxDecoration(
           color: Colors.white,
           border: Border.all(
-            color: Colors.brown.shade200,
+            color: Colors.grey.shade300,
             width: 1,
           ),
           borderRadius: BorderRadius.circular(0),
@@ -58,39 +58,46 @@ class AddressItem extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      // Default switch
+                      // Default switch - showing default state with the right configuration
                       GestureDetector(
                         onTap: !isDefault ? onSetDefault : null,
-                        child: Container(
-                          width: 60,
-                          height: 30,
-                          decoration: BoxDecoration(
-                            color: isDefault ? const Color(0xFF003333) : Colors.grey.shade300,
-                            border: Border.all(
-                              color: Colors.grey.shade300,
-                              width: 1,
-                            ),
-                          ),
-                          child: AnimatedAlign(
-                            duration: const Duration(milliseconds: 200),
-                            curve: Curves.easeInOut,
-                            alignment: isDefault ? Alignment.centerRight : Alignment.centerLeft,
-                            child: Container(
-                              width: 26,
-                              height: 26,
-                              margin: const EdgeInsets.all(2),
-                              decoration: const BoxDecoration(
-                                color: Colors.white,
+                        child: Row(
+                          children: [
+                            GestureDetector(
+                              onTap: !isDefault ? onSetDefault : null,
+                              child: Container(
+                                width: 60,
+                                height: 30,
+                                decoration: BoxDecoration(
+                                  color: isDefault ? const Color(0xFF003333) : Colors.grey.shade300,
+                                  border: Border.all(
+                                    color: Colors.grey.shade300,
+                                    width: 1,
+                                  ),
+                                ),
+                                child: AnimatedAlign(
+                                  duration: const Duration(milliseconds: 200),
+                                  curve: Curves.easeInOut,
+                                  alignment: isDefault ? Alignment.centerRight : Alignment.centerLeft,
+                                  child: Container(
+                                    width: 26,
+                                    height: 26,
+                                    margin: const EdgeInsets.all(2),
+                                    decoration: const BoxDecoration(
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
                               ),
                             ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      Text(
-                        'default'.tr(context),
-                        style: context.titleMedium.copyWith(
-                          color: Colors.black54,
+                            const SizedBox(width: 8),
+                            Text(
+                              'default'.tr(context),
+                              style: context.titleMedium.copyWith(
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                       const SizedBox(width: 12),

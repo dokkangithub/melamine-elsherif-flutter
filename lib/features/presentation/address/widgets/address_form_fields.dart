@@ -42,6 +42,13 @@ class AddressFormFields extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Check if the selected state ID exists in the states list
+    final bool stateExists = selectedStateId != null && 
+        states.any((state) => state['id'] == selectedStateId);
+        
+    // Use null if the selected state doesn't exist in the list
+    final effectiveStateId = stateExists ? selectedStateId : null;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -97,7 +104,7 @@ class AddressFormFields extends StatelessWidget {
         // State dropdown
         customText('state'.tr(context), context),
         DropdownButtonFormField<int>(
-          value: selectedStateId,
+          value: effectiveStateId,
           hint: Text('select_state'.tr(context)),
           isExpanded: true,
           decoration: InputDecoration(

@@ -16,6 +16,7 @@ import '../../../../core/config/themes.dart/theme.dart';
 import '../../../../core/utils/constants/app_strings.dart';
 import '../../../../core/utils/enums/loading_state.dart';
 import '../../../../core/utils/extension/text_style_extension.dart';
+import '../../../../core/widgets/custom_confirmation_dialog.dart';
 import '../../auth/controller/auth_provider.dart';
 import '../../auth/screens/login_screen.dart';
 import '../../club_point/controller/club_point_provider.dart';
@@ -23,7 +24,6 @@ import '../controller/profile_provider.dart';
 import '../widgets/profile_menu_item.dart';
 import '../../../../core/utils/widgets/premium_language_dialog.dart';
 import 'package:radial_button/widget/circle_floating_button.dart';
-import 'package:quickalert/quickalert.dart';
 
 class ProfileScreen extends StatefulWidget {
   final bool isActive;
@@ -581,18 +581,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void _showLogoutConfirmation(BuildContext context) {
     final navigatorContext = context;
 
-    QuickAlert.show(
+    showCustomConfirmationDialog(
       context: context,
-      type: QuickAlertType.confirm,
       title: 'logout'.tr(navigatorContext),
-      text: 'confirm_logout'.tr(navigatorContext),
-      confirmBtnText: 'logout'.tr(navigatorContext),
-      cancelBtnText: 'cancel'.tr(navigatorContext),
-      confirmBtnTextStyle: context.bodySmall.copyWith(color: AppTheme.white),
-      cancelBtnTextStyle: context.bodyMedium.copyWith(color: AppTheme.primaryColor),
-      confirmBtnColor: AppTheme.primaryColor,
-      onConfirmBtnTap: () async {
-        Navigator.pop(context); // Close the dialog
+      message: 'confirm_logout'.tr(navigatorContext),
+      confirmText: 'logout'.tr(navigatorContext),
+      cancelText: 'cancel'.tr(navigatorContext),
+      confirmButtonColor: AppTheme.primaryColor,
+      icon: Icons.logout,
+      onConfirm: () async {
         await navigatorContext.read<AuthProvider>().logout();
         AppStrings.userId = null;
         AppStrings.token = null;
@@ -600,7 +597,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         if (navigatorContext.mounted) {
           Navigator.of(navigatorContext).pushAndRemoveUntil(
             MaterialPageRoute(builder: (context) => const LoginScreen()),
-                (route) => false,
+            (route) => false,
           );
         }
       },

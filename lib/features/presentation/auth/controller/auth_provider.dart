@@ -121,22 +121,6 @@ class AuthProvider extends ChangeNotifier {
       Response response = await signupUseCase(userData);
       if (response.data['result']) {
         _user = AuthResponseModel.fromJson(response.data);
-        // AppStrings.token = _user!.accessToken!;
-        // AppStrings.userName = _user!.user!.name;
-        // AppStrings.userId = _user!.user!.id.toString();
-        // AppStrings.userEmail = _user!.user!.email.toString();
-        //
-        // // Save to secure storage
-        // await SecureStorage().save(LocalStorageKey.userToken, _user!.accessToken!);
-        // await SecureStorage().save(LocalStorageKey.userName, _user!.user!.name);
-        // await SecureStorage().save(LocalStorageKey.userId, _user!.user!.id);
-        // await SecureStorage().save(LocalStorageKey.userEmail, _user!.user!.email);
-
-        // Explicitly update the auth token in the API provider
-        // final apiProvider = GetIt.instance<ApiProvider>();
-        // if (apiProvider is RestApiProvider) {
-        //   apiProvider.setAuthToken(_user!.accessToken!);
-        // }
 
         isSuccess = true;
         _setRequestMessage(response.data['message']);

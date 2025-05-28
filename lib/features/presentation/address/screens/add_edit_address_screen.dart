@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:melamine_elsherif/core/utils/extension/text_style_extension.dart';
 import 'package:melamine_elsherif/core/utils/extension/translate_extension.dart';
 import 'package:melamine_elsherif/core/utils/widgets/cutsom_toast.dart';
+import 'package:melamine_elsherif/core/utils/widgets/custom_loading.dart';
 import 'package:provider/provider.dart';
 import '../../../../core/config/themes.dart/theme.dart';
 import '../../../../core/utils/enums/loading_state.dart';
@@ -30,29 +31,30 @@ class _AddEditAddressScreenState extends State<AddEditAddressScreen> {
   final TextEditingController _addressController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _cityNameController = TextEditingController();
-  final TextEditingController _titleController = TextEditingController();
-  final TextEditingController _postalCodeController = TextEditingController();
+  final TextEditingController _fullNameController = TextEditingController();
 
   int? _selectedCountryId;
   int? _selectedStateId;
 
   bool _isLoading = false;
+  bool _isLoadingStates = false;
 
   @override
   void initState() {
     super.initState();
 
-    // Default country to Egypt (ID: 1)
-    _selectedCountryId = 1;
+    // Default country to Egypt (ID: 64)
+    _selectedCountryId = 64;
 
     // If editing an existing address, populate the form
     if (widget.address != null) {
       _addressController.text = widget.address!.address;
       _phoneController.text = widget.address!.phone;
       _cityNameController.text = widget.address!.cityName;
-      _titleController.text = widget.address!.title;
-      _postalCodeController.text = widget.address!.postalCode;
       _selectedStateId = widget.address!.stateId;
+      if (widget.address!.countryId != 0) {
+        _selectedCountryId = widget.address!.countryId;
+      }
     }
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -65,20 +67,33 @@ class _AddEditAddressScreenState extends State<AddEditAddressScreen> {
     _addressController.dispose();
     _phoneController.dispose();
     _cityNameController.dispose();
-    _titleController.dispose();
-    _postalCodeController.dispose();
+    _fullNameController.dispose();
     super.dispose();
   }
 
-  void _loadCountryData() async {
-    final addressProvider = context.read<AddressProvider>();
-    
-    // Always load states for Egypt (ID: 1)
-    await addressProvider.fetchStatesByCountry(1);
-    
-    // If editing and we have a state ID, use it
-    if (widget.address != null && _selectedStateId != null) {
-      // State is already selected from the widget.address
+  Future<void> _loadCountryData() async {
+    setState(() {
+      _isLoadingStates = true;
+    });
+    try {
+      final addressProvider = context.read<AddressProvider>();
+      
+      // Always load states for Egypt (ID: 64)
+      await addressProvider.fetchStatesByCountry(64);
+      
+    } catch (e) {
+      if (mounted) {
+        CustomToast.showToast(
+          message: 'Error loading states: ${e.toString()}',
+          type: ToastType.error,
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoadingStates = false;
+        });
+      }
     }
   }
 
@@ -99,7 +114,7 @@ class _AddEditAddressScreenState extends State<AddEditAddressScreen> {
               ? 'add_new_address'.tr(context)
               : 'edit_address'.tr(context),
             style: context.displaySmall.copyWith(
-              fontFamily: GoogleFonts.cormorantGaramond().fontFamily,
+              fontFamily: GoogleFonts.playfairDisplay().fontFamily,
               fontWeight: FontWeight.w600,
             )
           ),
@@ -107,9 +122,9 @@ class _AddEditAddressScreenState extends State<AddEditAddressScreen> {
       ),
       body: Consumer<AddressProvider>(
         builder: (context, addressProvider, child) {
-          // Show shimmer while loading countries
-          final bool isLoadingInitialData =
-              addressProvider.addressState == LoadingState.loading;
+          // Show shimmer while loading states
+          final bool isLoadingInitialData = _isLoadingStates || 
+              (addressProvider.states.isEmpty && addressProvider.addressState == LoadingState.loading);
 
           return Form(
             key: _formKey,
@@ -120,7 +135,40 @@ class _AddEditAddressScreenState extends State<AddEditAddressScreen> {
                     padding: const EdgeInsets.all(16),
                     child: isLoadingInitialData
                       ? const AddressFormShimmer()
-                      : _buildAddressForm(addressProvider),
+                      : FadeInUp(
+                          duration: const Duration(milliseconds: 500),
+                          child: AddressFormFields(
+                            addressController: _addressController,
+                            phoneController: _phoneController,
+                            cityNameController: _cityNameController,
+                            selectedCountryId: _selectedCountryId, // Fixed to Egypt
+                            selectedStateId: _selectedStateId,
+                            fullNameController: _fullNameController,
+                            countries: const [
+                              {'id': 64, 'name': 'Egypt'} // Fixed to Egypt
+                            ],
+                            states: addressProvider.states
+                                .map((location) => location.toMap())
+                                .toList(),
+                            isLoading: _isLoading,
+                            onCountryChanged: (value) async {
+                              // Country is fixed to Egypt, so this is not needed
+                              // but keep it for the interface compatibility
+                              if (value != null) {
+                                setState(() {
+                                  _selectedCountryId = 64; // Always Egypt
+                                });
+                              }
+                            },
+                            onStateChanged: (value) async {
+                              if (value != null) {
+                                setState(() {
+                                  _selectedStateId = value;
+                                });
+                              }
+                            },
+                          ),
+                        ),
                   ),
                 ),
                 _buildSaveButton(),
@@ -129,185 +177,6 @@ class _AddEditAddressScreenState extends State<AddEditAddressScreen> {
           );
         },
       ),
-    );
-  }
-
-  Widget _buildAddressForm(AddressProvider addressProvider) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Address field
-        _buildFormLabel('address'.tr(context)),
-        _buildTextField(
-          controller: _addressController,
-          hintText: 'enter_your_address'.tr(context),
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return 'please_enter_your_address'.tr(context);
-            }
-            return null;
-          },
-        ),
-        const SizedBox(height: 16),
-
-        // Country dropdown
-        _buildFormLabel('country'.tr(context)),
-        _buildDropdown(
-          value: _selectedCountryId,
-          items: [
-            const DropdownMenuItem(
-              value: 1,
-              child: Text('Egypt'),
-            ),
-          ],
-          onChanged: (value) {
-            setState(() {
-              _selectedCountryId = value;
-              _selectedStateId = null;
-            });
-            addressProvider.fetchStatesByCountry(value!);
-          },
-        ),
-        const SizedBox(height: 16),
-
-        // State dropdown
-        _buildFormLabel('state'.tr(context)),
-        _buildDropdown(
-          value: _selectedStateId,
-          items: addressProvider.states.map((state) {
-            return DropdownMenuItem(
-              value: state.id,
-              child: Text(state.name),
-            );
-          }).toList(),
-          onChanged: (value) {
-            setState(() {
-              _selectedStateId = value;
-            });
-          },
-          hint: 'select_state'.tr(context),
-          validator: (value) {
-            if (value == null) {
-              return 'please_select_a_state'.tr(context);
-            }
-            return null;
-          },
-        ),
-        const SizedBox(height: 16),
-
-        // City field
-        _buildFormLabel('city'.tr(context)),
-        _buildTextField(
-          controller: _cityNameController,
-          hintText: 'enter_city'.tr(context),
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return 'please_enter_your_city'.tr(context);
-            }
-            return null;
-          },
-        ),
-        const SizedBox(height: 16),
-
-        // Postal code field
-        _buildFormLabel('postal_code'.tr(context)),
-        _buildTextField(
-          controller: _postalCodeController,
-          hintText: 'enter_postal_code'.tr(context),
-          keyboardType: TextInputType.number,
-        ),
-        const SizedBox(height: 16),
-
-        // Phone number field
-        _buildFormLabel('phone_number'.tr(context)),
-        _buildTextField(
-          controller: _phoneController,
-          hintText: 'enter_phone_number'.tr(context),
-          keyboardType: TextInputType.phone,
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return 'please_enter_your_phone_number'.tr(context);
-            }
-            return null;
-          },
-        ),
-      ],
-    );
-  }
-
-  Widget _buildFormLabel(String label) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8.0),
-      child: Text(
-        label,
-        style: context.titleMedium.copyWith(
-          fontWeight: FontWeight.w500,
-          color: Colors.black87,
-        ),
-      ),
-    );
-  }
-
-  Widget _buildTextField({
-    required TextEditingController controller,
-    required String hintText,
-    TextInputType keyboardType = TextInputType.text,
-    String? Function(String?)? validator,
-  }) {
-    return TextFormField(
-      controller: controller,
-      keyboardType: keyboardType,
-      decoration: InputDecoration(
-        hintText: hintText,
-        hintStyle: context.bodyLarge.copyWith(color: Colors.grey),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide(color: Colors.grey.shade300),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide(color: Colors.grey.shade300),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: const BorderSide(color: AppTheme.primaryColor),
-        ),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-      ),
-      validator: validator,
-    );
-  }
-
-  Widget _buildDropdown({
-    required int? value,
-    required List<DropdownMenuItem<int>> items,
-    required void Function(int?)? onChanged,
-    String? hint,
-    String? Function(int?)? validator,
-  }) {
-    return DropdownButtonFormField<int>(
-      value: value,
-      items: items,
-      onChanged: onChanged,
-      decoration: InputDecoration(
-        hintText: hint,
-        hintStyle: context.bodyLarge.copyWith(color: Colors.grey),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide(color: Colors.grey.shade300),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide(color: Colors.grey.shade300),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: const BorderSide(color: AppTheme.primaryColor),
-        ),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-      ),
-      icon: const Icon(Icons.keyboard_arrow_down, color: Colors.grey),
-      validator: validator,
     );
   }
 
@@ -320,11 +189,11 @@ class _AddEditAddressScreenState extends State<AddEditAddressScreen> {
           Expanded(
             child: CustomButton(
               onPressed: _isLoading ? null : () => Navigator.pop(context),
-              backgroundColor: Colors.transparent,
-              borderColor: Colors.grey.shade300,
+              isOutlined: true,
               child: Text(
                 'cancel'.tr(context),
-                style: context.titleLarge.copyWith(
+                textAlign: TextAlign.center,
+                style: context.headlineSmall.copyWith(
                   color: Colors.black87,
                   fontWeight: FontWeight.w600,
                 ),
@@ -333,26 +202,20 @@ class _AddEditAddressScreenState extends State<AddEditAddressScreen> {
           ),
           const SizedBox(width: 16),
           Expanded(
-            child: CustomButton(
-              onPressed: _isLoading ? null : _saveAddress,
-              backgroundColor: AppTheme.primaryColor,
-              child: _isLoading
-                ? const SizedBox(
-                    height: 20,
-                    width: 20,
-                    child: CircularProgressIndicator(
-                      color: Colors.white,
-                      strokeWidth: 2,
+            child: _isLoading
+                ? const CustomLoadingWidget()
+                : CustomButton(
+                  onPressed: _isLoading ? null : _saveAddress,
+                  backgroundColor: AppTheme.primaryColor,
+                  child: Text(
+                      'save'.tr(context),
+                      textAlign: TextAlign.center,
+                      style: context.headlineSmall.copyWith(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
-                  )
-                : Text(
-                    'save'.tr(context),
-                    style: context.titleLarge.copyWith(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-            ),
+                ),
           ),
         ],
       ),
@@ -373,7 +236,7 @@ class _AddEditAddressScreenState extends State<AddEditAddressScreen> {
           // Add new address
           await addressProvider.addAddress(
             address: _addressController.text,
-            countryId: _selectedCountryId ?? 1, // Default to Egypt
+            countryId: 64, // Egypt is always selected
             stateId: _selectedStateId!,
             cityName: cityName,
             phone: _phoneController.text,
@@ -391,7 +254,7 @@ class _AddEditAddressScreenState extends State<AddEditAddressScreen> {
           await addressProvider.updateAddress(
             id: widget.address!.id,
             address: _addressController.text,
-            countryId: _selectedCountryId ?? 1,
+            countryId: 64, // Egypt is always selected
             stateId: _selectedStateId!,
             cityName: cityName,
             phone: _phoneController.text,
