@@ -44,13 +44,20 @@ class FeaturedProductsWidget extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
-                padding: const EdgeInsets.only(bottom: 16.0, left: 16.0, right: 16.0),
-                child: Text(
-                  'featured_collection'.tr(context),
-                  style: context.headlineMedium,
-                ),
+              SeeAllWidget(
+                title: 'featured_collection'.tr(context),
+                onTap: () {
+                  AppRoutes.navigateTo(
+                    context,
+                    AppRoutes.allProductsByTypeScreen,
+                    arguments: {
+                      'productType': ProductType.featured,
+                      'title': 'featured_collection'.tr(context),
+                    },
+                  );
+                },
               ),
+              const SizedBox(height: 10),
               SizedBox(
                 height: 290,
                 child: ListView.builder(
