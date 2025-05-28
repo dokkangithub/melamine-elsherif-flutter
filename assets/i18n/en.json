@@ -541,5 +541,7 @@
   "search_addresses": "Search addresses",
   "credit_card_payment": "Credit Card Payment",
   "cash_payment": "Cash Payment",
-  "wallet_payment": "Wallet Payment"
+  "wallet_payment": "Wallet Payment",
+  "we_are_curating_the_finest_selection": "We're curating the finest selection for you",
+  "explore_our_collection": "Explore Our Collection"
 }

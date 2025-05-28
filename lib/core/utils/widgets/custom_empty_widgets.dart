@@ -1,52 +1,78 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:melamine_elsherif/core/config/routes.dart/routes.dart';
 import 'package:melamine_elsherif/core/config/themes.dart/theme.dart';
 import 'package:melamine_elsherif/core/utils/constants/app_assets.dart';
 import 'package:melamine_elsherif/core/utils/extension/text_theme_extension.dart';
 import 'package:melamine_elsherif/core/utils/extension/translate_extension.dart';
+import 'package:melamine_elsherif/core/utils/widgets/custom_button.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_cached_image.dart';
+import 'package:melamine_elsherif/features/presentation/main%20layout/controller/layout_provider.dart';
+import 'package:provider/provider.dart';
 
 class CustomEmptyWidget extends StatelessWidget {
   final String title;
   final String subtitle;
+  final VoidCallback? onExplorePressed;
 
   const CustomEmptyWidget({
     super.key,
-    this.title = "we_could't_find_anything_for_that",
-    this.subtitle = "bring_your_vision to_life_with_melamine_elsherif",
+    this.title = "no_products_available",
+    this.subtitle = "we_are_curating_the_finest_selection",
+    this.onExplorePressed,
   });
 
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            padding: const EdgeInsets.all(60),
-            decoration: const BoxDecoration(
-              shape: BoxShape.circle,
-              color: AppTheme.lightBackgroundColor,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // Shopping bag icon with neutral color
+            const CustomImage(assetPath: AppSvgs.no_data,height: 80),
+            const SizedBox(height: 32),
+            
+            // "No Products Available" title
+            Text(
+              title.tr(context),
+             style: context.displayLarge?.copyWith(
+               color: Colors.black,
+               fontWeight: FontWeight.w100,
+             ),
+              textAlign: TextAlign.center,
             ),
-            child: const CustomImage(
-              assetPath: AppSvgs.no_data,
-
-              fit: BoxFit.contain,
+            
+            const SizedBox(height: 16),
+            
+            // Subtitle about curating collection
+            Text(
+              subtitle.tr(context),
+              style: context.titleLarge?.copyWith(
+                color: Colors.black54,
+                fontWeight: FontWeight.w400,
+              ),
+              textAlign: TextAlign.center,
             ),
-          ),
-          const SizedBox(height: 16),
-          Text(
-            title.tr(context),
-            style: context.headlineSmall?.copyWith(fontWeight: FontWeight.w800),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 8),
-          Text(
-            subtitle.tr(context),
-            style: context.titleMedium,
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 30),
-        ],
+            
+            const SizedBox(height: 60),
+            
+            // "Explore Our Collection" button
+            CustomButton(
+              onPressed: onExplorePressed ?? () {
+                Provider.of<LayoutProvider>(context,listen: false).currentIndex=0;
+                AppRoutes.navigateTo(context, AppRoutes.mainLayoutScreen);
+              },
+              isOutlined: true,
+              child: Text(
+                'explore_our_collection'.tr(context),
+                textAlign: TextAlign.center,
+                style: context.titleLarge,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

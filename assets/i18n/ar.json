@@ -536,5 +536,7 @@
   "search_addresses": "بحث العناوين",
   "credit_card_payment": "الدفع ببطاقة الائتمان",
   "cash_payment": "الدفع نقداً",
-  "wallet_payment": "الدفع بالمحفظة"
+  "wallet_payment": "الدفع بالمحفظة",
+  "we_are_curating_the_finest_selection": "نحن نقوم بتنسيق أفضل مجموعة لك",
+  "explore_our_collection": "استكشف مجموعتنا"
 }
