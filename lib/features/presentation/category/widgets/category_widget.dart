@@ -143,13 +143,13 @@ class _CategoryWidgetState extends State<CategoryWidget> with SingleTickerProvid
       },
       child: Container(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(0),
         ),
         child: Stack(
           children: [
             // Image
             ClipRRect(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(0),
               child: CustomImage(
                 imageUrl: category.coverImage ?? '',
                 width: double.infinity,
@@ -161,7 +161,7 @@ class _CategoryWidgetState extends State<CategoryWidget> with SingleTickerProvid
             // Gradient overlay
             Container(
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(0),
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,

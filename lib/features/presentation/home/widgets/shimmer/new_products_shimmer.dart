@@ -21,12 +21,12 @@ class NewProductsShimmer extends StatelessWidget {
           baseColor: Colors.grey[300]!,
           highlightColor: Colors.grey[100]!,
           child: Container(
-            height: 175,
+            height: 200,
             width: double.infinity,
             margin: const EdgeInsets.symmetric(horizontal: 8.0),
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.zero,
             ),
           ),
         ),

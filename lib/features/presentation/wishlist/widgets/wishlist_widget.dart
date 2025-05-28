@@ -253,7 +253,7 @@ class _WishlistWidgetState extends State<WishlistWidget> {
                       
                       // Add to Cart button
                       SizedBox(
-                        height: 42,
+                        height: 50,
                         child: CustomButton(
                           onPressed: () => _addToCart(context, wishlistItem),
                           child: Text(

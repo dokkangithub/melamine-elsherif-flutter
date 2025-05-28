@@ -29,9 +29,9 @@ class BestSellingProductsShimmer extends StatelessWidget {
                   child: Container(
                     width: 180,
                     margin: const EdgeInsets.symmetric(horizontal: 10),
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(20),
+                      borderRadius: BorderRadius.zero,
                     ),
                   ),
                 ),

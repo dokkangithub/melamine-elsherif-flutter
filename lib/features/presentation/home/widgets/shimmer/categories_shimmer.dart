@@ -7,8 +7,8 @@ class CategoriesShimmer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: context.responsive(150),
+    return Container(
+      padding: const EdgeInsets.only(top: 0.0, bottom: 16.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -18,38 +18,28 @@ class CategoriesShimmer extends StatelessWidget {
             highlightColor: Colors.grey[100]!,
             child: Container(width: 120, height: 20, color: Colors.white),
           ),
-          const SizedBox(height: 12),
-          // Categories list shimmer
-          Expanded(
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: 6,
-              itemBuilder:
-                  (context, index) => Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: Shimmer.fromColors(
-                      baseColor: Colors.grey[300]!,
-                      highlightColor: Colors.grey[100]!,
-                      child: Column(
-                        children: [
-                          Container(
-                            width: context.responsive(60),
-                            height: context.responsive(40),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          Container(
-                            width: context.responsive(60),
-                            height: 10,
-                            color: Colors.white,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
+          const SizedBox(height: 16),
+          
+          // Grid shimmer matching the 2x2 grid in the category widget
+          GridView.builder(
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              childAspectRatio: 1.0,
+              crossAxisSpacing: 8,
+              mainAxisSpacing: 8,
+            ),
+            physics: const NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            itemCount: 4, // 4 categories like in the original widget
+            itemBuilder: (context, index) => Shimmer.fromColors(
+              baseColor: Colors.grey[300]!,
+              highlightColor: Colors.grey[100]!,
+              child: Container(
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.zero,
+                ),
+              ),
             ),
           ),
         ],

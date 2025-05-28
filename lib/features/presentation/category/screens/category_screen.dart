@@ -187,6 +187,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
       child: Card(
         color: AppTheme.white,
         elevation: 2,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
         child: Column(
           children: [
             // Category Image

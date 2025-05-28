@@ -64,24 +64,6 @@ class SnappableWishlistItemState extends State<SnappableWishlistItem>
     }
   }
 
-  void _showRemoveItemDialog(BuildContext context) {
-    showCustomConfirmationDialog(
-      context: context,
-      title: 'remove_item'.tr(context),
-      message: 'remove_item_confirmation'.tr(context),
-      confirmText: 'remove'.tr(context),
-      cancelText: 'cancel'.tr(context),
-      icon: Icons.delete_outline,
-      confirmButtonColor: AppTheme.accentColor,
-      onConfirm: () {
-        setState(() {
-          _isDeleting = true;
-        });
-        _animationController.forward();
-        CustomToast.showToast(message: 'item_removed_from_wishlist'.tr(context), type: ToastType.success);
-      },
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
