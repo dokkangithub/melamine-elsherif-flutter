@@ -38,47 +38,46 @@ class BottomNavBarWidget extends StatelessWidget {
             },
             useLegacyColorScheme: false,
             showSelectedLabels: true,
-            showUnselectedLabels: true,
+            showUnselectedLabels: false,
             enableFeedback: false,
-            selectedFontSize: 10.0,
+            selectedFontSize: 12.0,
             unselectedFontSize: 10.0,
-            selectedLabelStyle:  const TextStyle(fontSize: 12,fontFamily: 'Dokkan',fontWeight: FontWeight.w700),
-            unselectedLabelStyle:  const TextStyle(fontSize: 10,fontFamily: 'Dokkan'),
+            selectedLabelStyle: context.titleSmall!.copyWith(fontWeight: FontWeight.w700,color: AppTheme.primaryColor),
+            unselectedLabelStyle: context.bodySmall,
             elevation: 0,
             items: [
               BottomNavigationBarItem(
                 icon: const CustomImage(assetPath: AppSvgs.home_icon),
                 activeIcon: const CustomImage(assetPath: AppSvgs.active_home_icon),
-                label: 'home'.tr(context),
+                label: 'home'.tr(context).toUpperCase(),
               ),
               BottomNavigationBarItem(
                 icon: const CustomImage(assetPath: AppSvgs.category_icon),
                 activeIcon: const CustomImage(
                   assetPath: AppSvgs.active_category_icon,
                 ),
-                label: 'category'.tr(context),
+                label: 'category'.tr(context).toUpperCase(),
               ),
               BottomNavigationBarItem(
                 icon: const CustomImage(assetPath: AppSvgs.wishlist_icon),
                 activeIcon: const CustomImage(
                   assetPath: AppSvgs.active_wishlist_icon,
                 ),
-                label: 'wishlist'.tr(context),
+                label: 'wishlist'.tr(context).toUpperCase(),
               ),
               BottomNavigationBarItem(
                 icon: const CustomImage(assetPath: AppSvgs.cart_icon),
                 activeIcon: const CustomImage(assetPath: AppSvgs.active_cart_icon),
-                label: 'cart'.tr(context),
+                label: 'cart'.tr(context).toUpperCase(),
               ),
               BottomNavigationBarItem(
                 icon: const CustomImage(assetPath: AppSvgs.profile_icon),
                 activeIcon: const CustomImage(assetPath: AppSvgs.active_profile_icon),
-                label: 'profile'.tr(context),
+                label: 'profile'.tr(context).toUpperCase(),
               ),
             ],
           ),
         );
-        ;
       },
     );
   }
