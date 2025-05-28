@@ -122,7 +122,6 @@ class SuccessScreen extends StatelessWidget {
                   }
                 },
                 backgroundColor: AppTheme.primaryColor,
-                borderRadius: 8,
                 child: Center(
                   child: Text(
                     "track_order".tr(context),
@@ -142,7 +141,6 @@ class SuccessScreen extends StatelessWidget {
                   AppRoutes.navigateToAndRemoveUntil(context, AppRoutes.mainLayoutScreen);
                 },
                 isOutlined: true,
-                borderRadius: 8,
                 backgroundColor: AppTheme.primaryColor,
                 child: Center(
                   child: Text(
