@@ -160,42 +160,56 @@ class HomeProvider extends ChangeNotifier {
         allProductsPage = 1;
         hasMoreAllProducts = true;
         allProducts = [];
+        print('PAGINATION_DEBUG: Reset allProductsPage to 1, hasMoreAllProducts=true');
       }
 
-      if (!hasMoreAllProducts) return;
+      if (!hasMoreAllProducts) {
+        print('PAGINATION_DEBUG: hasMoreAllProducts is false, returning early');
+        return;
+      }
 
       allProductsState = LoadingState.loading;
       notifyListeners();
 
+      print('PAGINATION_DEBUG: Fetching page $allProductsPage');
       final response = await getAllProductsUseCase(allProductsPage, needUpdate: refresh);
 
       // Log retrieved data
-      print('All Products Response: ${response.data.length} items');
+      print('PAGINATION_DEBUG: All Products Response: ${response.data.length} items');
+      print('PAGINATION_DEBUG: Response meta - currentPage: ${response.meta.currentPage}, lastPage: ${response.meta.lastPage}, total: ${response.meta.total}');
+      print('PAGINATION_DEBUG: Response links - next: ${response.links.next}');
 
       // Filter products at data source level if possible
       List<Product> newProducts = response.data;
 
       if (refresh) {
         allProducts = newProducts;
+        print('PAGINATION_DEBUG: Refreshing, setting allProducts to ${newProducts.length} items');
       } else {
         allProducts.addAll(newProducts);
+        print('PAGINATION_DEBUG: Adding ${newProducts.length} new items, total now: ${allProducts.length}');
       }
 
+      // Check if we have more pages
       hasMoreAllProducts = response.meta.currentPage < response.meta.lastPage;
+      print('PAGINATION_DEBUG: Setting hasMoreAllProducts to $hasMoreAllProducts (currentPage=${response.meta.currentPage}, lastPage=${response.meta.lastPage})');
+      
       if (hasMoreAllProducts) {
         allProductsPage++;
+        print('PAGINATION_DEBUG: Incrementing allProductsPage to $allProductsPage');
       }
 
       allProductsState = LoadingState.loaded;
 
       // If we don't have enough published products and there are more pages, fetch more
       if (allProducts.where((p) => p.published == 1).length < 8 && hasMoreAllProducts) {
+        print('PAGINATION_DEBUG: Not enough published products, fetching more automatically');
         await fetchAllProducts();
       }
     } catch (e) {
       allProductsState = LoadingState.error;
       allProductsError = e.toString();
-      print('Error fetching all products: $e');
+      print('PAGINATION_DEBUG: Error fetching all products: $e');
     } finally {
       notifyListeners();
     }

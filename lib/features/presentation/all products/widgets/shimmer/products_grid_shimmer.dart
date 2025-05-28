@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:shimmer/shimmer.dart';
 
 class ProductsGridShimmer extends StatelessWidget {
@@ -9,82 +10,79 @@ class ProductsGridShimmer extends StatelessWidget {
     return Shimmer.fromColors(
       baseColor: Colors.grey[300]!,
       highlightColor: Colors.grey[100]!,
-      child: GridView.builder(
-        padding: const EdgeInsets.all(16),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: MasonryGridView.count(
           crossAxisCount: 2,
-          childAspectRatio: 0.7,
-          crossAxisSpacing: 16,
-          mainAxisSpacing: 16,
-        ),
-        itemCount: 6,
-        itemBuilder: (context, index) {
-          return Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  flex: 2,
-                  child: Container(
+          mainAxisSpacing: 4,
+          crossAxisSpacing: 4,
+          itemCount: 10,
+          itemBuilder: (context, index) {
+            // Alternate heights for visual variety
+            final bool isEven = index % 2 == 0;
+            final double height = isEven ? 250 : 270;
+            
+            return Container(
+              height: height,
+              margin: const EdgeInsets.all(4),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(0),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.1),
+                    spreadRadius: 1,
+                    blurRadius: 2,
+                    offset: const Offset(0, 1),
+                  ),
+                ],
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Image placeholder
+                  Container(
+                    height: isEven ? 180 : 200,
                     decoration: const BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(8),
-                        topRight: Radius.circular(8),
-                      ),
+                      borderRadius: BorderRadius.zero,
                     ),
                   ),
-                ),
-                Expanded(
-                  flex: 1,
-                  child: Padding(
+                  
+                  // Product details placeholder
+                  Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
+                        // Product name
                         Container(
                           width: double.infinity,
-                          height: 12,
+                          height: 14,
                           color: Colors.white,
                         ),
                         const SizedBox(height: 4),
+                        // Second line of product name
+                        Container(
+                          width: 100,
+                          height: 14,
+                          color: Colors.white,
+                        ),
+                        const SizedBox(height: 8),
+                        // Price
                         Container(
                           width: 80,
-                          height: 12,
+                          height: 16,
                           color: Colors.white,
-                        ),
-                        const SizedBox(height: 4),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Container(
-                              width: 60,
-                              height: 12,
-                              color: Colors.white,
-                            ),
-                            Container(
-                              width: 30,
-                              height: 26,
-                              decoration: const BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ],
                         ),
                       ],
                     ),
                   ),
-                ),
-              ],
-            ),
-          );
-        },
+                ],
+              ),
+            );
+          },
+        ),
       ),
     );
   }

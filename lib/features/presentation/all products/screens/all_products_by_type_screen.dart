@@ -1,22 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:melamine_elsherif/core/config/themes.dart/theme.dart';
 import 'package:melamine_elsherif/core/utils/constants/app_assets.dart';
 import 'package:melamine_elsherif/core/utils/enums/products_type.dart';
 import 'package:melamine_elsherif/core/utils/extension/text_theme_extension.dart';
 import 'package:melamine_elsherif/core/utils/extension/translate_extension.dart';
+import 'package:melamine_elsherif/core/utils/helpers.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_button.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_cached_image.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_empty_widgets.dart';
-import 'package:melamine_elsherif/core/utils/widgets/custom_form_field.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_loading.dart';
 import 'package:melamine_elsherif/features/domain/product/entities/product.dart';
 import 'package:provider/provider.dart';
 import '../../../../core/config/routes.dart/routes.dart';
 import '../../../../core/utils/enums/loading_state.dart';
-import '../../../../core/utils/widgets/custom_appBar.dart';
 import '../../home/controller/home_provider.dart';
-import '../widgets/products_grid.dart';
+import '../../wishlist/controller/wishlist_provider.dart';
 import '../widgets/shimmer/products_grid_shimmer.dart';
 
 class AllProductsByTypeScreen extends StatefulWidget {
@@ -32,12 +33,10 @@ class AllProductsByTypeScreen extends StatefulWidget {
   });
 
   @override
-  _AllProductsByTypeScreenState createState() =>
-      _AllProductsByTypeScreenState();
+  _AllProductsByTypeScreenState createState() => _AllProductsByTypeScreenState();
 }
 
 class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
-  final TextEditingController _searchController = TextEditingController();
   bool _isLoading = false;
   final ScrollController _scrollController = ScrollController();
   ProductType _selectedProductType = ProductType.all;
@@ -64,38 +63,43 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
 
   @override
   void dispose() {
-    _searchController.dispose();
+    _scrollController.removeListener(_scrollListener);
     _scrollController.dispose();
     super.dispose();
   }
 
   void _scrollListener() {
-    // Add a small threshold so it triggers slightly before hitting the very bottom
+    print("SCROLL_DEBUG: position=${_scrollController.position.pixels}, maxScrollExtent=${_scrollController.position.maxScrollExtent}");
     if (_scrollController.position.pixels >=
         _scrollController.position.maxScrollExtent - 200) {
+      print("SCROLL_DEBUG: Threshold reached, attempting to load more");
       _loadMoreProducts();
     }
   }
 
   Future<void> _loadMoreProducts() async {
-    if (_isLoading) return;
+    if (_isLoading) {
+      print("SCROLL_DEBUG: Already loading, skipping");
+      return;
+    }
     final provider = Provider.of<HomeProvider>(context, listen: false);
 
-    if (!_hasMoreProducts(provider)) return;
+    if (!_hasMoreProducts(provider)) {
+      print("SCROLL_DEBUG: No more products available for ${_selectedProductType.name}");
+      return;
+    }
 
     setState(() => _isLoading = true);
 
-    // Add a print statement to confirm the state change
-    print("Loading more products, _isLoading: $_isLoading");
+    print("SCROLL_DEBUG: Loading more products, _isLoading: $_isLoading");
 
     try {
       await _fetchProducts(provider);
+      print("SCROLL_DEBUG: Successfully fetched more products");
     } finally {
-      // Make sure this runs even if there's an error
       if (mounted) {
         setState(() => _isLoading = false);
-        // Add another print statement to see when it's set back to false
-        print("Finished loading, _isLoading: $_isLoading");
+        print("SCROLL_DEBUG: Finished loading, _isLoading: $_isLoading");
       }
     }
   }
@@ -104,6 +108,8 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
     HomeProvider provider, {
     bool refresh = false,
   }) async {
+    print("SCROLL_DEBUG: Fetching products for ${_selectedProductType.name}, refresh=$refresh");
+    
     switch (_selectedProductType) {
       case ProductType.all:
         await provider.fetchAllProducts(refresh: refresh);
@@ -121,21 +127,35 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
         await provider.fetchFlashDealProducts(refresh: refresh);
         break;
     }
+    print("SCROLL_DEBUG: Fetch completed for ${_selectedProductType.name}");
   }
 
   bool _hasMoreProducts(HomeProvider provider) {
+    bool hasMore = false;
     switch (_selectedProductType) {
       case ProductType.all:
-        return provider.hasMoreAllProducts;
+        hasMore = provider.hasMoreAllProducts;
+        print("SCROLL_DEBUG: hasMoreAllProducts = ${provider.hasMoreAllProducts}, current page = ${provider.allProductsPage}");
+        break;
       case ProductType.bestSelling:
-        return provider.hasMoreBestSellingProducts;
+        hasMore = provider.hasMoreBestSellingProducts;
+        print("SCROLL_DEBUG: hasMoreBestSellingProducts = ${provider.hasMoreBestSellingProducts}, current page = ${provider.bestSellingProductsPage}");
+        break;
       case ProductType.featured:
-        return provider.hasMoreFeaturedProducts;
+        hasMore = provider.hasMoreFeaturedProducts;
+        print("SCROLL_DEBUG: hasMoreFeaturedProducts = ${provider.hasMoreFeaturedProducts}, current page = ${provider.featuredProductsPage}");
+        break;
       case ProductType.newArrival:
-        return provider.hasMoreNewProducts;
+        hasMore = provider.hasMoreNewProducts;
+        print("SCROLL_DEBUG: hasMoreNewProducts = ${provider.hasMoreNewProducts}, current page = ${provider.newProductsPage}");
+        break;
       case ProductType.flashDeal:
-        return false; // No pagination for today's deal
+        hasMore = false; // No pagination for today's deal
+        print("SCROLL_DEBUG: Flash Deal - no pagination");
+        break;
     }
+    print("SCROLL_DEBUG: Has more products for ${_selectedProductType.name}: $hasMore");
+    return hasMore;
   }
 
   List<Product> _getProducts(HomeProvider provider) {
@@ -149,7 +169,6 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
       case ProductType.newArrival:
         return provider.newProducts;
       case ProductType.flashDeal:
-        // Return all flash deal products
         return provider.flashDealProducts;
     }
   }
@@ -191,157 +210,114 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
         final products = _getProducts(homeProvider);
         final state = _getLoadingState(homeProvider);
         final error = _getErrorMessage(homeProvider);
+        
         return Scaffold(
           backgroundColor: Colors.white,
-          body: SafeArea(
-            child: Column(
-              children: [
-                // App bar with back button and search field
-                FadeIn(
-                  duration: const Duration(milliseconds: 400),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 20.0,
-                      vertical: 20.0,
-                    ),
-                    child: Row(
-                      children: [
-                        const SizedBox(width: 6),
-                        InkWell(
-                          onTap: () => Navigator.pop(context),
-                          child: const Icon(
-                            Icons.arrow_back_ios,
-                            size: 20,
-                            color: AppTheme.accentColor,
-                          ),
-                        ),
-                        Expanded(
-                          child: InkWell(
-                            onTap: () {
-                              AppRoutes.navigateTo(
-                                context,
-                                AppRoutes.searchScreen,
-                              );
-                            },
-                            child: Container(
-                              margin: const EdgeInsets.symmetric(horizontal: 10),
-                              padding: const EdgeInsets.symmetric(horizontal: 15),
-                              height: 45,
-                              decoration: BoxDecoration(
-                                color: AppTheme.lightBackgroundColor,
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Row(
-                                children: [
-                                  const CustomImage(
-                                    assetPath: AppSvgs.category_search_icon,
-                                  ),
-                                  const SizedBox(width: 10),
-                                  Expanded(
-                                    child: Text(
-                                      'search_for_yours'.tr(context),
-                                      style: context.titleSmall?.copyWith(
-                                        color: AppTheme.lightSecondaryTextColor,
-                                      ),
-                                      overflow: TextOverflow.ellipsis,
-                                      maxLines: 1,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+          appBar: _buildAppBar(context),
+          body: Column(
+            children: [
+              // Category tabs
+              _buildCategoryTabs(homeProvider),
+              
+              // Products grid
+              Expanded(
+                child: FadeInUp(
+                  duration: const Duration(milliseconds: 600),
+                  child: _buildProductsGrid(
+                    products,
+                    state,
+                    error,
+                    homeProvider,
                   ),
                 ),
-
-                // Product type tabs - New Style
-                FadeInDown(
-                  duration: const Duration(milliseconds: 500),
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    physics: const BouncingScrollPhysics(),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16.0,
-                      vertical: 12.0,
-                    ),
-                    child: Row(
-                      children:
-                          ProductType.values.map((type) {
-                            bool isSelected = _selectedProductType == type;
-                            return Padding(
-                              padding: const EdgeInsets.only(right: 8.0),
-                              child: _buildProductTypeChip(
-                                text: _productTypeNames[type]!.tr(context),
-                                isSelected: isSelected,
-                                onTap: () {
-                                  setState(() {
-                                    _selectedProductType = type;
-                                    _fetchProducts(homeProvider, refresh: true);
-                                  });
-                                },
-                              ),
-                            );
-                          }).toList(),
-                    ),
-                  ),
-                ),
-
-                // Products grid
-                Expanded(
-                  child: FadeInUp(
-                    duration: const Duration(milliseconds: 600),
-                    child: _buildProductsGrid(
-                      products,
-                      state,
-                      error,
-                      homeProvider,
-                      error,
-                    ),
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         );
       },
     );
   }
 
-  Widget _buildProductTypeChip({
-    required String text,
-    required bool isSelected,
-    required VoidCallback onTap,
-  }) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(4.0),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
-        child: IntrinsicWidth(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Text(
-                text,
-                textAlign: TextAlign.center,
-                style: context.titleMedium?.copyWith(
-                  color:
-                      isSelected
-                          ? AppTheme.primaryColor
-                          : AppTheme.lightSecondaryTextColor,
-                  fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                ),
-              ),
-              const SizedBox(height: 4),
-              Container(
-                height: 2.5,
-                color: isSelected ? AppTheme.primaryColor : Colors.transparent,
-              ),
-            ],
+  AppBar _buildAppBar(BuildContext context) {
+    return AppBar(
+      backgroundColor: Colors.white,
+      elevation: 0,
+      title: Text(
+        "MELAMEN",
+        style: GoogleFonts.playfairDisplay(
+          fontSize: 24,
+          fontWeight: FontWeight.bold,
+          color: Colors.black,
+        ),
+      ),
+      centerTitle: true,
+      leading: IconButton(
+        icon: const Icon(Icons.menu, color: Colors.black),
+        onPressed: () {
+          Navigator.pop(context);
+        },
+      ),
+      actions: [
+        IconButton(
+          icon: const Icon(Icons.search, color: Colors.black),
+          onPressed: () {
+            AppRoutes.navigateTo(context, AppRoutes.searchScreen);
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget _buildCategoryTabs(HomeProvider homeProvider) {
+    return Container(
+      height: 50,
+      decoration: const BoxDecoration(
+        border: Border(
+          bottom: BorderSide(color: Colors.black12, width: 1),
+        ),
+      ),
+      child: FadeInDown(
+        duration: const Duration(milliseconds: 500),
+        child: ListView(
+          scrollDirection: Axis.horizontal,
+          children: [
+            _buildCategoryTab('ALL', ProductType.all),
+            _buildCategoryTab('BEST SELLERS', ProductType.bestSelling),
+            _buildCategoryTab('NEW ARRIVALS', ProductType.newArrival),
+            _buildCategoryTab('FEATURED', ProductType.featured),
+            _buildCategoryTab('DEALS', ProductType.flashDeal),
+          ],
+        ),
+      ),
+    );
+  }
+  
+  Widget _buildCategoryTab(String title, ProductType type) {
+    final bool isSelected = _selectedProductType == type;
+    
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          _selectedProductType = type;
+          _fetchProducts(Provider.of<HomeProvider>(context, listen: false), refresh: true);
+        });
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          border: Border(
+            bottom: BorderSide(
+              color: isSelected ? AppTheme.primaryColor : Colors.transparent,
+              width: 2,
+            ),
+          ),
+        ),
+        child: Text(
+          title,
+          style: TextStyle(
+            color: isSelected ? AppTheme.primaryColor : Colors.grey,
+            fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
           ),
         ),
       ),
@@ -351,9 +327,8 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
   Widget _buildProductsGrid(
     List<Product> products,
     LoadingState state,
-    String errorMessage,
-    HomeProvider homeProvider,
     String error,
+    HomeProvider homeProvider,
   ) {
     if (state == LoadingState.loading && products.isEmpty) {
       return const Center(child: ProductsGridShimmer());
@@ -366,14 +341,13 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(errorMessage),
+              Text(error),
               const SizedBox(height: 16),
               CustomButton(
-                onPressed:
-                    () => _fetchProducts(
-                      Provider.of<HomeProvider>(context, listen: false),
-                      refresh: true,
-                    ),
+                onPressed: () => _fetchProducts(
+                  Provider.of<HomeProvider>(context, listen: false),
+                  refresh: true,
+                ),
                 child: Text('retry'.tr(context)),
               ),
             ],
@@ -385,21 +359,31 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
     if (products.isEmpty) {
       return const Center(child: CustomEmptyWidget());
     }
+
     List<Product> filteredProducts = products;
     if (_selectedProductType != ProductType.newArrival) {
-      filteredProducts =
-          products.where((product) => product.published == 1).toList();
+      filteredProducts = products.where((product) => product.published == 1).toList();
     }
+    
+    print("Building grid with ${filteredProducts.length} products, isLoading: $_isLoading");
+
     return Column(
       children: [
         Expanded(
-          child: ProductsGrid(
-            products: _selectedProductType !=ProductType.flashDeal ? filteredProducts : products,
-            state: state,
-            error: error,
-            isLoading: _isLoading,
-            scrollController: _scrollController,
-            onRetry: () => _fetchProducts(homeProvider, refresh: true),
+          child: MasonryGridView.count(
+            controller: _scrollController,
+            crossAxisCount: 2,
+            mainAxisSpacing: 4,
+            crossAxisSpacing: 4,
+            padding: const EdgeInsets.all(8),
+            itemCount: filteredProducts.length,
+            itemBuilder: (context, index) {
+              final product = filteredProducts[index];
+              // Alternate item heights for visual variety
+              final bool isEven = index % 2 == 0;
+              
+              return _buildProductCard(context, product, isEven);
+            },
           ),
         ),
         if (_isLoading)
@@ -414,6 +398,105 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
             ),
           ),
       ],
+    );
+  }
+  
+  Widget _buildProductCard(BuildContext context, Product product, bool isEven) {
+    return GestureDetector(
+      onTap: () {
+        AppRoutes.navigateTo(
+          context,
+          AppRoutes.productDetailScreen,
+          arguments: {'slug': product.slug},
+        );
+      },
+      child: Container(
+        margin: const EdgeInsets.all(4),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(0),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.1),
+              spreadRadius: 1,
+              blurRadius: 2,
+              offset: const Offset(0, 1),
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Product image with favorite button
+            Stack(
+              children: [
+                CustomImage(
+                  imageUrl: product.thumbnailImage,
+                  height: isEven ? 180 : 200, // Alternate heights
+                  width: double.infinity,
+                  fit: BoxFit.cover,
+                ),
+                Positioned(
+                  top: 8,
+                  right: 8,
+                  child: Consumer<WishlistProvider>(
+                    builder: (context, wishlistProvider, _) {
+                      final isInWishlist = wishlistProvider.isProductInWishlist(product.slug);
+                      return GestureDetector(
+                        onTap: () {
+                          AppFunctions.toggleWishlistStatus(context, product.slug);
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(4),
+                          decoration: const BoxDecoration(
+                            shape: BoxShape.rectangle,
+                            color: Colors.white,
+                          ),
+                          child: Icon(
+                            isInWishlist ? Icons.favorite : Icons.favorite_border,
+                            color: AppTheme.primaryColor,
+                            size: 20,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+            
+            // Product details
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    product.name,
+                    style: context.titleMedium!.copyWith(color: AppTheme.darkDividerColor,fontWeight: FontWeight.w600),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 4),
+                  Row(
+                    children: [
+                      Text(
+                        product.discountedPrice,
+                        style: context.titleMedium!.copyWith(color: AppTheme.darkDividerColor,fontWeight: FontWeight.w600),
+                      ),
+                      const SizedBox(width: 6),
+                      product.hasDiscount? Text(
+                        product.mainPrice,
+                        style: context.titleMedium!.copyWith(color: AppTheme.darkDividerColor, fontWeight: FontWeight.w400,decoration: TextDecoration.lineThrough),
+                      ):const SizedBox.shrink(),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
