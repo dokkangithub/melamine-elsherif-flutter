@@ -25,70 +25,63 @@ class AddressCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        width: 220,
-        margin: const EdgeInsets.only(right: 12),
+        width: MediaQuery.of(context).size.width - 32, // Full width minus padding
+        margin: const EdgeInsets.only(bottom: 8),
         decoration: BoxDecoration(
           border: Border.all(
             color: isSelected ? AppTheme.primaryColor : Colors.grey.shade300,
-            width: isSelected ? 2 : 1,
+            width: isSelected ? 1 : 0.5,
           ),
-          borderRadius: BorderRadius.circular(8),
+          // No border radius for flat design
         ),
-        child: Stack(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(12),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Expanded(
-                        child: Text(
-                          address.title.isNotEmpty ? address.title : '',
-                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                                fontWeight: FontWeight.bold,
-                              ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ],
-                  ),
                   Text(
                     userName ?? '',
-                    style: Theme.of(context).textTheme.bodyMedium,
+                    style: context.titleLarge?.copyWith(
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
-                  const SizedBox(height: 4),
-                  Text(
-                    address.address,
-                    style: Theme.of(context).textTheme.bodySmall,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(height: 2),
-                  Text('${address.cityName}, ${address.stateName} ${address.postalCode}',
-                    style: Theme.of(context).textTheme.bodySmall,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+                  InkWell(
+                    onTap: onEdit,
+                    child: Text(
+                      'change_address'.tr(context),
+                      style: context.titleMedium?.copyWith(
+                        color: AppTheme.primaryColor,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
                   ),
                 ],
               ),
-            ),
-            Positioned(
-              top: -8,
-              right: -8,
-              child: IconButton(
-                icon: const Icon(
-                  Icons.edit,
-                  size: 18,
-                  color: AppTheme.primaryColor,
+              const SizedBox(height: 4),
+              if (address.phone.isNotEmpty)
+                Text(
+                  address.phone,
+                  style: context.titleMedium?.copyWith(color: AppTheme.darkDividerColor),
                 ),
-                onPressed: onEdit,
+              const SizedBox(height: 2),
+              Text(
+                address.address,
+                style: context.titleMedium?.copyWith(color: AppTheme.darkDividerColor),
               ),
-            ),
-          ],
+              const SizedBox(height: 2),
+              Text('${address.cityName}, ${address.stateName} ${address.postalCode}',
+                style: context.titleMedium?.copyWith(color: AppTheme.darkDividerColor),
+              ),
+              const SizedBox(height: 2),
+              Text(
+                address.countryName.isNotEmpty ? address.countryName : 'United States',
+                style: context.titleMedium?.copyWith(color: AppTheme.darkDividerColor),
+              ),
+            ],
+          ),
         ),
       ),
     );

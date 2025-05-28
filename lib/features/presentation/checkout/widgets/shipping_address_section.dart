@@ -89,52 +89,40 @@ class _ShippingAddressSectionState extends State<ShippingAddressSection> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
+              Icon(Icons.location_on_outlined, color: Colors.grey[600], size: 20),
+              const SizedBox(width: 8),
               Text('shipping_address'.tr(context),
                 style: context.titleLarge?.copyWith(
                   fontWeight: FontWeight.w600,
                 ),
               ),
-              if (!widget.isLoading && (widget.addresses.isNotEmpty || widget.selectedAddress != null))
-                TextButton(
-                  onPressed: widget.onChangePressed,
-                  child: Text(
-                    isGuest ? 'edit'.tr(context) : 'change'.tr(context),
-                    style: context.titleSmall!.copyWith(color: AppTheme.primaryColor,fontWeight: FontWeight.w800),
-                  ),
-                ),
             ],
           ),
+          const SizedBox(height: 16),
           if (widget.isLoading)
             _buildShimmerEffect(context)
           else if ((isGuest && widget.selectedAddress == null) || 
                    (widget.addresses.isEmpty && !isGuest))
             _buildAddAddressPrompt(context, isGuest)
           else
-            _buildAddressCards(context, isGuest),
+            _buildSelectedAddress(context, isGuest),
         ],
       ),
     );
   }
 
   Widget _buildShimmerEffect(BuildContext context) {
-    return SizedBox(
-      height: 130,
-      child: Shimmer.fromColors(
-        baseColor: Colors.grey[300]!,
-        highlightColor: Colors.grey[100]!,
-        child: ListView.builder(
-          scrollDirection: Axis.horizontal,
-          itemCount: 2,
-          itemBuilder: (context, index) => Container(
-            width: 220,
-            margin: const EdgeInsets.only(right: 12),
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.grey[300]!),
-              borderRadius: BorderRadius.circular(8),
-            ),
-          ),
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[300]!,
+      highlightColor: Colors.grey[100]!,
+      child: Container(
+        width: double.infinity,
+        height: 120,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border.all(color: Colors.grey[300]!),
+          // No border radius for flat design
         ),
       ),
     );
@@ -158,7 +146,9 @@ class _ShippingAddressSectionState extends State<ShippingAddressSection> {
           CustomButton(
             onPressed: widget.onChangePressed,
             text: 'add_address'.tr(context),
-            isGradient: true,
+            isGradient: false,
+            backgroundColor: AppTheme.primaryColor,
+            textColor: Colors.white,
             padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
           ),
         ],
@@ -166,39 +156,20 @@ class _ShippingAddressSectionState extends State<ShippingAddressSection> {
     );
   }
 
-  Widget _buildAddressCards(BuildContext context, bool isGuest) {
-    final displayAddresses = isGuest 
-        ? (widget.selectedAddress != null ? [widget.selectedAddress!] : []) 
-        : widget.addresses;
+  Widget _buildSelectedAddress(BuildContext context, bool isGuest) {
+    // For both guest and logged-in users, only show the selected/default address
+    final displayAddress = widget.selectedAddress;
     
-    if (displayAddresses.isEmpty) {
+    if (displayAddress == null) {
       return _buildAddAddressPrompt(context, isGuest);
     }
 
-    return SizedBox(
-      height: 120,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: displayAddresses.length,
-        itemBuilder: (context, index) {
-          final address = displayAddresses[index];
-          final isSelected = widget.selectedAddress?.id == address.id;
-          
-          return AddressCard(
-            address: address,
-            isSelected: isSelected,
-            userName: AppStrings.userName ?? 'John Doe',
-            onTap: () {
-              // When user manually selects an address, mark initial selection as done
-              _initialSelectionDone = true;
-              widget.onAddressSelected(address);
-            },
-            onEdit: () => isGuest 
-                ? widget.onChangePressed() 
-                : widget.onEditPressed(address.id),
-          );
-        },
-      ),
+    return AddressCard(
+      address: displayAddress,
+      isSelected: true,
+      userName: AppStrings.userName ?? '',
+      onTap: () {},
+      onEdit: widget.onChangePressed,
     );
   }
 }

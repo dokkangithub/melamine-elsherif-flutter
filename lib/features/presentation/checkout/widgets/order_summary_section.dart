@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:melamine_elsherif/core/config/themes.dart/theme.dart';
 import 'package:melamine_elsherif/core/utils/extension/text_theme_extension.dart';
+import 'package:melamine_elsherif/core/utils/widgets/custom_loading.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../../../core/utils/extension/translate_extension.dart';
 import '../../../../core/utils/widgets/custom_form_field.dart';
@@ -40,10 +41,16 @@ class OrderSummarySection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('order_summary'.tr(context),
-            style: context.titleMedium!.copyWith(fontWeight: FontWeight.w600),
+          Row(
+            children: [
+              Icon(Icons.receipt_outlined, color: Colors.grey[600], size: 20),
+              const SizedBox(width: 8),
+              Text('order_summary'.tr(context),
+                style: context.titleLarge!.copyWith(fontWeight: FontWeight.w600),
+              ),
+            ],
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 16),
 
           // Cart Items List
           if (isInitialLoading)
@@ -53,12 +60,12 @@ class OrderSummarySection extends StatelessWidget {
               (item) => Column(
                 children: [
                   CheckoutCartItem(item: item),
-                  const Divider(color: AppTheme.lightDividerColor),
+                  const Divider(color: Colors.grey, height: 1, thickness: 0.5),
                 ],
               ),
             ),
 
-          const SizedBox(height: 10),
+          const SizedBox(height: 20),
           // Price Summary
           if (isInitialLoading)
             _buildShimmerEffect(context)
@@ -68,8 +75,7 @@ class OrderSummarySection extends StatelessWidget {
                 _buildPriceRow(
                   context: context,
                   label: 'subtotal'.tr(context),
-                  value:
-                      '${(cartSummary.subtotal)}',
+                  value: '${(cartSummary.subtotal)} ${cartSummary.currencySymbol}',
                 ),
                 const SizedBox(height: 12),
                 _buildPriceRow(
@@ -109,54 +115,39 @@ class OrderSummarySection extends StatelessWidget {
                   label: 'total'.tr(context),
                   value:
                       '${cartSummary.total.toStringAsFixed(2)} ${cartSummary.currencySymbol}',
+                  valueStyle: context.headlineSmall?.copyWith(
+                    color: AppTheme.primaryColor,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
               ],
             ),
-          const SizedBox(height: 10),
+
+          
+          const SizedBox(height: 20),
+          
           // Add note to order section
-          Container(
-            color: Colors.white,
-            margin: const EdgeInsets.only(bottom: 12),
-            child: CustomTextFormField(
-              controller: noteController,
-              maxLines: 2,
-              hint: 'add_note_to_order'.tr(context),
-            ),
-          ),
-          const SizedBox(height: 10),
-          // Secure Checkout Benefits
-          _buildSecureCheckoutBenefits(context),
+          _buildNoteSection(context),
+          
         ],
       ),
     );
   }
 
-  Widget _buildSecureCheckoutBenefits(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        _buildBenefitItem(icon: Icons.lock_outline, label: 'secure_ssl'.tr(context)),
-        _buildBenefitItem(
-          icon: Icons.local_shipping_outlined,
-          label: 'free_shipping'.tr(context),
+  Widget _buildNoteSection(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.grey[300]!),
+      ),
+      child: TextField(
+        controller: noteController,
+        maxLines: 3,
+        decoration: InputDecoration(
+          hintText: 'add_note_to_order'.tr(context),
+          border: InputBorder.none,
+          contentPadding: const EdgeInsets.all(16),
         ),
-        _buildBenefitItem(icon: Icons.access_time, label: '30_day_returns'.tr(context)),
-        _buildBenefitItem(icon: Icons.payment, label: 'secure_payment'.tr(context)),
-      ],
-    );
-  }
-
-  Widget _buildBenefitItem({required IconData icon, required String label}) {
-    return Column(
-      children: [
-        Icon(icon, size: 20, color: Colors.grey[600]),
-        const SizedBox(height: 4),
-        Text(
-          label,
-          style: TextStyle(fontSize: 10, color: Colors.grey[600]),
-          textAlign: TextAlign.center,
-        ),
-      ],
+      ),
     );
   }
 
@@ -236,22 +227,19 @@ class OrderSummarySection extends StatelessWidget {
     required String value,
     bool isLoading = false,
     Color color = Colors.black,
+    TextStyle? valueStyle,
   }) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(label, style: context.titleSmall!.copyWith(color: AppTheme.black)),
+        Text(label, style: context.titleMedium!.copyWith(color: AppTheme.black)),
         if (isLoading)
-          const SizedBox(
-            width: 20,
-            height: 20,
-            child: CircularProgressIndicator(
-              strokeWidth: 2,
-              valueColor: AlwaysStoppedAnimation<Color>(Colors.grey),
-            ),
-          )
+          const CustomLoadingWidget()
         else
-          Text(value, style: context.titleSmall!.copyWith(color: color)),
+          Text(
+            value, 
+            style: valueStyle ?? context.titleMedium!.copyWith(color: color),
+          ),
       ],
     );
   }

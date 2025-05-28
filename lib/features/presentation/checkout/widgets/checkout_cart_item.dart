@@ -23,8 +23,8 @@ class CheckoutCartItem extends StatelessWidget {
             borderRadius: BorderRadius.circular(8),
             child: CustomImage(
               imageUrl:  item.thumbnailImage,
-              width: 60,
-              height: 60,
+              width: 70,
+              height: 70,
               fit: BoxFit.cover,
             ),
           ),
@@ -41,7 +41,7 @@ class CheckoutCartItem extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(height: 4),
-                item.variant == '' ? SizedBox.shrink() : Text('Model: ${item.variant}',
+                item.variant == '' ? const SizedBox.shrink() : Text('Model: ${item.variant}',
                   style: Theme
                       .of(context)
                       .textTheme
@@ -67,7 +67,7 @@ class CheckoutCartItem extends StatelessWidget {
                         borderRadius: BorderRadius.circular(4),
                       ),
                       child: Text('Qty: ${item.quantity}',
-                        style: Theme.of(context).textTheme.bodySmall,
+                        style: Theme.of(context).textTheme.titleSmall,
                       ),
                     ),
                   ],

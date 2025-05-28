@@ -10,31 +10,36 @@ class PaymentMethodSection extends StatelessWidget {
   final List<PaymentType> paymentTypes;
   final String selectedPaymentTypeKey;
   final Function(String) onPaymentTypeSelected;
-  final bool isLoading; // Add a loading state
+  final bool isLoading;
 
   const PaymentMethodSection({
     super.key,
     required this.paymentTypes,
     required this.selectedPaymentTypeKey,
     required this.onPaymentTypeSelected,
-    this.isLoading = false, // Default to false
+    this.isLoading = false,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       color: Colors.white,
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      margin: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: const EdgeInsets.only(bottom: 16),
-            child: Text(
-              'payment_method'.tr(context),
-              style: context.titleLarge?.copyWith(fontWeight: FontWeight.w600),
-            ),
+          Row(
+            children: [
+              Icon(Icons.payment_outlined, color: Colors.grey[600], size: 20),
+              const SizedBox(width: 8),
+              Text(
+                'payment_method'.tr(context),
+                style: context.titleLarge?.copyWith(fontWeight: FontWeight.w600),
+              ),
+            ],
           ),
+          const SizedBox(height: 16),
           if (isLoading)
             _buildShimmerEffect(context)
           else if (paymentTypes.isEmpty)
@@ -61,33 +66,13 @@ class PaymentMethodSection extends StatelessWidget {
       highlightColor: Colors.grey[100]!,
       child: Column(
         children: List.generate(2, (index) =>
-        Card(
-          elevation: 2,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+        Container(
+          width: double.infinity,
+          height: 60,
           margin: const EdgeInsets.only(bottom: 8),
-          child: Padding(
-            padding: const EdgeInsets.all(6.0),
-            child: Row(
-              children: [
-                Container(
-                  width: 24,
-                  height: 24,
-                  color: Colors.white,
-                ),
-                const SizedBox(width: 12),
-                Container(
-                  width: 40,
-                  height: 24,
-                  color: Colors.white,
-                ),
-                const SizedBox(width: 12),
-                Container(
-                  width: 100,
-                  height: 16,
-                  color: Colors.white,
-                ),
-              ],
-            ),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            border: Border.all(color: Colors.grey[300]!),
           ),
         ),
         ),
@@ -103,12 +88,35 @@ class PaymentMethodSection extends StatelessWidget {
     Widget paymentIcon;
     bool isArabic = Directionality.of(context) == TextDirection.rtl;
 
+    // Determine icon based on payment type key if image fails to load
+    IconData getIconForPaymentType(String key) {
+      switch (key) {
+        case 'cash_on_delivery':
+          return Icons.money;
+        case 'wallet':
+          return Icons.account_balance_wallet;
+        case 'digital_wallet':
+          return Icons.smartphone;
+        case 'credit_card':
+          return Icons.credit_card;
+        case 'club_points':
+          return Icons.star;
+        default:
+          return Icons.payment;
+      }
+    }
+
     // Default icon handling with error fallback
     paymentIcon = CustomImage(
       imageUrl: paymentType.image,
-      width: 40,
+      width: 32,
       height: 24,
       fit: BoxFit.contain,
+      errorWidget: Icon(
+        getIconForPaymentType(paymentType.paymentTypeKey),
+        size: 24,
+        color: Colors.grey[600],
+      ),
     );
 
     // Translate payment method name based on language
@@ -116,24 +124,37 @@ class PaymentMethodSection extends StatelessWidget {
         ? _getArabicPaymentMethodName(paymentType.paymentTypeKey)
         : paymentType.name;
 
-    return Card(
-      elevation: 0.5,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+    return Container(
       margin: const EdgeInsets.only(bottom: 8),
-      child: Padding(
-        padding: const EdgeInsets.all(6.0),
-        child: Row(
-          children: [
-            Radio<String>(
-              value: paymentType.paymentTypeKey,
-              groupValue: selectedPaymentTypeKey,
-              onChanged: (value) => onPaymentTypeSelected(value!),
-              activeColor: AppTheme.primaryColor,
-            ),
-            paymentIcon,
-            const SizedBox(width: 12),
-            Text(paymentMethodName, style: context.titleSmall),
-          ],
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: isSelected ? AppTheme.primaryColor : Colors.grey[300]!,
+          width: isSelected ? 1 : 0.5,
+        ),
+      ),
+      child: InkWell(
+        onTap: () => onPaymentTypeSelected(paymentType.paymentTypeKey),
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Row(
+            children: [
+              Radio<String>(
+                value: paymentType.paymentTypeKey,
+                groupValue: selectedPaymentTypeKey,
+                onChanged: (value) => onPaymentTypeSelected(value!),
+                activeColor: AppTheme.primaryColor,
+              ),
+              const SizedBox(width: 8),
+              paymentIcon,
+              const SizedBox(width: 16),
+              Text(
+                paymentMethodName, 
+                style: context.titleMedium?.copyWith(
+                  fontWeight: isSelected ? FontWeight.w500 : FontWeight.normal
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -184,8 +205,14 @@ class PaymentMethodSection extends StatelessWidget {
         return 'إم بيسا';
       case 'mercadopago':
         return 'ميركادو باجو';
+      case 'digital_wallet':
+        return 'المحفظة الرقمية';
+      case 'credit_card':
+        return 'بطاقة ائتمان';
+      case 'club_points':
+        return 'نقاط النادي';
       default:
-        return paymentTypeKey; // Fallback to original key if no translation available
+        return paymentTypeKey;
     }
   }
 }

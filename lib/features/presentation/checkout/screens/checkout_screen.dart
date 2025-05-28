@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:melamine_elsherif/core/config/themes.dart/theme.dart';
 import 'package:melamine_elsherif/core/utils/constants/app_assets.dart';
 import 'package:melamine_elsherif/core/utils/extension/text_theme_extension.dart';
+import 'package:melamine_elsherif/core/utils/widgets/custom_back_button.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_button.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_cached_image.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_form_field.dart';
@@ -300,25 +301,17 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[50],
       appBar: AppBar(
         backgroundColor: AppTheme.white,
         elevation: 0,
         scrolledUnderElevation: 0,
         title: Text(
           'checkout'.tr(context),
-          style: context.headlineSmall!.copyWith(fontWeight: FontWeight.w600),
+          style: context.headlineMedium!.copyWith(fontWeight: FontWeight.w600),
         ),
         centerTitle: true,
-        leading: InkWell(
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Transform.rotate(
-              angle: Directionality.of(context) == TextDirection.rtl ? 3.14159 : 0,
-              child: const CustomImage(assetPath: AppSvgs.back),
-            ),
-          ),
-          onTap: () => Navigator.pop(context),
-        ),
+        leading: const CustomBackButton(),
       ),
       body: Consumer3<AddressProvider, PaymentProvider, CartProvider>(
         builder: (context, addressProvider, paymentProvider, cartProvider, _) {
@@ -331,85 +324,78 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           return Column(
             children: [
               Expanded(
-                child: ListView(
-                  children: [
-                    // Shipping Address Section
-                    ShippingAddressSection(
-                      selectedAddress: _selectedAddress,
-                      addresses: _isGuestUser ? [] : addressProvider.addresses,
-                      onAddressSelected: (address) {
-                        setState(() {
-                          _selectedAddress = address;
-                        });
-                        _updateShippingWithSelectedAddress(paymentProvider);
-                      },
-                      onChangePressed: _navigateToAddressList,
-                      onEditPressed: _navigateToEditAddress,
-                      isLoading: isLoading,
-                    ),
-
-                    // Payment Method Section
-                    PaymentMethodSection(
-                      paymentTypes: paymentProvider.paymentTypes,
-                      selectedPaymentTypeKey:
-                          paymentProvider.selectedPaymentTypeKey,
-                      onPaymentTypeSelected: paymentProvider.selectPaymentType,
-                      isLoading: isLoading,
-                    ),
-
-                    // Remove Coupon Section and directly show Order Summary
-                    OrderSummarySection(
-                      cartSummary: cartProvider.cartSummary!,
-                      cartItems: cartProvider.cartItems,
-                      isUpdatingShipping:
-                          paymentProvider.shippingUpdateState ==
-                          LoadingState.loading,
-                      shippingError: paymentProvider.errorMessage,
-                      isInitialLoading: isLoading, noteController: _noteController,
-                    ),
-
-                  ],
-                ),
-              ),
-
-              // Payment Button
-              if (!isLoading)
-                _isProcessingPayment
-                    ? const CustomLoadingWidget()
-                    : Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.all(16),
-                      decoration: const BoxDecoration(
-                        color: Colors.white,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black12,
-                            offset: Offset(0, -2),
-                            blurRadius: 4,
-                          ),
-                        ],
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 8),
+                      
+                      // Shipping Address Section
+                      ShippingAddressSection(
+                        selectedAddress: _selectedAddress,
+                        addresses: _isGuestUser ? [] : addressProvider.addresses,
+                        onAddressSelected: (address) {
+                          setState(() {
+                            _selectedAddress = address;
+                          });
+                          _updateShippingWithSelectedAddress(paymentProvider);
+                        },
+                        onChangePressed: _navigateToAddressList,
+                        onEditPressed: _navigateToEditAddress,
+                        isLoading: isLoading,
                       ),
-                      child: CustomButton(
-                        isGradient: true,
-                        onPressed:
-                            _isProcessingPayment ? null : _processPayment,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text('place_order'.tr(context),
-                              style: context.titleLarge?.copyWith(
-                                color: AppTheme.white,
+
+                      // Payment Method Section
+                      PaymentMethodSection(
+                        paymentTypes: paymentProvider.paymentTypes,
+                        selectedPaymentTypeKey:
+                            paymentProvider.selectedPaymentTypeKey,
+                        onPaymentTypeSelected: paymentProvider.selectPaymentType,
+                        isLoading: isLoading,
+                      ),
+
+                      // Order Summary Section
+                      OrderSummarySection(
+                        cartSummary: cartProvider.cartSummary!,
+                        cartItems: cartProvider.cartItems,
+                        isUpdatingShipping:
+                            paymentProvider.shippingUpdateState ==
+                            LoadingState.loading,
+                        shippingError: paymentProvider.errorMessage,
+                        isInitialLoading: isLoading, 
+                        noteController: _noteController,
+                      ),
+
+                      Consumer<PaymentProvider>(
+                        builder: (context, paymentProvider, _) {
+                          final bool isLoading = paymentProvider.paymentTypesState == LoadingState.loading;
+
+                          if (isLoading || _isProcessingPayment) {
+                            return const CustomLoadingWidget();
+                          }
+
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                            child: CustomButton(
+                              onPressed: _processPayment,
+                              fullWidth: true,
+                              child: Text(
+                                'place_order'.tr(context),
+                                textAlign: TextAlign.center,
+                                style: context.headlineSmall!.copyWith(color: AppTheme.white,fontWeight: FontWeight.w700),
                               ),
                             ),
-                          ],
-                        ),
+                          );
+                        },
                       ),
-                    ),
+                      const SizedBox(height: 25),
+                    ],
+                  ),
+                ),
+              ),
             ],
           );
         },
       ),
     );
   }
-
 }
