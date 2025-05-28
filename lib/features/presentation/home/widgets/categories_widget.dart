@@ -26,7 +26,7 @@ class CategoriesWidget extends StatelessWidget {
         }
 
         // Show error state
-        if (categoryProvider.featuredCategoriesState == LoadingState.error) {
+        if (categoryProvider.categoriesState == LoadingState.error) {
           return _buildEmptyState();
         }
 
@@ -49,15 +49,15 @@ class CategoriesWidget extends StatelessWidget {
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
               childAspectRatio: 1.0,
-              crossAxisSpacing: 8,
-              mainAxisSpacing: 8,
+              crossAxisSpacing: 4,
+              mainAxisSpacing: 4,
             ),
             itemCount: displayCategories.length,
             shrinkWrap: true,
             padding: EdgeInsets.zero,
             physics: const NeverScrollableScrollPhysics(),
             itemBuilder: (context, index) => CategoryCard(
-              imageUrl: displayCategories[index].coverImage ?? '',
+              imageUrl: displayCategories[index].banner ?? '',
               // Use predefined display names for better UI match
               name: displayCategories[index].name??'',
               onTap: () {

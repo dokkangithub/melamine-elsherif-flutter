@@ -151,7 +151,7 @@ class _CategoryWidgetState extends State<CategoryWidget> with SingleTickerProvid
             ClipRRect(
               borderRadius: BorderRadius.circular(0),
               child: CustomImage(
-                imageUrl: category.coverImage ?? '',
+                imageUrl: category.banner ?? '',
                 width: double.infinity,
                 height: double.infinity,
                 fit: BoxFit.cover,

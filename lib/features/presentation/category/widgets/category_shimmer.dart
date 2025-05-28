@@ -38,11 +38,11 @@ class CategoryShimmer extends StatelessWidget {
                   baseColor: Colors.grey[300]!,
                   highlightColor: Colors.grey[100]!,
                   child: Container(
-                    width: 180,
+                    width: 200,
                     height: 24,
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(4),
+                      borderRadius: BorderRadius.circular(0),
                     ),
                   ),
                 ),
@@ -55,7 +55,7 @@ class CategoryShimmer extends StatelessWidget {
                     height: 16,
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(4),
+                      borderRadius: BorderRadius.circular(0),
                     ),
                   ),
                 ),
@@ -71,9 +71,9 @@ class CategoryShimmer extends StatelessWidget {
               physics: const NeverScrollableScrollPhysics(),
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
-                crossAxisSpacing: 16,
-                mainAxisSpacing: 16,
-                childAspectRatio: 1,
+                crossAxisSpacing: 8,
+                mainAxisSpacing: 8,
+                childAspectRatio: 0.65,
               ),
               itemCount: 6,
               itemBuilder: (context, index) {
@@ -83,7 +83,7 @@ class CategoryShimmer extends StatelessWidget {
                   child: Container(
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(0),
                     ),
                   ),
                 );
