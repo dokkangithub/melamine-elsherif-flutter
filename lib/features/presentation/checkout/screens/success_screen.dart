@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:melamine_elsherif/core/config/routes.dart/routes.dart';
 import 'package:melamine_elsherif/core/config/themes.dart/theme.dart';
 import 'package:melamine_elsherif/core/utils/constants/app_assets.dart';
@@ -22,12 +23,8 @@ class SuccessScreen extends StatelessWidget {
     
     // Format the order number
     String orderNumber = "#ORD-${orderDetails.combinedOrder!.id}";
-    
-    // Generate estimated delivery date (5 days from now)
-    final now = DateTime.now();
-    final deliveryDate = now.add(const Duration(days: 5));
-    final formattedDate = "${_getMonthName(deliveryDate.month)} ${deliveryDate.day}, ${deliveryDate.year}";
-    
+
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -39,23 +36,7 @@ class SuccessScreen extends StatelessWidget {
               const SizedBox(height: 60),
               
               // Success check icon
-              Center(
-                child: Container(
-                  width: 100,
-                  height: 100,
-                  decoration: const BoxDecoration(
-                    color: Color(0xFFBD5B4D), // Adjusted to match image
-                    shape: BoxShape.circle,
-                  ),
-                  child: const Center(
-                    child: Icon(
-                      Icons.check,
-                      size: 60,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              ),
+              Lottie.asset(AppAnimations.successCheckout,fit: BoxFit.contain,height: 200,width: 200),
               const SizedBox(height: 40),
 
               // Thank you heading
@@ -120,7 +101,7 @@ class SuccessScreen extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          formattedDate,
+                          '3-5 ${"days".tr(context)}',
                           style: context.titleSmall?.copyWith(
                             color: Colors.black,
                             fontWeight: FontWeight.w500,
@@ -142,7 +123,7 @@ class SuccessScreen extends StatelessWidget {
                     AppRoutes.navigateToAndRemoveUntil(context, AppRoutes.mainLayoutScreen);
                   }
                 },
-                backgroundColor: const Color(0xFFBD5B4D),
+                backgroundColor: AppTheme.primaryColor,
                 borderRadius: 8,
                 child: Center(
                   child: Text(
@@ -164,31 +145,23 @@ class SuccessScreen extends StatelessWidget {
                 },
                 isOutlined: true,
                 borderRadius: 8,
-                backgroundColor: const Color(0xFFBD5B4D),
+                backgroundColor: AppTheme.primaryColor,
                 child: Center(
                   child: Text(
                     "continue_shopping".tr(context),
                     style: context.headlineSmall?.copyWith(
-                      color: const Color(0xFFBD5B4D),
+                      color: AppTheme.primaryColor,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
                 ),
               ),
-          SizedBox(height: 80)
+          const SizedBox(height: 80)
             ],
           ),
         ),
       ),
     );
   }
-  
-  // Helper method to convert month number to name
-  String _getMonthName(int month) {
-    const months = [
-      'January', 'February', 'March', 'April', 'May', 'June',
-      'July', 'August', 'September', 'October', 'November', 'December'
-    ];
-    return months[month - 1];
-  }
+
 }
