@@ -25,10 +25,6 @@ class SearchInputField extends StatelessWidget {
     return CustomTextFormField(
       controller: controller,
       textInputAction: TextInputAction.search,
-      prefixIcon: const Padding(
-        padding: EdgeInsets.all(14.0),
-        child: CustomImage(assetPath: AppSvgs.colored_search_icon),
-      ),
       suffixIcon: InkWell(
           onTap: (){
             controller.clear();

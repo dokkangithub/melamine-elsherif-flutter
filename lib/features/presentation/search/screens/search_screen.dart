@@ -95,21 +95,19 @@ class _SearchScreenState extends State<SearchScreen> {
           statusBarColor: AppTheme.white,
           statusBarIconBrightness: Brightness.dark,
         ),
-        toolbarHeight: 0.0,
+        leading: const CustomBackButton(),
+        backgroundColor: AppTheme.white,
         elevation: 0,
       ),
       body: Consumer<SearchProvider>(
         builder: (context, searchProvider, _) {
           return Column(
             children: [
-              const SizedBox(height: 20),
               FadeIn(
                 duration: const Duration(milliseconds: 400),
                 child: Row(
                   children: [
                     const SizedBox(width: 20),
-                    const CustomBackButton(respectDirection: true),
-                    const SizedBox(width: 10),
                     Expanded(
                       child: SearchInputField(
                         controller: _searchController,
@@ -230,7 +228,7 @@ class _SearchScreenState extends State<SearchScreen> {
           children: [
             Text(
               'search_suggestions'.tr(context),
-              style: context.titleMedium!.copyWith(fontWeight: FontWeight.w700),
+              style: context.headlineSmall!.copyWith(fontWeight: FontWeight.w700),
             ),
             const SizedBox(height: 8),
             Wrap(
@@ -248,21 +246,21 @@ class _SearchScreenState extends State<SearchScreen> {
                   splashColor: Colors.transparent,
                   highlightColor: Colors.transparent,
                   hoverColor: Colors.transparent,
-                  borderRadius: BorderRadius.circular(16.0),
+                  borderRadius: BorderRadius.circular(0.0),
                   child: Chip(
                     label: Row(
                        mainAxisSize: MainAxisSize.min,
                        children: [
                          const Icon(Icons.refresh,color: AppTheme.primaryColor, size: 16),
                          const SizedBox(width: 4),
-                         Text(suggestion.query), 
+                         Text(suggestion.query,style: context.titleSmall),
                        ],
                      ),
                     backgroundColor: Colors.grey[200],
                     padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
                     shape: RoundedRectangleBorder(
                       side: const BorderSide(color: Colors.red, width: 0.002),
-                      borderRadius: BorderRadius.circular(16.0),
+                      borderRadius: BorderRadius.circular(0.0),
                     ),
                   ),
                 );

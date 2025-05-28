@@ -22,7 +22,7 @@ class CustomProductCardForAllProducts extends StatelessWidget {
     List<Widget> stars = [];
     int fullStars = ratingValue.floor();
     double remainder = ratingValue - fullStars;
-    const starColor = Color(0xFFD9534F);
+    const starColor = AppTheme.primaryColor;
     const starSize = 14.0; // Reduced star size
 
     for (int i = 0; i < 5; i++) {
@@ -55,81 +55,81 @@ class CustomProductCardForAllProducts extends StatelessWidget {
         width: context.responsive(170), 
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: Colors.grey.shade300, width: 0.8),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withValues(alpha: 0.12),
-              spreadRadius: 0.5,
-              blurRadius: 2,
-              offset: const Offset(0, 1),
+          borderRadius: BorderRadius.circular(0),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Product image
+            AspectRatio(
+              aspectRatio: 1.05,
+              child: CustomImage(
+                width: double.infinity,
+                imageUrl: product.thumbnailImage,
+                fit: BoxFit.cover,
+              ),
+            ),
+            const SizedBox(height: 4),
+
+            // Product details
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 2.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min, // Important for Column within Column
+                children: [
+                  Align(
+                    alignment: currentTextDirection == TextDirection.rtl ? Alignment.centerRight : Alignment.centerLeft,
+                    child: Text(
+                      product.name,
+                      style: context.titleLarge?.copyWith(
+                        fontWeight: FontWeight.w500,
+                        color: AppTheme.black,
+                        height: 1.2,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: currentTextDirection == TextDirection.rtl ? TextAlign.right : TextAlign.left,
+                      textDirection: currentTextDirection,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+
+                  _buildRatingStars(context, averageRating),
+
+                  const SizedBox(height: 2),
+
+                  Align(
+                    alignment: currentTextDirection == TextDirection.rtl ? Alignment.centerRight : Alignment.centerLeft,
+                    child: Row(
+                      spacing: 4,
+                      children: [
+                        Text(
+                          product.discountedPrice,
+                          style: context.titleLarge?.copyWith(
+                            fontWeight: FontWeight.w900,
+                            color: AppTheme.primaryColor,
+                          ),
+                          textAlign: currentTextDirection == TextDirection.rtl ? TextAlign.right : TextAlign.left,
+                          textDirection: currentTextDirection,
+                        ),
+                        product.hasDiscount? Text(
+                          product.mainPrice,
+                          style: context.titleSmall?.copyWith(
+                            fontWeight: FontWeight.w400,
+                            color: AppTheme.darkDividerColor,
+                            decoration: TextDecoration.lineThrough
+                          ),
+                          textAlign: currentTextDirection == TextDirection.rtl ? TextAlign.right : TextAlign.left,
+                          textDirection: currentTextDirection,
+                        ):const SizedBox.shrink(),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
-        ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0), 
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Product image
-              AspectRatio(
-                aspectRatio: 1.05,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(6),
-                  child: CustomImage(
-                    width: double.infinity,
-                    imageUrl: product.thumbnailImage,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 4), 
-
-              // Product details
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 2.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min, // Important for Column within Column
-                  children: [
-                    Align(
-                      alignment: currentTextDirection == TextDirection.rtl ? Alignment.centerRight : Alignment.centerLeft,
-                      child: Text(
-                        product.name,
-                        style: context.titleSmall?.copyWith(
-                          fontWeight: FontWeight.w500,
-                          color: AppTheme.black,
-                          height: 1.2,
-                        ),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: currentTextDirection == TextDirection.rtl ? TextAlign.right : TextAlign.left,
-                        textDirection: currentTextDirection,
-                      ),
-                    ),
-                    const SizedBox(height: 2),
-                    
-                    _buildRatingStars(context, averageRating),
-                    
-                    const SizedBox(height: 2),
-                    
-                    Align(
-                      alignment: currentTextDirection == TextDirection.rtl ? Alignment.centerRight : Alignment.centerLeft,
-                      child: Text(
-                        product.discountedPrice,
-                        style: context.titleMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: AppTheme.primaryColor,
-                        ),
-                        textAlign: currentTextDirection == TextDirection.rtl ? TextAlign.right : TextAlign.left,
-                        textDirection: currentTextDirection,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
         ),
       ),
     );

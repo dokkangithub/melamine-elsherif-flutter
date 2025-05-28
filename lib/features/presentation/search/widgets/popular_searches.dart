@@ -25,7 +25,7 @@ class PopularSearches extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           child: Text(
             'most_searched'.tr(context),
-            style: context.titleMedium!.copyWith(fontWeight: FontWeight.w700),
+            style: context.headlineSmall!.copyWith(fontWeight: FontWeight.w700),
           ),
         ),
         SizedBox(
