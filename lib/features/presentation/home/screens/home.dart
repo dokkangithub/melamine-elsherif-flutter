@@ -105,8 +105,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
                           FeaturedProductsWidget(),
 
-                          SimpleBannerCarousel(),
-
                           CategoriesWidget(),
 
                           NewProductsWidget(),
