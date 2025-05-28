@@ -70,37 +70,27 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
   }
 
   void _scrollListener() {
-    print("SCROLL_DEBUG: position=${_scrollController.position.pixels}, maxScrollExtent=${_scrollController.position.maxScrollExtent}");
-    if (_scrollController.position.pixels >=
+    if (!_isLoading && 
+        _scrollController.position.pixels >= 
         _scrollController.position.maxScrollExtent - 200) {
-      print("SCROLL_DEBUG: Threshold reached, attempting to load more");
       _loadMoreProducts();
     }
   }
 
   Future<void> _loadMoreProducts() async {
-    if (_isLoading) {
-      print("SCROLL_DEBUG: Already loading, skipping");
-      return;
-    }
     final provider = Provider.of<HomeProvider>(context, listen: false);
-
-    if (!_hasMoreProducts(provider)) {
-      print("SCROLL_DEBUG: No more products available for ${_selectedProductType.name}");
+    
+    if (_isLoading || !_hasMoreProducts(provider)) {
       return;
     }
-
+    
     setState(() => _isLoading = true);
-
-    print("SCROLL_DEBUG: Loading more products, _isLoading: $_isLoading");
-
+    
     try {
       await _fetchProducts(provider);
-      print("SCROLL_DEBUG: Successfully fetched more products");
     } finally {
       if (mounted) {
         setState(() => _isLoading = false);
-        print("SCROLL_DEBUG: Finished loading, _isLoading: $_isLoading");
       }
     }
   }
@@ -109,8 +99,6 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
     HomeProvider provider, {
     bool refresh = false,
   }) async {
-    print("SCROLL_DEBUG: Fetching products for ${_selectedProductType.name}, refresh=$refresh");
-    
     switch (_selectedProductType) {
       case ProductType.all:
         await provider.fetchAllProducts(refresh: refresh);
@@ -128,35 +116,21 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
         await provider.fetchFlashDealProducts(refresh: refresh);
         break;
     }
-    print("SCROLL_DEBUG: Fetch completed for ${_selectedProductType.name}");
   }
 
   bool _hasMoreProducts(HomeProvider provider) {
-    bool hasMore = false;
     switch (_selectedProductType) {
       case ProductType.all:
-        hasMore = provider.hasMoreAllProducts;
-        print("SCROLL_DEBUG: hasMoreAllProducts = ${provider.hasMoreAllProducts}, current page = ${provider.allProductsPage}");
-        break;
+        return provider.hasMoreAllProducts;
       case ProductType.bestSelling:
-        hasMore = provider.hasMoreBestSellingProducts;
-        print("SCROLL_DEBUG: hasMoreBestSellingProducts = ${provider.hasMoreBestSellingProducts}, current page = ${provider.bestSellingProductsPage}");
-        break;
+        return provider.hasMoreBestSellingProducts;
       case ProductType.featured:
-        hasMore = provider.hasMoreFeaturedProducts;
-        print("SCROLL_DEBUG: hasMoreFeaturedProducts = ${provider.hasMoreFeaturedProducts}, current page = ${provider.featuredProductsPage}");
-        break;
+        return provider.hasMoreFeaturedProducts;
       case ProductType.newArrival:
-        hasMore = provider.hasMoreNewProducts;
-        print("SCROLL_DEBUG: hasMoreNewProducts = ${provider.hasMoreNewProducts}, current page = ${provider.newProductsPage}");
-        break;
+        return provider.hasMoreNewProducts;
       case ProductType.flashDeal:
-        hasMore = false; // No pagination for today's deal
-        print("SCROLL_DEBUG: Flash Deal - no pagination");
-        break;
+        return false; // No pagination for flash deal
     }
-    print("SCROLL_DEBUG: Has more products for ${_selectedProductType.name}: $hasMore");
-    return hasMore;
   }
 
   List<Product> _getProducts(HomeProvider provider) {
@@ -361,8 +335,6 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
     if (_selectedProductType != ProductType.newArrival) {
       filteredProducts = products.where((product) => product.published == 1).toList();
     }
-    
-    print("Building grid with ${filteredProducts.length} products, isLoading: $_isLoading");
 
     return Column(
       children: [
@@ -384,13 +356,16 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
           ),
         ),
         if (_isLoading)
-          FadeIn(
-            duration: const Duration(milliseconds: 300),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16.0),
-              child: Text(
-                'loading_more_products'.tr(context),
-                style: context.titleSmall?.copyWith(color: AppTheme.accentColor),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16.0),
+            child: Center(
+              child: SizedBox(
+                height: 24,
+                width: 24,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  color: AppTheme.primaryColor,
+                ),
               ),
             ),
           ),
