@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:melamine_elsherif/core/utils/extension/responsive_extension.dart';
+import 'package:melamine_elsherif/core/config/themes.dart/theme.dart';
 import 'package:melamine_elsherif/core/utils/extension/text_theme_extension.dart';
-
-import '../../../../core/utils/widgets/custom_cached_image.dart';
+import 'package:melamine_elsherif/core/utils/widgets/custom_cached_image.dart';
 
 class CategoryCard extends StatelessWidget {
   final String imageUrl;
@@ -20,32 +19,36 @@ class CategoryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Expanded(
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(25),
-              child: CustomImage(
-               imageUrl:  imageUrl,
-                width: context.responsive(80),
-                height: context.responsive(60),
-                fit: BoxFit.contain,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(0), // Square corners
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            // Image
+            CustomImage(
+              imageUrl: imageUrl,
+              fit: BoxFit.cover,
+            ),
+            
+            // Dark overlay
+            Container(
+              color: Colors.black.withValues(alpha: 0.3),
+            ),
+            
+            // Category name
+            Align(
+              alignment: Alignment.center,
+              child: Text(
+                name.toUpperCase(),
+                style: context.headlineMedium!.copyWith(
+                  color: AppTheme.white,
+                  fontWeight: FontWeight.w700
+                ),
+                textAlign: TextAlign.center,
               ),
             ),
-          ),
-          const SizedBox(height: 8),
-          SizedBox(
-            height: 35,
-            child: Text(
-              name,
-              style: context.bodyMedium!.copyWith(fontWeight: FontWeight.w300),
-              textAlign: TextAlign.center,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

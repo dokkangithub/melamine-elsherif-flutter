@@ -11,6 +11,7 @@ import 'package:melamine_elsherif/features/presentation/category/controller/prov
 import 'package:melamine_elsherif/features/presentation/home/widgets/category_card.dart';
 import 'package:melamine_elsherif/features/presentation/home/widgets/shimmer/categories_shimmer.dart';
 import 'package:melamine_elsherif/features/presentation/main layout/controller/layout_provider.dart';
+import 'package:melamine_elsherif/core/utils/extension/text_theme_extension.dart';
 
 class CategoriesWidget extends StatelessWidget {
   const CategoriesWidget({super.key});
@@ -26,7 +27,7 @@ class CategoriesWidget extends StatelessWidget {
 
         // Show error state
         if (categoryProvider.featuredCategoriesState == LoadingState.error) {
-          return _buildEmptyState(context, "no_categories_available".tr(context));
+          return _buildEmptyState();
         }
 
         // Get categories data
@@ -34,60 +35,48 @@ class CategoriesWidget extends StatelessWidget {
 
         // Show empty state if no categories
         if (categories.isEmpty) {
-          return _buildEmptyState(
-            context,
-            "no_categories_available".tr(context),
-          );
+          return _buildEmptyState();
         }
+
+        // Only display first 4 categories
+        final displayCategories = categories.take(4).toList();
 
 
         // Show categories grid
-        return SizedBox(
-          height: 140,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SeeAllWidget(
-                title: 'categories'.tr(context),
-                onTap: () {
-                  Provider.of<LayoutProvider>(context, listen: false)
-                      .currentIndex = 1;
-                },
-              ),
-              const SizedBox(height: 12),
-              Expanded(
-                child: GridView.builder(
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 4,
-                    childAspectRatio: 0.75,
-                    crossAxisSpacing: 8,
-                    mainAxisSpacing: 8,
-                  ),
-                  itemCount: 4,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemBuilder: (context, index) => CategoryCard(
-                    imageUrl: categories[index].coverImage ?? '',
-                    name: categories[index].name ?? 'Category',
-                    onTap: () {
-                      AppRoutes.navigateTo(
-                        context,
-                        AppRoutes.allCategoryProductsScreen,
-                        arguments: {
-                          'category': categories[index],
-                        },
-                      );
-                    },
-                  ),
-                ),
-              ),
-            ],
+        return Container(
+          padding: const EdgeInsets.only(top: 0.0, bottom: 16.0),
+          child: GridView.builder(
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              childAspectRatio: 1.0,
+              crossAxisSpacing: 0,
+              mainAxisSpacing: 0,
+            ),
+            itemCount: displayCategories.length,
+            shrinkWrap: true,
+            padding: EdgeInsets.zero,
+            physics: const NeverScrollableScrollPhysics(),
+            itemBuilder: (context, index) => CategoryCard(
+              imageUrl: displayCategories[index].coverImage ?? '',
+              // Use predefined display names for better UI match
+              name: displayCategories[index].name??'',
+              onTap: () {
+                AppRoutes.navigateTo(
+                  context,
+                  AppRoutes.allCategoryProductsScreen,
+                  arguments: {
+                    'category': displayCategories[index],
+                  },
+                );
+              },
+            ),
           ),
         );
       },
     );
   }
 
-  Widget _buildEmptyState(BuildContext context, String message) {
+  Widget _buildEmptyState() {
     return const SizedBox.shrink();
   }
 }

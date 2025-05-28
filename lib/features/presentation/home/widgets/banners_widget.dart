@@ -56,7 +56,7 @@ class _SimpleBannerCarouselState extends State<SimpleBannerCarousel> {
               CarouselSlider.builder(
                 itemCount: sliders.length,
                 options: CarouselOptions(
-                  height: 150,
+                  height: 120,
                   aspectRatio: 16 / 9,
                   viewportFraction: 1,
                   initialPage: 0,
