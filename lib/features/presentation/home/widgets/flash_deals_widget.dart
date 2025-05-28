@@ -69,69 +69,86 @@ class FlashDealsWidget extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(top: 8.0, bottom: 15),
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: CustomImage(
-                imageUrl: deal.banner,
-                height: 180,
+              borderRadius: BorderRadius.circular(0),
+              child: SizedBox(
+                height: 200,
                 width: double.infinity,
-                fit: BoxFit.cover,
+                child: Stack(
+                  children: [
+                    CustomImage(
+                      imageUrl: deal.banner,
+                      height: 200,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                    ),
+                    // Color overlay
+                    Container(
+                      height: 200,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: Colors.black.withValues(alpha: 0.4), // Slightly darker for better text contrast
+                      ),
+                    ),
+                    // Text overlay
+                    Positioned.fill(
+                      child: Container(
+                        padding: const EdgeInsets.all(10),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            // Top section - Deal info
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                // Flash deal badge
+                                const SizedBox(height: 15),
+                                // Deal title
+                                Text(
+                                  'premium_dinnerware_collection'.tr(context),
+                                  style: context.displaySmall!.copyWith(color: AppTheme.white,fontWeight: FontWeight.w600,fontSize: 22),
+                                ),
+                                const SizedBox(height: 5),
+                                Text(
+                                  'discover_premium_quality_and_service'.tr(context),
+                                  style: context.titleLarge!.copyWith(color: AppTheme.white.withValues(alpha: 0.7),fontWeight: FontWeight.w400),
+                                ),
+                              ],
+                            ),
+                            // Bottom section - Discount
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                // Space for your countdown timer
+                                Text(
+                                  'ends_in'.tr(context),
+                                  style: context.titleLarge!.copyWith(color: AppTheme.white,fontWeight: FontWeight.w600),
+                                ),
+                                FlashDealCountdown(endDate: deal.date),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
 
-        // Row with title, countdown timer, and see all
-        // Row(
-        //   children: [
-        //
-        //     // Countdown timer
-        //     FlashDealCountdown(endDate: deal.date),
-        //     SeeAllWidget(
-        //       title: deal.title,
-        //       onTap: () {
-        //         AppRoutes.navigateTo(
-        //           context,
-        //           AppRoutes.allProductsByTypeScreen,
-        //           arguments: {
-        //             'productType': ProductType.flashDeal,
-        //             'title': deal.title,
-        //           },
-        //         );
-        //       },
-        //     ),
-        //     const SizedBox(height: 10),
-        //   ],
-        // ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              deal.title,
 
-              style: Theme.of(context).textTheme.headlineMedium!.copyWith(
-                fontWeight: FontWeight.w700,
-                letterSpacing: 1.2,
-              ),
-            ),
-            Row(
-              children: [
-
-                InkWell(
-                  onTap: () {
-                    AppRoutes.navigateTo(
-                      context,
-                      AppRoutes.allProductsByTypeScreen,
-                      arguments: {
-                        'productType': ProductType.flashDeal,
-                        'title': deal.title,
-                      },
-                    );
-                  },
-                  child: FlashDealCountdown(endDate: deal.date),
-                ),
-              ],
-            ),
-          ],
-        ),
+        SeeAllWidget(title: deal.title, onTap: () {
+          AppRoutes.navigateTo(
+            context,
+            AppRoutes.allProductsByTypeScreen,
+            arguments: {
+              'productType': ProductType.flashDeal,
+              'title': deal.title,
+            },
+          );
+        },),
 
         const SizedBox(height: 10),
 
@@ -208,23 +225,33 @@ class _FlashDealCountdownState extends State<FlashDealCountdown> {
     final minutes = _remainingTime.inMinutes % 60;
     final seconds = _remainingTime.inSeconds % 60;
 
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        const Icon(
-          Icons.access_time_rounded,
-          size: 16,
-          color: AppTheme.primaryColor,
-        ),
-        const SizedBox(width: 4),
-        Text(
-          '${hours.toString().padLeft(2, '0')}:${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}',
-          style: context.headlineSmall?.copyWith(
-            color: AppTheme.primaryColor,
-            fontWeight: FontWeight.w900,
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 12,
+        vertical: 6,
+      ),
+      decoration: BoxDecoration(
+        color: AppTheme.primaryColor,
+        borderRadius: BorderRadius.circular(0),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Icon(
+            Icons.access_time_rounded,
+            size: 16,
+            color: AppTheme.white,
           ),
-        ),
-      ],
+          const SizedBox(width: 4),
+          Text(
+            '${hours.toString().padLeft(2, '0')}:${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}',
+            style: context.headlineSmall?.copyWith(
+              color: AppTheme.white,
+              fontWeight: FontWeight.w900,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

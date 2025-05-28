@@ -10,6 +10,7 @@ class AppImages {
   static const String home_banner = '$imagesPath/home_banner.png';
   static const String plates_image = '$imagesPath/plates_image.png';
   static const String second_home_image = '$imagesPath/second_home_image.png';
+  static const String second_home_banner_gif = '$imagesPath/second_home_banner.gif';
   static const String summers_deals_image = '$imagesPath/summers_deals_image.png';
   static const String linearAppLogo = '$imagesPath/linear_app_logo.png';
   static const String wallet_icon = '$imagesPath/wallet.png';

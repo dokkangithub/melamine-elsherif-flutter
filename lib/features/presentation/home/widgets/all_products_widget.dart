@@ -78,7 +78,7 @@ class AllProductsWidget extends StatelessWidget {
               shrinkWrap: true,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
-                childAspectRatio: 0.6,
+                childAspectRatio: 0.55,
                 crossAxisSpacing: 0,
                 mainAxisSpacing: 0,
               ),

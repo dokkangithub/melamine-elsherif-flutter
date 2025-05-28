@@ -113,12 +113,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
                           BestSellingProductsWidget(),
 
-                          SecondHomeImageWidget(),
-
 
                           FlashDealsWidget(),
 
-                          SummerDealsWidgets(),
+                          SecondHomeImageWidget(),
 
                           AllProductsWidget(),
                         ],
