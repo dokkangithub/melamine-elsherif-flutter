@@ -87,7 +87,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         child: _buildGuestUserHeader(context),
                       )
                     : _buildGuestUserHeader(context),
-                
+
                 // Menu items
                 const SizedBox(height: 30),
                 _shouldAnimate
@@ -97,7 +97,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         child: _buildGuestMenuItems(context),
                       )
                     : _buildGuestMenuItems(context),
-                
+
                 // Social media icons
                 const SizedBox(height: 60),
                 _shouldAnimate
@@ -107,7 +107,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         child: _buildSocialMediaRow(context),
                       )
                     : _buildSocialMediaRow(context),
-                
+
                 // Footer text
                 const SizedBox(height: 40),
                 _shouldAnimate
@@ -117,7 +117,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         child: _buildFooterText(context),
                       )
                     : _buildFooterText(context),
-                
+
                 const SizedBox(height: 80),
               ],
             ),
@@ -141,7 +141,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       child: _buildLoggedInUserHeader(context, profileProvider),
                     )
                   : _buildLoggedInUserHeader(context, profileProvider),
-              
+
               // User dashboard (orders, wallet, address, saved items)
               _shouldAnimate
                   ? FadeInUp(
@@ -150,10 +150,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       child: _buildUserDashboard(context),
                     )
                   : _buildUserDashboard(context),
-              
+
               // Section divider
               const Divider(height: 16, thickness: 8, color: Color(0xFFF5F5F5)),
-              
+
               // Account tools section
               _shouldAnimate
                   ? FadeInUp(
@@ -162,10 +162,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       child: _buildAccountToolsSection(context),
                     )
                   : _buildAccountToolsSection(context),
-              
+
               // Section divider
               const Divider(height: 16, thickness: 8, color: Color(0xFFF5F5F5)),
-              
+
               // Contact & Social section
               _shouldAnimate
                   ? FadeInUp(
@@ -174,7 +174,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       child: _buildContactSocialSection(context),
                     )
                   : _buildContactSocialSection(context),
-              
+
               // Logout button
               _shouldAnimate
                   ? FadeInUp(
@@ -373,7 +373,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               fit: BoxFit.cover,
             ),
           ),
-          
+
           // Backdrop filter for visual effect
           Positioned.fill(
             child: BackdropFilter(
@@ -383,7 +383,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
             ),
           ),
-          
+
           // Content
           Container(
             width: double.infinity,
@@ -391,9 +391,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                
+
                 const SizedBox(height: 40),
-                
+
                 // User image and info
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -427,9 +427,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               ),
                       ),
                     ),
-                    
+
                     const SizedBox(width: 16),
-                    
+
                     // User info with email
                     Expanded(
                       child: Column(
@@ -470,7 +470,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   ],
                 ),
-                
+
                 const SizedBox(height: 8),
               ],
             ),
@@ -502,7 +502,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               }
             },
           ),
-          
+
           // About Us
           _buildMenuItemExact(
             context: context,
@@ -519,7 +519,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               }
             },
           ),
-          
+
           // Contact Us
           _buildMenuItemExact(
             context: context,
@@ -540,7 +540,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
     );
   }
-  
+
   // Menu item widget that exactly matches the design in the image
   Widget _buildMenuItemExact({
     required BuildContext context,
@@ -753,7 +753,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ],
     );
   }
-  
+
   // Individual social icon
   Widget _buildSocialIcon({
     required String icon,
@@ -766,7 +766,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
     );
   }
-  
+
   // Footer text that matches the design
   Widget _buildFooterText(BuildContext context) {
     return Padding(
@@ -794,7 +794,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             context: context,
             icon: AppSvgs.profile_bag,
             title: 'my_orders'.tr(context),
-            subtitle: '${Provider.of<ProfileProvider>(context,listen: false).profileCounters!.orderCount}${'active_orders'.tr(context)}',
+            subtitle: '${Provider.of<ProfileProvider>(context,listen: false).profileCounters!.orderCount}  ${'active_orders'.tr(context)}',
             onTap: () {
               AppRoutes.navigateTo(
                 context,
@@ -802,9 +802,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
               );
             },
           ),
-          
+
           const SizedBox(height: 24),
-          
+
           // My Wallet
           _buildDashboardItem(
             context: context,
@@ -818,9 +818,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
               );
             },
           ),
-          
+
           const SizedBox(height: 24),
-          
+
           // Shipping Address
           _buildDashboardItem(
             context: context,
@@ -834,15 +834,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
               );
             },
           ),
-          
+
           const SizedBox(height: 24),
-          
+
           // Saved Items
           _buildDashboardItem(
             context: context,
             icon: AppSvgs.profile_fav,
             title: 'saved_items'.tr(context),
-            subtitle: '${Provider.of<ProfileProvider>(context,listen: false).profileCounters!.wishlistItemCount}${'items'.tr(context)}',
+            subtitle: '${Provider.of<ProfileProvider>(context,listen: false).profileCounters!.wishlistItemCount}  ${'items'.tr(context)}',
             onTap: () {
               AppRoutes.navigateTo(
                 context,
@@ -854,7 +854,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
     );
   }
-  
+
   // Dashboard item widget
   Widget _buildDashboardItem({
     required BuildContext context,
@@ -874,9 +874,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
             height: 26,
             color: const Color(0xFF223843),
           ),
-          
+
           const SizedBox(width: 16),
-          
+
           // Text content
           Expanded(
             child: Column(
@@ -903,7 +903,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
     );
   }
-  
+
   // Account tools section header
   Widget _buildSectionHeader(BuildContext context, String title) {
     return Padding(
@@ -925,10 +925,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
       children: [
         // Section header
         _buildSectionHeader(context, 'account_tools'.tr(context)),
-        
+
         // Divider
         const Divider(height: 1),
-        
+
         // Change Language
         _buildToolItem(
           context: context,
@@ -938,7 +938,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             LanguageDialog.show(context);
           },
         ),
-        
+
         // Help & Support
         _buildToolItem(
           context: context,
@@ -955,7 +955,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             }
           },
         ),
-        
+
         // About Us
         _buildToolItem(
           context: context,
@@ -972,7 +972,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             }
           },
         ),
-        
+
         // Visit Website
         _buildToolItem(
           context: context,
@@ -992,7 +992,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ],
     );
   }
-  
+
   // Tool item widget
   Widget _buildToolItem({
     required BuildContext context,
@@ -1015,9 +1015,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   height: 22,
                   color: const Color(0xFF223843),
                 ),
-                
+
                 const SizedBox(width: 16),
-                
+
                 // Title
                 Expanded(
                   child: Text(
@@ -1028,7 +1028,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   ),
                 ),
-                
+
                 // Chevron
                 const Icon(
                   Icons.chevron_right,
@@ -1051,7 +1051,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       children: [
         // Section header
         _buildSectionHeader(context, 'contact_social'.tr(context)),
-        
+
         // Social buttons in a grid
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
@@ -1066,9 +1066,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   onTap: _openWhatsApp,
                 ),
               ),
-              
+
               const SizedBox(width: 16),
-              
+
               // Call Us
               Expanded(
                 child: _buildContactButton(
@@ -1081,7 +1081,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ],
           ),
         ),
-        
+
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
           child: Row(
@@ -1095,9 +1095,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   onTap: _openFacebook,
                 ),
               ),
-              
+
               const SizedBox(width: 16),
-              
+
               // YouTube
               Expanded(
                 child: _buildContactButton(
@@ -1113,7 +1113,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ],
     );
   }
-  
+
   // Contact button widget
   Widget _buildContactButton({
     required BuildContext context,

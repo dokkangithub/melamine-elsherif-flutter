@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:melamine_elsherif/core/utils/extension/text_theme_extension.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:melamine_elsherif/core/config/themes.dart/theme.dart';
+import 'package:melamine_elsherif/core/utils/extension/text_style_extension.dart';
 import 'package:melamine_elsherif/core/utils/extension/translate_extension.dart';
+import 'package:melamine_elsherif/core/utils/widgets/custom_back_button.dart';
+import 'package:melamine_elsherif/core/utils/widgets/custom_button.dart';
+import 'package:melamine_elsherif/core/utils/widgets/custom_loading.dart';
 import 'package:provider/provider.dart';
 import 'package:quickalert/quickalert.dart';
-import '../../../../core/config/themes.dart/theme.dart';
 import '../../../../core/utils/enums/loading_state.dart';
+import '../../../../core/widgets/custom_confirmation_dialog.dart';
 import '../../club_point/controller/club_point_provider.dart';
 import '../controller/wallet_provider.dart';
 import '../widgets/transaction_item.dart';
@@ -69,10 +74,23 @@ class _WalletScreenState extends State<WalletScreen> {
         walletProvider.transactions.isEmpty;
 
     return Scaffold(
+      backgroundColor: AppTheme.white,
       appBar: AppBar(
-        title:  Text('my_wallet'.tr(context),style: context.headlineMedium!.copyWith(color: AppTheme.white),),
+        elevation: 0,
+        scrolledUnderElevation: 0,
+        backgroundColor: AppTheme.white,
+        centerTitle: true,
+        leading: const CustomBackButton(),
+        title: Text(
+          'my_wallet'.tr(context),
+          style: context.displayLarge.copyWith(
+            fontFamily: GoogleFonts.cormorantGaramond().fontFamily,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
       ),
       body: RefreshIndicator(
+        color: AppTheme.primaryColor,
         onRefresh: () async {
           await context.read<WalletProvider>().refreshWallet();
           await context.read<ClubPointProvider>().fetchClubPoints(refresh: true);
@@ -90,14 +108,23 @@ class _WalletScreenState extends State<WalletScreen> {
             ),
             SliverToBoxAdapter(
               child: Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.fromLTRB(20.0, 24.0, 20.0, 12.0),
                 child: Text(
                   'transaction_history'.tr(context),
-                  style: Theme.of(context).textTheme.titleLarge,
+                  style: context.titleLarge.copyWith(
+                    fontFamily: GoogleFonts.cormorantGaramond().fontFamily,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 18,
+                    color: Colors.black87,
+                  ),
                 ),
               ),
             ),
             _buildTransactionsList(),
+            // Add some padding at the bottom
+            const SliverToBoxAdapter(
+              child: SizedBox(height: 20),
+            ),
           ],
         ),
       ),
@@ -116,12 +143,29 @@ class _WalletScreenState extends State<WalletScreen> {
               balance: provider.walletBalance!.balance,
               lastRecharged: provider.walletBalance!.lastRecharged,
             )
-                : Center(child: Text('no_wallet_data_available'.tr(context)));
+                : Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Text(
+                        'no_wallet_data_available'.tr(context),
+                        style: context.titleMedium.copyWith(
+                          color: Colors.grey[600],
+                          fontFamily: GoogleFonts.cormorantGaramond().fontFamily,
+                        ),
+                      ),
+                    ),
+                  );
           case LoadingState.error:
             return Center(
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
-                child: Text('Error: ${provider.errorMessage}'),
+                child: Text(
+                  'Error: ${provider.errorMessage}',
+                  style: context.titleMedium.copyWith(
+                    color: Colors.red,
+                    fontFamily: GoogleFonts.cormorantGaramond().fontFamily,
+                  ),
+                ),
               ),
             );
           default:
@@ -138,47 +182,85 @@ class _WalletScreenState extends State<WalletScreen> {
           case LoadingState.loading:
             return const ClubPointsShimmer();
           case LoadingState.loaded:
-            return Card(
-              margin: const EdgeInsets.all(16.0),
+            return Container(
+              margin: const EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 16.0),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16.0),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.1),
+                    blurRadius: 10,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
               child: Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(20.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                  Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'your_club_points'.tr(context),
-                      style: Theme.of(context).textTheme.titleMedium,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(8.0),
+                              decoration: BoxDecoration(
+                                color: AppTheme.primaryColor.withValues(alpha: 0.15),
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              child: const Icon(
+                                Icons.card_giftcard,
+                                color: AppTheme.primaryColor,
+                                size: 20,
+                              ),
+                            ),
+                            const SizedBox(width: 12.0),
+                            Text(
+                              'your_club_points'.tr(context),
+                              style: context.titleMedium.copyWith(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 16,
+                                fontFamily: GoogleFonts.cormorantGaramond().fontFamily,
+                                color: Colors.black87,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Text(
+                          provider.totalPoints,
+                          style: context.titleLarge.copyWith(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                            fontFamily: GoogleFonts.cormorantGaramond().fontFamily,
+                            color: AppTheme.primaryColor,
+                          ),
+                        ),
+                      ],
                     ),
-                    Text(
-                      provider.totalPoints,
-                      style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                        fontWeight: FontWeight.bold,
+                    const SizedBox(height: 20.0),
+                    SizedBox(
+                      width: double.infinity,
+                      child: CustomButton(
+                        onPressed: provider.clubPoints.isEmpty
+                            ? null
+                            : () => _convertPointsToWallet(context, provider),
+                        child: provider.convertState == LoadingState.loading
+                            ? const CustomLoadingWidget()
+                            : Text(
+                                'convert_to_wallet'.tr(context),
+                                textAlign: TextAlign.center,
+                                style: context.titleLarge.copyWith(
+                                  color: AppTheme.white,
+                                  fontFamily: GoogleFonts.cormorantGaramond().fontFamily,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
                       ),
                     ),
-                  ],
-                ),
-                const SizedBox(height: 16.0),
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: provider.clubPoints.isEmpty
-                        ? null
-                        : () => _convertPointsToWallet(context, provider),
-                    child: provider.convertState == LoadingState.loading
-                        ? const SizedBox(
-                      height: 20,
-                      width: 20,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2,
-                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                      ),
-                    )
-                        : Text('convert_to_wallet'.tr(context),style: context.titleMedium!.copyWith(color: AppTheme.white),
-                    ),
-                  ),),
                   ],
                 ),
               ),
@@ -187,7 +269,13 @@ class _WalletScreenState extends State<WalletScreen> {
             return Center(
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
-                child: Text('Error: ${provider.errorMessage}'),
+                child: Text(
+                  'Error: ${provider.errorMessage}',
+                  style: context.titleMedium.copyWith(
+                    color: Colors.red,
+                    fontFamily: GoogleFonts.cormorantGaramond().fontFamily,
+                  ),
+                ),
               ),
             );
           default:
@@ -212,7 +300,13 @@ class _WalletScreenState extends State<WalletScreen> {
         if (provider.historyState == LoadingState.error && provider.transactions.isEmpty) {
           return SliverFillRemaining(
             child: Center(
-              child: Text('Error: ${provider.errorMessage}'),
+              child: Text(
+                'Error: ${provider.errorMessage}',
+                style: context.titleMedium.copyWith(
+                  color: Colors.red,
+                  fontFamily: GoogleFonts.cormorantGaramond().fontFamily,
+                ),
+              ),
             ),
           );
         }
@@ -220,7 +314,25 @@ class _WalletScreenState extends State<WalletScreen> {
         if (provider.transactions.isEmpty) {
           return SliverFillRemaining(
             child: Center(
-              child: Text('no_transactions_available'.tr(context)),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    Icons.history,
+                    size: 60,
+                    color: Colors.grey[300],
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    'no_transactions_available'.tr(context),
+                    style: context.titleMedium.copyWith(
+                      color: Colors.grey[600],
+                      fontFamily: GoogleFonts.cormorantGaramond().fontFamily,
+                      fontSize: 16,
+                    ),
+                  ),
+                ],
+              ),
             ),
           );
         }
@@ -237,8 +349,15 @@ class _WalletScreenState extends State<WalletScreen> {
                   padding: const EdgeInsets.symmetric(vertical: 16.0),
                   child: Center(
                     child: provider.historyState == LoadingState.loading
-                        ? const TransactionItemShimmer()
-                        : Text('no_more_transactions'.tr(context)),
+                        ? const CustomLoadingWidget()
+                        : Text(
+                            'no_more_transactions'.tr(context),
+                            style: context.bodyLarge.copyWith(
+                              color: Colors.grey[600],
+                              fontFamily: GoogleFonts.cormorantGaramond().fontFamily,
+                              fontSize: 14,
+                            ),
+                          ),
                   ),
                 );
               } else {
@@ -253,15 +372,15 @@ class _WalletScreenState extends State<WalletScreen> {
   }
 
   void _convertPointsToWallet(BuildContext context, ClubPointProvider provider) async {
-    QuickAlert.show(
+    showCustomConfirmationDialog(
       context: context,
-      type: QuickAlertType.confirm,
       title: 'convert_points'.tr(context),
-      text: 'are_you_sure_you_want_to_convert_all_your_club_points_to_wallet_balance'.tr(context),
-      confirmBtnText: 'convert'.tr(context),
-      cancelBtnText: 'cancel'.tr(context),
-      onConfirmBtnTap: () async {
-        Navigator.pop(context);
+      message: 'are_you_sure_you_want_to_convert_all_your_club_points_to_wallet_balance'.tr(context),
+      confirmText: 'convert'.tr(context),
+      cancelText: 'cancel'.tr(context),
+      confirmButtonColor: AppTheme.primaryColor,
+      icon: Icons.swap_horiz,
+      onConfirm: () async {
         await provider.convertPointsToWallet();
         if (!context.mounted) return;
         if (provider.convertState == LoadingState.loaded) {
@@ -272,6 +391,7 @@ class _WalletScreenState extends State<WalletScreen> {
             type: QuickAlertType.success,
             title: 'success'.tr(context),
             text: 'points_successfully_converted_to_wallet!'.tr(context),
+            confirmBtnColor: AppTheme.primaryColor,
           );
         }
       },

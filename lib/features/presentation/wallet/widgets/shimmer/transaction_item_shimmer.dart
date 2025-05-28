@@ -1,28 +1,40 @@
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:melamine_elsherif/core/config/themes.dart/theme.dart';
 
 class TransactionItemShimmer extends StatelessWidget {
   const TransactionItemShimmer({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Card(
+    return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12.0),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.1),
+            blurRadius: 6,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Shimmer.fromColors(
-          baseColor: Colors.grey[300]!,
-          highlightColor: Colors.grey[100]!,
+          baseColor: AppTheme.primaryColor.withOpacity(0.1),
+          highlightColor: AppTheme.primaryColor.withOpacity(0.05),
           child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               // Transaction Icon Container
               Container(
-                width: 40,
-                height: 40,
+                width: 44,
+                height: 44,
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.circular(8.0),
+                  borderRadius: BorderRadius.circular(12.0),
                 ),
               ),
               const SizedBox(width: 16.0),
@@ -34,8 +46,8 @@ class TransactionItemShimmer extends StatelessWidget {
                   children: [
                     // Payment method
                     Container(
-                      width: 140,
-                      height: 16,
+                      width: 150,
+                      height: 18,
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(4),
@@ -54,10 +66,10 @@ class TransactionItemShimmer extends StatelessWidget {
                             shape: BoxShape.circle,
                           ),
                         ),
-                        const SizedBox(width: 4.0),
+                        const SizedBox(width: 6.0),
                         Container(
-                          width: 100,
-                          height: 12,
+                          width: 120,
+                          height: 14,
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(4),
@@ -67,13 +79,13 @@ class TransactionItemShimmer extends StatelessWidget {
                     ),
                     const SizedBox(height: 8.0),
                     
-                    // Approval string
+                    // Approval badge
                     Container(
-                      width: 120,
-                      height: 12,
+                      width: 80,
+                      height: 24,
                       decoration: BoxDecoration(
                         color: Colors.white,
-                        borderRadius: BorderRadius.circular(4),
+                        borderRadius: BorderRadius.circular(10),
                       ),
                     ),
                   ],
@@ -82,8 +94,8 @@ class TransactionItemShimmer extends StatelessWidget {
               
               // Amount
               Container(
-                width: 60,
-                height: 16,
+                width: 80,
+                height: 18,
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(4),

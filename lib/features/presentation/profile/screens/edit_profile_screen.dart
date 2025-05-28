@@ -240,7 +240,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     fullWidth: true,
                     child: Text('delete_account'.tr(context),
                       textAlign: TextAlign.center,
-                      style: context.titleMedium.copyWith(color: AppTheme.black,fontWeight: FontWeight.w600),
+                      style: context.titleMedium.copyWith(color: AppTheme.primaryColor,fontWeight: FontWeight.w600),
                     ),
                   ),
                 ),

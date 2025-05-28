@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:melamine_elsherif/core/utils/extension/text_theme_extension.dart';
+
+import '../config/themes.dart/theme.dart';
 
 class CustomConfirmationDialog extends StatelessWidget {
   final String title;
@@ -14,7 +17,7 @@ class CustomConfirmationDialog extends StatelessWidget {
   final Color cancelTextColor;
 
   const CustomConfirmationDialog({
-    Key? key,
+    super.key,
     required this.title,
     required this.message,
     this.cancelText = 'Cancel',
@@ -26,13 +29,13 @@ class CustomConfirmationDialog extends StatelessWidget {
     this.cancelButtonColor = Colors.transparent,
     this.confirmTextColor = Colors.white,
     this.cancelTextColor = Colors.black54,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     return Dialog(
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(0),
       ),
       elevation: 0,
       backgroundColor: Colors.transparent,
@@ -46,7 +49,7 @@ class CustomConfirmationDialog extends StatelessWidget {
       decoration: BoxDecoration(
         shape: BoxShape.rectangle,
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(0),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -86,7 +89,7 @@ class CustomConfirmationDialog extends StatelessWidget {
                     backgroundColor: cancelButtonColor,
                     padding: const EdgeInsets.symmetric(vertical: 12),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(0),
                       side: BorderSide(color: Colors.grey.shade300),
                     ),
                   ),
@@ -106,14 +109,13 @@ class CustomConfirmationDialog extends StatelessWidget {
                     backgroundColor: confirmButtonColor,
                     padding: const EdgeInsets.symmetric(vertical: 12),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(0),
+                      side: BorderSide(color: Colors.grey.shade300),
                     ),
                   ),
                   child: Text(
                     confirmText,
-                    style: TextStyle(
-                      color: confirmTextColor,
-                    ),
+                    style: context.headlineSmall!.copyWith(fontWeight: FontWeight.w700,color: AppTheme.white),
                   ),
                 ),
               ),
@@ -134,7 +136,7 @@ Future<bool?> showCustomConfirmationDialog({
   String confirmText = 'Remove',
   required VoidCallback onConfirm,
   IconData? icon = Icons.delete_outline,
-  Color confirmButtonColor = const Color(0xFFCB997E),
+  Color confirmButtonColor = AppTheme.primaryColor,
 }) {
   return showDialog<bool>(
     context: context,

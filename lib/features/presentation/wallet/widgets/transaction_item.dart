@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:melamine_elsherif/core/config/themes.dart/theme.dart';
+import 'package:melamine_elsherif/core/utils/extension/text_style_extension.dart';
 import '../../../domain/wallet/entities/wallet_transaction.dart';
 
 class TransactionItem extends StatelessWidget {
@@ -11,23 +14,40 @@ class TransactionItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
+    final isPositive = _isPositiveAmount();
+    final iconData = _getTransactionIcon();
+    
+    return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12.0),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.1),
+            blurRadius: 6,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             // Transaction Icon
             Container(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(10.0),
               decoration: BoxDecoration(
-                color: Theme.of(context).primaryColor.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(8.0),
+                color: isPositive 
+                    ? AppTheme.primaryColor.withValues(alpha: 0.15)
+                    : Colors.grey.withValues(alpha: 0.15),
+                borderRadius: BorderRadius.circular(12.0),
               ),
               child: Icon(
-                _getTransactionIcon(),
-                color: Theme.of(context).primaryColor,
+                iconData,
+                color: isPositive ? AppTheme.primaryColor : Colors.grey[700],
+                size: 22,
               ),
             ),
             const SizedBox(width: 16.0),
@@ -39,32 +59,51 @@ class TransactionItem extends StatelessWidget {
                 children: [
                   Text(
                     transaction.paymentMethod,
-                    style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
+                    style: context.titleMedium.copyWith(
+                      fontWeight: FontWeight.w600,
+                      fontFamily: GoogleFonts.cormorantGaramond().fontFamily,
+                      fontSize: 16,
+                      color: Colors.black87,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  const SizedBox(height: 4.0),
+                  const SizedBox(height: 6.0),
                   Row(
                     children: [
                       Icon(
                         Icons.calendar_today_outlined,
                         size: 14.0,
-                        color: Colors.grey[600],
+                        color: Colors.grey[500],
                       ),
-                      const SizedBox(width: 4.0),
+                      const SizedBox(width: 6.0),
                       Text(
                         transaction.date,
-                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                              color: Colors.grey[600],
-                            ),
+                        style: context.bodyLarge.copyWith(
+                          color: Colors.grey[600],
+                          fontFamily: GoogleFonts.cormorantGaramond().fontFamily,
+                          fontSize: 14,
+                        ),
                       ),
                     ],
                   ),
                   if (transaction.approvalString != 'N/A') ...[
                     const SizedBox(height: 4.0),
-                    Text(
-                      'Approval: ${transaction.approvalString}',
-                      style: Theme.of(context).textTheme.bodySmall,
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 2.0),
+                      decoration: BoxDecoration(
+                        color: isPositive ? AppTheme.primaryColor.withValues(alpha: 0.1) : Colors.orange.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      child: Text(
+                        transaction.approvalString,
+                        style: context.bodySmall.copyWith(
+                          color: isPositive ? Colors.green[700] : Colors.orange[700],
+                          fontFamily: GoogleFonts.cormorantGaramond().fontFamily,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
                     ),
                   ],
                 ],
@@ -74,10 +113,12 @@ class TransactionItem extends StatelessWidget {
             // Amount
             Text(
               transaction.amount,
-              style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: _isPositiveAmount() ? Colors.green : Colors.black,
-                  ),
+              style: context.titleMedium.copyWith(
+                fontWeight: FontWeight.bold,
+                color: _isPositiveAmount() ? Colors.green[700] : Colors.black87,
+                fontFamily: GoogleFonts.cormorantGaramond().fontFamily,
+                fontSize: 16,
+              ),
             ),
           ],
         ),

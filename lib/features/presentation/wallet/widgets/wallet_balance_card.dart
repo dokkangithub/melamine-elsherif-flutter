@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:melamine_elsherif/core/config/themes.dart/theme.dart';
+import 'package:melamine_elsherif/core/utils/extension/text_style_extension.dart';
+import 'package:melamine_elsherif/core/utils/extension/translate_extension.dart';
 
 class WalletBalanceCard extends StatelessWidget {
   final String balance;
@@ -12,58 +16,116 @@ class WalletBalanceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.all(16.0),
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.all(20.0),
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              Theme.of(context).primaryColor,
-              Theme.of(context).primaryColor.withOpacity(0.7),
-            ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-          borderRadius: BorderRadius.circular(12.0),
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
+      width: double.infinity,
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            AppTheme.primaryColor,
+            AppTheme.primaryColor.withValues(alpha: 0.85),
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Wallet Balance',
-              style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                    color: Colors.white,
-                  ),
+        boxShadow: [
+          BoxShadow(
+            color: AppTheme.primaryColor.withValues(alpha: 0.3),
+            blurRadius: 10,
+            offset: const Offset(0, 5),
+          ),
+        ],
+      ),
+      child: Stack(
+        children: [
+          // Background Pattern
+          Positioned(
+            right: -20,
+            bottom: -20,
+            child: Container(
+              width: 150,
+              height: 150,
+              decoration: BoxDecoration(
+                color: Colors.white.withValues(alpha: 0.05),
+                shape: BoxShape.circle,
+              ),
             ),
-            const SizedBox(height: 8.0),
-            Text(
-              balance,
-              style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+          ),
+          
+          // Content
+          Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'wallet_balance'.tr(context),
+                      style: context.titleLarge.copyWith(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w800,
+                        fontFamily: GoogleFonts.cormorantGaramond().fontFamily,
+                        fontSize: 18,
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.all(8.0),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.2),
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(
+                        Icons.account_balance_wallet,
+                        color: Colors.white,
+                        size: 20,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16.0),
+                Text(
+                  balance,
+                  style: context.displayMedium.copyWith(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
+                    fontFamily: GoogleFonts.cormorantGaramond().fontFamily,
+                    fontSize: 36,
                   ),
-            ),
-            const SizedBox(height: 16.0),
-            Row(
-              children: [
-                const Icon(
-                  Icons.access_time,
-                  color: Colors.white70,
-                  size: 16.0,
                 ),
-                const SizedBox(width: 8.0),
-                Text(
-                  'Last recharged: $lastRecharged',
-                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                        color: Colors.white70,
+                const SizedBox(height: 24.0),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: 0.2),
+                    borderRadius: BorderRadius.circular(20.0),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Icon(
+                        Icons.access_time,
+                        color: Colors.white,
+                        size: 16.0,
                       ),
+                      const SizedBox(width: 8.0),
+                      Text(
+                        '${'last_recharged'.tr(context)}$lastRecharged',
+                        style: context.bodyLarge.copyWith(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w800,
+                          fontFamily: GoogleFonts.cormorantGaramond().fontFamily,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

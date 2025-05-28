@@ -3,7 +3,6 @@ import 'package:animate_do/animate_do.dart';
 import 'package:melamine_elsherif/core/config/themes.dart/theme.dart';
 import 'package:melamine_elsherif/core/utils/constants/app_assets.dart';
 import 'package:melamine_elsherif/core/utils/extension/text_theme_extension.dart';
-import 'package:melamine_elsherif/core/utils/widgets/custom_button.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_cached_image.dart';
 import 'package:provider/provider.dart';
 import '../../../../core/utils/extension/translate_extension.dart';
@@ -21,7 +20,7 @@ class EmptyWishlistWidget extends StatelessWidget {
         // Background image with blend mode overlay
         ColorFiltered(
           colorFilter: ColorFilter.mode(
-            Colors.white.withValues(alpha: 0.65),
+            Colors.white.withValues(alpha: 0.85),
             BlendMode.lighten,
           ),
           child: const CustomImage(
@@ -80,7 +79,7 @@ class EmptyWishlistWidget extends StatelessWidget {
               ),
               
               // Expandable space before button
-              const SizedBox(height: 50),
+              const Spacer(),
               
               // Button at bottom
               Padding(
@@ -90,13 +89,20 @@ class EmptyWishlistWidget extends StatelessWidget {
                   child: SizedBox(
                     width: double.infinity,
                     height: 52,
-                    child: CustomButton(
+                    child: ElevatedButton(
                       onPressed: () {
                         Provider.of<LayoutProvider>(context, listen: false).currentIndex = 0;
                       },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppTheme.accentColor,
+                        foregroundColor: Colors.white,
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                      ),
                       child: Text(
                         'browse_products'.tr(context),
-                        textAlign: TextAlign.center,
                         style: context.titleMedium?.copyWith(
                           color: Colors.white,
                           fontWeight: FontWeight.w600,
