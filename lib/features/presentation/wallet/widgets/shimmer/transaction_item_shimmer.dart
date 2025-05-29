@@ -11,7 +11,7 @@ class TransactionItemShimmer extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(12.0),
+        borderRadius: BorderRadius.circular(0.0),
         boxShadow: [
           BoxShadow(
             color: Colors.grey.withOpacity(0.1),
@@ -34,7 +34,7 @@ class TransactionItemShimmer extends StatelessWidget {
                 height: 44,
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.circular(12.0),
+                  borderRadius: BorderRadius.circular(0.0),
                 ),
               ),
               const SizedBox(width: 16.0),
@@ -50,7 +50,7 @@ class TransactionItemShimmer extends StatelessWidget {
                       height: 18,
                       decoration: BoxDecoration(
                         color: Colors.white,
-                        borderRadius: BorderRadius.circular(4),
+                        borderRadius: BorderRadius.circular(0),
                       ),
                     ),
                     const SizedBox(height: 8.0),
@@ -72,7 +72,7 @@ class TransactionItemShimmer extends StatelessWidget {
                           height: 14,
                           decoration: BoxDecoration(
                             color: Colors.white,
-                            borderRadius: BorderRadius.circular(4),
+                            borderRadius: BorderRadius.circular(0),
                           ),
                         ),
                       ],
@@ -85,7 +85,7 @@ class TransactionItemShimmer extends StatelessWidget {
                       height: 24,
                       decoration: BoxDecoration(
                         color: Colors.white,
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(0),
                       ),
                     ),
                   ],
@@ -98,7 +98,7 @@ class TransactionItemShimmer extends StatelessWidget {
                 height: 18,
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.circular(4),
+                  borderRadius: BorderRadius.circular(0),
                 ),
               ),
             ],

@@ -54,6 +54,7 @@
   "invalid_credentials": "بيانات الاعتماد غير صالحة",
   "dont_have_account": "ليس لديك حساب؟",
   "sign_up": "التسجيل",
+  "last_recharged": "آخر عملية شحن: ",
   "forgot_password_title": "نسيت كلمة المرور",
   "forgot_password_email_desc": "أدخل عنوان بريدك الإلكتروني وسنرسل لك رابطًا لإعادة تعيين كلمة المرور.",
   "forgot_password_phone_desc": "أدخل رقم هاتفك وسنرسل لك رمز التحقق لإعادة تعيين كلمة المرور.",

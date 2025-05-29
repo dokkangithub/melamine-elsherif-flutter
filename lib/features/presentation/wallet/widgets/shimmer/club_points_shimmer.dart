@@ -11,10 +11,10 @@ class ClubPointsShimmer extends StatelessWidget {
       margin: const EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 16.0),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16.0),
+        borderRadius: BorderRadius.circular(0.0),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
+            color: Colors.grey.withValues(alpha: 0.1),
             blurRadius: 10,
             offset: const Offset(0, 2),
           ),
@@ -23,8 +23,8 @@ class ClubPointsShimmer extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Shimmer.fromColors(
-          baseColor: AppTheme.primaryColor.withOpacity(0.1),
-          highlightColor: AppTheme.primaryColor.withOpacity(0.05),
+          baseColor: AppTheme.primaryColor.withValues(alpha: 0.1),
+          highlightColor: AppTheme.primaryColor.withValues(alpha: 0.05),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -40,7 +40,7 @@ class ClubPointsShimmer extends StatelessWidget {
                         height: 36,
                         decoration: BoxDecoration(
                           color: Colors.white,
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: BorderRadius.circular(0),
                         ),
                       ),
                       const SizedBox(width: 12),
@@ -50,7 +50,7 @@ class ClubPointsShimmer extends StatelessWidget {
                         height: 18,
                         decoration: BoxDecoration(
                           color: Colors.white,
-                          borderRadius: BorderRadius.circular(4),
+                          borderRadius: BorderRadius.circular(0),
                         ),
                       ),
                     ],
@@ -62,7 +62,7 @@ class ClubPointsShimmer extends StatelessWidget {
                     height: 24,
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(4),
+                      borderRadius: BorderRadius.circular(0),
                     ),
                   ),
                 ],
@@ -76,7 +76,7 @@ class ClubPointsShimmer extends StatelessWidget {
                 height: 48,
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(0),
                 ),
               ),
             ],

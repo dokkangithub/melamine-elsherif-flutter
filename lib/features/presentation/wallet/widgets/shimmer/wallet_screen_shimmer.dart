@@ -33,7 +33,7 @@ class WalletScreenShimmer extends StatelessWidget {
                     height: 20,
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(4),
+                      borderRadius: BorderRadius.circular(0),
                     ),
                   ),
                 ),

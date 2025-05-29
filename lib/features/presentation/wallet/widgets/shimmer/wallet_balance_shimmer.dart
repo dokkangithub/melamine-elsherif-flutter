@@ -13,7 +13,7 @@ class WalletBalanceShimmer extends StatelessWidget {
       height: 180,
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16.0),
+        borderRadius: BorderRadius.circular(0.0),
         boxShadow: [
           BoxShadow(
             color: Colors.grey.withOpacity(0.1),
@@ -40,7 +40,7 @@ class WalletBalanceShimmer extends StatelessWidget {
                     height: 18,
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(4),
+                      borderRadius: BorderRadius.circular(0),
                     ),
                   ),
                   
@@ -63,7 +63,7 @@ class WalletBalanceShimmer extends StatelessWidget {
                 height: 40,
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.circular(6),
+                  borderRadius: BorderRadius.circular(0),
                 ),
               ),
               
@@ -75,7 +75,7 @@ class WalletBalanceShimmer extends StatelessWidget {
                 height: 32,
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(0),
                 ),
               ),
             ],
