@@ -207,7 +207,7 @@ class _AllCategoryProductsScreenState extends State<AllCategoryProductsScreen> {
     return FadeIn(
       duration: const Duration(milliseconds: 400),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+        padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 8.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -230,6 +230,7 @@ class _AllCategoryProductsScreenState extends State<AllCategoryProductsScreen> {
                 AppRoutes.navigateTo(context, AppRoutes.searchScreen);
               },
             ),
+            const SizedBox(width: 10)
           ],
         ),
       ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:animate_do/animate_do.dart';
+import 'dart:async';
 import 'package:melamine_elsherif/core/config/themes.dart/theme.dart';
 import 'package:melamine_elsherif/core/utils/extension/text_theme_extension.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_back_button.dart';
@@ -27,6 +28,7 @@ class _SearchScreenState extends State<SearchScreen> {
   final TextEditingController _searchController = TextEditingController();
   final ScrollController _scrollControllerForSearchResults = ScrollController();
   bool _isSearchActive = false;
+  Timer? _debounceTimer;
 
 
   @override
@@ -47,6 +49,7 @@ class _SearchScreenState extends State<SearchScreen> {
     _searchController.dispose();
     _scrollControllerForSearchResults.removeListener(_searchScrollListener);
     _scrollControllerForSearchResults.dispose();
+    _debounceTimer?.cancel();
     super.dispose();
   }
 
@@ -76,6 +79,18 @@ class _SearchScreenState extends State<SearchScreen> {
       searchProvider.clearFilteredProducts();
       searchProvider.fetchFilteredProducts(refresh: true, name: '');
     }
+  }
+
+  void _debounceSearch(String query) {
+    // Cancel previous timer if it's still active
+    if (_debounceTimer?.isActive ?? false) {
+      _debounceTimer!.cancel();
+    }
+    
+    // Set a new timer for 1 second
+    _debounceTimer = Timer(const Duration(seconds: 1), () {
+      _performSearch(query);
+    });
   }
 
   void _clearSearch() {
@@ -122,9 +137,19 @@ class _SearchScreenState extends State<SearchScreen> {
                               refresh: true,
                               name: '',
                             );
+                          } else {
+                            // Use debounce for search while typing
+                            _debounceSearch(value);
                           }
                         },
-                        onSubmitted: _performSearch,
+                        onSubmitted: (query) {
+                          // Cancel any pending debounce timer
+                          if (_debounceTimer?.isActive ?? false) {
+                            _debounceTimer!.cancel();
+                          }
+                          // Immediately perform search on submit
+                          _performSearch(query);
+                        },
                         onClear: _clearSearch,
                       ),
                     ),
