@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:melamine_elsherif/core/config/themes.dart/theme.dart';
 import 'package:melamine_elsherif/core/utils/extension/text_theme_extension.dart';
+import 'package:melamine_elsherif/core/utils/widgets/custom_loading.dart';
 import 'package:melamine_elsherif/features/domain/product%20details/entities/product_details.dart';
 import 'package:melamine_elsherif/core/utils/enums/loading_state.dart';
 import 'package:melamine_elsherif/features/presentation/product%20details/controller/product_provider.dart';
@@ -55,11 +56,7 @@ class QuantitySelectorWidget extends StatelessWidget {
               ],
             ),
             isLoading
-                ? const SizedBox(
-              width: 20,
-              height: 20,
-              child: CircularProgressIndicator(strokeWidth: 2),
-            )
+                ? const CustomLoadingWidget()
                 : Text('${(price * quantity).toStringAsFixed(2)} ${product.currencySymbol  }',
               style: context.headlineSmall!.copyWith(color: AppTheme.primaryColor,fontWeight: FontWeight.w900),
             ),

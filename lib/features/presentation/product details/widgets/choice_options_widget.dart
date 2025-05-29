@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:melamine_elsherif/core/config/themes.dart/theme.dart';
 import 'package:melamine_elsherif/features/domain/product%20details/entities/product_details.dart';
 import 'package:melamine_elsherif/features/presentation/product%20details/controller/product_provider.dart';
 import 'package:provider/provider.dart';
@@ -37,7 +38,7 @@ class ChoiceOptionsWidget extends StatelessWidget {
                     children: option.options.map((optionValue) {
                       final isSelected = provider.selectedVariants[option.name] == optionValue;
 
-                      return GestureDetector(
+                      return InkWell(
                         onTap: () {
                           provider.setVariantOption(option.name, optionValue);
                         },
@@ -47,17 +48,17 @@ class ChoiceOptionsWidget extends StatelessWidget {
                             vertical: 8,
                           ),
                           decoration: BoxDecoration(
-                            color: isSelected ? Colors.blue.shade50 : Colors.grey.shade100,
-                            borderRadius: BorderRadius.circular(20),
+                            color: isSelected ? AppTheme.primaryColor : Colors.grey.shade100,
+                            borderRadius: BorderRadius.circular(0),
                             border: Border.all(
-                              color: isSelected ? Colors.blue : Colors.grey.shade300,
+                              color: isSelected ? AppTheme.primaryColor : Colors.grey.shade300,
                               width: 1,
                             ),
                           ),
                           child: Text(
                             optionValue,
                             style: TextStyle(
-                              color: isSelected ? Colors.blue : Colors.black87,
+                              color: isSelected ? AppTheme.white : Colors.black87,
                               fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
                             ),
                           ),

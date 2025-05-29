@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:melamine_elsherif/core/config/themes.dart/theme.dart';
 import 'package:melamine_elsherif/core/utils/extension/translate_extension.dart';
 import 'package:melamine_elsherif/features/domain/product%20details/entities/product_details.dart';
 import 'package:melamine_elsherif/features/presentation/product%20details/controller/product_provider.dart';
@@ -29,7 +30,7 @@ class ColorVariantsWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('available_colors'.tr(context),
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
               ),
@@ -48,9 +49,9 @@ class ColorVariantsWidget extends StatelessWidget {
                     margin: const EdgeInsets.only(right: 12),
                     decoration: BoxDecoration(
                       color: colorList[index],
-                      shape: BoxShape.circle,
+                      shape: BoxShape.rectangle,
                       border: isSelected
-                          ? Border.all(color: Colors.blue, width: 2)
+                          ? Border.all(color: AppTheme.primaryColor, width: 2)
                           : null,
                       boxShadow: isSelected
                           ? [

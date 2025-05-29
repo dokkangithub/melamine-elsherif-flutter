@@ -5,6 +5,7 @@ import 'package:melamine_elsherif/core/utils/extension/text_theme_extension.dart
 import 'package:melamine_elsherif/core/utils/extension/translate_extension.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_button.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_cached_image.dart';
+import 'package:melamine_elsherif/core/utils/widgets/custom_loading.dart';
 import 'package:provider/provider.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import '../../../../core/utils/enums/loading_state.dart';
@@ -69,7 +70,7 @@ class _ReviewsSectionWidgetState extends State<ReviewsSectionWidget> {
 
               // Reviews Carousel
               if (reviewProvider.reviewState == LoadingState.loading)
-                const Center(child: CircularProgressIndicator())
+                const Center(child: CustomLoadingWidget())
               else if (reviewProvider.reviews.isEmpty)
                 Center(
                   child: Padding(

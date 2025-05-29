@@ -150,7 +150,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     title: _showAppBar 
                       ? Text(
                           product.name,
-                          style: context.titleLarge.copyWith(color: AppTheme.primaryColor),
+                          style: context.titleLarge.copyWith(color: AppTheme.primaryColor,fontWeight: FontWeight.w800),
                           overflow: TextOverflow.ellipsis,
                         ) 
                       : null,

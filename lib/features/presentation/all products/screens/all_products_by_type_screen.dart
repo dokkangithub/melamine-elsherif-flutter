@@ -406,7 +406,7 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
       );
     }
 
-    List<Product> filteredProducts = products;
+    List<Product>filteredProducts = products.where((product) => product.published == 1).toList();
     if (_selectedProductType != ProductType.newArrival) {
       filteredProducts = products.where((product) => product.published == 1).toList();
     }
@@ -467,10 +467,9 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
   }
   
   Widget _buildProductCard(BuildContext context, Product product, bool isEven) {
-    // Check if the current locale is RTL
     final bool isRTL = Directionality.of(context) == TextDirection.rtl;
     
-    return GestureDetector(
+    return InkWell(
       onTap: () {
         AppRoutes.navigateTo(
           context,

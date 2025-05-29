@@ -30,14 +30,14 @@ class ProductSpecificationsSummary extends StatelessWidget {
                   children: [
                     TextSpan(
                       text: "${entry.key}: ",
-                      style: context.titleMedium!.copyWith(
+                      style: context.titleMedium.copyWith(
                         color: Colors.grey[600],
                         fontWeight: FontWeight.w500,
                       ),
                     ),
                     TextSpan(
                       text: entry.value,
-                      style: context.titleMedium!.copyWith(
+                      style: context.titleMedium.copyWith(
                         color: Colors.grey[800],
                         fontWeight: FontWeight.w400,
                       ),
