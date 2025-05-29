@@ -55,10 +55,18 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
     super.initState();
     _scrollController.addListener(_scrollListener);
     _selectedProductType = widget.productType;
+    
+    print("PAGINATION_DEBUG: Initializing screen with product type: ${_productTypeNames[_selectedProductType]}");
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final homeProvider = Provider.of<HomeProvider>(context, listen: false);
-      _fetchProducts(homeProvider, refresh: true);
+      print("PAGINATION_DEBUG: Initial fetch for ${_productTypeNames[_selectedProductType]}");
+      setState(() => _isLoading = true);
+      _fetchProducts(homeProvider, refresh: true).then((_) {
+        if (mounted) {
+          setState(() => _isLoading = false);
+        }
+      });
     });
   }
 
@@ -72,7 +80,8 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
   void _scrollListener() {
     if (!_isLoading && 
         _scrollController.position.pixels >= 
-        _scrollController.position.maxScrollExtent - 200) {
+        _scrollController.position.maxScrollExtent * 0.7) {
+      print("PAGINATION_DEBUG: Scroll threshold reached (70%), loading more products");
       _loadMoreProducts();
     }
   }
@@ -80,14 +89,29 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
   Future<void> _loadMoreProducts() async {
     final provider = Provider.of<HomeProvider>(context, listen: false);
     
-    if (_isLoading || !_hasMoreProducts(provider)) {
+    if (_isLoading) {
+      print("PAGINATION_DEBUG: Already loading, skipping request");
       return;
     }
     
+    if (!_hasMoreProducts(provider)) {
+      print("PAGINATION_DEBUG: No more products to load for ${_productTypeNames[_selectedProductType]}");
+      return;
+    }
+    
+    print("PAGINATION_DEBUG: Loading more ${_productTypeNames[_selectedProductType]} products");
+    
+    // Set loading state and rebuild UI immediately
     setState(() => _isLoading = true);
     
+    // Use a microtask to ensure the UI updates before the potentially heavy operation
+    await Future.microtask(() => null);
+    
     try {
-      await _fetchProducts(provider);
+      await _fetchProducts(provider, refresh: false);
+      print("PAGINATION_DEBUG: Successfully loaded more products");
+    } catch (e) {
+      print("PAGINATION_DEBUG: Error loading more products: $e");
     } finally {
       if (mounted) {
         setState(() => _isLoading = false);
@@ -99,38 +123,75 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
     HomeProvider provider, {
     bool refresh = false,
   }) async {
-    switch (_selectedProductType) {
-      case ProductType.all:
-        await provider.fetchAllProducts(refresh: refresh);
-        break;
-      case ProductType.bestSelling:
-        await provider.fetchBestSellingProducts(refresh: refresh);
-        break;
-      case ProductType.featured:
-        await provider.fetchFeaturedProducts(refresh: refresh);
-        break;
-      case ProductType.newArrival:
-        await provider.fetchNewProducts(refresh: refresh);
-        break;
-      case ProductType.flashDeal:
-        await provider.fetchFlashDealProducts(refresh: refresh);
-        break;
+    print("PAGINATION_DEBUG: Fetching products for ${_productTypeNames[_selectedProductType]}, refresh: $refresh");
+    
+    try {
+      switch (_selectedProductType) {
+        case ProductType.all:
+          await provider.fetchAllProducts(refresh: refresh);
+          break;
+        case ProductType.bestSelling:
+          await provider.fetchBestSellingProducts(refresh: refresh);
+          break;
+        case ProductType.featured:
+          await provider.fetchFeaturedProducts(refresh: refresh);
+          break;
+        case ProductType.newArrival:
+          await provider.fetchNewProducts(refresh: refresh);
+          break;
+        case ProductType.flashDeal:
+          await provider.fetchFlashDealProducts(refresh: refresh);
+          break;
+      }
+      
+      // Check if we still have more products after this fetch
+      if (mounted) {
+        print("PAGINATION_DEBUG: After fetching, hasMoreProducts: ${_hasMoreProducts(provider)}");
+        
+        // For product types other than new arrivals, check if we have enough published products
+        if (_selectedProductType != ProductType.newArrival) {
+          List<Product> products = _getProducts(provider);
+          List<Product> publishedProducts = products.where((product) => product.published == 1).toList();
+          
+          print("PAGINATION_DEBUG: Total products: ${products.length}, Published products: ${publishedProducts.length}");
+          
+          // If we have very few published products but there are more pages, automatically load more
+          if (publishedProducts.length < 4 && _hasMoreProducts(provider)) {
+            print("PAGINATION_DEBUG: Not enough published products, loading more automatically");
+            // Add a small delay to avoid UI freezes
+            await Future.delayed(const Duration(milliseconds: 300));
+            await _fetchProducts(provider, refresh: false);
+          }
+        }
+      }
+    } catch (e) {
+      print("PAGINATION_DEBUG: Error fetching products: $e");
     }
   }
 
   bool _hasMoreProducts(HomeProvider provider) {
+    bool hasMore = false;
+    
     switch (_selectedProductType) {
       case ProductType.all:
-        return provider.hasMoreAllProducts;
+        hasMore = provider.hasMoreAllProducts;
+        break;
       case ProductType.bestSelling:
-        return provider.hasMoreBestSellingProducts;
+        hasMore = provider.hasMoreBestSellingProducts;
+        break;
       case ProductType.featured:
-        return provider.hasMoreFeaturedProducts;
+        hasMore = provider.hasMoreFeaturedProducts;
+        break;
       case ProductType.newArrival:
-        return provider.hasMoreNewProducts;
+        hasMore = provider.hasMoreNewProducts;
+        break;
       case ProductType.flashDeal:
-        return false; // No pagination for flash deal
+        hasMore = false; // No pagination for flash deal
+        break;
     }
+    
+    print("PAGINATION_DEBUG: hasMoreProducts for ${_productTypeNames[_selectedProductType]}: $hasMore");
+    return hasMore;
   }
 
   List<Product> _getProducts(HomeProvider provider) {
@@ -219,11 +280,7 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
       elevation: 0,
       title: Text(
         "MELAMEN",
-        style: GoogleFonts.jost(
-          fontSize: 24,
-          fontWeight: FontWeight.w500,
-          color: Colors.black,
-        ),
+        style: context.displaySmall!.copyWith(fontWeight: FontWeight.w500),
       ),
       centerTitle: true,
       leading: const CustomBackButton(),
@@ -267,10 +324,24 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
     
     return GestureDetector(
       onTap: () {
-        setState(() {
-          _selectedProductType = type;
+        if (_selectedProductType != type) {
+          print("PAGINATION_DEBUG: Switching tab from ${_productTypeNames[_selectedProductType]} to ${_productTypeNames[type]}");
+          setState(() {
+            _selectedProductType = type;
+            _isLoading = false; // Reset loading state
+          });
+          
+          // Scroll to top when changing tabs
+          if (_scrollController.hasClients) {
+            _scrollController.animateTo(
+              0,
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeOut,
+            );
+          }
+          
           _fetchProducts(Provider.of<HomeProvider>(context, listen: false), refresh: true);
-        });
+        }
       },
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -288,7 +359,6 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
           style: context.titleSmall!.copyWith(
             color: isSelected ? AppTheme.primaryColor : AppTheme.darkDividerColor,
             fontWeight: isSelected ? FontWeight.w900 : FontWeight.w500,
-
           )
         ),
       ),
@@ -301,6 +371,8 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
     String error,
     HomeProvider homeProvider,
   ) {
+    print("PAGINATION_DEBUG: Building grid - LoadingState: $state, Products count: ${products.length}, isLoading: $_isLoading");
+    
     if (state == LoadingState.loading && products.isEmpty) {
       return const Center(child: ProductsGridShimmer());
     }
@@ -327,13 +399,23 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
       );
     }
 
-    if (products.isEmpty) {
-      return const Center(child: CustomEmptyWidget());
-    }
-
     List<Product> filteredProducts = products;
     if (_selectedProductType != ProductType.newArrival) {
       filteredProducts = products.where((product) => product.published == 1).toList();
+    }
+    
+    print("PAGINATION_DEBUG: Filtered products count: ${filteredProducts.length}");
+
+    // If we've filtered out all products but there are more to load, try loading more
+    if (filteredProducts.isEmpty && products.isNotEmpty && _hasMoreProducts(homeProvider)) {
+      print("PAGINATION_DEBUG: All products were filtered out, trying to load more");
+      _loadMoreProducts();
+      return const Center(child: ProductsGridShimmer());
+    }
+    
+    // If we've filtered out all products and there are no more to load, show empty state
+    if (filteredProducts.isEmpty) {
+      return const Center(child: CustomEmptyWidget());
     }
 
     return Column(
@@ -359,13 +441,24 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 16.0),
             child: Center(
-              child: SizedBox(
-                height: 24,
-                width: 24,
-                child: CircularProgressIndicator(
-                  strokeWidth: 2,
-                  color: AppTheme.primaryColor,
-                ),
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: 24,
+                    width: 24,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      color: AppTheme.primaryColor,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'Loading more products...',
+                    style: context.titleSmall!.copyWith(
+                      color: AppTheme.darkDividerColor,
+                    ),
+                  ),
+                ],
               ),
             ),
           ),

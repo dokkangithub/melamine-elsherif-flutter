@@ -10,10 +10,10 @@ class FeaturedProductCard extends StatelessWidget {
   final double width;
   
   const FeaturedProductCard({
-    Key? key,
+    super.key,
     required this.product,
     this.width = 250,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

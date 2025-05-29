@@ -18,7 +18,7 @@ class FeaturedProductsShimmer extends StatelessWidget {
         const SizedBox(height: 10),
         // Products list shimmer
         SizedBox(
-          height: 240,
+          height: 280,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             itemCount: 5,
@@ -27,7 +27,7 @@ class FeaturedProductsShimmer extends StatelessWidget {
                   baseColor: Colors.grey[300]!,
                   highlightColor: Colors.grey[100]!,
                   child: Container(
-                    width: 180,
+                    width: 250,
                     margin: const EdgeInsets.symmetric(horizontal: 10),
                     decoration: const BoxDecoration(
                       color: Colors.white,
