@@ -242,13 +242,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
               AppRoutes.navigateTo(context, AppRoutes.login);
             },
             fullWidth: true,
-            height: 55,
+            height: 50,
             child: Text(
               textAlign: TextAlign.center,
               'sign_in'.tr(context),
-              style: context.headlineMedium.copyWith(
+              style: context.headlineSmall.copyWith(
                 color: Colors.white,
-                fontWeight: FontWeight.w500,
+                fontWeight: FontWeight.w800,
               ),
             ),
           ),
@@ -256,15 +256,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
         // Create Account text button
         const SizedBox(height: 20),
-        TextButton(
-          onPressed: () {
-            AppRoutes.navigateTo(context, AppRoutes.signUp);
-          },
-          child: Text(
-            'create_account'.tr(context),
-            style: context.headlineSmall.copyWith(
-              color: Colors.black87,
-              fontWeight: FontWeight.w600,
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          child: CustomButton(
+            onPressed: () {
+              AppRoutes.navigateTo(context, AppRoutes.signUp);
+            },
+            isOutlined: true,
+            fullWidth: true,
+            child: Text(
+              'create_account'.tr(context),
+              textAlign: TextAlign.center,
+              style: context.headlineSmall.copyWith(
+                fontWeight: FontWeight.w600,
+                color: AppTheme.primaryColor
+              ),
             ),
           ),
         ),
@@ -478,6 +484,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       children: [
         InkWell(
           onTap: onTap,
+          splashColor: Colors.transparent,
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 20),
             child: Row(

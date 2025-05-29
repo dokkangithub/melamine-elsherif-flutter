@@ -110,8 +110,8 @@ class LanguageSwitcher extends StatelessWidget {
           text: displayText,
           style: baseStyle.copyWith(
             color: isSelected ? AppTheme.primaryColor : Colors.black54,
-            fontWeight: isSelected ? FontWeight.w800 : FontWeight.w300,
-            fontSize: isSelected ? 16 : 14,
+            fontWeight: isSelected ? FontWeight.w900 : FontWeight.w300,
+            fontSize: isSelected ? 18 : 14,
           ),
           recognizer: TapGestureRecognizer()
             ..onTap = () {
@@ -180,8 +180,7 @@ class LanguageSwitcher extends StatelessWidget {
                 displayText,
                 style: baseStyle.copyWith(
                   color: isSelected ? AppTheme.primaryColor : Colors.black54,
-                  fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
-                  fontFamily: GoogleFonts.tajawal().fontFamily,
+                  fontWeight: isSelected ? FontWeight.w900 : FontWeight.w400,
                 ),
               ),
             );

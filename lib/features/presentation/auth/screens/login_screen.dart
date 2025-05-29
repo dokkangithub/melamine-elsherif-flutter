@@ -144,11 +144,17 @@ class _LoginScreenState extends State<LoginScreen> {
                               Center(
                                 child: Text(
                                     'welcome_back'.tr(context),
-                                    style: GoogleFonts.jost(
-                                      fontSize: 32,
-                                      fontWeight: FontWeight.w200,
-                                      color: Colors.black54,
-                                    )
+                                    style: Directionality.of(context) == TextDirection.rtl
+                                      ? GoogleFonts.tajawal(
+                                          fontSize: 32,
+                                          fontWeight: FontWeight.w200,
+                                          color: Colors.black54,
+                                        )
+                                      : GoogleFonts.jost(
+                                          fontSize: 32,
+                                          fontWeight: FontWeight.w200,
+                                          color: Colors.black54,
+                                        )
                                 ),
                               ),
 
