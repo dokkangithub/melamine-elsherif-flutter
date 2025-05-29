@@ -89,7 +89,6 @@ class _AddressListScreenState extends State<AddressListScreen> {
           child: Text(
             'my_addresses'.tr(context), 
             style: context.displaySmall.copyWith(
-              fontFamily: GoogleFonts.playfairDisplay().fontFamily,
               fontWeight: FontWeight.w600,
             )
           ),
@@ -186,7 +185,6 @@ class _AddressListScreenState extends State<AddressListScreen> {
               style: context.titleLarge.copyWith(
                 color: Colors.white,
                 fontWeight: FontWeight.w600,
-                fontFamily: GoogleFonts.playfairDisplay().fontFamily,
               ),
             ),
           ),

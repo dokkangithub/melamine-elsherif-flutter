@@ -48,71 +48,71 @@ class AppTheme {
     scaffoldBackgroundColor: white,
     cardColor: lightCardColor,
     dividerColor: lightDividerColor,
-    fontFamily: GoogleFonts.playfairDisplay().fontFamily,
+    fontFamily: GoogleFonts.jost().fontFamily,
 
     // Apply Playfair Display font
     textTheme: TextTheme(
-      displayLarge: GoogleFonts.playfairDisplay(
+      displayLarge: GoogleFonts.jost(
         color: black,
         fontSize: 28,
         fontWeight: FontWeight.w500,
       ),
-      displayMedium: GoogleFonts.playfairDisplay(
+      displayMedium: GoogleFonts.jost(
         color: black,
         fontSize: 24,
         fontWeight: FontWeight.w500,
       ),
-      displaySmall: GoogleFonts.playfairDisplay(
+      displaySmall: GoogleFonts.jost(
         color: black,
         fontSize: 20,
         fontWeight: FontWeight.w500,
       ),
-      headlineLarge: GoogleFonts.playfairDisplay(
+      headlineLarge: GoogleFonts.jost(
         color: black,
         fontSize: 22,
         fontWeight: FontWeight.w500,
       ),
-      headlineMedium: GoogleFonts.playfairDisplay(
+      headlineMedium: GoogleFonts.jost(
         color: black,
         fontSize: 18,
         fontWeight: FontWeight.w400,
       ),
-      headlineSmall: GoogleFonts.playfairDisplay(
+      headlineSmall: GoogleFonts.jost(
         color: black,
         fontSize: 16,
         fontWeight: FontWeight.w300,
       ),
-      titleLarge: GoogleFonts.playfairDisplay(
+      titleLarge: GoogleFonts.jost(
         color: black,
         fontSize: 14,
         fontWeight: FontWeight.w300,
       ),
-      titleMedium: GoogleFonts.playfairDisplay(
+      titleMedium: GoogleFonts.jost(
         color: black,
         fontSize: 13,
         fontWeight: FontWeight.w300,
       ),
-      titleSmall: GoogleFonts.playfairDisplay(
+      titleSmall: GoogleFonts.jost(
         color: black,
         fontSize: 12,
         fontWeight: FontWeight.w300,
       ),
-      bodyLarge: GoogleFonts.playfairDisplay(
+      bodyLarge: GoogleFonts.jost(
         color: black,
         fontSize: 11,
         fontWeight: FontWeight.w300,
       ),
-      bodyMedium: GoogleFonts.playfairDisplay(
+      bodyMedium: GoogleFonts.jost(
         color: black,
         fontSize: 10,
         fontWeight: FontWeight.w300,
       ),
-      bodySmall: GoogleFonts.playfairDisplay(
+      bodySmall: GoogleFonts.jost(
         color: black,
         fontSize: 9,
         fontWeight: FontWeight.w300,
       ),
-      labelLarge: GoogleFonts.playfairDisplay(
+      labelLarge: GoogleFonts.jost(
         color: black,
         fontSize: 8,
         fontWeight: FontWeight.w300,
@@ -127,7 +127,7 @@ class AppTheme {
         elevation: 2,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        textStyle: GoogleFonts.playfairDisplay(
+        textStyle: GoogleFonts.jost(
           fontSize: 16, 
           fontWeight: FontWeight.w500,
         ),
@@ -140,7 +140,7 @@ class AppTheme {
         side: const BorderSide(color: primaryColor),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        textStyle: GoogleFonts.playfairDisplay(
+        textStyle: GoogleFonts.jost(
           fontSize: 16, 
           fontWeight: FontWeight.w500,
         ),
@@ -151,7 +151,7 @@ class AppTheme {
       style: TextButton.styleFrom(
         foregroundColor: primaryColor,
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        textStyle: GoogleFonts.playfairDisplay(
+        textStyle: GoogleFonts.jost(
           fontSize: 16, 
           fontWeight: FontWeight.w500,
         ),
@@ -183,15 +183,15 @@ class AppTheme {
         borderRadius: BorderRadius.circular(8),
         borderSide: const BorderSide(color: errorColor, width: 2),
       ),
-      labelStyle: GoogleFonts.playfairDisplay(
+      labelStyle: GoogleFonts.jost(
         color: lightSecondaryTextColor, 
         fontSize: 16,
       ),
-      hintStyle: GoogleFonts.playfairDisplay(
+      hintStyle: GoogleFonts.jost(
         color: lightSecondaryTextColor, 
         fontSize: 16,
       ),
-      errorStyle: GoogleFonts.playfairDisplay(
+      errorStyle: GoogleFonts.jost(
         color: errorColor, 
         fontSize: 12,
       ),
@@ -210,7 +210,7 @@ class AppTheme {
       color: primaryColor,
       elevation: 0,
       centerTitle: true,
-      titleTextStyle: GoogleFonts.playfairDisplay(
+      titleTextStyle: GoogleFonts.jost(
         color: Colors.white,
         fontSize: 20,
         fontWeight: FontWeight.w600,
@@ -223,11 +223,11 @@ class AppTheme {
       backgroundColor: lightCardColor,
       selectedItemColor: primaryColor,
       unselectedItemColor: lightSecondaryTextColor,
-      selectedLabelStyle: GoogleFonts.playfairDisplay(
+      selectedLabelStyle: GoogleFonts.jost(
         fontSize: 12, 
         fontWeight: FontWeight.w500,
       ),
-      unselectedLabelStyle: GoogleFonts.playfairDisplay(
+      unselectedLabelStyle: GoogleFonts.jost(
         fontSize: 12, 
         fontWeight: FontWeight.w500,
       ),

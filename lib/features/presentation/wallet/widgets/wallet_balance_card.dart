@@ -9,10 +9,10 @@ class WalletBalanceCard extends StatelessWidget {
   final String lastRecharged;
 
   const WalletBalanceCard({
-    Key? key,
+    super.key,
     required this.balance,
     required this.lastRecharged,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +66,6 @@ class WalletBalanceCard extends StatelessWidget {
                       style: context.titleLarge.copyWith(
                         color: Colors.white,
                         fontWeight: FontWeight.w800,
-                        fontFamily: GoogleFonts.cormorantGaramond().fontFamily,
                         fontSize: 18,
                       ),
                     ),
@@ -74,7 +73,7 @@ class WalletBalanceCard extends StatelessWidget {
                       padding: const EdgeInsets.all(8.0),
                       decoration: BoxDecoration(
                         color: Colors.white.withValues(alpha: 0.2),
-                        shape: BoxShape.circle,
+                        shape: BoxShape.rectangle,
                       ),
                       child: const Icon(
                         Icons.account_balance_wallet,
@@ -89,9 +88,8 @@ class WalletBalanceCard extends StatelessWidget {
                   balance,
                   style: context.displayMedium.copyWith(
                     color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: GoogleFonts.cormorantGaramond().fontFamily,
-                    fontSize: 36,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 30,
                   ),
                 ),
                 const SizedBox(height: 24.0),
@@ -115,7 +113,6 @@ class WalletBalanceCard extends StatelessWidget {
                         style: context.bodyLarge.copyWith(
                           color: Colors.white,
                           fontWeight: FontWeight.w800,
-                          fontFamily: GoogleFonts.cormorantGaramond().fontFamily,
                           fontSize: 14,
                         ),
                       ),

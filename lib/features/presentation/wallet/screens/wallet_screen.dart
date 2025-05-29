@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:melamine_elsherif/core/config/themes.dart/theme.dart';
 import 'package:melamine_elsherif/core/utils/extension/text_style_extension.dart';
 import 'package:melamine_elsherif/core/utils/extension/translate_extension.dart';
@@ -83,9 +82,8 @@ class _WalletScreenState extends State<WalletScreen> {
         leading: const CustomBackButton(),
         title: Text(
           'my_wallet'.tr(context),
-          style: context.displayLarge.copyWith(
-            fontFamily: GoogleFonts.cormorantGaramond().fontFamily,
-            fontWeight: FontWeight.w600,
+          style: context.displaySmall.copyWith(
+            fontWeight: FontWeight.w500,
           ),
         ),
       ),
@@ -112,7 +110,6 @@ class _WalletScreenState extends State<WalletScreen> {
                 child: Text(
                   'transaction_history'.tr(context),
                   style: context.titleLarge.copyWith(
-                    fontFamily: GoogleFonts.cormorantGaramond().fontFamily,
                     fontWeight: FontWeight.w600,
                     fontSize: 18,
                     color: Colors.black87,
@@ -150,7 +147,6 @@ class _WalletScreenState extends State<WalletScreen> {
                         'no_wallet_data_available'.tr(context),
                         style: context.titleMedium.copyWith(
                           color: Colors.grey[600],
-                          fontFamily: GoogleFonts.cormorantGaramond().fontFamily,
                         ),
                       ),
                     ),
@@ -163,7 +159,6 @@ class _WalletScreenState extends State<WalletScreen> {
                   'Error: ${provider.errorMessage}',
                   style: context.titleMedium.copyWith(
                     color: Colors.red,
-                    fontFamily: GoogleFonts.cormorantGaramond().fontFamily,
                   ),
                 ),
               ),
@@ -189,7 +184,7 @@ class _WalletScreenState extends State<WalletScreen> {
                 borderRadius: BorderRadius.circular(16.0),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.grey.withOpacity(0.1),
+                    color: Colors.grey.withValues(alpha: 0.1),
                     blurRadius: 10,
                     offset: const Offset(0, 2),
                   ),
@@ -223,7 +218,6 @@ class _WalletScreenState extends State<WalletScreen> {
                               style: context.titleMedium.copyWith(
                                 fontWeight: FontWeight.w500,
                                 fontSize: 16,
-                                fontFamily: GoogleFonts.cormorantGaramond().fontFamily,
                                 color: Colors.black87,
                               ),
                             ),
@@ -234,7 +228,6 @@ class _WalletScreenState extends State<WalletScreen> {
                           style: context.titleLarge.copyWith(
                             fontWeight: FontWeight.bold,
                             fontSize: 20,
-                            fontFamily: GoogleFonts.cormorantGaramond().fontFamily,
                             color: AppTheme.primaryColor,
                           ),
                         ),
@@ -254,7 +247,6 @@ class _WalletScreenState extends State<WalletScreen> {
                                 textAlign: TextAlign.center,
                                 style: context.titleLarge.copyWith(
                                   color: AppTheme.white,
-                                  fontFamily: GoogleFonts.cormorantGaramond().fontFamily,
                                   fontSize: 16,
                                   fontWeight: FontWeight.w700,
                                 ),
@@ -273,7 +265,6 @@ class _WalletScreenState extends State<WalletScreen> {
                   'Error: ${provider.errorMessage}',
                   style: context.titleMedium.copyWith(
                     color: Colors.red,
-                    fontFamily: GoogleFonts.cormorantGaramond().fontFamily,
                   ),
                 ),
               ),
@@ -304,7 +295,6 @@ class _WalletScreenState extends State<WalletScreen> {
                 'Error: ${provider.errorMessage}',
                 style: context.titleMedium.copyWith(
                   color: Colors.red,
-                  fontFamily: GoogleFonts.cormorantGaramond().fontFamily,
                 ),
               ),
             ),
@@ -327,7 +317,6 @@ class _WalletScreenState extends State<WalletScreen> {
                     'no_transactions_available'.tr(context),
                     style: context.titleMedium.copyWith(
                       color: Colors.grey[600],
-                      fontFamily: GoogleFonts.cormorantGaramond().fontFamily,
                       fontSize: 16,
                     ),
                   ),
@@ -354,7 +343,6 @@ class _WalletScreenState extends State<WalletScreen> {
                             'no_more_transactions'.tr(context),
                             style: context.bodyLarge.copyWith(
                               color: Colors.grey[600],
-                              fontFamily: GoogleFonts.cormorantGaramond().fontFamily,
                               fontSize: 14,
                             ),
                           ),

@@ -220,7 +220,7 @@ class _CartScreenState extends State<CartScreen> {
               scrolledUnderElevation: 0,
               title: Text(
                 'my_cart'.tr(context),
-                style: context.displaySmall!.copyWith(fontWeight: FontWeight.bold),
+                style: context.displaySmall!.copyWith(fontWeight: FontWeight.w500),
               ),
               centerTitle: true,
             ),

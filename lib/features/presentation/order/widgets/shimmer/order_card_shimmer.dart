@@ -28,7 +28,7 @@ class OrderCardShimmer extends StatelessWidget {
                     height: 20,
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(4),
+                      borderRadius: BorderRadius.circular(0),
                     ),
                   ),
                 ),
@@ -41,7 +41,7 @@ class OrderCardShimmer extends StatelessWidget {
                     height: 14,
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(4),
+                      borderRadius: BorderRadius.circular(0),
                     ),
                   ),
                 ),
@@ -71,7 +71,7 @@ class OrderCardShimmer extends StatelessWidget {
                     height: 16,
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(4),
+                      borderRadius: BorderRadius.circular(0),
                     ),
                   ),
                 ),
@@ -84,7 +84,7 @@ class OrderCardShimmer extends StatelessWidget {
                     height: 16,
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(4),
+                      borderRadius: BorderRadius.circular(0),
                     ),
                   ),
                 ),
@@ -104,7 +104,7 @@ class OrderCardShimmer extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(0),
           border: Border.all(color: Colors.grey[300]!),
         ),
         child: Container(
@@ -112,7 +112,7 @@ class OrderCardShimmer extends StatelessWidget {
           height: 16,
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(4),
+            borderRadius: BorderRadius.circular(0),
           ),
         ),
       ),

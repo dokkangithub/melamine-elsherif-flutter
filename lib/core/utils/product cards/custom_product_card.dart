@@ -125,13 +125,12 @@ class _ProductCardState extends State<ProductCard> {
                                   : TextAlign.left,
                         ),
 
-                        const SizedBox(height: 4),
                         // Price and fav icon
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Expanded(
-                              child: Row(
+                              child: Column(
                                 spacing: 4,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -192,7 +191,6 @@ class _ProductCardState extends State<ProductCard> {
                             ),
                           ],
                         ),
-                        const SizedBox(height: 4),
 
                         isAddingToCart
                             ? const Row(
@@ -263,11 +261,14 @@ class _ProductCardState extends State<ProductCard> {
               ),
             ),
             if (_showWishlistAnimation)
-              Lottie.asset(
-                AppAnimations.wishlistAnimation,
-                width: 200,
-                height: 200,
-                fit: BoxFit.cover,
+              Opacity(
+                opacity: 0.05,
+                child: Lottie.asset(
+                  AppAnimations.wishlistAnimation,
+                  width: 200,
+                  height: 200,
+                  fit: BoxFit.cover,
+                ),
               ),
           ],
         ),

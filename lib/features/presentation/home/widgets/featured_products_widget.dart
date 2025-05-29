@@ -59,7 +59,7 @@ class FeaturedProductsWidget extends StatelessWidget {
               ),
               const SizedBox(height: 10),
               SizedBox(
-                height: 300,
+                height: 330,
                 child: ListView.builder(
                   padding: const EdgeInsets.only(left: 16.0),
                   scrollDirection: Axis.horizontal,
@@ -67,7 +67,7 @@ class FeaturedProductsWidget extends StatelessWidget {
                   itemBuilder: (context, index) => 
                     FeaturedProductCard(
                       product: filteredProducts[index],
-                      width: 210,
+                      width: 250,
                     ),
                 ),
               ),

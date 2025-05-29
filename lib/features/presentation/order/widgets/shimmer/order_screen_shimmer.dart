@@ -21,7 +21,7 @@ class OrderScreenShimmer extends StatelessWidget {
             height: 24,
             decoration: BoxDecoration(
               color: Colors.grey[300],
-              borderRadius: BorderRadius.circular(4),
+              borderRadius: BorderRadius.circular(0),
             ),
           ),
           const SizedBox(height: 10),

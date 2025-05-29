@@ -333,7 +333,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         boxShadow: [
                           BoxShadow(
                             color: Colors.black.withValues(alpha: 0.1),
-                            blurRadius: 10,
+                            blurRadius: 0,
                             offset: const Offset(0, 5),
                           ),
                         ],
@@ -566,7 +566,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       child: Container(
         alignment: Alignment.center,
         padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(borderRadius: BorderRadius.circular(8),color: AppTheme.primaryColor.withValues(alpha: 0.1)),
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(0),color: AppTheme.primaryColor.withValues(alpha: 0.1)),
         child: Row(
           children: [
             CustomImage(assetPath: icon),
@@ -1049,7 +1049,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
         decoration: BoxDecoration(
           border: Border.all(color: Colors.grey[300]!),
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(0),
         ),
         child: Column(
           children: [

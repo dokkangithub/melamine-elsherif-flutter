@@ -46,9 +46,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
         leading: const CustomBackButton(respectDirection: true),
         title: Text(
           'order_details'.tr(context),
-          style: context.displayLarge!.copyWith(
-            fontFamily:  GoogleFonts.cormorantGaramond().fontFamily,
-            color: Colors.black87,
+          style: context.displaySmall!.copyWith(
             fontWeight: FontWeight.w500,
           ),
         ),
@@ -321,7 +319,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
       height: 4,
       decoration: BoxDecoration(
         color: Colors.grey[200],
-        borderRadius: BorderRadius.circular(2),
+        borderRadius: BorderRadius.circular(0),
       ),
       child: Row(
         children: [
@@ -330,7 +328,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
             child: Container(
               decoration: BoxDecoration(
                 color: AppTheme.primaryColor,
-                borderRadius: BorderRadius.circular(2),
+                borderRadius: BorderRadius.circular(0),
               ),
             ),
           ),
@@ -343,7 +341,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
             child: Container(
               decoration: BoxDecoration(
                 color: AppTheme.primaryColor,
-                borderRadius: BorderRadius.circular(2),
+                borderRadius: BorderRadius.circular(0),
               ),
             ),
           ),
@@ -356,7 +354,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
             child: Container(
               decoration: BoxDecoration(
                 color: AppTheme.primaryColor,
-                borderRadius: BorderRadius.circular(2),
+                borderRadius: BorderRadius.circular(0),
               ),
             ),
           ),
@@ -418,7 +416,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.grey[50],
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(0),
         border: Border.all(color: Colors.grey[200]!),
       ),
       child: Row(
@@ -473,7 +471,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.grey[50],
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(0),
         border: Border.all(color: Colors.grey[200]!),
       ),
       child: Row(
@@ -532,7 +530,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.grey[50],
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(0),
         border: Border.all(color: Colors.grey[200]!),
       ),
       child: Column(
@@ -601,7 +599,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.grey[50],
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(0),
         border: Border.all(color: Colors.grey[200]!),
       ),
       child: Row(
@@ -637,7 +635,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             decoration: BoxDecoration(
               color: bgColor,
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(0),
             ),
             child: Text(
               paymentStatus,
@@ -722,7 +720,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.grey[50],
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(0),
         border: Border.all(color: Colors.grey[200]!),
       ),
       child: Column(

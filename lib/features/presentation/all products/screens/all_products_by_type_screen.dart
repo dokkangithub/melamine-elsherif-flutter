@@ -219,9 +219,9 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
       elevation: 0,
       title: Text(
         "MELAMEN",
-        style: GoogleFonts.playfairDisplay(
+        style: GoogleFonts.jost(
           fontSize: 24,
-          fontWeight: FontWeight.bold,
+          fontWeight: FontWeight.w500,
           color: Colors.black,
         ),
       ),

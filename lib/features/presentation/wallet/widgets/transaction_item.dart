@@ -21,10 +21,10 @@ class TransactionItem extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(12.0),
+        borderRadius: BorderRadius.circular(0.0),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
+            color: Colors.grey.withValues(alpha: 0.1),
             blurRadius: 6,
             offset: const Offset(0, 2),
           ),
@@ -42,7 +42,7 @@ class TransactionItem extends StatelessWidget {
                 color: isPositive 
                     ? AppTheme.primaryColor.withValues(alpha: 0.15)
                     : Colors.grey.withValues(alpha: 0.15),
-                borderRadius: BorderRadius.circular(12.0),
+                borderRadius: BorderRadius.circular(0.0),
               ),
               child: Icon(
                 iconData,
@@ -61,7 +61,6 @@ class TransactionItem extends StatelessWidget {
                     transaction.paymentMethod,
                     style: context.titleMedium.copyWith(
                       fontWeight: FontWeight.w600,
-                      fontFamily: GoogleFonts.cormorantGaramond().fontFamily,
                       fontSize: 16,
                       color: Colors.black87,
                     ),
@@ -81,7 +80,6 @@ class TransactionItem extends StatelessWidget {
                         transaction.date,
                         style: context.bodyLarge.copyWith(
                           color: Colors.grey[600],
-                          fontFamily: GoogleFonts.cormorantGaramond().fontFamily,
                           fontSize: 14,
                         ),
                       ),
@@ -93,13 +91,12 @@ class TransactionItem extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 2.0),
                       decoration: BoxDecoration(
                         color: isPositive ? AppTheme.primaryColor.withValues(alpha: 0.1) : Colors.orange.withValues(alpha: 0.1),
-                        borderRadius: BorderRadius.circular(10.0),
+                        borderRadius: BorderRadius.circular(0.0),
                       ),
                       child: Text(
                         transaction.approvalString,
                         style: context.bodySmall.copyWith(
                           color: isPositive ? Colors.green[700] : Colors.orange[700],
-                          fontFamily: GoogleFonts.cormorantGaramond().fontFamily,
                           fontSize: 12,
                           fontWeight: FontWeight.w500,
                         ),
@@ -116,7 +113,6 @@ class TransactionItem extends StatelessWidget {
               style: context.titleMedium.copyWith(
                 fontWeight: FontWeight.bold,
                 color: _isPositiveAmount() ? Colors.green[700] : Colors.black87,
-                fontFamily: GoogleFonts.cormorantGaramond().fontFamily,
                 fontSize: 16,
               ),
             ),

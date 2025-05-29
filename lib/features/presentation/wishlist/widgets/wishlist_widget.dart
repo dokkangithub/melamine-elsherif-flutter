@@ -66,7 +66,7 @@ class _WishlistWidgetState extends State<WishlistWidget> {
         scrolledUnderElevation: 0,
         title: Text(
           'my_wishlist'.tr(context),
-          style: context.displaySmall.copyWith(fontWeight: FontWeight.bold),
+          style: context.displaySmall.copyWith(fontWeight: FontWeight.w500),
         ),
         centerTitle: true,
       ),
@@ -147,7 +147,7 @@ class _WishlistWidgetState extends State<WishlistWidget> {
               child: Stack(
                 children: [
                   // Product image
-                  GestureDetector(
+                  InkWell(
                     onTap: () => _navigateToProductDetails(context, wishlistItem.slug),
                     child: ClipRRect(
                       child: CustomImage(
@@ -171,7 +171,7 @@ class _WishlistWidgetState extends State<WishlistWidget> {
                         padding: const EdgeInsets.all(6),
                         decoration: BoxDecoration(
                           color: Colors.white.withValues(alpha: 0.8),
-                          shape: BoxShape.circle,
+                          shape: BoxShape.rectangle,
                         ),
                         child: const Icon(
                           Icons.favorite_outlined,
@@ -236,7 +236,7 @@ class _WishlistWidgetState extends State<WishlistWidget> {
                     ],
                   ),
                   
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 4),
                   
                   // Price and Add to Cart button
                   Row(
@@ -246,7 +246,7 @@ class _WishlistWidgetState extends State<WishlistWidget> {
                       Text(
                         wishlistItem.price,
                         style: context.headlineSmall.copyWith(
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.w800,
                           color: AppTheme.primaryColor,
                         ),
                       ),
@@ -258,9 +258,9 @@ class _WishlistWidgetState extends State<WishlistWidget> {
                           onPressed: () => _addToCart(context, wishlistItem),
                           child: Text(
                             'add_to_cart'.tr(context),
-                            style: context.titleSmall.copyWith(
+                            style: context.titleLarge.copyWith(
                               color: Colors.white,
-                              fontWeight: FontWeight.w600,
+                              fontWeight: FontWeight.w900,
                             ),
                           ),
                         ),

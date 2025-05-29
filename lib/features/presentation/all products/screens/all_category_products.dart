@@ -279,7 +279,7 @@ class _AllCategoryProductsScreenState extends State<AllCategoryProductsScreen> {
                   children: [
                     // Background Image - no ClipRRect
                     CustomImage(
-                      imageUrl: category.coverImage,
+                      imageUrl: category.banner,
                       fit: BoxFit.cover,
                     ),
                     // Gradient Overlay

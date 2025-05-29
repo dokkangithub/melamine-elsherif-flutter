@@ -76,18 +76,18 @@ abstract class AppFunctions {
         // Show appropriate toast message
         isSuccess
             ? CustomToast.showToast(
-          message: result ?? 'added_to_cart_successfully'.tr(context),
-          type: ToastType.success
+            message: result ?? 'added_to_cart_successfully'.tr(context),
+            type: ToastType.success
         )
             : CustomToast.showToast(
-          message: result ?? 'failed_to_add_to_cart'.tr(context),
+            message: result ?? 'failed_to_add_to_cart'.tr(context),
             type: ToastType.error
         );
-        
+
         // Show animation only if cart addition was successful
         if (isSuccess) {
-          showCartAddedAnimation(context);
-          
+          //showCartAddedAnimation(context);
+
           // Refresh cart data asynchronously without waiting
           _refreshCartDataAsync(cartProvider,context);
         }
@@ -98,16 +98,16 @@ abstract class AppFunctions {
           productProvider.selectedProduct?.slug == productSlug) {
         productProvider.setAddingToCartState(false);
       }
-      
+
       if (context.mounted) {
         CustomToast.showToast(
-          message: e.toString(),
-          type: ToastType.error
+            message: e.toString(),
+            type: ToastType.error
         );
       }
     }
   }
-  
+
   // Helper method to refresh cart data asynchronously
   static Future<void> _refreshCartDataAsync(CartProvider cartProvider,context) async {
     await cartProvider.fetchCartItems();
@@ -117,9 +117,9 @@ abstract class AppFunctions {
   }
 
   static Future<void> toggleWishlistStatus(
-    BuildContext context,
-    String slug,
-  ) async {
+      BuildContext context,
+      String slug,
+      ) async {
     if (AppStrings.token == null) {
       CustomToast.showToast(message: 'please_login'.tr(context), type: ToastType.warning);
     } else {
@@ -131,56 +131,56 @@ abstract class AppFunctions {
   }
 
   /// Changes the application language and refreshes all necessary data
-  /// 
+  ///
   /// [context] - BuildContext for provider access and translations
   /// [languageCode] - The language code to change to (e.g., 'en', 'ar')
   /// [countryCode] - The country code to use with the language (e.g., 'US', 'Eg')
   static Future<void> changeLanguage(
-    BuildContext context,
-    String languageCode,
-    String countryCode,
-  ) async {
+      BuildContext context,
+      String languageCode,
+      String countryCode,
+      ) async {
     try {
       // Get language provider
       final languageProvider = Provider.of<LanguageProvider>(context, listen: false);
-      
+
       // Check if this is a direction change (RTL/LTR)
       final isDirectionChange = languageProvider.isDirectionChange(languageCode);
-      
+
       // Show loading indicator for direction changes as they can take longer
       if (isDirectionChange && context.mounted) {
         CustomDialog.showLoading(context, message: 'changing_language'.tr(context));
       }
-      
+
       // Change the language using the provider
       await languageProvider.changeLanguage(languageCode, countryCode);
-      
+
       // If using service locator for other providers, refresh them directly
       try {
         // Get singleton instances from service locator and refresh them
         final homeProvider = sl<HomeProvider>();
         homeProvider.refreshAfterLanguageChange();
-        
+
         final categoryProvider = sl<CategoryProvider>();
         categoryProvider.refreshAfterLanguageChange();
-        
+
         // Additionally refresh profile data if needed
         if (context.mounted) {
           final profileProvider = Provider.of<ProfileProvider>(context, listen: false);
           await profileProvider.getProfileCounters();
           await profileProvider.getUserProfile();
         }
-        
+
         // Dismiss loading dialog if it was shown
         if (isDirectionChange && context.mounted) {
           Navigator.pop(context);
         }
-        
+
         // Show success message
         if (context.mounted) {
           CustomToast.showToast(
-            message: 'language_changed_successfully'.tr(context),
-            type: ToastType.success
+              message: 'language_changed_successfully'.tr(context),
+              type: ToastType.success
           );
         }
       } catch (e) {
@@ -188,12 +188,12 @@ abstract class AppFunctions {
         if (isDirectionChange && context.mounted) {
           Navigator.pop(context);
         }
-        
+
         debugPrint('Error refreshing data after language change: $e');
         if (context.mounted) {
           CustomToast.showToast(
-            message: 'language_changed_data_refresh_failed'.tr(context),
-            type: ToastType.warning
+              message: 'language_changed_data_refresh_failed'.tr(context),
+              type: ToastType.warning
           );
         }
       }
@@ -201,10 +201,13 @@ abstract class AppFunctions {
       debugPrint('Error changing language: $e');
       if (context.mounted) {
         CustomToast.showToast(
-          message: 'failed_to_change_language'.tr(context),
-          type: ToastType.error
+            message: 'failed_to_change_language'.tr(context),
+            type: ToastType.error
         );
       }
     }
   }
+
+
+
 }

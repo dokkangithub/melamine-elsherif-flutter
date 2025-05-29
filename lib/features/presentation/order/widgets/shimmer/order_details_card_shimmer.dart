@@ -22,7 +22,7 @@ class OrderDetailsCardShimmer extends StatelessWidget {
                 height: 24,
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.circular(4),
+                  borderRadius: BorderRadius.circular(0),
                 ),
               ),
             ),
@@ -36,7 +36,7 @@ class OrderDetailsCardShimmer extends StatelessWidget {
                 height: 16,
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.circular(4),
+                  borderRadius: BorderRadius.circular(0),
                 ),
               ),
             ),
@@ -75,7 +75,7 @@ class OrderDetailsCardShimmer extends StatelessWidget {
             height: 20,
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.circular(4),
+              borderRadius: BorderRadius.circular(0),
             ),
           ),
         ),
@@ -101,7 +101,7 @@ class OrderDetailsCardShimmer extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(0),
           border: Border.all(color: Colors.grey[300]!),
         ),
         child: Container(
@@ -109,7 +109,7 @@ class OrderDetailsCardShimmer extends StatelessWidget {
           height: 16,
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(4),
+            borderRadius: BorderRadius.circular(0),
           ),
         ),
       ),
@@ -129,7 +129,7 @@ class OrderDetailsCardShimmer extends StatelessWidget {
             height: 20,
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.circular(4),
+              borderRadius: BorderRadius.circular(0),
             ),
           ),
         ),
@@ -165,7 +165,7 @@ class OrderDetailsCardShimmer extends StatelessWidget {
               height: isTotal ? 18 : 16,
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(4),
+                borderRadius: BorderRadius.circular(0),
               ),
             ),
           ),
@@ -178,7 +178,7 @@ class OrderDetailsCardShimmer extends StatelessWidget {
               height: isTotal ? 18 : 16,
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(4),
+                borderRadius: BorderRadius.circular(0),
               ),
             ),
           ),
@@ -200,7 +200,7 @@ class OrderDetailsCardShimmer extends StatelessWidget {
             height: 20,
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.circular(4),
+              borderRadius: BorderRadius.circular(0),
             ),
           ),
         ),
@@ -214,7 +214,7 @@ class OrderDetailsCardShimmer extends StatelessWidget {
             height: 16,
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.circular(4),
+              borderRadius: BorderRadius.circular(0),
             ),
           ),
         ),
@@ -227,7 +227,7 @@ class OrderDetailsCardShimmer extends StatelessWidget {
             height: 16,
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.circular(4),
+              borderRadius: BorderRadius.circular(0),
             ),
           ),
         ),
@@ -240,7 +240,7 @@ class OrderDetailsCardShimmer extends StatelessWidget {
             height: 16,
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.circular(4),
+              borderRadius: BorderRadius.circular(0),
             ),
           ),
         ),

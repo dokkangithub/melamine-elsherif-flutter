@@ -29,7 +29,7 @@ class OrderItemsListShimmer extends StatelessWidget {
                     width: 60,
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(0),
                     ),
                   ),
                 ),
@@ -47,7 +47,7 @@ class OrderItemsListShimmer extends StatelessWidget {
                           height: 16,
                           decoration: BoxDecoration(
                             color: Colors.white,
-                            borderRadius: BorderRadius.circular(4),
+                            borderRadius: BorderRadius.circular(0),
                           ),
                         ),
                       ),
@@ -61,7 +61,7 @@ class OrderItemsListShimmer extends StatelessWidget {
                           height: 12,
                           decoration: BoxDecoration(
                             color: Colors.white,
-                            borderRadius: BorderRadius.circular(4),
+                            borderRadius: BorderRadius.circular(0),
                           ),
                         ),
                       ),
@@ -79,7 +79,7 @@ class OrderItemsListShimmer extends StatelessWidget {
                               height: 16,
                               decoration: BoxDecoration(
                                 color: Colors.white,
-                                borderRadius: BorderRadius.circular(4),
+                                borderRadius: BorderRadius.circular(0),
                               ),
                             ),
                           ),
@@ -92,7 +92,7 @@ class OrderItemsListShimmer extends StatelessWidget {
                               height: 16,
                               decoration: BoxDecoration(
                                 color: Colors.white,
-                                borderRadius: BorderRadius.circular(4),
+                                borderRadius: BorderRadius.circular(0),
                               ),
                             ),
                           ),
