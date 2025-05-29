@@ -28,7 +28,7 @@ class CustomBackButton extends StatelessWidget {
             ? Transform(
                 alignment: Alignment.center,
                 transform: Matrix4.rotationY(3.14159), // Flip horizontally (pi radians)
-                child: const Icon(Icons.arrow_back_ios,color: AppTheme.primaryColor,size: 22),
+                child: Icon( !respectDirection?Icons.arrow_back_ios:Icons.arrow_forward_ios,color: AppTheme.primaryColor,size: 22),
               )
             : const Icon(Icons.arrow_back_ios,color: AppTheme.primaryColor,size: 22),
     );

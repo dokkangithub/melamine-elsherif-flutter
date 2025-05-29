@@ -5,6 +5,7 @@ import 'package:melamine_elsherif/core/utils/extension/text_theme_extension.dart
 import 'package:melamine_elsherif/core/utils/extension/translate_extension.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_button.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_form_field.dart';
+import 'package:melamine_elsherif/core/utils/widgets/custom_loading.dart';
 import 'package:melamine_elsherif/features/domain/cart/entities/cart.dart';
 import 'package:melamine_elsherif/features/presentation/cart/widgets/snappable_cart_item.dart';
 import 'package:melamine_elsherif/features/presentation/main%20layout/controller/layout_provider.dart';
@@ -47,8 +48,6 @@ class _CartScreenState extends State<CartScreen> {
   final TextEditingController _promoCodeController = TextEditingController();
   bool _isApplyingCoupon = false;
   bool _shouldAnimate = false;
-  bool _isReconnecting = false;
-  // Track items being deleted to avoid UI jumps
   final Set<int> _itemsBeingDeleted = {};
 
   @override
@@ -87,39 +86,6 @@ class _CartScreenState extends State<CartScreen> {
     super.dispose();
   }
 
-  Future<void> _tryReconnect(CartProvider cartProvider) async {
-    if (_isReconnecting) return;
-    
-    setState(() {
-      _isReconnecting = true;
-    });
-    
-    try {
-      final success = await cartProvider.tryReconnect();
-      
-      if (success && mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('reconnected_successfully'.tr(context)),
-            backgroundColor: Colors.green,
-          ),
-        );
-      } else if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('reconnection_failed'.tr(context)),
-            backgroundColor: Colors.orange,
-          ),
-        );
-      }
-    } finally {
-      if (mounted) {
-        setState(() {
-          _isReconnecting = false;
-        });
-      }
-    }
-  }
 
   Future<void> _applyCoupon(CouponProvider couponProvider) async {
     final couponCode = _promoCodeController.text.trim();
@@ -468,17 +434,7 @@ class _CartScreenState extends State<CartScreen> {
                                       _applyCoupon(couponProvider),
                           child:
                               _isApplyingCoupon
-                                  ? const SizedBox(
-                                    width: 20,
-                                    height: 20,
-                                    child: CircularProgressIndicator(
-                                      strokeWidth: 2,
-                                      valueColor:
-                                          AlwaysStoppedAnimation<
-                                            Color
-                                          >(Colors.white),
-                                    ),
-                                  )
+                                  ? const CustomLoadingWidget()
                                   : Text(
                                     'apply'.tr(context),
                                     style: context.titleMedium!

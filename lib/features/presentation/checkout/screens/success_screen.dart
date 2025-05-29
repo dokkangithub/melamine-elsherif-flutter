@@ -114,7 +114,7 @@ class SuccessScreen extends StatelessWidget {
               const Spacer(),
               
               // Track Order button
-              CustomButton(
+             AppStrings.token==null?const SizedBox.shrink(): CustomButton(
                 onPressed: () {
                   if (AppStrings.token != null) {
                     Provider.of<LayoutProvider>(context, listen: false).currentIndex = 4;

@@ -106,7 +106,7 @@
   "try_another_ritual?": "Try another ritual?",
   "we_could't_find_anything_for_that": "We couldn't find anything for that",
   "bring_your_vision to_life_with_melamine_elsherif": "Bring your vision to life with Melamine Elsherif",
-  "loading_more_products": "loading more Products...",
+  "loading_more_products": "Loading more products...",
   "best_selling_products": "Best Selling Products",
   "feature_products": "Feature Products",
   "today_deal_products": "Today Deal Products",
@@ -485,6 +485,7 @@
   "get_assistance": "Get help with orders and products",
   "learn_about_elsherif": "Learn about our company and values",
   "product_count": "{count} products",
+  "app_title": "MELAMINE",
   
   "splash_alsherif": "ALSHERIF",
   "splash_melamine": "MELAMINE",
@@ -554,5 +555,10 @@
   "cash_payment": "Cash Payment",
   "wallet_payment": "Wallet Payment",
   "we_are_curating_the_finest_selection": "We're curating the finest selection for you",
-  "explore_our_collection": "Explore Our Collection"
+  "explore_our_collection": "Explore Our Collection",
+  "best_sellers": "BEST SELLERS",
+  "new_arrivals": "NEW ARRIVALS",
+  "featured": "FEATURED",
+  "deals": "DEALS",
+  "all": "ALL"
 }

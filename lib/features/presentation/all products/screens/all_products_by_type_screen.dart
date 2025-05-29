@@ -275,15 +275,21 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
   }
 
   AppBar _buildAppBar(BuildContext context) {
+    // Check if the current locale is RTL
+    final bool isRTL = Directionality.of(context) == TextDirection.rtl;
+    
     return AppBar(
       backgroundColor: Colors.white,
       elevation: 0,
       title: Text(
-        "MELAMEN",
+        'app_title'.tr(context),
         style: context.displaySmall!.copyWith(fontWeight: FontWeight.w500),
       ),
       centerTitle: true,
-      leading: const CustomBackButton(),
+      // Use custom back button with proper RTL support
+      leading: CustomBackButton(
+        respectDirection: isRTL,
+      ),
       actions: [
         IconButton(
           icon: const Icon(Icons.search, color: Colors.black),
@@ -291,6 +297,7 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
             AppRoutes.navigateTo(context, AppRoutes.searchScreen);
           },
         ),
+        const SizedBox(width: 8),
       ],
     );
   }
@@ -308,11 +315,11 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
         child: ListView(
           scrollDirection: Axis.horizontal,
           children: [
-            _buildCategoryTab('ALL', ProductType.all),
-            _buildCategoryTab('BEST SELLERS', ProductType.bestSelling),
-            _buildCategoryTab('NEW ARRIVALS', ProductType.newArrival),
-            _buildCategoryTab('FEATURED', ProductType.featured),
-            _buildCategoryTab('DEALS', ProductType.flashDeal),
+            _buildCategoryTab('all'.tr(context), ProductType.all),
+            _buildCategoryTab('best_sellers'.tr(context), ProductType.bestSelling),
+            _buildCategoryTab('new_arrivals'.tr(context), ProductType.newArrival),
+            _buildCategoryTab('featured'.tr(context), ProductType.featured),
+            _buildCategoryTab('deals'.tr(context), ProductType.flashDeal),
           ],
         ),
       ),
@@ -443,17 +450,10 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
             child: Center(
               child: Column(
                 children: [
-                  SizedBox(
-                    height: 24,
-                    width: 24,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      color: AppTheme.primaryColor,
-                    ),
-                  ),
+                  const CustomLoadingWidget(),
                   const SizedBox(height: 8),
                   Text(
-                    'Loading more products...',
+                    'loading_more_products'.tr(context),
                     style: context.titleSmall!.copyWith(
                       color: AppTheme.darkDividerColor,
                     ),
@@ -467,6 +467,9 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
   }
   
   Widget _buildProductCard(BuildContext context, Product product, bool isEven) {
+    // Check if the current locale is RTL
+    final bool isRTL = Directionality.of(context) == TextDirection.rtl;
+    
     return GestureDetector(
       onTap: () {
         AppRoutes.navigateTo(
@@ -503,7 +506,9 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
                 ),
                 Positioned(
                   top: 8,
-                  right: 8,
+                  // Position based on text direction
+                  right: isRTL ? null : 8,
+                  left: isRTL ? 8 : null,
                   child: Consumer<WishlistProvider>(
                     builder: (context, wishlistProvider, _) {
                       final isInWishlist = wishlistProvider.isProductInWishlist(product.slug);
@@ -538,22 +543,25 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
                 children: [
                   Text(
                     product.name,
-                    style: context.titleMedium!.copyWith(color: AppTheme.darkDividerColor,fontWeight: FontWeight.w600),
+                    style: context.titleMedium!.copyWith(color: AppTheme.darkDividerColor, fontWeight: FontWeight.w600),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
+                    textAlign: isRTL ? TextAlign.right : TextAlign.left,
                   ),
                   const SizedBox(height: 4),
                   Row(
+                    // In RTL mode, we need to reverse the order of the price elements
+                    textDirection: isRTL ? TextDirection.rtl : TextDirection.ltr,
                     children: [
                       Text(
                         product.discountedPrice,
                         style: context.titleLarge!.copyWith(color: AppTheme.primaryColor, fontWeight: FontWeight.w900),
                       ),
                       const SizedBox(width: 6),
-                      product.hasDiscount? Text(
+                      product.hasDiscount ? Text(
                         product.mainPrice,
-                        style: context.titleMedium!.copyWith(color: AppTheme.darkDividerColor, fontWeight: FontWeight.w400,decoration: TextDecoration.lineThrough),
-                      ):const SizedBox.shrink(),
+                        style: context.titleMedium!.copyWith(color: AppTheme.darkDividerColor, fontWeight: FontWeight.w400, decoration: TextDecoration.lineThrough),
+                      ) : const SizedBox.shrink(),
                     ],
                   ),
                 ],

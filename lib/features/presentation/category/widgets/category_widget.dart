@@ -98,28 +98,25 @@ class _CategoryWidgetState extends State<CategoryWidget> with SingleTickerProvid
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Grid Categories
-                  Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: GridView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        crossAxisSpacing: 14,
-                        mainAxisSpacing: 14,
-                        childAspectRatio: 1,
-                      ),
-                      itemCount: widget.categories.length,
-                      itemBuilder: (context, index) {
-                        final category = widget.categories[index];
-                        return _shouldAnimate 
-                          ? FadeInUp(
-                              duration: Duration(milliseconds: 400 + (index * 100)),
-                              child: _buildCategoryCard(context, category),
-                            )
-                          : _buildCategoryCard(context, category);
-                      },
+                  GridView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 8,
+                      mainAxisSpacing: 8,
+                      childAspectRatio: 1,
                     ),
+                    itemCount: widget.categories.length,
+                    itemBuilder: (context, index) {
+                      final category = widget.categories[index];
+                      return _shouldAnimate
+                        ? FadeInUp(
+                            duration: Duration(milliseconds: 400 + (index * 100)),
+                            child: _buildCategoryCard(context, category),
+                          )
+                        : _buildCategoryCard(context, category);
+                    },
                   ),
                 ],
               ),
@@ -142,6 +139,7 @@ class _CategoryWidgetState extends State<CategoryWidget> with SingleTickerProvid
         );
       },
       child: Container(
+        padding: EdgeInsets.zero,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(0),
         ),

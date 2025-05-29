@@ -191,43 +191,31 @@ class _CategoryScreenState extends State<CategoryScreen> {
         child: Column(
           children: [
             // Category Image
-            Expanded(
-              child: Container(
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: NetworkImage(category.icon ?? ''),
-                    fit: BoxFit.cover,
-                  ),
+            CustomImage(imageUrl: category.icon ),
+            Column(
+              children: [
+                const SizedBox(height: 4),
+                Text(
+                  category.name ?? '',
+                  textAlign: TextAlign.center,
+                  style: context.headlineSmall!.copyWith(fontWeight: FontWeight.w600),
+                  maxLines: 1,
                 ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: [
-                  Text(
-                    category.name ?? '',
-                    textAlign: TextAlign.center,
-                    style: context.headlineMedium!.copyWith(fontWeight: FontWeight.w600),
-                    maxLines: 1,
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    'products_count'.tr(context).replaceAll('{count}', productCount.toString()),
-                    textAlign: TextAlign.center,
-                    style: context.titleMedium!.copyWith(color: AppTheme.darkDividerColor),
-                  ),
-                  const SizedBox(height: 8),
-                  Container(
-                    height: 2,
-                    width: double.infinity,
-                    margin: const EdgeInsets.symmetric(horizontal: 40),
-                    color: AppTheme.primaryColor,
-                  ),
-                  const SizedBox(height: 8),
-                ],
-              ),
+                const SizedBox(height: 4),
+                Text(
+                  'products_count'.tr(context).replaceAll('{count}', productCount.toString()),
+                  textAlign: TextAlign.center,
+                  style: context.titleMedium!.copyWith(color: AppTheme.darkDividerColor),
+                ),
+                const SizedBox(height: 8),
+                Container(
+                  height: 2,
+                  width: double.infinity,
+                  margin: const EdgeInsets.symmetric(horizontal: 40),
+                  color: AppTheme.primaryColor,
+                ),
+                const SizedBox(height: 8),
+              ],
             ),
           ],
         ),
