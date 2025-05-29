@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:melamine_elsherif/core/config/themes.dart/theme.dart';
+import 'package:melamine_elsherif/core/utils/extension/text_theme_extension.dart';
+import 'package:melamine_elsherif/core/utils/widgets/custom_loading.dart';
 import 'package:provider/provider.dart';
 import '../../../../core/utils/enums/loading_state.dart';
 import '../../../../core/utils/extension/translate_extension.dart';
 import '../../../../core/utils/widgets/custom_appBar.dart';
 import '../../../../core/utils/widgets/custom_back_button.dart';
+import '../../../../core/utils/widgets/custom_button.dart';
 import '../controller/reviews_provider.dart';
 import '../widgets/add_review_dialog.dart';
 import '../widgets/review_card.dart';
@@ -27,7 +31,10 @@ class _AllReviewsScreenState extends State<AllReviewsScreen> {
 
     // Fetch reviews when screen loads
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<ReviewProvider>(context, listen: false).fetchReviews(widget.productId);
+      Provider.of<ReviewProvider>(
+        context,
+        listen: false,
+      ).fetchReviews(widget.productId);
     });
 
     // Add scroll listener for pagination
@@ -35,9 +42,12 @@ class _AllReviewsScreenState extends State<AllReviewsScreen> {
   }
 
   void _scrollListener() {
-    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent * 0.9) {
-      Provider.of<ReviewProvider>(context, listen: false)
-          .loadMoreReviews(widget.productId);
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent * 0.9) {
+      Provider.of<ReviewProvider>(
+        context,
+        listen: false,
+      ).loadMoreReviews(widget.productId);
     }
   }
 
@@ -94,8 +104,10 @@ class _AllReviewsScreenState extends State<AllReviewsScreen> {
           const SizedBox(height: 16),
           ElevatedButton(
             onPressed: () {
-              Provider.of<ReviewProvider>(context, listen: false)
-                  .fetchReviews(widget.productId);
+              Provider.of<ReviewProvider>(
+                context,
+                listen: false,
+              ).fetchReviews(widget.productId);
             },
             child: Text('try_again'.tr(context)),
           ),
@@ -114,9 +126,16 @@ class _AllReviewsScreenState extends State<AllReviewsScreen> {
             style: const TextStyle(fontSize: 18),
           ),
           const SizedBox(height: 16),
-          ElevatedButton(
+          CustomButton(
             onPressed: _showAddReviewDialog,
-            child: Text('write_first_review'.tr(context)),
+            child: Text(
+              'write_first_review'.tr(context),
+              textAlign: TextAlign.center,
+              style: context.titleMedium!.copyWith(
+                color: AppTheme.white,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
           ),
         ],
       ),
@@ -127,13 +146,15 @@ class _AllReviewsScreenState extends State<AllReviewsScreen> {
     return ListView.builder(
       controller: _scrollController,
       padding: const EdgeInsets.all(16),
-      itemCount: reviewProvider.reviews.length + (reviewProvider.isLoadingMore ? 1 : 0),
+      itemCount:
+          reviewProvider.reviews.length +
+          (reviewProvider.isLoadingMore ? 1 : 0),
       itemBuilder: (context, index) {
         if (index == reviewProvider.reviews.length) {
           return const Center(
             child: Padding(
               padding: EdgeInsets.all(16.0),
-              child: CircularProgressIndicator(),
+              child: CustomLoadingWidget(),
             ),
           );
         }

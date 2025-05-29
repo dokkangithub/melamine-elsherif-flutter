@@ -23,7 +23,6 @@ class SaveAddressButton extends StatelessWidget {
           isEditing ? 'update_address'.tr(context) : 'add_address'.tr(context),
       onPressed: isLoading ? null : onPressed,
       isLoading: isLoading,
-      isGradient: true,
       textColor: AppTheme.white,
       padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 24),
       textStyle: context.titleSmall!.copyWith(color: AppTheme.white,fontWeight: FontWeight.w800),

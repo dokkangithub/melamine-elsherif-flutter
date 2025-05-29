@@ -186,7 +186,6 @@ class OnboardingContent extends StatelessWidget {
               CustomButton(
                 text: 'sign_up'.tr(context),
                 onPressed: onSignUp,
-                isGradient: true,
                 backgroundColor: AppTheme.primaryColor,
                 fullWidth: true,
               ),

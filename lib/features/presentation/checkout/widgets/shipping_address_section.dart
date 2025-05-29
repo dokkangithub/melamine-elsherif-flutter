@@ -146,7 +146,6 @@ class _ShippingAddressSectionState extends State<ShippingAddressSection> {
           CustomButton(
             onPressed: widget.onChangePressed,
             text: 'add_address'.tr(context),
-            isGradient: false,
             backgroundColor: AppTheme.primaryColor,
             textColor: Colors.white,
             padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),

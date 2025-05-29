@@ -110,7 +110,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     style: const TextStyle(color: ProductTheme.errorColor),
                   ),
                   CustomButton(
-                    isGradient: true,
                     onPressed:
                         () => productProvider.fetchProductDetails(widget.slug),
                     child: Text('retry'.tr(context),style: context.titleMedium.copyWith(color: AppTheme.white),),
@@ -368,7 +367,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                 width: double.infinity,
                                 height: 50,
                                 child: CustomButton(
-                                  isGradient: true,
                                   onPressed:
                                   productProvider.isAddingToCart ||
                                       !productProvider.canAddToCart

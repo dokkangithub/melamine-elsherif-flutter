@@ -58,7 +58,7 @@ class _AddReviewDialogState extends State<AddReviewDialog> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                          Text(
-                          'Rate this product',
+                          'rate_this_product'.tr(context),
                           style: context.headlineMedium,
                         ),
                       ],
@@ -106,7 +106,6 @@ class _AddReviewDialogState extends State<AddReviewDialog> {
                     CustomButton(
                       onPressed: isSubmitting ? null : _submitReview,
                       text: 'submit'.tr(context),
-                      isGradient: true,
                       fullWidth: true,
                     ),
                     const SizedBox(height: 12),

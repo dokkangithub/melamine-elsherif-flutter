@@ -10,13 +10,13 @@ class ReviewRatingBar extends StatelessWidget {
   final bool readOnly;
 
   const ReviewRatingBar({
-    Key? key,
+    super.key,
     required this.rating,
     required this.onRatingUpdate,
     this.itemSize = 40.0,
     this.allowHalfRating = true,
     this.readOnly = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

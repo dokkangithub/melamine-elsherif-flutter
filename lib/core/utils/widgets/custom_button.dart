@@ -21,7 +21,6 @@ class CustomButton extends StatelessWidget {
   final double? loadingIndicatorSize;
   final bool isOutlined;
   final bool fullWidth; // Added parameter for full width
-  final bool isGradient; // New parameter for gradient style
   final List<Color>? gradientColors; // Allow custom gradient colors
   final double? height; // New parameter for custom height
 
@@ -43,7 +42,6 @@ class CustomButton extends StatelessWidget {
     this.icon,
     this.isOutlined = false,
     this.fullWidth = false,
-    this.isGradient = false,
     this.gradientColors,
     this.height,
   }) : assert(text != null || child != null, 'Either text or child must be provided');
@@ -60,47 +58,6 @@ class CustomButton extends StatelessWidget {
        AppTheme.primaryColor, // Darker reddish color
       AppTheme.secondaryColor, // Lighter pinkish color
     ];
-
-    if (isGradient) {
-      // Return gradient style button
-      return Container(
-        width: fullWidth ? double.infinity : null,
-        height: height ?? 50,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(borderRadius ?? 0.0),
-          gradient: LinearGradient(
-            colors: colors,
-            begin: Alignment.centerLeft,
-            end: Alignment.centerRight,
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.1),
-              blurRadius: 4,
-              offset: const Offset(0, 2),
-            ),
-          ],
-        ),
-        child: MaterialButton(
-          padding: padding ?? const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(borderRadius ?? 0.0),
-          ),
-          onPressed: isLoading ? null : onPressed,
-          splashColor: splashColor ?? colors[0].withValues(alpha: 0.3),
-          child: isLoading
-              ? SizedBox(
-                  width: loadingIndicatorSize,
-                  height: loadingIndicatorSize,
-                  child: const CircularProgressIndicator(
-                    strokeWidth: 2,
-                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                  ),
-                )
-              : _buildContent(context, effectiveTextColor),
-        ),
-      );
-    }
 
     // Return original button style if not gradient
     return Material(
