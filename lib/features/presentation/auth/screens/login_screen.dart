@@ -104,9 +104,25 @@ class _LoginScreenState extends State<LoginScreen> {
                               const SizedBox(height: 16),
 
                               // Language switcher at the top right
-                              const Align(
-                                alignment: Alignment.topRight,
-                                child: LanguageSwitcher(),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const LanguageSwitcher(),
+                                  FadeInLeft(
+                                    duration: const Duration(milliseconds: 500),
+                                    child: InkWell(
+                                        onTap: () {
+                                          Provider.of<LayoutProvider>(context,listen: false).currentIndex=0;
+                                          AppRoutes.navigateTo(
+                                            context,
+                                            AppRoutes.mainLayoutScreen,
+                                          );
+                                        },
+                                        child: const Icon(Icons.arrow_forward_ios,color: AppTheme.primaryColor,size: 24)
+                                    ),
+                                  ),
+
+                                ],
                               ),
 
                               const SizedBox(height: 60),
@@ -183,8 +199,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                   },
                                   child: Text(
                                     'forgot_password'.tr(context),
-                                    style: context.titleSmall.copyWith(
-                                      color: Colors.black54,
+                                    style: context.titleLarge.copyWith(
+                                      color: AppTheme.primaryColor,
+                                      fontWeight: FontWeight.w900
                                     ),
                                   ),
                                 ),
@@ -202,7 +219,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                         horizontal: 16),
                                     child: Text(
                                       'or'.tr(context),
-                                      style: context.bodySmall.copyWith(
+                                      style: context.bodyLarge.copyWith(
                                         color: Colors.black54,
                                       ),
                                     ),
@@ -226,7 +243,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   children: [
                                     Text(
                                       "t_have_an_account?".tr(context),
-                                      style: context.titleSmall.copyWith(
+                                      style: context.titleLarge.copyWith(
                                         color: Colors.black54,
                                       ),
                                     ),
@@ -239,7 +256,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                       },
                                       child: Text(
                                         'sign_up'.tr(context),
-                                        style: context.titleSmall.copyWith(
+                                        style: context.titleLarge.copyWith(
                                           color: AppTheme.primaryColor,
                                           fontWeight: FontWeight.bold,
                                         ),

@@ -242,6 +242,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               AppRoutes.navigateTo(context, AppRoutes.login);
             },
             fullWidth: true,
+            height: 55,
             child: Text(
               textAlign: TextAlign.center,
               'sign_in'.tr(context),

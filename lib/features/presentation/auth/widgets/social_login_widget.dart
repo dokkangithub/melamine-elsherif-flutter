@@ -66,7 +66,7 @@ class SocialLoginWidget extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 12),
           decoration: BoxDecoration(
             border: Border.all(color: Colors.grey.shade300),
-            borderRadius: BorderRadius.circular(4),
+            borderRadius: BorderRadius.circular(0),
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,

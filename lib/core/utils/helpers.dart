@@ -147,10 +147,6 @@ abstract class AppFunctions {
       // Check if this is a direction change (RTL/LTR)
       final isDirectionChange = languageProvider.isDirectionChange(languageCode);
 
-      // Show loading indicator for direction changes as they can take longer
-      if (isDirectionChange && context.mounted) {
-        CustomDialog.showLoading(context, message: 'changing_language'.tr(context));
-      }
 
       // Change the language using the provider
       await languageProvider.changeLanguage(languageCode, countryCode);
@@ -171,11 +167,6 @@ abstract class AppFunctions {
           await profileProvider.getUserProfile();
         }
 
-        // Dismiss loading dialog if it was shown
-        if (isDirectionChange && context.mounted) {
-          Navigator.pop(context);
-        }
-
         // Show success message
         if (context.mounted) {
           CustomToast.showToast(
@@ -184,10 +175,6 @@ abstract class AppFunctions {
           );
         }
       } catch (e) {
-        // Dismiss loading dialog if it was shown
-        if (isDirectionChange && context.mounted) {
-          Navigator.pop(context);
-        }
 
         debugPrint('Error refreshing data after language change: $e');
         if (context.mounted) {
