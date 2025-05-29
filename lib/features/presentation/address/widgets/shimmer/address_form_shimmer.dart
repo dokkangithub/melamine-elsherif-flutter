@@ -13,7 +13,7 @@ class AddressFormShimmer extends StatelessWidget {
         Container(
           height: 60,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(4),
+            borderRadius: BorderRadius.circular(0),
             border: Border.all(color: Colors.grey[300]!),
           ),
           child: const ShimmerWidget.rectangular(height: 60),
@@ -24,7 +24,7 @@ class AddressFormShimmer extends StatelessWidget {
         Container(
           height: 60,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(4),
+            borderRadius: BorderRadius.circular(0),
             border: Border.all(color: Colors.grey[300]!),
           ),
           child: const ShimmerWidget.rectangular(height: 60),
@@ -35,7 +35,7 @@ class AddressFormShimmer extends StatelessWidget {
         Container(
           height: 60,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(4),
+            borderRadius: BorderRadius.circular(0),
             border: Border.all(color: Colors.grey[300]!),
           ),
           child: const ShimmerWidget.rectangular(height: 60),
@@ -46,7 +46,7 @@ class AddressFormShimmer extends StatelessWidget {
         Container(
           height: 60,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(4),
+            borderRadius: BorderRadius.circular(0),
             border: Border.all(color: Colors.grey[300]!),
           ),
           child: const ShimmerWidget.rectangular(height: 60),
@@ -57,7 +57,7 @@ class AddressFormShimmer extends StatelessWidget {
         Container(
           height: 100,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(4),
+            borderRadius: BorderRadius.circular(0),
             border: Border.all(color: Colors.grey[300]!),
           ),
           child: const ShimmerWidget.rectangular(height: 100),
@@ -68,7 +68,7 @@ class AddressFormShimmer extends StatelessWidget {
         Container(
           height: 60,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(4),
+            borderRadius: BorderRadius.circular(0),
             border: Border.all(color: Colors.grey[300]!),
           ),
           child: const ShimmerWidget.rectangular(height: 60),
@@ -79,7 +79,7 @@ class AddressFormShimmer extends StatelessWidget {
         Container(
           height: 60,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(4),
+            borderRadius: BorderRadius.circular(0),
             border: Border.all(color: Colors.grey[300]!),
           ),
           child: const ShimmerWidget.rectangular(height: 60),

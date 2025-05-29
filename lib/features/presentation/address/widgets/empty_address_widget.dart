@@ -32,7 +32,6 @@ class EmptyAddressWidget extends StatelessWidget {
           CustomButton(
             text: 'add_new_address'.tr(context),
             onPressed: onAddAddress,
-            isGradient: true,
             textStyle: context.titleMedium?.copyWith(color: AppTheme.white),
           ),
         ],

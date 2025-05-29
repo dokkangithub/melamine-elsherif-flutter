@@ -7,9 +7,9 @@ class AddressListShimmer extends StatelessWidget {
   final int itemCount;
 
   const AddressListShimmer({
-    Key? key,
+    super.key,
     this.itemCount = 2,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -23,11 +23,11 @@ class AddressListShimmer extends StatelessWidget {
             child: Container(
               height: 50,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(0),
                 gradient: LinearGradient(
                   colors: [
-                    AppTheme.primaryColor.withOpacity(0.05),
-                    AppTheme.accentColor.withOpacity(0.05)
+                    AppTheme.primaryColor.withValues(alpha: 0.05),
+                    AppTheme.accentColor.withValues(alpha: 0.05)
                   ],
                 ),
               ),

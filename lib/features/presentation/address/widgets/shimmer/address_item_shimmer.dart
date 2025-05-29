@@ -24,7 +24,7 @@ class AddressItemShimmer extends StatelessWidget {
                 width: 70,
                 height: 24,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(0),
                 ),
                 child: const ShimmerWidget.rectangular(
                   height: 24,
@@ -37,11 +37,11 @@ class AddressItemShimmer extends StatelessWidget {
           const SizedBox(height: 12),
 
           // Address line
-          Row(
+          const Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const ShimmerWidget.circular(width: 20, height: 20),
-              const SizedBox(width: 8),
+              ShimmerWidget.circular(width: 20, height: 20),
+              SizedBox(width: 8),
               Expanded(
                 child: ShimmerWidget.rectangular(height: 16),
               ),
@@ -50,15 +50,15 @@ class AddressItemShimmer extends StatelessWidget {
           const SizedBox(height: 12),
 
           // Location line
-          Row(
+          const Row(
             children: [
-              const ShimmerWidget.circular(width: 20, height: 20),
-              const SizedBox(width: 8),
+              ShimmerWidget.circular(width: 20, height: 20),
+              SizedBox(width: 8),
               Expanded(
                 child: ShimmerWidget.rectangular(height: 14),
               ),
-              const SizedBox(width: 8),
-              const ShimmerWidget.circular(width: 20, height: 20),
+              SizedBox(width: 8),
+              ShimmerWidget.circular(width: 20, height: 20),
             ],
           ),
           const SizedBox(height: 8),
