@@ -89,7 +89,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             child: TextButton(
               onPressed: isUpdating ? null : () => _updateProfile(context, profileProvider),
               child: Text(
-                'Save',
+                'save'.tr(context),
                 style: context.headlineSmall.copyWith(
                   color: AppTheme.primaryColor,
                   fontWeight: FontWeight.w800,

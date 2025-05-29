@@ -8,6 +8,7 @@ import 'package:melamine_elsherif/core/utils/extension/translate_extension.dart'
 import 'package:melamine_elsherif/core/utils/widgets/custom_button.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_cached_image.dart';
 import 'package:melamine_elsherif/core/utils/widgets/language_switcher.dart';
+import 'package:melamine_elsherif/features/presentation/main%20layout/controller/layout_provider.dart';
 import 'package:melamine_elsherif/features/presentation/wallet/controller/wallet_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -715,6 +716,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   // Build user dashboard items (orders, wallet, address, saved items)
   Widget _buildUserDashboard(BuildContext context) {
+    // Get profileProvider once to avoid multiple calls
+    final profileProvider = Provider.of<ProfileProvider>(context, listen: false);
+    final profileCounters = profileProvider.profileCounters;
+    
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
       child: Column(
@@ -724,7 +729,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
             context: context,
             icon: AppSvgs.profile_bag,
             title: 'my_orders'.tr(context),
-            subtitle: '${Provider.of<ProfileProvider>(context,listen: false).profileCounters!.orderCount}  ${'active_orders'.tr(context)}',
+            subtitle: profileCounters?.orderCount != null
+                ? '${profileCounters!.orderCount} ${'active_orders'.tr(context)}'
+                : "active_orders".tr(context),
             onTap: () {
               AppRoutes.navigateTo(
                 context,
@@ -772,12 +779,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
             context: context,
             icon: AppSvgs.profile_fav,
             title: 'saved_items'.tr(context),
-            subtitle: '${Provider.of<ProfileProvider>(context,listen: false).profileCounters!.wishlistItemCount}  ${'items'.tr(context)}',
+            subtitle: profileCounters?.wishlistItemCount != null
+                ? '${profileCounters!.wishlistItemCount} ${'items'.tr(context)}'
+                : 'items'.tr(context),
             onTap: () {
-              AppRoutes.navigateTo(
-                context,
-                AppRoutes.wishListScreen,
-              );
+              Provider.of<LayoutProvider>(context,listen: false).currentIndex=2;
             },
           ),
         ],
