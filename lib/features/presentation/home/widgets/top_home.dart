@@ -21,7 +21,7 @@ class TopHomeWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.only(left: 16.0, top: 15.0),
+      padding: const EdgeInsets.only(left: 16.0, top: 15.0,right: 16),
       color: Colors.white,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -29,8 +29,7 @@ class TopHomeWidget extends StatelessWidget {
           Text(
             'welcome'.tr(context),
             style: context.displayLarge!.copyWith(
-                fontFamily: GoogleFonts.jost().fontFamily,
-              fontSize: 36,
+              fontSize: 34,
               fontWeight: FontWeight.normal
             ),
           ),
@@ -38,7 +37,6 @@ class TopHomeWidget extends StatelessWidget {
           Text(
             'discover_luxury'.tr(context),
             style: context.displayLarge!.copyWith(
-                fontFamily: GoogleFonts.jost().fontFamily,
                 fontSize: 20,
                 fontWeight: FontWeight.normal
             ),

@@ -29,6 +29,7 @@ class SeeAllWidget extends StatelessWidget {
             'see_all'.tr(context).toUpperCase(),
             style: context.titleLarge.copyWith(
               color: AppTheme.primaryColor,
+              fontWeight: FontWeight.w800
             ),
           ),
         ),

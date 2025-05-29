@@ -28,15 +28,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController =
-      TextEditingController();
+
 
   @override
   void dispose() {
     _nameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
-    _confirmPasswordController.dispose();
     super.dispose();
   }
   
@@ -92,7 +90,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           children: [
                             // Back button
                             IconButton(
-                              icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
+                              icon: const Icon(Icons.arrow_back_ios, color: AppTheme.primaryColor),
                               onPressed: () => Navigator.of(context).pop(),
                               padding: EdgeInsets.zero,
                               constraints: const BoxConstraints(),
@@ -166,14 +164,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             return CustomButton(
                               onPressed: () {
                                 if (_formKey.currentState!.validate()) {
-                                  if (_passwordController.text == _confirmPasswordController.text) {
-                                    _handleSignUp(context, provider);
-                                  } else {
-                                    CustomToast.showToast(
-                                      message: 'passwords_not_match'.tr(context),
-                                      type: ToastType.error,
-                                    );
-                                  }
+                                  _handleSignUp(context, provider);
                                 }
                               },
                               text: 'sign_up'.tr(context),

@@ -134,7 +134,7 @@ class MyApp extends StatelessWidget {
           MaterialApp(
             title: AppConfig().appName,
             debugShowCheckedModeBanner: false,
-            theme: AppTheme.lightTheme,
+            theme: AppTheme.getTheme(languageProvider.locale.languageCode),
             themeMode: ThemeMode.light,
             locale: languageProvider.locale,
             supportedLocales: const [

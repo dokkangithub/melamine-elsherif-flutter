@@ -29,238 +29,259 @@ class AppTheme {
   static const Color lightDividerColor = Color(0xFFE0E0E0);
   static const Color darkDividerColor = Color(0xFF424242);
 
-  // Light Theme
-  static final ThemeData lightTheme = ThemeData(
-    brightness: Brightness.light,
-    primaryColor: primaryColor,
-    primaryColorDark: primaryColor.withValues(alpha: 0.8),
-    primaryColorLight: primaryColor.withValues(alpha: 0.2),
-    colorScheme: const ColorScheme.light(
-      primary: primaryColor,
-      secondary: secondaryColor,
-      error: errorColor,
-      surface: lightCardColor,
-      onPrimary: Colors.white,
-      onSecondary: Colors.white,
-      onSurface: lightTextColor,
-      onError: Colors.white,
-    ),
-    scaffoldBackgroundColor: white,
-    cardColor: lightCardColor,
-    dividerColor: lightDividerColor,
-    fontFamily: GoogleFonts.jost().fontFamily,
+  // Helper method to get the appropriate font family based on language
+  static String getFontFamily(String? languageCode) {
+    // Use Tajawal for Arabic, otherwise use Jost
+    return (languageCode == 'ar') 
+        ? GoogleFonts.notoKufiArabic().fontFamily!
+        : GoogleFonts.jost().fontFamily!;
+  }
 
-    // Apply Playfair Display font
-    textTheme: TextTheme(
-      displayLarge: GoogleFonts.jost(
+  // Get text theme based on language
+  static TextTheme getTextTheme(String? languageCode) {
+    final bool isArabic = languageCode == 'ar';
+    
+    return TextTheme(
+      displayLarge: (isArabic ? GoogleFonts.notoKufiArabic : GoogleFonts.jost)(
         color: black,
         fontSize: 28,
         fontWeight: FontWeight.w500,
       ),
-      displayMedium: GoogleFonts.jost(
+      displayMedium: (isArabic ? GoogleFonts.notoKufiArabic : GoogleFonts.jost)(
         color: black,
         fontSize: 24,
         fontWeight: FontWeight.w500,
       ),
-      displaySmall: GoogleFonts.jost(
+      displaySmall: (isArabic ? GoogleFonts.notoKufiArabic : GoogleFonts.jost)(
         color: black,
         fontSize: 20,
         fontWeight: FontWeight.w500,
       ),
-      headlineLarge: GoogleFonts.jost(
+      headlineLarge: (isArabic ? GoogleFonts.notoKufiArabic : GoogleFonts.jost)(
         color: black,
         fontSize: 22,
         fontWeight: FontWeight.w500,
       ),
-      headlineMedium: GoogleFonts.jost(
+      headlineMedium: (isArabic ? GoogleFonts.notoKufiArabic : GoogleFonts.jost)(
         color: black,
         fontSize: 18,
         fontWeight: FontWeight.w400,
       ),
-      headlineSmall: GoogleFonts.jost(
+      headlineSmall: (isArabic ? GoogleFonts.notoKufiArabic : GoogleFonts.jost)(
         color: black,
         fontSize: 16,
         fontWeight: FontWeight.w300,
       ),
-      titleLarge: GoogleFonts.jost(
+      titleLarge: (isArabic ? GoogleFonts.notoKufiArabic : GoogleFonts.jost)(
         color: black,
         fontSize: 14,
         fontWeight: FontWeight.w300,
       ),
-      titleMedium: GoogleFonts.jost(
+      titleMedium: (isArabic ? GoogleFonts.notoKufiArabic : GoogleFonts.jost)(
         color: black,
         fontSize: 13,
         fontWeight: FontWeight.w300,
       ),
-      titleSmall: GoogleFonts.jost(
+      titleSmall: (isArabic ? GoogleFonts.notoKufiArabic : GoogleFonts.jost)(
         color: black,
         fontSize: 12,
         fontWeight: FontWeight.w300,
       ),
-      bodyLarge: GoogleFonts.jost(
+      bodyLarge: (isArabic ? GoogleFonts.notoKufiArabic : GoogleFonts.jost)(
         color: black,
         fontSize: 11,
         fontWeight: FontWeight.w300,
       ),
-      bodyMedium: GoogleFonts.jost(
+      bodyMedium: (isArabic ? GoogleFonts.notoKufiArabic : GoogleFonts.jost)(
         color: black,
         fontSize: 10,
         fontWeight: FontWeight.w300,
       ),
-      bodySmall: GoogleFonts.jost(
+      bodySmall: (isArabic ? GoogleFonts.notoKufiArabic : GoogleFonts.jost)(
         color: black,
         fontSize: 9,
         fontWeight: FontWeight.w300,
       ),
-      labelLarge: GoogleFonts.jost(
+      labelLarge: (isArabic ? GoogleFonts.notoKufiArabic : GoogleFonts.jost)(
         color: black,
         fontSize: 8,
         fontWeight: FontWeight.w300,
       ),
-    ),
+    );
+  }
 
-    // Button Theme
-    elevatedButtonTheme: ElevatedButtonThemeData(
-      style: ElevatedButton.styleFrom(
-        backgroundColor: primaryColor,
-        foregroundColor: Colors.white,
+  // Get a theme with the appropriate font based on language
+  static ThemeData getTheme(String? languageCode) {
+    final bool isArabic = languageCode == 'ar';
+    final String fontFamily = getFontFamily(languageCode);
+    
+    return ThemeData(
+      brightness: Brightness.light,
+      primaryColor: primaryColor,
+      primaryColorDark: primaryColor.withValues(alpha: 0.8),
+      primaryColorLight: primaryColor.withValues(alpha: 0.2),
+      colorScheme: const ColorScheme.light(
+        primary: primaryColor,
+        secondary: secondaryColor,
+        error: errorColor,
+        surface: lightCardColor,
+        onPrimary: Colors.white,
+        onSecondary: Colors.white,
+        onSurface: lightTextColor,
+        onError: Colors.white,
+      ),
+      scaffoldBackgroundColor: white,
+      cardColor: lightCardColor,
+      dividerColor: lightDividerColor,
+      fontFamily: fontFamily,
+      textTheme: getTextTheme(languageCode),
+
+      // Button Theme
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: primaryColor,
+          foregroundColor: Colors.white,
+          elevation: 2,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          textStyle: (isArabic ? GoogleFonts.notoKufiArabic : GoogleFonts.jost)(
+            fontSize: 16, 
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      ),
+
+      outlinedButtonTheme: OutlinedButtonThemeData(
+        style: OutlinedButton.styleFrom(
+          foregroundColor: primaryColor,
+          side: const BorderSide(color: primaryColor),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          textStyle: (isArabic ? GoogleFonts.notoKufiArabic : GoogleFonts.jost)(
+            fontSize: 16, 
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      ),
+
+      textButtonTheme: TextButtonThemeData(
+        style: TextButton.styleFrom(
+          foregroundColor: primaryColor,
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          textStyle: (isArabic ? GoogleFonts.notoKufiArabic : GoogleFonts.jost)(
+            fontSize: 16, 
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      ),
+
+      // Input Theme
+      inputDecorationTheme: InputDecorationTheme(
+        filled: true,
+        fillColor: Colors.white,
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: const BorderSide(color: lightDividerColor),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: const BorderSide(color: lightDividerColor),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: const BorderSide(color: primaryColor, width: 2),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: const BorderSide(color: errorColor, width: 1),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: const BorderSide(color: errorColor, width: 2),
+        ),
+        labelStyle: (isArabic ? GoogleFonts.notoKufiArabic : GoogleFonts.jost)(
+          color: lightSecondaryTextColor, 
+          fontSize: 16,
+        ),
+        hintStyle: (isArabic ? GoogleFonts.notoKufiArabic : GoogleFonts.jost)(
+          color: lightSecondaryTextColor, 
+          fontSize: 16,
+        ),
+        errorStyle: (isArabic ? GoogleFonts.notoKufiArabic : GoogleFonts.jost)(
+          color: errorColor, 
+          fontSize: 12,
+        ),
+      ),
+
+      // Card Theme
+      cardTheme: CardTheme(
+        color: lightCardColor,
         elevation: 2,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        textStyle: GoogleFonts.jost(
-          fontSize: 16, 
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        margin: const EdgeInsets.all(8),
+      ),
+
+      // App Bar Theme
+      appBarTheme: AppBarTheme(
+        color: primaryColor,
+        elevation: 0,
+        centerTitle: true,
+        titleTextStyle: (isArabic ? GoogleFonts.notoKufiArabic : GoogleFonts.jost)(
+          color: Colors.white,
+          fontSize: 20,
+          fontWeight: FontWeight.w600,
+        ),
+        iconTheme: const IconThemeData(color: Colors.white),
+      ),
+
+      // Bottom Navigation Bar Theme
+      bottomNavigationBarTheme: BottomNavigationBarThemeData(
+        backgroundColor: lightCardColor,
+        selectedItemColor: primaryColor,
+        unselectedItemColor: lightSecondaryTextColor,
+        selectedLabelStyle: (isArabic ? GoogleFonts.notoKufiArabic : GoogleFonts.jost)(
+          fontSize: 12, 
           fontWeight: FontWeight.w500,
         ),
-      ),
-    ),
-
-    outlinedButtonTheme: OutlinedButtonThemeData(
-      style: OutlinedButton.styleFrom(
-        foregroundColor: primaryColor,
-        side: const BorderSide(color: primaryColor),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        textStyle: GoogleFonts.jost(
-          fontSize: 16, 
+        unselectedLabelStyle: (isArabic ? GoogleFonts.notoKufiArabic : GoogleFonts.jost)(
+          fontSize: 12, 
           fontWeight: FontWeight.w500,
         ),
+        elevation: 8,
       ),
-    ),
 
-    textButtonTheme: TextButtonThemeData(
-      style: TextButton.styleFrom(
-        foregroundColor: primaryColor,
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        textStyle: GoogleFonts.jost(
-          fontSize: 16, 
-          fontWeight: FontWeight.w500,
-        ),
+      // Checkbox Theme
+      checkboxTheme: CheckboxThemeData(
+        fillColor: WidgetStateProperty.resolveWith<Color>((states) {
+          if (states.contains(WidgetState.selected)) {
+            return primaryColor;
+          }
+          return Colors.transparent;
+        }),
+        checkColor: WidgetStateProperty.all(Colors.white),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
       ),
-    ),
 
-    // Input Theme
-    inputDecorationTheme: InputDecorationTheme(
-      filled: true,
-      fillColor: Colors.white,
-      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(8),
-        borderSide: const BorderSide(color: lightDividerColor),
+      // Switch Theme
+      switchTheme: SwitchThemeData(
+        thumbColor: WidgetStateProperty.resolveWith<Color>((states) {
+          if (states.contains(WidgetState.selected)) {
+            return primaryColor;
+          }
+          return Colors.grey;
+        }),
+        trackColor: WidgetStateProperty.resolveWith<Color>((states) {
+          if (states.contains(WidgetState.selected)) {
+            return primaryColor.withValues(alpha: 0.5);
+          }
+          return Colors.grey.withValues(alpha: 0.5);
+        }),
       ),
-      enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(8),
-        borderSide: const BorderSide(color: lightDividerColor),
-      ),
-      focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(8),
-        borderSide: const BorderSide(color: primaryColor, width: 2),
-      ),
-      errorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(8),
-        borderSide: const BorderSide(color: errorColor, width: 1),
-      ),
-      focusedErrorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(8),
-        borderSide: const BorderSide(color: errorColor, width: 2),
-      ),
-      labelStyle: GoogleFonts.jost(
-        color: lightSecondaryTextColor, 
-        fontSize: 16,
-      ),
-      hintStyle: GoogleFonts.jost(
-        color: lightSecondaryTextColor, 
-        fontSize: 16,
-      ),
-      errorStyle: GoogleFonts.jost(
-        color: errorColor, 
-        fontSize: 12,
-      ),
-    ),
+    );
+  }
 
-    // Card Theme
-    cardTheme: CardTheme(
-      color: lightCardColor,
-      elevation: 2,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      margin: const EdgeInsets.all(8),
-    ),
-
-    // App Bar Theme
-    appBarTheme: AppBarTheme(
-      color: primaryColor,
-      elevation: 0,
-      centerTitle: true,
-      titleTextStyle: GoogleFonts.jost(
-        color: Colors.white,
-        fontSize: 20,
-        fontWeight: FontWeight.w600,
-      ),
-      iconTheme: const IconThemeData(color: Colors.white),
-    ),
-
-    // Bottom Navigation Bar Theme
-    bottomNavigationBarTheme: BottomNavigationBarThemeData(
-      backgroundColor: lightCardColor,
-      selectedItemColor: primaryColor,
-      unselectedItemColor: lightSecondaryTextColor,
-      selectedLabelStyle: GoogleFonts.jost(
-        fontSize: 12, 
-        fontWeight: FontWeight.w500,
-      ),
-      unselectedLabelStyle: GoogleFonts.jost(
-        fontSize: 12, 
-        fontWeight: FontWeight.w500,
-      ),
-      elevation: 8,
-    ),
-
-    // Checkbox Theme
-    checkboxTheme: CheckboxThemeData(
-      fillColor: WidgetStateProperty.resolveWith<Color>((states) {
-        if (states.contains(WidgetState.selected)) {
-          return primaryColor;
-        }
-        return Colors.transparent;
-      }),
-      checkColor: WidgetStateProperty.all(Colors.white),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
-    ),
-
-    // Switch Theme
-    switchTheme: SwitchThemeData(
-      thumbColor: WidgetStateProperty.resolveWith<Color>((states) {
-        if (states.contains(WidgetState.selected)) {
-          return primaryColor;
-        }
-        return Colors.grey;
-      }),
-      trackColor: WidgetStateProperty.resolveWith<Color>((states) {
-        if (states.contains(WidgetState.selected)) {
-          return primaryColor.withValues(alpha: 0.5);
-        }
-        return Colors.grey.withValues(alpha: 0.5);
-      }),
-    ),
-  );
+  // Light theme (default to English)
+  static final ThemeData lightTheme = getTheme('en');
 }
 

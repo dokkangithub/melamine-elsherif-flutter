@@ -113,7 +113,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                             FadeInLeft(
                               duration: const Duration(milliseconds: 500),
                               child: IconButton(
-                                icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
+                                icon: const Icon(Icons.arrow_back_ios, color: AppTheme.primaryColor),
                                 onPressed: () => Navigator.of(context).pop(),
                                 padding: EdgeInsets.zero,
                                 constraints: const BoxConstraints(),
@@ -241,7 +241,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                               _isSendingEmail
                                   ? 'use_phone_number_instead'.tr(context)
                                   : 'use_email_address_instead'.tr(context),
-                              style: context.titleSmall.copyWith(
+                              style: context.titleLarge.copyWith(
                                 color: AppTheme.primaryColor,
                               ),
                             ),

@@ -79,8 +79,8 @@ class SocialLoginWidget extends StatelessWidget {
               const SizedBox(width: 8),
               Text(
                 label,
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  fontWeight: FontWeight.w500,
+                style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                  fontWeight: FontWeight.w600,
                 ),
               ),
             ],
