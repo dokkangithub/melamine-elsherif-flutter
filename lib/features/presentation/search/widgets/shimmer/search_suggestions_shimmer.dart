@@ -20,7 +20,7 @@ class SearchSuggestionsShimmer extends StatelessWidget {
               width: 150.0,
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(4.0),
+                borderRadius: BorderRadius.circular(0.0),
               ),
             ),
             const SizedBox(height: 12),
@@ -35,7 +35,7 @@ class SearchSuggestionsShimmer extends StatelessWidget {
                   width: chipWidth,
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(16.0), // Match Chip border radius
+                    borderRadius: BorderRadius.circular(0.0), // Match Chip border radius
                   ),
                 );
               }).toList(),

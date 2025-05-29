@@ -201,6 +201,9 @@ class _AllCategoryProductsScreenState extends State<AllCategoryProductsScreen> {
   }
 
   Widget _buildAppBar(BuildContext context) {
+    // Check if the current locale is RTL
+    final bool isRTL = Directionality.of(context) == TextDirection.rtl;
+    
     return FadeIn(
       duration: const Duration(milliseconds: 400),
       child: Padding(
@@ -208,7 +211,9 @@ class _AllCategoryProductsScreenState extends State<AllCategoryProductsScreen> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const CustomBackButton(),
+            const CustomBackButton(
+              respectDirection: true,
+            ),
             Expanded(
               child: Center(
                 child: Text(
@@ -367,106 +372,88 @@ class _AllCategoryProductsScreenState extends State<AllCategoryProductsScreen> {
       return const SizedBox(height: 10); // Small gap if no subcategories
     }
 
-    return FadeIn(
-      duration: const Duration(milliseconds: 500),
-      child: Container(
-        margin: const EdgeInsets.only(top: 16, bottom: 16),
-        height: 80,
-        child: ListView(
-          scrollDirection: Axis.horizontal,
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          children: [
-            // "All" option
-            _buildSubCategoryItem(
-              icon: Icons.apps,
-              name: 'All',
-              isSelected: _selectedSubCategoryId == null,
-              onTap: () {
-                setState(() {
-                  _selectedSubCategoryId = null;
-                  _selectedSubCategoryName = null;
-                  final provider = Provider.of<HomeProvider>(context, listen: false);
-                  provider.fetchCategoryProducts(_selectedCategoryId, refresh: true);
-                });
-              },
-            ),
-            // Subcategories
-            ...categoryProvider.subCategoriesResponse!.data.map((subcategory) {
-              return _buildSubCategoryItem(
-                imageUrl: subcategory.icon,
-                name: subcategory.name ?? '',
-                isSelected: _selectedSubCategoryId == subcategory.id,
-                onTap: () {
-                  if (subcategory.id != null && subcategory.name != null) {
-                    _selectSubCategory(subcategory.name!, subcategory.id!);
-                  }
-                },
-              );
-            }).toList(),
-          ],
-        ),
-      ),
-    );
-  }
+    // Check if the current locale is RTL
+    final bool isRTL = Directionality.of(context) == TextDirection.rtl;
+    
+    // Create a list with "All" as the first tab, then all subcategories
+    final List<Map<String, dynamic>> tabs = [
+      {'id': null, 'name': 'all'.tr(context)}
+    ];
+    
+    // Add all subcategories to the tabs list
+    categoryProvider.subCategoriesResponse!.data.forEach((subCategory) {
+      tabs.add({
+        'id': subCategory.id,
+        'name': subCategory.name ?? ''
+      });
+    });
 
-  Widget _buildSubCategoryItem({
-    IconData? icon,
-    String? imageUrl,
-    required String name,
-    required bool isSelected,
-    required VoidCallback onTap,
-  }) {
-    return Padding(
-      padding: const EdgeInsets.only(right: 12.0),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(10),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              width: 50,
-              height: 50,
-              decoration: BoxDecoration(
-                color: isSelected ? AppTheme.primaryColor : Colors.grey.shade200,
-                shape: BoxShape.circle,
-              ),
+    // Limit to maximum 4 tabs for better display
+    final displayedTabs = tabs.length > 4 ? tabs.sublist(0, 4) : tabs;
+
+    return Container(
+      margin: const EdgeInsets.only(top: 12, bottom: 0),
+      decoration: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(color: Colors.grey.shade200, width: 1),
+        ),
+        color: Colors.white,
+      ),
+      child: DefaultTabController(
+        length: displayedTabs.length,
+        initialIndex: displayedTabs.indexWhere((tab) => tab['id'] == _selectedSubCategoryId).clamp(0, displayedTabs.length - 1),
+        child: TabBar(
+          isScrollable: false,
+          labelColor: AppTheme.primaryColor,
+          unselectedLabelColor: Colors.grey.shade600,
+          indicatorColor: AppTheme.primaryColor,
+          indicatorWeight: 3,
+          indicatorSize: TabBarIndicatorSize.tab,
+          labelStyle: context.titleMedium?.copyWith(
+            fontWeight: FontWeight.w900,
+            fontSize: 14,
+          ),
+          unselectedLabelStyle: context.titleSmall?.copyWith(
+            fontWeight: FontWeight.w500,
+            fontSize: 12,
+          ),
+          padding: EdgeInsets.zero,
+          labelPadding: EdgeInsets.zero,
+          dividerColor: Colors.transparent,
+          tabAlignment: TabAlignment.fill,
+          splashFactory: NoSplash.splashFactory,
+          overlayColor: MaterialStateProperty.all(Colors.transparent),
+          onTap: (index) {
+            final selectedTab = displayedTabs[index];
+            if (selectedTab['id'] == null) {
+              // "All" tab
+              setState(() {
+                _selectedSubCategoryId = null;
+                _selectedSubCategoryName = null;
+                final provider = Provider.of<HomeProvider>(context, listen: false);
+                provider.fetchCategoryProducts(_selectedCategoryId, refresh: true);
+              });
+            } else {
+              // Subcategory tab
+              _selectSubCategory(
+                selectedTab['name'] as String, 
+                selectedTab['id'] as int
+              );
+            }
+          },
+          tabs: displayedTabs.map((tab) {
+            return Tab(
+              height: 44,
               child: Center(
-                child: icon != null
-                    ? Icon(
-                        icon,
-                        color: isSelected ? Colors.white : Colors.grey.shade700,
-                        size: 24,
-                      )
-                    : imageUrl != null
-                        ? ClipRRect(
-                            borderRadius: BorderRadius.circular(25),
-                            child: CustomImage(
-                              imageUrl: imageUrl,
-                              width: 30,
-                              height: 30,
-                              fit: BoxFit.contain,
-                            ),
-                          )
-                        : Icon(
-                            Icons.category,
-                            color: isSelected ? Colors.white : Colors.grey.shade700,
-                            size: 24,
-                          ),
+                child: Text(
+                  tab['name'] as String,
+                  textAlign: TextAlign.center,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              name,
-              style: TextStyle(
-                color: isSelected ? AppTheme.primaryColor : Colors.black87,
-                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                fontSize: 12,
-              ),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ],
+            );
+          }).toList(),
         ),
       ),
     );
@@ -493,7 +480,7 @@ class _AllCategoryProductsScreenState extends State<AllCategoryProductsScreen> {
               const SizedBox(height: 16),
               CustomButton(
                 onPressed: _retryLoading,
-                child: Text('retry'.tr(context)),
+                child: Text('retry'.tr(context),style: context.titleLarge!.copyWith(color: AppTheme.white),),
               ),
             ],
           ),
@@ -541,7 +528,10 @@ class _AllCategoryProductsScreenState extends State<AllCategoryProductsScreen> {
   }
   
   Widget _buildProductCard(BuildContext context, product_import.Product product, bool isEven) {
-    return GestureDetector(
+    // Check if the current locale is RTL
+    final bool isRTL = Directionality.of(context) == TextDirection.rtl;
+    
+    return InkWell(
       onTap: () {
         AppRoutes.navigateTo(
           context,
@@ -564,7 +554,7 @@ class _AllCategoryProductsScreenState extends State<AllCategoryProductsScreen> {
           ],
         ),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: isRTL ? CrossAxisAlignment.end : CrossAxisAlignment.start,
           children: [
             // Product image with favorite button
             Stack(
@@ -577,7 +567,9 @@ class _AllCategoryProductsScreenState extends State<AllCategoryProductsScreen> {
                 ),
                 Positioned(
                   top: 8,
-                  right: 8,
+                  // Adjust position based on text direction
+                  right: isRTL ? null : 8,
+                  left: isRTL ? 8 : null,
                   child: Consumer<WishlistProvider>(
                     builder: (context, wishlistProvider, _) {
                       final isInWishlist = wishlistProvider.isProductInWishlist(product.slug);
@@ -608,16 +600,20 @@ class _AllCategoryProductsScreenState extends State<AllCategoryProductsScreen> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: isRTL ? CrossAxisAlignment.end : CrossAxisAlignment.start,
                 children: [
                   Text(
                     product.name,
                     style: context.titleMedium!.copyWith(color: AppTheme.darkDividerColor, fontWeight: FontWeight.w600),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
+                    textAlign: isRTL ? TextAlign.right : TextAlign.left,
                   ),
                   const SizedBox(height: 4),
                   Row(
+                    // Adjust row direction based on language
+                    mainAxisAlignment: isRTL ? MainAxisAlignment.end : MainAxisAlignment.start,
+                    textDirection: isRTL ? TextDirection.rtl : TextDirection.ltr,
                     children: [
                       Text(
                         product.discountedPrice,

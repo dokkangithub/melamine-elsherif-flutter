@@ -19,7 +19,7 @@ class PopularSearchesShimmer extends StatelessWidget {
               width: 120,
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(4),
+                borderRadius: BorderRadius.circular(0),
               ),
             ),
           ),
@@ -41,7 +41,7 @@ class PopularSearchesShimmer extends StatelessWidget {
                     width: 150,
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(16),
+                      borderRadius: BorderRadius.circular(0),
                     ),
                   ),
                 ),

@@ -22,7 +22,7 @@ class SearchResultsShimmer extends StatelessWidget {
             highlightColor: Colors.grey[100]!,
             child: Card(
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(0),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -33,8 +33,8 @@ class SearchResultsShimmer extends StatelessWidget {
                     decoration: const BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(12),
-                        topRight: Radius.circular(12),
+                        topLeft: Radius.circular(0),
+                        topRight: Radius.circular(0),
                       ),
                     ),
                   ),
