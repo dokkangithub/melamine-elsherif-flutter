@@ -346,6 +346,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       context: context,
       type: QuickAlertType.warning,
       title: 'delete_account'.tr(context),
+      borderRadius: 0,
       text: 'are_you_sure_you'.tr(context),
       confirmBtnText: 'delete'.tr(navigatorContext),
       cancelBtnText: 'cancel'.tr(navigatorContext),

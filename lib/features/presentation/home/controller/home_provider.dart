@@ -656,8 +656,8 @@ class HomeProvider extends ChangeNotifier {
       fetchBestSellingProducts(refresh: true),
       fetchNewProducts(refresh: true),
       fetchTodaysDealProducts(refresh: true),
+      fetchFlashDealProducts(refresh: true),
       fetchDigitalProducts(refresh: true),
-      fetchFlashDealProducts(refresh: true)
     ]);
     
     // Notify about completed refresh
@@ -688,7 +688,8 @@ class HomeProvider extends ChangeNotifier {
         featuredProductsState == LoadingState.loaded &&
         bestSellingProductsState == LoadingState.loaded &&
         newProductsState == LoadingState.loaded &&
-        todaysDealProductsState == LoadingState.loaded;
+        todaysDealProductsState == LoadingState.loaded &&
+        flashDealProductsState == LoadingState.loaded;
   }
 
   // Special method for language change - resets all cache and forces refresh
@@ -701,6 +702,7 @@ class HomeProvider extends ChangeNotifier {
     bestSellingProductsState = LoadingState.loading;
     newProductsState = LoadingState.loading;
     todaysDealProductsState = LoadingState.loading;
+    flashDealProductsState = LoadingState.loading;
     notifyListeners();
     
     // Reset all pages
@@ -723,6 +725,7 @@ class HomeProvider extends ChangeNotifier {
       fetchNewProducts(refresh: true),
       fetchTodaysDealProducts(refresh: true),
       fetchDigitalProducts(refresh: true),
+      fetchFlashDealProducts(refresh: true),
     ]);
     
     notifyListeners();
