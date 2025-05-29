@@ -555,5 +555,12 @@
   "new_arrivals": "وصل حديثاً",
   "featured": "مميز",
   "deals": "عروض",
-  "app_title": "ميلامين"
+  "app_title": "ميلامين",
+  "please_enter_mobile_number": "الرجاء إدخال رقم الهاتف المحمول",
+  "mobile_number_must_be_13_digits": "يجب أن يتكون رقم الهاتف المحمول من 13 رقمًا (بما في ذلك +201)",
+  "mobile_number_must_be_12_digits": "يجب أن يتكون رقم الهاتف المحمول من 12 رقمًا (بما في ذلك 201)",
+  "mobile_number_must_be_11_digits": "يجب أن يتكون رقم الهاتف المحمول من 11 رقمًا",
+  "number_must_start_with_valid_prefix": "يجب أن يبدأ الرقم بـ +201 أو 201 أو 01",
+  "mobile_number_must_contain_only_digits": "يجب أن يحتوي رقم الهاتف المحمول على أرقام فقط",
+  "number_not_valid": "الرقم غير صالح"
 }

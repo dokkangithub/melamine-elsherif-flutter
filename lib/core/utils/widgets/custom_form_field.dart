@@ -70,22 +70,38 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
     _obscureText = widget.isPassword;
   }
 
-  String? _validateInput(String? value) {
-    String? mobileError;
+  String? _validateInput(String? value, BuildContext context) {
+    // Check for mobile number validation
     if (widget.isMobileNumber) {
-      mobileError = PhoneValidation.validateMobileNumber(value);
+      final mobileError = PhoneValidation.validateMobileNumber(value, context);
+      if (mobileError != null) {
+        setState(() {
+          _errorText = mobileError;
+        });
+        return mobileError;
+      }
     }
 
-    String? customError;
+    // Apply custom validator if provided
     if (widget.validator != null) {
-      customError = widget.validator!(value);
+      final customError = widget.validator!(value);
+      if (customError != null) {
+        setState(() {
+          _errorText = customError;
+        });
+        return customError;
+      }
     }
 
-    final error = mobileError ?? customError;
-    setState(() {
-      _errorText = error ?? widget.errorText;
-    });
-    return error;
+    // If we reach here, there are no validation errors
+    if (_errorText != null) {
+      setState(() {
+        _errorText = null;
+      });
+    }
+    
+    // Return null when valid (this is what Flutter form validation expects)
+    return null;
   }
 
   // Toggle password visibility
@@ -194,13 +210,15 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
           ),
         ),
         onChanged: (value) {
-          _validateInput(value); // Validate on change
           if (widget.onChanged != null) {
             widget.onChanged!(value);
           }
         },
         onFieldSubmitted: widget.onFieldSubmitted,
-        validator: _validateInput,
+        validator: (value) {
+          // This ensures we're using the most recent context during validation
+          return _validateInput(value, context);
+        },
       ),
     );
   }

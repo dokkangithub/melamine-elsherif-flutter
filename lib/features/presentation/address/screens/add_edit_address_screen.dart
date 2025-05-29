@@ -114,7 +114,7 @@ class _AddEditAddressScreenState extends State<AddEditAddressScreen> {
               ? 'add_new_address'.tr(context)
               : 'edit_address'.tr(context),
             style: context.displaySmall.copyWith(
-              fontWeight: FontWeight.w600,
+              fontWeight: FontWeight.w500,
             )
           ),
         ),
