@@ -148,20 +148,18 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
       if (mounted) {
         print("PAGINATION_DEBUG: After fetching, hasMoreProducts: ${_hasMoreProducts(provider)}");
         
-        // For product types other than new arrivals, check if we have enough published products
-        if (_selectedProductType != ProductType.newArrival) {
-          List<Product> products = _getProducts(provider);
-          List<Product> publishedProducts = products.where((product) => product.published == 1).toList();
-          
-          print("PAGINATION_DEBUG: Total products: ${products.length}, Published products: ${publishedProducts.length}");
-          
-          // If we have very few published products but there are more pages, automatically load more
-          if (publishedProducts.length < 4 && _hasMoreProducts(provider)) {
-            print("PAGINATION_DEBUG: Not enough published products, loading more automatically");
-            // Add a small delay to avoid UI freezes
-            await Future.delayed(const Duration(milliseconds: 300));
-            await _fetchProducts(provider, refresh: false);
-          }
+        // Check if we have enough published products for all product types
+        List<Product> products = _getProducts(provider);
+        List<Product> publishedProducts = products.where((product) => product.published == 1).toList();
+        
+        print("PAGINATION_DEBUG: Total products: ${products.length}, Published products: ${publishedProducts.length}");
+        
+        // If we have very few published products but there are more pages, automatically load more
+        if (publishedProducts.length < 4 && _hasMoreProducts(provider)) {
+          print("PAGINATION_DEBUG: Not enough published products, loading more automatically");
+          // Add a small delay to avoid UI freezes
+          await Future.delayed(const Duration(milliseconds: 300));
+          await _fetchProducts(provider, refresh: false);
         }
       }
     } catch (e) {
@@ -406,10 +404,8 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
       );
     }
 
-    List<Product>filteredProducts = products.where((product) => product.published == 1).toList();
-    if (_selectedProductType != ProductType.newArrival) {
-      filteredProducts = products.where((product) => product.published == 1).toList();
-    }
+    // Filter out all products where published is 0 for all product types
+    List<Product> filteredProducts = products.where((product) => product.published == 1).toList();
     
     print("PAGINATION_DEBUG: Filtered products count: ${filteredProducts.length}");
 
@@ -425,6 +421,7 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
       return const Center(child: CustomEmptyWidget());
     }
 
+
     return Column(
       children: [
         Expanded(
@@ -437,6 +434,7 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
             itemCount: filteredProducts.length,
             itemBuilder: (context, index) {
               final product = filteredProducts[index];
+
               // Alternate item heights for visual variety
               final bool isEven = index % 2 == 0;
               

@@ -69,7 +69,7 @@
             android:name=".WidgetUpdateReceiver"
             android:exported="true">
             <intent-filter>
-                <action android:name="com.melamine_elsherif.UPDATE_WIDGET" />
+                <action android:name="com.melamine.elsherif.UPDATE_WIDGET" />
             </intent-filter>
         </receiver>
 

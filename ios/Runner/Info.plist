@@ -5,7 +5,7 @@
 		<key>CFBundleDevelopmentRegion</key>
 		<string>$(DEVELOPMENT_LANGUAGE)</string>
 		<key>CFBundleDisplayName</key>
-		<string>melamine_elsherif</string>
+		<string>Melamine Elsherif</string>
 		<key>CFBundleExecutable</key>
 		<string>$(EXECUTABLE_NAME)</string>
 		<key>CFBundleIdentifier</key>
@@ -13,7 +13,7 @@
 		<key>CFBundleInfoDictionaryVersion</key>
 		<string>6.0</string>
 		<key>CFBundleName</key>
-		<string>laravel_ecommerce</string>
+		<string>Melamine Elsherif</string>
 		<key>CFBundlePackageType</key>
 		<string>APPL</string>
 		<key>CFBundleShortVersionString</key>
@@ -55,7 +55,7 @@
 				<string>Editor</string>
 				<key>CFBundleURLSchemes</key>
 				<array>
-					<string>com.googleusercontent.apps.YOUR-CLIENT-ID</string>
+					<string>com.googleusercontent.apps.113857629873-9i09rcimdbjrreuajcj199a9fmia41ee</string>
 				</array>
 			</dict>
 			<!-- Facebook Sign-in -->
@@ -74,7 +74,7 @@
 		<key>FacebookClientToken</key>
 		<string>YOUR_CLIENT_TOKEN</string>
 		<key>FacebookDisplayName</key>
-		<string>Laravel Ecommerce</string>
+		<string>Melamine Elsherif</string>
 		<!-- For Sign in with Apple -->
 		<key>com.apple.developer.applesignin</key>
 		<array>
