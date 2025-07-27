@@ -6,6 +6,7 @@ import 'package:melamine_elsherif/core/utils/constants/app_strings.dart';
 import 'package:melamine_elsherif/core/utils/helpers/ui_helper.dart';
 import 'package:melamine_elsherif/features/presentation/home/controller/home_provider.dart';
 import 'package:melamine_elsherif/features/presentation/search/controller/search_provider.dart';
+import 'package:melamine_elsherif/features/presentation/set%20products/controller/set_product_provider.dart';
 import 'package:uuid/uuid.dart';
 import 'core/config/app_config.dart/app_config.dart';
 import 'core/config/routes.dart/routes.dart';
@@ -112,6 +113,7 @@ Future<void> main() async {
         ChangeNotifierProvider(create: (_) => sl<SearchProvider>()),
         ChangeNotifierProvider(create: (_) => sl<WalletProvider>()),
         ChangeNotifierProvider(create: (_) => sl<ClubPointProvider>()),
+        ChangeNotifierProvider(create: (_) => sl<SetProductsProvider>()),
       ],
       child: MyApp(route: await getStartupScreen()),
     ),

@@ -34,6 +34,8 @@ import '../../features/data/review/datasources/review_remote_datasource.dart';
 import '../../features/data/review/repositories/review_repository_impl.dart';
 import '../../features/data/search/datasources/search_remote_datasource.dart';
 import '../../features/data/search/repositories/search_repository_impl.dart';
+import '../../features/data/set products/datasources/set_products_remote_datasource.dart';
+import '../../features/data/set products/repositories/set_products_repository_impl.dart';
 import '../../features/data/slider/datasources/slider_remote_datasource.dart';
 import '../../features/data/slider/repositories/slider_repository_impl.dart';
 import '../../features/data/wishlist/datasources/wishlist_remote_datasource.dart';
@@ -45,6 +47,8 @@ import '../../features/data/club_point/repositories/club_point_repository_impl.d
 import '../../features/domain/club_point/repositories/club_point_repository.dart';
 import '../../features/domain/club_point/usecases/get_club_points_usecase.dart';
 import '../../features/domain/club_point/usecases/convert_to_wallet_usecase.dart';
+import '../../features/domain/set products/repositories/set_products_repository.dart';
+import '../../features/domain/set products/usecases/get_set_products_use_case.dart';
 import '../../features/presentation/club_point/controller/club_point_provider.dart';
 import '../../features/domain/address/repositories/address_repository.dart';
 import '../../features/domain/address/usecases/add_address_usecases.dart';
@@ -143,6 +147,7 @@ import '../../features/presentation/checkout/controller/payment_provider.dart';
 import '../../features/presentation/product details/controller/product_provider.dart';
 import '../../features/presentation/review/controller/reviews_provider.dart';
 import '../../features/presentation/search/controller/search_provider.dart';
+import '../../features/presentation/set products/controller/set_product_provider.dart';
 import '../../features/presentation/slider/controller/provider.dart';
 import '../../features/presentation/wishlist/controller/wishlist_provider.dart';
 import '../api/api_provider.dart';
@@ -292,6 +297,11 @@ Future<void> setupDependencies() async {
         PaymentRepositoryImpl(remoteDataSource: sl<PaymentRemoteDataSource>()),
   );
 
+  sl.registerLazySingleton<SetProductsRemoteDataSource>(
+        () => SetProductsRemoteDataSourceImpl(sl<ApiProvider>()),
+  );
+
+
   // Profile Data Sources
   sl.registerLazySingleton<ProfileRemoteDataSource>(
     () => ProfileRemoteDataSourceImpl(sl<ApiProvider>()),
@@ -409,6 +419,9 @@ Future<void> setupDependencies() async {
   sl.registerLazySingleton(() => GetSearchSuggestionsUseCase(sl()));
   sl.registerLazySingleton(() => GetFilteredProductsUseCase(sl()));
 
+  // Use Cases - set products
+  sl.registerLazySingleton(() => GetSetProductsUseCase(sl()));
+
   // Providers
   sl.registerLazySingleton(
     () => AuthProvider(
@@ -424,6 +437,12 @@ Future<void> setupDependencies() async {
   );
 
   sl.registerFactory(() => SliderProvider(getSlidersUseCase: sl()));
+
+  sl.registerFactory(
+        () => SetProductsProvider(
+      getSetProductsUseCase: sl(),
+    ),
+  );
 
   sl.registerLazySingleton(
     () => CategoryProvider(
@@ -559,6 +578,10 @@ Future<void> setupDependencies() async {
       dataSource: sl<ClubPointDataSource>(),
       networkInfo: sl<NetworkInfo>(),
     ),
+  );
+
+  sl.registerLazySingleton<SetProductsRepository>(
+        () => SetProductsRepositoryImpl(sl<SetProductsRemoteDataSource>()),
   );
 
   // ClubPoint data source

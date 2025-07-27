@@ -21,6 +21,7 @@ import '../../../features/presentation/order/screens/order_screen.dart';
 import '../../../features/presentation/order/screens/orders_list_screen.dart';
 import '../../../features/presentation/checkout/screens/checkout_screen.dart';
 import '../../../features/presentation/product details/screens/product_screen.dart';
+import '../../../features/presentation/set products/set_products_screen.dart';
 import '../../../features/presentation/splash/splash_screen.dart';
 import '../../../features/presentation/search/screens/search_screen.dart';
 import '../../../features/presentation/wallet/screens/wallet_screen.dart';
@@ -45,6 +46,7 @@ class AppRoutes {
   static const String productDetailScreen = '/product-details';
   static const String allCategoryProductsScreen = '/all-category-product';
   static const String allProductsByTypeScreen = '/allProductsByType';
+  static const String setProductsScreen = '/setProductsScreen';
   static const String addressListScreen = '/addressListScreen';
   static const String checkoutScreen = '/checkout';
   static const String newCheckoutScreen = '/new-checkout';
@@ -138,6 +140,9 @@ class AppRoutes {
         break;
       case newCheckoutScreen:
         page = const CheckoutScreen();
+        break;
+      case setProductsScreen:
+        page = const SetProductsScreen();
         break;
       case allOrdersListScreen:
         page = const OrdersListScreen();

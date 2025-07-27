@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:melamine_elsherif/features/presentation/set%20products/controller/set_product_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:melamine_elsherif/features/presentation/wishlist/controller/wishlist_provider.dart';
 import 'package:melamine_elsherif/features/presentation/category/controller/provider.dart';
@@ -9,6 +11,7 @@ import 'package:melamine_elsherif/features/presentation/home/widgets/best_sellin
 import 'package:melamine_elsherif/features/presentation/home/widgets/featured_products_widget.dart';
 import 'package:melamine_elsherif/features/presentation/home/widgets/new_products_widget.dart';
 import 'package:melamine_elsherif/features/presentation/home/widgets/all_products_widget.dart';
+import 'package:melamine_elsherif/features/presentation/home/widgets/set_products_widget.dart';
 import '../../cart/controller/cart_provider.dart';
 import '../../slider/controller/provider.dart';
 import '../widgets/banners_widget.dart';
@@ -54,20 +57,18 @@ class _HomeScreenState extends State<HomeScreen> {
       context,
       listen: false,
     );
+    final setProductProvider = Provider.of<SetProductsProvider>(
+      context,
+      listen: false,
+    );
 
     categoryProvider.getCategories();
     homeProvider.initHomeData();
+    setProductProvider.getSetProducts();
     cartProvider.fetchCartCount();
     wishlistProvider.fetchWishlist();
   }
 
-  void _scrollToShopNow() {
-    _scrollController.animateTo(
-      250.0, // The position to scroll to
-      duration: const Duration(milliseconds: 500), // Duration of the scroll animation
-      curve: Curves.easeInOut, // Animation curve
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -108,6 +109,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           CategoriesWidget(),
 
                           NewProductsWidget(),
+
+                          SetProductsWidget(),
 
                           SimpleBannerCarousel(),
 
