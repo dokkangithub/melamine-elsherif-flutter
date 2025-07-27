@@ -80,10 +80,15 @@ class _HomeScreenState extends State<HomeScreen> {
           listen: false,
         );
         final sliderProvider = Provider.of<SliderProvider>(context, listen: false);
+        final setProductProvider = Provider.of<SetProductsProvider>(
+          context,
+          listen: false,
+        );
 
         await Future.wait([
         sliderProvider.getSliders(refresh: true),
           homeProvider.refreshHomeData(),
+          setProductProvider.getSetProducts(),
           categoryProvider.getCategories(needRefresh: true),
         ]);
       },
@@ -115,7 +120,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           SimpleBannerCarousel(),
 
                           BestSellingProductsWidget(),
-
 
                           FlashDealsWidget(),
 

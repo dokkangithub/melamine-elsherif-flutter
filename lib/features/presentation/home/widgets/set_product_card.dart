@@ -21,7 +21,7 @@ class SetProductCard extends StatelessWidget {
       onTap: () {
         AppRoutes.navigateTo(
           context,
-          AppRoutes.productDetailScreen,
+          AppRoutes.setProductDetailsScreen,
           arguments: {'slug': setProduct.slug},
         );
       },

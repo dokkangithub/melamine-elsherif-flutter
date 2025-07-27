@@ -21,6 +21,7 @@ import '../../../features/presentation/order/screens/order_screen.dart';
 import '../../../features/presentation/order/screens/orders_list_screen.dart';
 import '../../../features/presentation/checkout/screens/checkout_screen.dart';
 import '../../../features/presentation/product details/screens/product_screen.dart';
+import '../../../features/presentation/set products/screens/set_product_details_screen.dart';
 import '../../../features/presentation/set products/screens/set_products_screen.dart';
 import '../../../features/presentation/splash/splash_screen.dart';
 import '../../../features/presentation/search/screens/search_screen.dart';
@@ -55,6 +56,8 @@ class AppRoutes {
   static const String orderDetailsScreen = '/order-details';
   static const String searchScreen = '/search-screen';
   static const String walletScreen = '/wallet-screen';
+  static const String setProductDetailsScreen = '/set-product-details';
+
 
   static const PageTransitionType defaultTransition = PageTransitionType.sharedAxisHorizontal;
 
@@ -117,6 +120,12 @@ class AppRoutes {
         final args = settings.arguments as Map<String, dynamic>?;
         page = AllCategoryProductsScreen(
           category: args?['category'] as Category,
+        );
+        break;
+      case setProductDetailsScreen:
+        final args = settings.arguments as Map<String, dynamic>?;
+        page = SetProductDetailsScreen(
+          slug: args?['slug'] as String,
         );
         break;
       case AppRoutes.allProductsByTypeScreen:

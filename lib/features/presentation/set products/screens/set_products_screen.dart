@@ -174,7 +174,7 @@ class _SetProductsScreenState extends State<SetProductsScreen> {
       onTap: () {
         AppRoutes.navigateTo(
           context,
-          AppRoutes.productDetailScreen, // TODO: Replace with set product detail route if needed
+          AppRoutes.setProductDetailsScreen,
           arguments: {'slug': product.slug},
         );
       },

@@ -49,6 +49,8 @@ import '../../features/domain/club_point/repositories/club_point_repository.dart
 import '../../features/domain/club_point/usecases/get_club_points_usecase.dart';
 import '../../features/domain/club_point/usecases/convert_to_wallet_usecase.dart';
 import '../../features/domain/set products/repositories/set_products_repository.dart';
+import '../../features/domain/set products/usecases/calculate_price_use_case.dart';
+import '../../features/domain/set products/usecases/get_set_product_details_use_case.dart';
 import '../../features/domain/set products/usecases/get_set_products_use_case.dart';
 import '../../features/presentation/club_point/controller/club_point_provider.dart';
 import '../../features/domain/address/repositories/address_repository.dart';
@@ -429,6 +431,13 @@ Future<void> setupDependencies() async {
 
   // Use Cases - set products
   sl.registerLazySingleton(() => GetSetProductsUseCase(sl()));
+  GetIt.instance.registerLazySingleton<GetSetProductDetailsUseCase>(
+        () => GetSetProductDetailsUseCase(GetIt.instance<SetProductsRepository>()),
+  );
+
+  GetIt.instance.registerLazySingleton<CalculatePriceUseCase>(
+        () => CalculatePriceUseCase(GetIt.instance<SetProductsRepository>()),
+  );
 
   // Providers
   sl.registerLazySingleton(
@@ -446,9 +455,11 @@ Future<void> setupDependencies() async {
 
   sl.registerFactory(() => SliderProvider(getSlidersUseCase: sl()));
 
-  sl.registerFactory(
+  GetIt.instance.registerFactory<SetProductsProvider>(
         () => SetProductsProvider(
-      getSetProductsUseCase: sl(),
+      getSetProductsUseCase: GetIt.instance<GetSetProductsUseCase>(),
+      getSetProductDetailsUseCase: GetIt.instance<GetSetProductDetailsUseCase>(),
+      calculatePriceUseCase: GetIt.instance<CalculatePriceUseCase>(),
     ),
   );
 

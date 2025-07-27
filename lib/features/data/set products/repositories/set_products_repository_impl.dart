@@ -1,7 +1,9 @@
+import '../../../domain/set products/entities/set_product_details.dart';
 import '../../../domain/set products/entities/set_products_response.dart';
 import '../../../domain/set products/repositories/set_products_repository.dart';
 import '../datasources/set_products_remote_datasource.dart';
 import '../datasources/set_products_local_datasource.dart';
+import '../models/set_product_details_model.dart';
 import '../models/set_products_model.dart';
 
 class SetProductsRepositoryImpl implements SetProductsRepository {
@@ -36,6 +38,26 @@ class SetProductsRepositoryImpl implements SetProductsRepository {
     final products = model.data?.data ?? [];
     final totalPages = model.data?.lastPage ?? 1;
     await localDataSource.saveCollection(collectionType, page, products, totalPages);
+    return model.toEntity();
+  }
+
+  @override
+  Future<SetProductDetailsEntity> getSetProductDetails({required String slug}) async {
+    final model = await remoteDataSource.getSetProductDetails(slug: slug);
+    return model.toEntity();
+  }
+
+  @override
+  Future<CalculatePriceResponseEntity> calculatePrice({required CalculatePriceRequest request}) async {
+    final requestModel = CalculatePriceRequestModel(
+      productId: request.productId,
+      components: request.components.map((c) => ComponentRequestModel(
+        productId: c.productId,
+        quantity: c.quantity,
+      )).toList(),
+    );
+
+    final model = await remoteDataSource.calculatePrice(request: requestModel);
     return model.toEntity();
   }
 }
