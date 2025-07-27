@@ -8,16 +8,22 @@ import '../../../../core/utils/enums/loading_state.dart';
 import '../../../domain/set products/usecases/get_set_products_use_case.dart';
 import '../../../domain/set products/usecases/get_set_product_details_use_case.dart';
 import '../../../domain/set products/usecases/calculate_price_use_case.dart';
+import '../../../domain/set products/usecases/add_full_set_to_cart_use_case.dart';
+import '../../../domain/set products/usecases/add_custom_set_to_cart_use_case.dart';
 
 class SetProductsProvider extends ChangeNotifier {
   final GetSetProductsUseCase getSetProductsUseCase;
   final GetSetProductDetailsUseCase getSetProductDetailsUseCase;
   final CalculatePriceUseCase calculatePriceUseCase;
+  final AddFullSetToCartUseCase addFullSetToCartUseCase;
+  final AddCustomSetToCartUseCase addCustomSetToCartUseCase;
 
   SetProductsProvider({
     required this.getSetProductsUseCase,
     required this.getSetProductDetailsUseCase,
     required this.calculatePriceUseCase,
+    required this.addFullSetToCartUseCase,
+    required this.addCustomSetToCartUseCase,
   });
 
   // Set Products List State
@@ -41,6 +47,11 @@ class SetProductsProvider extends ChangeNotifier {
   LoadingState calculatePriceState = LoadingState.initial;
   CalculatedPriceData? calculatedPrice;
   String calculatePriceError = '';
+
+  // Add to Cart State
+  LoadingState addToCartState = LoadingState.initial;
+  String addToCartError = '';
+  Map<String, dynamic>? addToCartResponse;
 
   Future<void> getSetProducts({bool isRefresh = false}) async {
     try {
@@ -140,6 +151,59 @@ class SetProductsProvider extends ChangeNotifier {
     }
   }
 
+  Future<bool> addFullSetToCart({required int productId, required int quantity}) async {
+    try {
+      addToCartState = LoadingState.loading;
+      addToCartError = '';
+      notifyListeners();
+
+      final response = await addFullSetToCartUseCase(
+        productId: productId,
+        quantity: quantity,
+      );
+
+      addToCartResponse = response;
+      addToCartState = LoadingState.loaded;
+      return true;
+    } catch (e) {
+      addToCartState = LoadingState.error;
+      addToCartError = e.toString();
+      addToCartResponse = null;
+      return false;
+    } finally {
+      notifyListeners();
+    }
+  }
+
+  Future<bool> addCustomSetToCart({
+    required int productId,
+    required int quantity,
+    required List<ComponentRequest> components
+  }) async {
+    try {
+      addToCartState = LoadingState.loading;
+      addToCartError = '';
+      notifyListeners();
+
+      final response = await addCustomSetToCartUseCase(
+        productId: productId,
+        quantity: quantity,
+        components: components,
+      );
+
+      addToCartResponse = response;
+      addToCartState = LoadingState.loaded;
+      return true;
+    } catch (e) {
+      addToCartState = LoadingState.error;
+      addToCartError = e.toString();
+      addToCartResponse = null;
+      return false;
+    } finally {
+      notifyListeners();
+    }
+  }
+
   // Clear details when navigating away
   void clearSetProductDetails() {
     setProductDetails = null;
@@ -153,6 +217,14 @@ class SetProductsProvider extends ChangeNotifier {
     calculatedPrice = null;
     calculatePriceState = LoadingState.initial;
     calculatePriceError = '';
+    notifyListeners();
+  }
+
+  // Clear add to cart state
+  void clearAddToCartState() {
+    addToCartState = LoadingState.initial;
+    addToCartError = '';
+    addToCartResponse = null;
     notifyListeners();
   }
 }

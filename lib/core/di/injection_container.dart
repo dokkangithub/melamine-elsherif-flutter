@@ -2,6 +2,8 @@ import 'package:melamine_elsherif/core/api/rest_api_provider.dart';
 import 'package:get_it/get_it.dart';
 import 'package:dio/dio.dart';
 import 'package:melamine_elsherif/features/domain/search/usecases/get_search_suggestions_use_case.dart';
+import 'package:melamine_elsherif/features/domain/set%20products/usecases/add_custom_set_to_cart_use_case.dart';
+import 'package:melamine_elsherif/features/domain/set%20products/usecases/add_full_set_to_cart_use_case.dart';
 import 'package:melamine_elsherif/features/presentation/home/controller/home_provider.dart';
 import 'package:melamine_elsherif/features/data/profile/repositories/profile_repository_impl.dart';
 import 'package:melamine_elsherif/features/data/profile/datasources/profile_remote_datasource.dart';
@@ -438,6 +440,12 @@ Future<void> setupDependencies() async {
   GetIt.instance.registerLazySingleton<CalculatePriceUseCase>(
         () => CalculatePriceUseCase(GetIt.instance<SetProductsRepository>()),
   );
+  GetIt.instance.registerLazySingleton<AddFullSetToCartUseCase>(
+        () => AddFullSetToCartUseCase(GetIt.instance<SetProductsRepository>()),
+  );
+  GetIt.instance.registerLazySingleton<AddCustomSetToCartUseCase>(
+        () => AddCustomSetToCartUseCase(GetIt.instance<SetProductsRepository>()),
+  );
 
   // Providers
   sl.registerLazySingleton(
@@ -460,6 +468,9 @@ Future<void> setupDependencies() async {
       getSetProductsUseCase: GetIt.instance<GetSetProductsUseCase>(),
       getSetProductDetailsUseCase: GetIt.instance<GetSetProductDetailsUseCase>(),
       calculatePriceUseCase: GetIt.instance<CalculatePriceUseCase>(),
+          addFullSetToCartUseCase: sl<AddFullSetToCartUseCase>(),
+
+            addCustomSetToCartUseCase: sl<AddCustomSetToCartUseCase>()
     ),
   );
 

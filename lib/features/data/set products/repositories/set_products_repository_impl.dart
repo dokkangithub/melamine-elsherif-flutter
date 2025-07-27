@@ -60,4 +60,30 @@ class SetProductsRepositoryImpl implements SetProductsRepository {
     final model = await remoteDataSource.calculatePrice(request: requestModel);
     return model.toEntity();
   }
+
+  @override
+  Future<Map<String, dynamic>> addFullSetToCart({required int productId, required int quantity}) async {
+    return await remoteDataSource.addFullSetToCart(
+      productId: productId,
+      quantity: quantity,
+    );
+  }
+
+  @override
+  Future<Map<String, dynamic>> addCustomSetToCart({
+    required int productId,
+    required int quantity,
+    required List<ComponentRequest> components
+  }) async {
+    final componentModels = components.map((c) => ComponentRequestModel(
+      productId: c.productId,
+      quantity: c.quantity,
+    )).toList();
+
+    return await remoteDataSource.addCustomSetToCart(
+      productId: productId,
+      quantity: quantity,
+      components: componentModels,
+    );
+  }
 }

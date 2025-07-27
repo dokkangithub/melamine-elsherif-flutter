@@ -11,8 +11,10 @@ import 'package:provider/provider.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/tap_bounce_container.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
+import '../../features/domain/set products/entities/set_product_details.dart';
 import '../../features/presentation/cart/controller/cart_provider.dart';
 import '../../features/presentation/product details/controller/product_provider.dart';
+import '../../features/presentation/set products/controller/set_product_provider.dart';
 import '../../features/presentation/wishlist/controller/wishlist_provider.dart';
 import '../../core/providers/localization/language_provider.dart';
 import '../../features/presentation/home/controller/home_provider.dart';
@@ -89,7 +91,7 @@ abstract class AppFunctions {
           //showCartAddedAnimation(context);
 
           // Refresh cart data asynchronously without waiting
-          _refreshCartDataAsync(cartProvider,context);
+          _refreshCartDataAsync(cartProvider, context);
         }
       }
     } catch (e) {
@@ -109,24 +111,26 @@ abstract class AppFunctions {
   }
 
   // Helper method to refresh cart data asynchronously
-  static Future<void> _refreshCartDataAsync(CartProvider cartProvider,context) async {
+  static Future<void> _refreshCartDataAsync(CartProvider cartProvider,
+      context) async {
     await cartProvider.fetchCartItems();
     await cartProvider.fetchCartCount();
     await cartProvider.fetchCartSummary();
-    await Provider.of<ProfileProvider>(context,listen: false).getProfileCounters();
+    await Provider.of<ProfileProvider>(context, listen: false)
+        .getProfileCounters();
   }
 
-  static Future<void> toggleWishlistStatus(
-      BuildContext context,
-      String slug,
-      ) async {
+  static Future<void> toggleWishlistStatus(BuildContext context,
+      String slug,) async {
     if (AppStrings.token == null) {
-      CustomToast.showToast(message: 'please_login'.tr(context), type: ToastType.warning);
+      CustomToast.showToast(
+          message: 'please_login'.tr(context), type: ToastType.warning);
     } else {
       final provider = Provider.of<WishlistProvider>(context, listen: false);
 
       await provider.toggleWishlistStatus(context, slug);
-      await Provider.of<ProfileProvider>(context,listen: false).getProfileCounters();
+      await Provider.of<ProfileProvider>(context, listen: false)
+          .getProfileCounters();
     }
   }
 
@@ -135,17 +139,17 @@ abstract class AppFunctions {
   /// [context] - BuildContext for provider access and translations
   /// [languageCode] - The language code to change to (e.g., 'en', 'ar')
   /// [countryCode] - The country code to use with the language (e.g., 'US', 'Eg')
-  static Future<void> changeLanguage(
-      BuildContext context,
+  static Future<void> changeLanguage(BuildContext context,
       String languageCode,
-      String countryCode,
-      ) async {
+      String countryCode,) async {
     try {
       // Get language provider
-      final languageProvider = Provider.of<LanguageProvider>(context, listen: false);
+      final languageProvider = Provider.of<LanguageProvider>(
+          context, listen: false);
 
       // Check if this is a direction change (RTL/LTR)
-      final isDirectionChange = languageProvider.isDirectionChange(languageCode);
+      final isDirectionChange = languageProvider.isDirectionChange(
+          languageCode);
 
 
       // Change the language using the provider
@@ -162,7 +166,8 @@ abstract class AppFunctions {
 
         // Additionally refresh profile data if needed
         if (context.mounted) {
-          final profileProvider = Provider.of<ProfileProvider>(context, listen: false);
+          final profileProvider = Provider.of<ProfileProvider>(
+              context, listen: false);
           await profileProvider.getProfileCounters();
           await profileProvider.getUserProfile();
         }
@@ -175,7 +180,6 @@ abstract class AppFunctions {
           );
         }
       } catch (e) {
-
         debugPrint('Error refreshing data after language change: $e');
         if (context.mounted) {
           CustomToast.showToast(
@@ -195,6 +199,191 @@ abstract class AppFunctions {
     }
   }
 
+
+  static Future<void> addFullSetToCart({
+    required BuildContext context,
+    required int productId,
+    required String productName,
+    required String productSlug,
+    int quantity = 1,
+  }) async {
+    final setProductProvider = Provider.of<SetProductsProvider>(
+      context,
+      listen: false,
+    );
+    final cartProvider = Provider.of<CartProvider>(context, listen: false);
+
+    // Set loading state
+    if (setProductProvider.setProductDetails?.slug == productSlug) {
+      // The loading state is already handled in the provider's addFullSetToCart method
+    }
+
+    try {
+      // Add full set to cart
+      final success = await setProductProvider.addFullSetToCart(
+        productId: productId,
+        quantity: quantity,
+      );
+
+      if (context.mounted) {
+        if (success) {
+          // Get the response message or use default
+          final response = setProductProvider.addToCartResponse;
+          final message = response?['message'] ??
+              'full_set_added_to_cart_successfully'.tr(context);
+
+          CustomToast.showToast(
+            message: message,
+            type: ToastType.success,
+          );
+
+          // Show animation only if cart addition was successful
+          // showCartAddedAnimation(context);
+
+          // Refresh cart data asynchronously without waiting
+          _refreshCartDataAsync(cartProvider, context);
+        } else {
+          CustomToast.showToast(
+            message: setProductProvider.addToCartError.isNotEmpty
+                ? setProductProvider.addToCartError
+                : 'failed_to_add_full_set_to_cart'.tr(context),
+            type: ToastType.error,
+          );
+        }
+      }
+    } catch (e) {
+      if (context.mounted) {
+        CustomToast.showToast(
+          message: e.toString(),
+          type: ToastType.error,
+        );
+      }
+    }
+  }
+
+  static Future<void> addCustomSetToCart({
+    required BuildContext context,
+    required int productId,
+    required String productName,
+    required String productSlug,
+    required List<ComponentRequest> components,
+    int quantity = 1,
+  }) async {
+    final setProductProvider = Provider.of<SetProductsProvider>(
+      context,
+      listen: false,
+    );
+    final cartProvider = Provider.of<CartProvider>(context, listen: false);
+
+    // Validate that we have components
+    if (components.isEmpty) {
+      CustomToast.showToast(
+        message: 'please_select_components'.tr(context),
+        type: ToastType.error,
+      );
+      return;
+    }
+
+    try {
+      // Add custom set to cart
+      final success = await setProductProvider.addCustomSetToCart(
+        productId: productId,
+        quantity: quantity,
+        components: components,
+      );
+
+      if (context.mounted) {
+        if (success) {
+          // Get the response message or use default
+          final response = setProductProvider.addToCartResponse;
+          final message = response?['message'] ??
+              'custom_set_added_to_cart_successfully'.tr(context);
+
+          CustomToast.showToast(
+            message: message,
+            type: ToastType.success,
+          );
+
+          // Show animation only if cart addition was successful
+          // showCartAddedAnimation(context);
+
+          // Refresh cart data asynchronously without waiting
+          _refreshCartDataAsync(cartProvider, context);
+        } else {
+          CustomToast.showToast(
+            message: setProductProvider.addToCartError.isNotEmpty
+                ? setProductProvider.addToCartError
+                : 'failed_to_add_custom_set_to_cart'.tr(context),
+            type: ToastType.error,
+          );
+        }
+      }
+    } catch (e) {
+      if (context.mounted) {
+        CustomToast.showToast(
+          message: e.toString(),
+          type: ToastType.error,
+        );
+      }
+    }
+  }
+
+
+  // Utility method to create components list from current selections
+  static List<ComponentRequest> createComponentsFromSelections(
+      List<Component> allComponents,
+      Map<int, int> selectedQuantities,) {
+    final components = <ComponentRequest>[];
+
+    for (final component in allComponents) {
+      final quantity = selectedQuantities[component.id] ??
+          (component.initialQuantity ?? 1);
+      if (quantity > 0) {
+        components.add(
+          ComponentRequest(
+            productId: component.id!,
+            quantity: quantity,
+          ),
+        );
+      }
+    }
+
+    return components;
+  }
+
+  // Utility method to validate custom set selection
+  static bool validateCustomSetSelection(List<Component> allComponents,
+      Map<int, int> selectedQuantities,
+      BuildContext context,) {
+    // Check if all required components are selected
+    for (final component in allComponents) {
+      if (component.isRequired == true) {
+        final quantity = selectedQuantities[component.id] ??
+            (component.initialQuantity ?? 1);
+        if (quantity <= 0) {
+          CustomToast.showToast(
+            message: 'please_select_required_component'.tr(context) +
+                ': ${component.name}',
+            type: ToastType.error,
+          );
+          return false;
+        }
+      }
+    }
+
+    // Check if at least one component is selected
+    final hasAnySelection = selectedQuantities.values.any((
+        quantity) => quantity > 0);
+    if (!hasAnySelection) {
+      CustomToast.showToast(
+        message: 'please_select_at_least_one_component'.tr(context),
+        type: ToastType.error,
+      );
+      return false;
+    }
+
+    return true;
+  }
 
 
 }

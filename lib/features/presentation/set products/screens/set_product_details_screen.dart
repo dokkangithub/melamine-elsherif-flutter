@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 import '../../../../../core/utils/enums/loading_state.dart';
 import '../../../../../core/utils/widgets/custom_back_button.dart';
 import '../../../../../features/domain/set products/entities/set_product_details.dart';
+import '../../../../core/utils/helpers.dart';
 import '../controller/set_product_provider.dart';
 import '../widgets/set_product_details_shimmer.dart';
 
@@ -77,6 +78,7 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
     final provider = Provider.of<SetProductsProvider>(context, listen: false);
     provider.clearSetProductDetails();
     provider.clearCalculatedPrice();
+    provider.clearAddToCartState();
     super.dispose();
   }
 
@@ -124,6 +126,46 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
     }
   }
 
+  Future<void> _handleAddToCart(SetProductsProvider provider) async {
+    if (provider.setProductDetails == null) return;
+
+    if (isFullSet) {
+      // Add full set to cart using utility method
+      await AppFunctions.addFullSetToCart(
+        context: context,
+        productId: provider.setProductDetails!.id!,
+        productName: provider.setProductDetails!.name ?? '',
+        productSlug: provider.setProductDetails!.slug ?? widget.slug,
+        quantity: 1, // You can make this dynamic if needed
+      );
+    } else {
+      // Validate custom set selection first
+      if (!AppFunctions.validateCustomSetSelection(
+        provider.setProductDetails!.components,
+        selectedQuantities,
+        context,
+      )) {
+        return;
+      }
+
+      // Create components list from selections
+      final components = AppFunctions.createComponentsFromSelections(
+        provider.setProductDetails!.components,
+        selectedQuantities,
+      );
+
+      // Add custom set to cart using utility method
+      await AppFunctions.addCustomSetToCart(
+        context: context,
+        productId: provider.setProductDetails!.id!,
+        productName: provider.setProductDetails!.name ?? '',
+        productSlug: provider.setProductDetails!.slug ?? widget.slug,
+        components: components,
+        quantity: 1, // You can make this dynamic if needed
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<SetProductsProvider>(
@@ -139,8 +181,6 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
       },
     );
   }
-
-
 
   Widget _buildProductHeader(SetProductDetailsData product) {
     final screenHeight = MediaQuery.of(context).size.height;
@@ -227,9 +267,9 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
                       children: [
                         if (isLoading)
                           const SizedBox(
-                            width: 24,
-                            height: 24,
-                            child: CustomLoadingWidget()
+                              width: 24,
+                              height: 24,
+                              child: CustomLoadingWidget()
                           )
                         else
                           Text(
@@ -883,9 +923,9 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
             children: [
               if (isLoading)
                 const SizedBox(
-                  width: 20,
-                  height: 20,
-                  child: CustomLoadingWidget()
+                    width: 20,
+                    height: 20,
+                    child: CustomLoadingWidget()
                 )
               else
                 Text(
@@ -898,13 +938,19 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
               const SizedBox(width: 16),
               Expanded(
                 child: CustomButton(
-                  onPressed: () {
-                    // TODO: Implement add to cart functionality
-                  },
-                  child: Text('add_to_cart'.tr(context),textAlign: TextAlign.center,style: Theme.of(context).textTheme.headlineSmall!.copyWith(
-                    color: AppTheme.white,
-                    fontWeight: FontWeight.bold,
-                  ),),
+                  onPressed: provider.addToCartState == LoadingState.loading
+                      ? null
+                      : () => _handleAddToCart(provider),
+                  child: provider.addToCartState == LoadingState.loading
+                      ? const CustomLoadingWidget()
+                      : Text(
+                    'add_to_cart'.tr(context),
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.headlineSmall!.copyWith(
+                      color: AppTheme.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
               ),
             ],
@@ -913,7 +959,6 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
       },
     );
   }
-
 
   void _calculatePrice(SetProductsProvider provider) {
     final components = <ComponentRequest>[];
@@ -935,5 +980,4 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
 
     provider.calculatePrice(request: request);
   }
-
 }
