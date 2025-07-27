@@ -2,6 +2,7 @@ import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:objectbox/objectbox.dart';
 import '../../features/data/product/models/product_entity.dart';
+import '../../features/data/set products/models/set_products_model.dart';
 import '../../objectbox.g.dart';
 
 class ObjectBox {
@@ -10,12 +11,16 @@ class ObjectBox {
   late final Box<CategoryEntity> categoryBox;
   late final Box<ProductStockEntity> stockBox;
   late final Box<ProductCollectionEntity> collectionBox;
+  late final Box<SetProductEntity> setProductBox;
+  late final Box<SetProductCollectionEntity> setProductCollectionBox;
 
   ObjectBox._create(this.store) {
     productBox = Box<ProductEntity>(store);
     categoryBox = Box<CategoryEntity>(store);
     stockBox = Box<ProductStockEntity>(store);
     collectionBox = Box<ProductCollectionEntity>(store);
+    setProductBox = Box<SetProductEntity>(store);
+    setProductCollectionBox = Box<SetProductCollectionEntity>(store);
   }
 
   static Future<ObjectBox> create() async {

@@ -29,7 +29,7 @@ class SetProductsWidget extends StatelessWidget {
         if (products.isEmpty) {
           return _buildEmptyState();
         }
-        final filteredProducts = products.where((product) => product.published.toString() == '1').toList();
+        final filteredProducts = products.where((product) => product.published==true).toList();
 
         return Padding(
           padding: const EdgeInsets.only(top: 16.0),
@@ -44,7 +44,7 @@ class SetProductsWidget extends StatelessWidget {
               ),
               const SizedBox(height: 10),
               SizedBox(
-                height: 330,
+                height: 300,
                 child: ListView.builder(
                   padding: const EdgeInsets.only(left: 16.0),
                   scrollDirection: Axis.horizontal,

@@ -1,6 +1,125 @@
 import '../../../domain/set products/entities/set_products.dart';
 import '../../../domain/set products/entities/set_products_response.dart';
 
+// ObjectBox entity for SetProduct
+import 'package:objectbox/objectbox.dart';
+
+@Entity()
+class SetProductEntity {
+  int id;
+  int? setProductId;
+  String? name;
+  String? slug;
+  String? description;
+  int? fullSetPrice;
+  bool? hasDiscount;
+  String? discount;
+  String? mainPrice;
+  String? discountedPrice;
+  int? calculablePrice;
+  String? thumbnailImage;
+  int? mainCategoryId;
+  String? mainCategoryName;
+  int? componentCount;
+  bool? published;
+  bool? approved;
+  DateTime? createdAt;
+  DateTime? updatedAt;
+  DateTime? timestamp;
+
+  final collection = ToOne<SetProductCollectionEntity>();
+
+  SetProductEntity({
+    this.id = 0,
+    this.setProductId,
+    this.name,
+    this.slug,
+    this.description,
+    this.fullSetPrice,
+    this.hasDiscount,
+    this.discount,
+    this.mainPrice,
+    this.discountedPrice,
+    this.calculablePrice,
+    this.thumbnailImage,
+    this.mainCategoryId,
+    this.mainCategoryName,
+    this.componentCount,
+    this.published,
+    this.approved,
+    this.createdAt,
+    this.updatedAt,
+    this.timestamp,
+  });
+
+  factory SetProductEntity.fromModel(DatumModel model, DateTime timestamp) {
+    return SetProductEntity(
+      setProductId: model.id,
+      name: model.name,
+      slug: model.slug,
+      description: model.description,
+      fullSetPrice: model.fullSetPrice,
+      hasDiscount: model.hasDiscount,
+      discount: model.discount,
+      mainPrice: model.mainPrice,
+      discountedPrice: model.discountedPrice,
+      calculablePrice: model.calculablePrice,
+      thumbnailImage: model.thumbnailImage,
+      mainCategoryId: model.mainCategoryId,
+      mainCategoryName: model.mainCategoryName,
+      componentCount: model.componentCount,
+      published: model.published,
+      approved: model.approved,
+      createdAt: model.createdAt,
+      updatedAt: model.updatedAt,
+      timestamp: timestamp,
+    );
+  }
+
+  DatumModel toModel() {
+    return DatumModel(
+      id: setProductId,
+      name: name,
+      slug: slug,
+      description: description,
+      fullSetPrice: fullSetPrice,
+      hasDiscount: hasDiscount,
+      discount: discount,
+      mainPrice: mainPrice,
+      discountedPrice: discountedPrice,
+      calculablePrice: calculablePrice,
+      thumbnailImage: thumbnailImage,
+      mainCategoryId: mainCategoryId,
+      mainCategoryName: mainCategoryName,
+      componentCount: componentCount,
+      published: published,
+      approved: approved,
+      createdAt: createdAt,
+      updatedAt: updatedAt,
+    );
+  }
+}
+
+@Entity()
+class SetProductCollectionEntity {
+  int id;
+  String collectionType;
+  int page;
+  int totalPages;
+  DateTime timestamp;
+
+  @Backlink('collection')
+  final setProducts = ToMany<SetProductEntity>();
+
+  SetProductCollectionEntity({
+    this.id = 0,
+    required this.collectionType,
+    required this.page,
+    required this.totalPages,
+    required this.timestamp,
+  });
+}
+
 class SetProductsModel {
   final bool? success;
   final DataModel? data;

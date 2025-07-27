@@ -8,12 +8,12 @@ import 'package:melamine_elsherif/core/utils/widgets/custom_cached_image.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_empty_widgets.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_loading.dart';
 import 'package:provider/provider.dart';
-import '../../../../core/config/routes.dart/routes.dart';
-import '../../../../core/utils/enums/loading_state.dart';
-import '../../../../core/utils/widgets/custom_back_button.dart';
-import '../all products/widgets/shimmer/products_grid_shimmer.dart';
-import '../set products/controller/set_product_provider.dart';
-import '../../../../features/domain/set products/entities/set_products.dart';
+import '../../../../../core/config/routes.dart/routes.dart';
+import '../../../../../core/utils/enums/loading_state.dart';
+import '../../../../../core/utils/widgets/custom_back_button.dart';
+import '../../all products/widgets/shimmer/products_grid_shimmer.dart';
+import '../controller/set_product_provider.dart';
+import '../../../../../features/domain/set products/entities/set_products.dart';
 
 class SetProductsScreen extends StatefulWidget {
   const SetProductsScreen({super.key});
@@ -81,7 +81,7 @@ class _SetProductsScreenState extends State<SetProductsScreen> {
       backgroundColor: Colors.white,
       elevation: 0,
       title: Text(
-        'set_products'.tr(context),
+        'customize_yours'.tr(context),
         style: Theme.of(context).textTheme.displaySmall!.copyWith(fontWeight: FontWeight.w500),
       ),
       centerTitle: true,
@@ -185,7 +185,7 @@ class _SetProductsScreenState extends State<SetProductsScreen> {
           borderRadius: BorderRadius.circular(0),
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.1),
+              color: Colors.grey.withValues(alpha: 0.1),
               spreadRadius: 1,
               blurRadius: 2,
               offset: const Offset(0, 1),
@@ -200,7 +200,7 @@ class _SetProductsScreenState extends State<SetProductsScreen> {
               imageUrl: product.thumbnailImage ?? '',
               height: isEven ? 180 : 200,
               width: double.infinity,
-              fit: BoxFit.cover,
+              fit: BoxFit.contain,
             ),
             // Product details
             Padding(

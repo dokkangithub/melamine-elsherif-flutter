@@ -36,6 +36,7 @@ import '../../features/data/search/datasources/search_remote_datasource.dart';
 import '../../features/data/search/repositories/search_repository_impl.dart';
 import '../../features/data/set products/datasources/set_products_remote_datasource.dart';
 import '../../features/data/set products/repositories/set_products_repository_impl.dart';
+import '../../features/data/set products/datasources/set_products_local_datasource.dart';
 import '../../features/data/slider/datasources/slider_remote_datasource.dart';
 import '../../features/data/slider/repositories/slider_repository_impl.dart';
 import '../../features/data/wishlist/datasources/wishlist_remote_datasource.dart';
@@ -299,6 +300,13 @@ Future<void> setupDependencies() async {
 
   sl.registerLazySingleton<SetProductsRemoteDataSource>(
         () => SetProductsRemoteDataSourceImpl(sl<ApiProvider>()),
+  );
+  sl.registerLazySingleton<SetProductsLocalDataSource>(
+    () => SetProductsLocalDataSourceImpl(objectBox: sl(), timestampService: sl()),
+  );
+
+  sl.registerLazySingleton<SetProductsRepository>(
+    () => SetProductsRepositoryImpl(sl<SetProductsRemoteDataSource>(), sl<SetProductsLocalDataSource>()),
   );
 
 
@@ -580,10 +588,6 @@ Future<void> setupDependencies() async {
     ),
   );
 
-  sl.registerLazySingleton<SetProductsRepository>(
-        () => SetProductsRepositoryImpl(sl<SetProductsRemoteDataSource>()),
-  );
-
   // ClubPoint data source
   sl.registerLazySingleton<ClubPointDataSource>(
     () => ClubPointDataSourceImpl(sl<ApiProvider>()),
@@ -630,3 +634,4 @@ Future<void> setupDependencies() async {
     () => BusinessSettingsService(),
   );
 }
+

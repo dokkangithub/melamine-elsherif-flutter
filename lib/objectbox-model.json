@@ -209,7 +209,7 @@
           "name": "productId",
           "type": 11,
           "flags": 520,
-          "indexId": "6:4069748724318163954",
+          "indexId": "7:2071029441306199466",
           "relationTarget": "ProductEntity"
         },
         {
@@ -249,10 +249,161 @@
         }
       ],
       "relations": []
+    },
+    {
+      "id": "5:75256651470345789",
+      "lastPropertyId": "5:140532944370020962",
+      "name": "SetProductCollectionEntity",
+      "properties": [
+        {
+          "id": "1:5948486492779826352",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:4402176182304737212",
+          "name": "collectionType",
+          "type": 9
+        },
+        {
+          "id": "3:8024429530676212170",
+          "name": "page",
+          "type": 6
+        },
+        {
+          "id": "4:2591584715713854128",
+          "name": "totalPages",
+          "type": 6
+        },
+        {
+          "id": "5:140532944370020962",
+          "name": "timestamp",
+          "type": 10
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "6:4686267185390874861",
+      "lastPropertyId": "21:5950924827491299167",
+      "name": "SetProductEntity",
+      "properties": [
+        {
+          "id": "1:1446513566208531704",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:3069899723645343592",
+          "name": "setProductId",
+          "type": 6
+        },
+        {
+          "id": "3:4631919926901680491",
+          "name": "name",
+          "type": 9
+        },
+        {
+          "id": "4:8626841771148667334",
+          "name": "slug",
+          "type": 9
+        },
+        {
+          "id": "5:681225881389745572",
+          "name": "description",
+          "type": 9
+        },
+        {
+          "id": "6:3928356945678449415",
+          "name": "fullSetPrice",
+          "type": 6
+        },
+        {
+          "id": "7:7836722684664207112",
+          "name": "hasDiscount",
+          "type": 1
+        },
+        {
+          "id": "8:4172829610031103777",
+          "name": "discount",
+          "type": 9
+        },
+        {
+          "id": "9:9160476089554570880",
+          "name": "mainPrice",
+          "type": 9
+        },
+        {
+          "id": "10:4177955080616639602",
+          "name": "discountedPrice",
+          "type": 9
+        },
+        {
+          "id": "11:8404174426487224003",
+          "name": "calculablePrice",
+          "type": 6
+        },
+        {
+          "id": "12:3921196799415188029",
+          "name": "thumbnailImage",
+          "type": 9
+        },
+        {
+          "id": "13:5669817167617969412",
+          "name": "mainCategoryId",
+          "type": 6
+        },
+        {
+          "id": "14:3851088205061439550",
+          "name": "mainCategoryName",
+          "type": 9
+        },
+        {
+          "id": "15:3021287921222937209",
+          "name": "componentCount",
+          "type": 6
+        },
+        {
+          "id": "16:7887991490410957751",
+          "name": "published",
+          "type": 1
+        },
+        {
+          "id": "17:6264187060238851480",
+          "name": "approved",
+          "type": 1
+        },
+        {
+          "id": "18:3811286192340397030",
+          "name": "createdAt",
+          "type": 10
+        },
+        {
+          "id": "19:5714055337165355458",
+          "name": "updatedAt",
+          "type": 10
+        },
+        {
+          "id": "20:8478605236907332985",
+          "name": "timestamp",
+          "type": 10
+        },
+        {
+          "id": "21:5950924827491299167",
+          "name": "collectionId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "8:4767468883453088849",
+          "relationTarget": "SetProductCollectionEntity"
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "4:6191226038099156628",
-  "lastIndexId": "6:4069748724318163954",
+  "lastEntityId": "6:4686267185390874861",
+  "lastIndexId": "8:4767468883453088849",
   "lastRelationId": "4:5158101576197910839",
   "lastSequenceId": "0:0",
   "modelVersion": 5,
@@ -263,7 +414,8 @@
     6939879753518239501,
     5170633160563148609,
     1404418803750877277,
-    1397916786979179608
+    1397916786979179608,
+    4069748724318163954
   ],
   "retiredPropertyUids": [
     905316272912219989
