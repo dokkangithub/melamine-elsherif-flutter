@@ -41,7 +41,7 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.melamine.elsherif</string>
+				<string>com.melamine_elsherif</string>
 			</array>
 		</dict>
 	</array>

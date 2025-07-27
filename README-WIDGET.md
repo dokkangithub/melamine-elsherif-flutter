@@ -48,7 +48,7 @@ The Android widget uses the AppWidgetManager and HomeWidget integration:
 ### iOS Setup
 
 1. Enable App Groups in your app's capabilities
-2. Set the App Group ID to `group.com.melamine.elsherif.widget`
+2. Set the App Group ID to `group.com.melamine_elsherif.widget`
 3. Create a new Widget Extension target in Xcode
 4. Add the Swift files from the `ios/ProductWidget` directory
 

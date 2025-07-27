@@ -1,4 +1,4 @@
-package com.melamine.elsherif
+package com.melamine_elsherif
 
 import io.flutter.embedding.android.FlutterActivity
 

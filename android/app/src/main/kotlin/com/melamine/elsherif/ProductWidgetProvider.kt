@@ -1,4 +1,4 @@
-package com.melamine.elsherif
+package com.melamine_elsherif
 
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
@@ -98,7 +98,7 @@ class ProductWidgetProvider : AppWidgetProvider() {
             val prefLocations = listOf(
                 HOME_WIDGET_DATA_PREF,                      // home_widget default
                 "home_widget_data",                         // alternative home_widget location
-                "com.melamine.elsherif.home_widget",        // app-specific home_widget
+                "com.melamine_elsherif.home_widget",        // app-specific home_widget
                 FLUTTER_SHARED_PREFS                        // flutter shared prefs
             )
             

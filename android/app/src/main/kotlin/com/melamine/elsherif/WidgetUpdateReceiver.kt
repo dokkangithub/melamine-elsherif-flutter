@@ -1,4 +1,4 @@
-package com.melamine.elsherif
+package com.melamine_elsherif
 
 import android.appwidget.AppWidgetManager
 import android.content.BroadcastReceiver
@@ -16,7 +16,7 @@ import android.util.Log
 class WidgetUpdateReceiver : BroadcastReceiver() {
     companion object {
         private const val TAG = "WidgetUpdateReceiver"
-        const val ACTION_UPDATE_WIDGET = "com.melamine.elsherif.UPDATE_WIDGET"
+        const val ACTION_UPDATE_WIDGET = "com.melamine_elsherif.UPDATE_WIDGET"
     }
 
     override fun onReceive(context: Context, intent: Intent) {

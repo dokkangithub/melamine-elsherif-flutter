@@ -12,7 +12,7 @@ struct Product: Codable {
 
 // Timeline Provider to handle data loading and refresh
 struct ProductTimelineProvider: TimelineProvider {
-    let sharedUserDefaults = UserDefaults(suiteName: "group.com.melamine.elsherif.widget")
+    let sharedUserDefaults = UserDefaults(suiteName: "group.com.melamine_elsherif.widget")
     
     func placeholder(in context: Context) -> ProductEntry {
         return ProductEntry(date: Date(), product: placeholderProduct)

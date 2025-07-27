@@ -23,7 +23,7 @@ class WidgetService {
   // Initialize the widget service
   Future<void> initialize() async {
     // Initialize HomeWidget with your group ID (important for iOS)
-    await HomeWidget.setAppGroupId('group.com.melamine.elsherif.widget');
+    await HomeWidget.setAppGroupId('group.com.melamine_elsherif.widget');
     
     // Register for widget clicks
     await registerInteractivity();
