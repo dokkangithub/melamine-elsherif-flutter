@@ -20,6 +20,7 @@ class ProductEntity {
   bool hasVariation = false;
   int stockQuantity = 0;
   int currentStock = 0;
+  bool setProduct = false;
   dynamic rating = 0;
   int ratingCount = 0;
   int sales = 0;
@@ -52,6 +53,7 @@ class ProductEntity {
     required this.rating,
     required this.ratingCount,
     required this.sales,
+    required this.setProduct,
     required this.details,
     required this.timestamp,
   });
@@ -62,6 +64,7 @@ class ProductEntity {
       productId: model.id,
       slug: model.slug,
       name: model.name,
+      setProduct: model.setProduct,
       mainCategoryId: model.mainCategoryId is int ? model.mainCategoryId : 0,
       mainCategoryName: model.mainCategoryName,
       thumbnailImage: model.thumbnailImage,
@@ -107,6 +110,7 @@ class ProductEntity {
       id: productId,
       slug: slug,
       name: name,
+      setProduct: setProduct,
       mainCategoryId: mainCategoryId,
       mainCategoryName: mainCategoryName,
       categories: categoryModels,

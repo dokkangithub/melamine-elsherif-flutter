@@ -9,6 +9,7 @@ class Product extends Equatable {
   final List<Category> categories;
   final String thumbnailImage;
   final bool hasDiscount;
+  final bool setProduct;
   final String discount;
   final String mainPrice;
   final String discountedPrice;
@@ -25,6 +26,7 @@ class Product extends Equatable {
   const Product({
     required this.id,
     required this.slug,
+    required this.setProduct,
     required this.name,
     required this.mainCategoryId,
     required this.mainCategoryName,
@@ -64,6 +66,7 @@ class Product extends Equatable {
     currentStock,
     stock,
     rating,
+    setProduct,
     ratingCount,
     sales,
     links,

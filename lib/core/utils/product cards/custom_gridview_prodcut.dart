@@ -49,6 +49,11 @@ class _ProductGridCardState extends State<ProductGridCard> {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
+        widget.product.setProduct?AppRoutes.navigateTo(
+          context,
+          AppRoutes.setProductDetailsScreen,
+          arguments: {'slug': widget.product.slug},
+        ):
         AppRoutes.navigateTo(
           context,
           AppRoutes.productDetailScreen,

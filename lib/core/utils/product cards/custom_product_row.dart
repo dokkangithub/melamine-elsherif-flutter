@@ -43,6 +43,11 @@ class _ProductItemInRow1State extends State<ProductItemInRow1> {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
+        widget.product.setProduct?AppRoutes.navigateTo(
+          context,
+          AppRoutes.setProductDetailsScreen,
+          arguments: {'slug': widget.product.slug},
+        ):
         AppRoutes.navigateTo(
           context,
           AppRoutes.productDetailScreen,

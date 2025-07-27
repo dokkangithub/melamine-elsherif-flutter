@@ -19,6 +19,7 @@ class ProductModel extends entity.Product {
     required super.currentStock,
     required super.stock,
     required super.rating,
+    required super.setProduct,
     required super.ratingCount,
     required super.sales,
     required super.links,
@@ -29,6 +30,7 @@ class ProductModel extends entity.Product {
       id: json['id'] ?? 0,
       slug: json['slug'] ?? '',
       name: json['name'] ?? '',
+      setProduct: json['set_product'],
       mainCategoryId: json['main_category_id'] ?? 0,
       mainCategoryName: json['main_category_name'] ?? '',
       categories: json['categories'] is List

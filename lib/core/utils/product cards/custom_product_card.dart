@@ -65,6 +65,11 @@ class _ProductCardState extends State<ProductCard> {
         splashColor: Colors.transparent,
         highlightColor: Colors.transparent,
         onTap: () {
+          widget.product.setProduct?AppRoutes.navigateTo(
+            context,
+            AppRoutes.setProductDetailsScreen,
+            arguments: {'slug': widget.product.slug},
+          ):
           AppRoutes.navigateTo(
             context,
             AppRoutes.productDetailScreen,

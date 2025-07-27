@@ -45,6 +45,11 @@ class CustomProductCardForAllProducts extends StatelessWidget {
 
     return InkWell(
       onTap: () {
+        product.setProduct?AppRoutes.navigateTo(
+          context,
+          AppRoutes.setProductDetailsScreen,
+          arguments: {'slug': product.slug},
+        ):
         AppRoutes.navigateTo(
           context,
           AppRoutes.productDetailScreen,
