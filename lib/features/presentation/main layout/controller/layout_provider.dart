@@ -11,9 +11,12 @@ class LayoutProvider extends ChangeNotifier {
   bool _isLoading = false;
   final bool _isDrawerOpen = false;
   late List<Widget> _mainScreens;
-  
+
   // Track if we're coming from a "Buy Now" action to optimize cart loading
   bool _skipCartDataReload = false;
+
+  // Callback to notify external components (like PageController) about index changes
+  VoidCallback? _onIndexChanged;
 
   // Initialize screens once
   LayoutProvider() {
@@ -37,38 +40,44 @@ class LayoutProvider extends ChangeNotifier {
   List<Widget> get mainScreens => _mainScreens;
   bool get skipCartDataReload => _skipCartDataReload;
 
+  // Set callback for external components to listen to index changes
+  void setOnIndexChangedCallback(VoidCallback callback) {
+    _onIndexChanged = callback;
+  }
+
   void setCurrentIndex(int index) {
+    if (_currentIndex == index) return; // Prevent unnecessary updates
+
     _currentIndex = index;
-    
+
     // Reset the flag when changing to any tab other than cart
     if (index != 3) {
       _skipCartDataReload = false;
     }
-    
+
     // Update screens with new active state
     _updateMainScreens();
+
+    // Notify external listeners (like PageController)
+    _onIndexChanged?.call();
+
     notifyListeners();
   }
 
   set currentIndex(int index) {
-    _currentIndex = index;
-    
-    // Reset the flag when changing to any tab other than cart
-    if (index != 3) {
-      _skipCartDataReload = false;
-    }
-    
-    // Update screens with new active state
-    _updateMainScreens();
-    notifyListeners();
+    setCurrentIndex(index);
   }
-  
+
   /// Navigate to cart tab after adding product via Buy Now
   /// This will skip unnecessary data reloading
   void navigateToCartFromBuyNow() {
     _skipCartDataReload = true;
     _currentIndex = 3; // Cart tab index
     _updateMainScreens(); // Update screens with new active state
+
+    // Notify external listeners (like PageController)
+    _onIndexChanged?.call();
+
     notifyListeners();
   }
 
