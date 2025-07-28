@@ -1,4 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:melamine_elsherif/core/services/widget_service.dart';
@@ -65,18 +66,46 @@ Future<void> checkAndGenerateTempUserId() async {
   }
 }
 
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
+
+Future<void> getAndPrintFcmToken() async {
+  try {
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+    // Request permission on iOS and Android 13+
+    NotificationSettings settings = await messaging.requestPermission(
+      alert: true,
+      badge: true,
+      sound: true,
+    );
+    FirebaseMessaging.instance.subscribeToTopic("all_devices");
+
+    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+      String? token = await messaging.getToken();
+      if (token != null) {
+        print('✅ FCM Token: $token');
+      } else {
+        print('⚠️ Failed to get FCM token');
+      }
+    } else {
+      print('❌ Notifications permission not granted');
+    }
+  } catch (e) {
+    print('❗ Error getting FCM token: $e');
+  }
+}
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
+  await getAndPrintFcmToken();
   // Set system UI overlay style for the entire app using our helper
   UIHelper.setTransparentStatusBar();
   
   await SharedPrefs.init();
   await setupDependencies();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-// Initialize notifications
   final notificationRouter = NotificationRouter(
-    navigatorKey: GlobalKey<NavigatorState>(), // You need to create and use this key
+    navigatorKey: navigatorKey, // Use the global key
   );
   final notificationManager = NotificationManager(router: notificationRouter);
   await notificationManager.initialize();
@@ -129,7 +158,6 @@ Future<void> main() async {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key, required this.route});
-  static final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
   final String route;
 

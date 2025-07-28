@@ -190,9 +190,9 @@ Future<void> setupDependencies() async {
         () => NotificationService(),
   );
 
-  sl.registerLazySingleton<NotificationRouter>(
-        () => NotificationRouter(navigatorKey: MyApp.navigatorKey),
-  );
+  // sl.registerLazySingleton<NotificationRouter>(
+  //       () => NotificationRouter(navigatorKey: MyApp.navigatorKey),
+  // );
 
   sl.registerLazySingleton<NotificationManager>(
         () => NotificationManager(
