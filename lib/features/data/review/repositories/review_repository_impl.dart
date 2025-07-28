@@ -13,7 +13,7 @@ class ReviewRepositoryImpl implements ReviewRepository {
   }
 
   @override
-  Future<bool> submitReview(int productId, double rating, String comment) {
+  Future<Map<String, dynamic>> submitReview(int productId, double rating, String comment) {
     return remoteDataSource.submitReview(productId, rating, comment);
   }
 }

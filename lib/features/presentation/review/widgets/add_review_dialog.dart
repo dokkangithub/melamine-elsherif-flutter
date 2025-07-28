@@ -29,7 +29,7 @@ class _AddReviewDialogState extends State<AddReviewDialog> {
     reviewController.dispose();
     super.dispose();
   }
-  
+
   @override
   void initState() {
     super.initState();
@@ -57,7 +57,7 @@ class _AddReviewDialogState extends State<AddReviewDialog> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                         Text(
+                        Text(
                           'rate_this_product'.tr(context),
                           style: context.headlineMedium,
                         ),
@@ -104,8 +104,8 @@ class _AddReviewDialogState extends State<AddReviewDialog> {
                     ),
                     const SizedBox(height: 20),
                     CustomButton(
-                      onPressed: isSubmitting ? null : _submitReview,
-                      text: 'submit'.tr(context),
+                      onPressed: isSubmitting ? null : () => _submitReview(setState),
+                      text: isSubmitting ? 'submitting'.tr(context) : 'submit'.tr(context),
                       fullWidth: true,
                     ),
                     const SizedBox(height: 12),
@@ -128,7 +128,7 @@ class _AddReviewDialogState extends State<AddReviewDialog> {
     );
   }
 
-  Future<void> _submitReview() async {
+  Future<void> _submitReview(StateSetter setState) async {
     if (rating <= 0 || reviewController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -144,16 +144,28 @@ class _AddReviewDialogState extends State<AddReviewDialog> {
     });
 
     try {
-      final success = await Provider.of<ReviewProvider>(context, listen: false)
+      final result = await Provider.of<ReviewProvider>(context, listen: false)
           .submitNewReview(widget.productId, rating.toDouble(), reviewController.text);
-
-      if (success) {
+      if (result['result'] == true) {
         Navigator.pop(context);
         Navigator.pop(context);
-        CustomToast.showToast(message: 'review_submitted_successfully'.tr(context),type: ToastType.success);
+        CustomToast.showToast(
+          message: 'review_submitted_successfully'.tr(context),
+          type: ToastType.success,
+        );
       } else {
-        CustomToast.showToast(message: 'failed_to_submit_review'.tr(context),type: ToastType.error);
+        // Show the specific error message from the API
+        final errorMessage = result['message'] ?? 'failed_to_submit_review'.tr(context);
+        CustomToast.showToast(
+          message: errorMessage,
+          type: ToastType.error,
+        );
       }
+    } catch (e) {
+      CustomToast.showToast(
+        message: 'an_error_occurred'.tr(context),
+        type: ToastType.error,
+      );
     } finally {
       if (mounted) {
         setState(() {
@@ -165,8 +177,6 @@ class _AddReviewDialogState extends State<AddReviewDialog> {
 
   @override
   Widget build(BuildContext context) {
-    // The dialog is shown via _showAddReviewDialog in initState
-    // This scaffold is just a container
     return const Scaffold(
       backgroundColor: Colors.transparent,
       body: SizedBox(),

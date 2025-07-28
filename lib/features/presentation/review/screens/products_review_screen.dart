@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:melamine_elsherif/core/config/themes.dart/theme.dart';
 import 'package:melamine_elsherif/core/utils/extension/text_theme_extension.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_loading.dart';
+import 'package:melamine_elsherif/core/utils/widgets/custom_dilog.dart';
+import 'package:melamine_elsherif/core/utils/constants/app_strings.dart';
+import 'package:melamine_elsherif/core/config/routes.dart/routes.dart';
 import 'package:provider/provider.dart';
 import '../../../../core/utils/enums/loading_state.dart';
 import '../../../../core/utils/extension/translate_extension.dart';
@@ -67,7 +70,7 @@ class _AllReviewsScreenState extends State<AllReviewsScreen> {
       ),
       body: _buildBody(),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => _showAddReviewDialog(),
+        onPressed: () => _checkAuthAndShowReviewDialog(),
         child: const Icon(Icons.rate_review),
       ),
     );
@@ -127,7 +130,7 @@ class _AllReviewsScreenState extends State<AllReviewsScreen> {
           ),
           const SizedBox(height: 16),
           CustomButton(
-            onPressed: _showAddReviewDialog,
+            onPressed: _checkAuthAndShowReviewDialog,
             child: Text(
               'write_first_review'.tr(context),
               textAlign: TextAlign.center,
@@ -147,7 +150,7 @@ class _AllReviewsScreenState extends State<AllReviewsScreen> {
       controller: _scrollController,
       padding: const EdgeInsets.all(16),
       itemCount:
-          reviewProvider.reviews.length +
+      reviewProvider.reviews.length +
           (reviewProvider.isLoadingMore ? 1 : 0),
       itemBuilder: (context, index) {
         if (index == reviewProvider.reviews.length) {
@@ -164,6 +167,90 @@ class _AllReviewsScreenState extends State<AllReviewsScreen> {
       },
     );
   }
+
+  void _checkAuthAndShowReviewDialog() {
+    // Check if user is logged in
+    if (AppStrings.userId == null || AppStrings.userId!.isEmpty) {
+      _showLoginRequiredDialog();
+    } else {
+      _showAddReviewDialog();
+    }
+  }
+
+  void _showLoginRequiredDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => Dialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                'login_required'.tr(context),
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 16),
+              Text(
+                'you_need_to_login_to_write_review'.tr(context),
+                style: const TextStyle(fontSize: 16),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 24),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text(
+                      'cancel'.tr(context),
+                      style: TextStyle(
+                        color: Colors.grey[600],
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      AppRoutes.navigateToAndRemoveUntil(context, AppRoutes.login);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(0),
+                      ),
+                    ),
+                    child: Text(
+                      'login'.tr(context),
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
 
   void _showAddReviewDialog() {
     showDialog(

@@ -54,19 +54,22 @@ class ReviewProvider extends ChangeNotifier {
     }
   }
 
-  Future<bool> submitNewReview(int productId, double rating, String comment) async {
+  Future<Map<String, dynamic>> submitNewReview(int productId, double rating, String comment) async {
     try {
       reviewState = LoadingState.loading;
       notifyListeners();
 
-      final success = await submitReview(productId, rating, comment);
-      if (success) {
+      final result = await submitReview(productId, rating, comment);
+      if (result['result'] == true) {
         await fetchReviews(productId);
       }
-      return success;
+      return result;
     } catch (e) {
       reviewError = e.toString();
-      return false;
+      return {
+        'result': false,
+        'message': 'An error occurred while submitting review',
+      };
     } finally {
       reviewState = LoadingState.loaded;
       notifyListeners();

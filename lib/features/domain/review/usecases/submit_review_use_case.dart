@@ -5,7 +5,7 @@ class SubmitReviewUseCase {
 
   SubmitReviewUseCase(this.repository);
 
-  Future<bool> call(int productId, double rating, String comment) async {
+  Future<Map<String, dynamic>> call(int productId, double rating, String comment) async {
     return await repository.submitReview(productId, rating, comment);
   }
 }
