@@ -8,6 +8,8 @@
   "login": "LOGIN",
   "Password": "Password",
   "customize_yours": "Customize Yours",
+  "add_full_set": "Add Full Set",
+  "add_custom_set": "Add Custom Set",
   "no_data_found": "No data found",
   "login_required": "Login Required",
   "you_need_to_login_to_write_review": "You need to log in to write a review",

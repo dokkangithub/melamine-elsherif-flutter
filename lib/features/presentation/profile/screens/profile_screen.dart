@@ -9,7 +9,6 @@ import 'package:melamine_elsherif/core/utils/widgets/custom_button.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_cached_image.dart';
 import 'package:melamine_elsherif/core/utils/widgets/language_switcher.dart';
 import 'package:melamine_elsherif/features/presentation/main%20layout/controller/layout_provider.dart';
-import 'package:melamine_elsherif/features/presentation/wallet/controller/wallet_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../../core/config/routes.dart/routes.dart';
@@ -22,9 +21,7 @@ import '../../auth/controller/auth_provider.dart';
 import '../../auth/screens/login_screen.dart';
 import '../../club_point/controller/club_point_provider.dart';
 import '../controller/profile_provider.dart';
-import '../widgets/profile_menu_item.dart';
 import '../../../../core/utils/widgets/premium_language_dialog.dart';
-import 'package:radial_button/widget/circle_floating_button.dart';
 
 class ProfileScreen extends StatefulWidget {
   final bool isActive;
@@ -67,11 +64,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     final profileProvider = Provider.of<ProfileProvider>(context);
-    final clubPointProvider = Provider.of<ClubPointProvider>(context);
-    final counters = profileProvider.profileCounters;
+
     final isLoggedIn = AppStrings.token != null;
-    final isLoadingCounters =
-        profileProvider.countersState == LoadingState.loading;
 
     // For non-logged-in users, create a completely different layout
     if (!isLoggedIn) {
@@ -243,7 +237,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               AppRoutes.navigateTo(context, AppRoutes.login);
             },
             fullWidth: true,
-            height: 50,
+            height: 54,
             child: Text(
               textAlign: TextAlign.center,
               'sign_in'.tr(context),
@@ -260,6 +254,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24),
           child: CustomButton(
+            height: 54,
             onPressed: () {
               AppRoutes.navigateTo(context, AppRoutes.signUp);
             },
@@ -544,48 +539,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget _buildStatItem(
-      BuildContext context,
-      String value,
-      String label,
-      String icon,
-      ) {
-    return Column(
-      children: [
-        CustomImage(assetPath: icon),
-        const SizedBox(height: 4),
-        Text(
-          value,
-          style: context.titleLarge.copyWith(fontWeight: FontWeight.bold),
-        ),
-        const SizedBox(height: 4),
-        Text(label, style: context.bodySmall.copyWith(color: Colors.grey[600])),
-      ],
-    );
-  }
-
-  Widget _buildQuickAccessItem(
-      BuildContext context,
-      String icon,
-      String label,
-      VoidCallback onTap,
-      ) {
-    return InkWell(
-      onTap: onTap,
-      child: Container(
-        alignment: Alignment.center,
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(borderRadius: BorderRadius.circular(0),color: AppTheme.primaryColor.withValues(alpha: 0.1)),
-        child: Row(
-          children: [
-            CustomImage(assetPath: icon),
-            const SizedBox(width: 10),
-            Expanded(child: Text(label, style: context.titleMedium.copyWith(fontWeight: FontWeight.w700))),
-          ],
-        ),
-      ),
-    );
-  }
 
   void _showLogoutConfirmation(BuildContext context) {
     final navigatorContext = context;
@@ -1086,4 +1039,5 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
     );
   }
+
 }
