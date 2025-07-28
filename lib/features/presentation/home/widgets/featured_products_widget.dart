@@ -12,8 +12,61 @@ import 'package:melamine_elsherif/features/presentation/home/widgets/featured_pr
 
 import '../../../../core/utils/product cards/custom_product_card.dart';
 
-class FeaturedProductsWidget extends StatelessWidget {
+class FeaturedProductsWidget extends StatefulWidget {
   const FeaturedProductsWidget({super.key});
+
+  @override
+  State<FeaturedProductsWidget> createState() => _FeaturedProductsWidgetState();
+}
+
+class _FeaturedProductsWidgetState extends State<FeaturedProductsWidget>
+    with SingleTickerProviderStateMixin {
+  late ScrollController _scrollController;
+  late AnimationController _fadeController;
+  late Animation<double> _fadeAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _scrollController = ScrollController();
+
+    _fadeController = AnimationController(
+      duration: const Duration(milliseconds: 800),
+      vsync: this,
+    );
+
+    _fadeAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(
+      parent: _fadeController,
+      curve: Curves.easeOut,
+    ));
+
+    // Auto-scroll to center the first few cards initially
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_scrollController.hasClients) {
+        _scrollController.animateTo(
+          20.0, // Small offset to trigger initial animation
+          duration: const Duration(milliseconds: 500),
+          curve: Curves.easeOut,
+        );
+      }
+    });
+
+    // Start fade animation
+    Future.delayed(const Duration(milliseconds: 200), () {
+      if (mounted) _fadeController.forward();
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    _fadeController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,42 +89,59 @@ class FeaturedProductsWidget extends StatelessWidget {
         if (products.isEmpty) {
           return _buildEmptyState();
         }
-        final filteredProducts = products.where((product) => product.published.toString() == '1').toList();
 
-        // Show products list
-        return Padding(
-          padding: const EdgeInsets.only(top: 16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SeeAllWidget(
-                title: 'featured_collection'.tr(context),
-                onTap: () {
-                  AppRoutes.navigateTo(
-                    context,
-                    AppRoutes.allProductsByTypeScreen,
-                    arguments: {
-                      'productType': ProductType.featured,
-                      'title': 'featured_collection'.tr(context),
+        final filteredProducts = products
+            .where((product) => product.published.toString() == '1')
+            .toList();
+
+        // Show products list with scroll-based animation
+        return FadeTransition(
+          opacity: _fadeAnimation,
+          child: Padding(
+            padding: const EdgeInsets.only(top: 16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Header
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: SeeAllWidget(
+                    title: 'featured_collection'.tr(context),
+                    onTap: () {
+                      AppRoutes.navigateTo(
+                        context,
+                        AppRoutes.allProductsByTypeScreen,
+                        arguments: {
+                          'productType': ProductType.featured,
+                          'title': 'featured_collection'.tr(context),
+                        },
+                      );
                     },
-                  );
-                },
-              ),
-              const SizedBox(height: 10),
-              SizedBox(
-                height: 330,
-                child: ListView.builder(
-                  padding: const EdgeInsets.only(left: 16.0),
-                  scrollDirection: Axis.horizontal,
-                  itemCount: filteredProducts.length,
-                  itemBuilder: (context, index) => 
-                    FeaturedProductCard(
+                  ),
+                ),
+                const SizedBox(height: 10),
+
+                // Scroll-animated products list
+                SizedBox(
+                  height: 330,
+                  child: ListView.builder(
+                    controller: _scrollController,
+                    padding: const EdgeInsets.only(left: 16.0, right: 16.0),
+                    scrollDirection: Axis.horizontal,
+                    physics: const BouncingScrollPhysics(
+                      parent: AlwaysScrollableScrollPhysics(),
+                    ),
+                    itemCount: filteredProducts.length,
+                    itemBuilder: (context, index) => FeaturedProductCard(
                       product: filteredProducts[index],
+                      scrollController: _scrollController,
+                      index: index,
                       width: 250,
                     ),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         );
       },
