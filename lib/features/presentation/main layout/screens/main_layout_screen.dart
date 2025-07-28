@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import '../../../../core/config/themes.dart/theme.dart';
+import '../../../../core/utils/constants/app_strings.dart';
 import '../controller/layout_provider.dart';
 import '../../home/widgets/app_bar_widget.dart';
 import '../widgets/bottom_nav_bar_widget.dart';
@@ -55,6 +56,30 @@ class MainLayoutScreenState extends State<MainLayoutScreen> with SingleTickerPro
   void _onPageChanged(int index) {
     final provider = Provider.of<LayoutProvider>(context, listen: false);
 
+    // Skip wishlist if user is not authenticated
+    if (index == 2 && AppStrings.token == null) {
+      // Determine swipe direction
+      final currentIndex = provider.currentIndex;
+      int nextIndex;
+
+      if (currentIndex < 2) {
+        // Swiping right to left (forward), skip to cart (index 3)
+        nextIndex = 3;
+      } else {
+        // Swiping left to right (backward), skip to category (index 1)
+        nextIndex = 1;
+      }
+
+      // Navigate to the next valid screen without animation to avoid visual glitch
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (_pageController.hasClients) {
+          _pageController.jumpToPage(nextIndex);
+        }
+      });
+
+      return;
+    }
+
     // Add haptic feedback on page change
     HapticFeedback.lightImpact();
 
@@ -63,6 +88,11 @@ class MainLayoutScreenState extends State<MainLayoutScreen> with SingleTickerPro
 
   void _navigateToPage(int index) {
     if (!_pageController.hasClients) return;
+
+    // Skip wishlist if user is not authenticated and trying to navigate there
+    if (index == 2 && AppStrings.token == null) {
+      return;
+    }
 
     _pageController.animateToPage(
       index,
