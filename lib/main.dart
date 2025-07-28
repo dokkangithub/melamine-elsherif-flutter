@@ -92,6 +92,11 @@ Future<void> main() async {
     return AppRoutes.splash;
   }
 
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown, // Optional: allows upside-down portrait
+  ]);
+
   runApp(
     MultiProvider(
       providers: [
