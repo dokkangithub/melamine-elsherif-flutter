@@ -15,6 +15,9 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
+
+        // ✅ REQUIRED: Enable desugaring for Java 8+ APIs (used by flutter_local_notifications)
+        isCoreLibraryDesugaringEnabled = true
     }
 
     kotlinOptions {
@@ -31,16 +34,12 @@ android {
 
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig = signingConfigs.getByName("debug")
         }
     }
 
-    // Add configuration to resolve duplicate class conflicts
     configurations.all {
         resolutionStrategy {
-            // Force a specific version of androidx.work to resolve conflicts
             force("androidx.work:work-runtime:2.8.1")
             force("androidx.work:work-runtime-ktx:2.8.1")
         }
@@ -50,10 +49,15 @@ android {
 dependencies {
     // Kotlin Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
-    // Material Components for Android
+
+    // Material Components
     implementation("com.google.android.material:material:1.11.0")
-    // Add explicit dependency on androidx.work
+
+    // WorkManager
     implementation("androidx.work:work-runtime-ktx:2.8.1")
+
+    // ✅ REQUIRED: Enable desugaring to avoid crash in flutter_local_notifications
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")
 }
 
 flutter {

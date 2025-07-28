@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'models/notification_models.dart';
 
 /// Router service for handling notification navigation
@@ -38,9 +39,12 @@ class NotificationRouter {
 
   /// Open URL (implement based on your URL handling strategy)
   Future<void> _openUrl(String url) async {
-    // Implement URL opening logic here
-    // You might want to use url_launcher package
-    debugPrint("Opening URL: $url");
+    final Uri uri = Uri.parse(url);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    } else {
+      debugPrint("Could not launch URL: $url");
+    }
   }
 
   /// Handle custom actions

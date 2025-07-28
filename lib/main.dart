@@ -16,6 +16,8 @@ import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'core/providers/localization/app_localizations.dart';
 import 'core/providers/localization/language_provider.dart';
+import 'core/services/notification/notification_manager.dart';
+import 'core/services/notification/notification_router.dart';
 import 'core/utils/local_storage/local_storage_keys.dart';
 import 'core/utils/local_storage/secure_storage.dart';
 import 'core/utils/local_storage/shared_pref.dart';
@@ -72,7 +74,12 @@ Future<void> main() async {
   await SharedPrefs.init();
   await setupDependencies();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-
+// Initialize notifications
+  final notificationRouter = NotificationRouter(
+    navigatorKey: GlobalKey<NavigatorState>(), // You need to create and use this key
+  );
+  final notificationManager = NotificationManager(router: notificationRouter);
+  await notificationManager.initialize();
   // Initialize widget service
   await WidgetService().initialize();
   
@@ -122,6 +129,7 @@ Future<void> main() async {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key, required this.route});
+  static final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
   final String route;
 
@@ -135,6 +143,7 @@ class MyApp extends StatelessWidget {
         return UIHelper.wrapWithStatusBarConfig(
           MaterialApp(
             title: AppConfig().appName,
+            navigatorKey: navigatorKey,
             debugShowCheckedModeBanner: false,
             theme: AppTheme.getTheme(languageProvider.locale.languageCode),
             themeMode: ThemeMode.light,

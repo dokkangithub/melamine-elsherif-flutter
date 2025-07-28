@@ -155,11 +155,16 @@ import '../../features/presentation/search/controller/search_provider.dart';
 import '../../features/presentation/set products/controller/set_product_provider.dart';
 import '../../features/presentation/slider/controller/provider.dart';
 import '../../features/presentation/wishlist/controller/wishlist_provider.dart';
+import '../../main.dart';
 import '../api/api_provider.dart';
 import '../config/app_config.dart/app_config.dart';
 import '../database/objectbox_store.dart';
 import '../database/timestamp_service.dart';
 import '../providers/localization/language_provider.dart';
+import '../services/notification/interfaces/notification_service_interface.dart';
+import '../services/notification/notification_manager.dart';
+import '../services/notification/notification_router.dart';
+import '../services/notification/notification_service.dart';
 import '../utils/local_storage/secure_storage.dart';
 import '../utils/local_storage/local_storage_keys.dart';
 import '../../features/di/wallet_injection.dart';
@@ -180,6 +185,21 @@ Future<void> setupDependencies() async {
   final objectBox = await ObjectBox.create();
   sl.registerSingleton<ObjectBox>(objectBox);
   sl.registerLazySingleton<TimestampService>(() => TimestampService());
+
+  sl.registerLazySingleton<INotificationService>(
+        () => NotificationService(),
+  );
+
+  sl.registerLazySingleton<NotificationRouter>(
+        () => NotificationRouter(navigatorKey: MyApp.navigatorKey),
+  );
+
+  sl.registerLazySingleton<NotificationManager>(
+        () => NotificationManager(
+      notificationService: sl<INotificationService>(),
+      router: sl<NotificationRouter>(),
+    ),
+  );
 
   // Core
   sl.registerLazySingleton<AppConfig>(() => AppConfig());
