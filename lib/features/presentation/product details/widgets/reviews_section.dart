@@ -6,6 +6,8 @@ import 'package:melamine_elsherif/core/utils/extension/translate_extension.dart'
 import 'package:melamine_elsherif/core/utils/widgets/custom_button.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_cached_image.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_loading.dart';
+import 'package:melamine_elsherif/core/utils/constants/app_strings.dart';
+import 'package:melamine_elsherif/core/config/routes.dart/routes.dart';
 import 'package:provider/provider.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import '../../../../core/utils/enums/loading_state.dart';
@@ -59,8 +61,8 @@ class _ReviewsSectionWidgetState extends State<ReviewsSectionWidget> {
                     child: Text(
                       'see_all_reviews'.tr(context),
                       style: context.bodyLarge!.copyWith(
-                        color: AppTheme.primaryColor,
-                        fontWeight: FontWeight.w700
+                          color: AppTheme.primaryColor,
+                          fontWeight: FontWeight.w700
                       ),
                     ),
                   ),
@@ -156,34 +158,98 @@ class _ReviewsSectionWidgetState extends State<ReviewsSectionWidget> {
   Widget _buildWriteReviewButton() {
     return CustomButton(
       text: 'write_review'.tr(context),
-      onPressed: () => _showAnimatedReviewDialog(),
+      onPressed: () => _checkAuthAndShowReviewDialog(),
     );
   }
 
-  void _showAnimatedReviewDialog() {
-    showGeneralDialog(
+  void _checkAuthAndShowReviewDialog() {
+    // Check if user is logged in
+    if (AppStrings.userId == null || AppStrings.userId!.isEmpty) {
+      _showLoginRequiredDialog();
+    } else {
+      _showAddReviewDialog();
+    }
+  }
+
+  void _showLoginRequiredDialog() {
+    showDialog(
       context: context,
-      barrierDismissible: true,
-      barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
-      barrierColor: Colors.black.withValues(alpha: 0.5),
-      transitionDuration: const Duration(milliseconds: 300),
-      pageBuilder: (context, animation1, animation2) {
-        return const SizedBox.shrink();
-      },
-      transitionBuilder: (context, animation, secondaryAnimation, child) {
-        return SlideTransition(
-          position: Tween<Offset>(
-            begin: const Offset(0, -1),
-            end: Offset.zero,
-          ).animate(
-            CurvedAnimation(
-              parent: animation,
-              curve: Curves.easeOut,
-            ),
+      builder: (context) => Dialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
           ),
-          child: AddReviewDialog(productId: widget.productId),
-        );
-      },
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                'login_required'.tr(context),
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 16),
+              Text(
+                'you_need_to_login_to_write_review'.tr(context),
+                style: const TextStyle(fontSize: 16),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 24),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text(
+                      'cancel'.tr(context),
+                      style: TextStyle(
+                        color: Colors.grey[600],
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      AppRoutes.navigateToAndRemoveUntil(context, AppRoutes.login);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(0),
+                      ),
+                    ),
+                    child: Text(
+                      'login'.tr(context),
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
+
+  void _showAddReviewDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AddReviewDialog(productId: widget.productId),
+    );
+  }
+
 }

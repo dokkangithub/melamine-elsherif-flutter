@@ -9,6 +9,8 @@
   "Password": "Password",
   "customize_yours": "Customize Yours",
   "no_data_found": "No data found",
+  "login_required": "Login Required",
+  "you_need_to_login_to_write_review": "You need to log in to write a review",
   "full_set": "Full Set",
   "custom_set": "Custom Set",
   "components": "Components",

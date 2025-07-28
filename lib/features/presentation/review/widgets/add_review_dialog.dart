@@ -31,104 +31,86 @@ class _AddReviewDialogState extends State<AddReviewDialog> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _showAddReviewDialog();
-    });
-  }
-
-  void _showAddReviewDialog() {
-    showDialog(
-      context: context,
-      barrierDismissible: true,
-      builder: (BuildContext context) {
-        return StatefulBuilder(
-          builder: (context, setState) {
-            return Dialog(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16.0),
+  Widget build(BuildContext context) {
+    return Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16.0),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'rate_this_product'.tr(context),
+                  style: context.headlineMedium,
+                ),
+              ],
+            ),
+            const SizedBox(height: 30),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: List.generate(5, (index) {
+                return Expanded(
+                  child: InkWell(
+                    splashColor: Colors.transparent,
+                    highlightColor: Colors.transparent,
+                    child: Icon(
+                      Icons.star,
+                      color: index < rating ? Colors.amber : Colors.grey.shade200,
+                      size: 30,
+                    ),
+                    onTap: () {
+                      setState(() {
+                        rating = index + 1;
+                      });
+                    },
+                  ),
+                );
+              }),
+            ),
+            const SizedBox(height: 20),
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: Colors.grey.shade300),
               ),
-              child: Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'rate_this_product'.tr(context),
-                          style: context.headlineMedium,
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 30),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: List.generate(5, (index) {
-                        return Expanded(
-                          child: InkWell(
-                            splashColor: Colors.transparent,
-                            highlightColor: Colors.transparent,
-                            child: Icon(
-                              Icons.star,
-                              color: index < rating ? Colors.amber : Colors.grey.shade200,
-                              size: 30,
-                            ),
-                            onTap: () {
-                              setState(() {
-                                rating = index + 1;
-                              });
-                            },
-                          ),
-                        );
-                      }),
-                    ),
-                    const SizedBox(height: 20),
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                        border: Border.all(color: Colors.grey.shade300),
-                      ),
-                      child: TextField(
-                        controller: reviewController,
-                        maxLines: 4,
-                        decoration: InputDecoration(
-                          hintText: 'write_your_opinion_here'.tr(context),
-                          hintStyle: context.bodyLarge!.copyWith(color: AppTheme.darkDividerColor),
-                          border: InputBorder.none,
-                          contentPadding: const EdgeInsets.all(16),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    CustomButton(
-                      onPressed: isSubmitting ? null : () => _submitReview(setState),
-                      text: isSubmitting ? 'submitting'.tr(context) : 'submit'.tr(context),
-                      fullWidth: true,
-                    ),
-                    const SizedBox(height: 12),
-                    CustomButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                        Navigator.pop(context);
-                      },
-                      text: 'cancel'.tr(context),
-                      isOutlined: true,
-                      fullWidth: true,
-                    ),
-                  ],
+              child: TextField(
+                controller: reviewController,
+                maxLines: 4,
+                decoration: InputDecoration(
+                  hintText: 'write_your_opinion_here'.tr(context),
+                  hintStyle: context.bodyLarge!.copyWith(color: AppTheme.darkDividerColor),
+                  border: InputBorder.none,
+                  contentPadding: const EdgeInsets.all(16),
                 ),
               ),
-            );
-          },
-        );
-      },
+            ),
+            const SizedBox(height: 20),
+            CustomButton(
+              onPressed: isSubmitting ? null : _submitReview,
+              text: isSubmitting ? 'submitting'.tr(context) : 'submit'.tr(context),
+              fullWidth: true,
+            ),
+            const SizedBox(height: 12),
+            CustomButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              text: 'cancel'.tr(context),
+              isOutlined: true,
+              fullWidth: true,
+            ),
+          ],
+        ),
+      ),
     );
   }
 
-  Future<void> _submitReview(StateSetter setState) async {
+  Future<void> _submitReview() async {
     if (rating <= 0 || reviewController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -146,8 +128,8 @@ class _AddReviewDialogState extends State<AddReviewDialog> {
     try {
       final result = await Provider.of<ReviewProvider>(context, listen: false)
           .submitNewReview(widget.productId, rating.toDouble(), reviewController.text);
+
       if (result['result'] == true) {
-        Navigator.pop(context);
         Navigator.pop(context);
         CustomToast.showToast(
           message: 'review_submitted_successfully'.tr(context),
@@ -173,13 +155,5 @@ class _AddReviewDialogState extends State<AddReviewDialog> {
         });
       }
     }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return const Scaffold(
-      backgroundColor: Colors.transparent,
-      body: SizedBox(),
-    );
   }
 }

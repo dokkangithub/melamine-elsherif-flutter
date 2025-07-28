@@ -17,6 +17,8 @@
   "required": "مطلوب",
   "full_set_components": "مكونات المجموعة الكاملة",
   "selected_components": "المكونات المحددة",
+  "login_required": "تسجيل الدخول مطلوب",
+  "you_need_to_login_to_write_review": "يجب تسجيل الدخول لكتابة مراجعة",
   "anonymous": "مجهول",
   "egp": "جنيه",
   "out_of_stock": "غير متوفر حاليا",
