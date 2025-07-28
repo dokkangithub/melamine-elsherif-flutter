@@ -50,6 +50,7 @@ class RelatedProductsWidget extends StatelessWidget {
                     itemCount: provider.relatedProducts.length,
                     itemBuilder: (context, index) {
                       final product = provider.relatedProducts[index];
+                      print('rrrr${product.setProduct}');
                       return CustomProductCardForAllProducts(product: product);
                     },
                   ),

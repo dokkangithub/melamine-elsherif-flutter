@@ -558,7 +558,7 @@ class HomeProvider extends ChangeNotifier {
 
 
   // New method for Related Products
-  Future<void> fetchRelatedProducts(int productId,{bool refresh = false}) async {
+  Future<void> fetchRelatedProducts(int productId,{bool refresh = true}) async {
     try {
       relatedProductsState = LoadingState.loading;
       notifyListeners();

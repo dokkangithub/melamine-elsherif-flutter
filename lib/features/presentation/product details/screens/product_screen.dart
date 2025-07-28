@@ -16,6 +16,8 @@ import 'package:melamine_elsherif/features/presentation/product%20details/widget
 import 'package:melamine_elsherif/features/presentation/home/controller/home_provider.dart';
 import 'package:melamine_elsherif/features/presentation/review/controller/reviews_provider.dart';
 import 'package:provider/provider.dart';
+import '../../../../core/config/routes.dart/routes.dart';
+import '../../main layout/controller/layout_provider.dart';
 import '../../wishlist/controller/wishlist_provider.dart';
 import '../widgets/color_variants_widget.dart';
 import '../widgets/description_widget.dart';
@@ -48,7 +50,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         listen: false,
       );
       productProvider.fetchProductDetails(widget.slug).then((_) {
-        if (productProvider.selectedProduct != null) {
+
           final homeProvider = Provider.of<HomeProvider>(
             context,
             listen: false,
@@ -62,7 +64,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             listen: false,
           );
           reviewProvider.fetchReviews(productProvider.selectedProduct!.id);
-        }
+
       });
     });
 
@@ -145,7 +147,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     collapsedHeight: kToolbarHeight,
                     backgroundColor: AppTheme.white,
                     leading: _showAppBar 
-                      ? const CustomBackButton(respectDirection: true) 
+                      ? IconButton(onPressed: (){
+                      Provider.of<LayoutProvider>(context,listen: false).currentIndex=0;
+                      AppRoutes.navigateTo(context, AppRoutes.mainLayoutScreen);
+                    }, icon: const Icon(Icons.arrow_back_ios,color: AppTheme.primaryColor))
                       : const SizedBox.shrink(),
                     title: _showAppBar 
                       ? Text(
@@ -175,7 +180,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                 shape: BoxShape.circle,
                                 color: AppTheme.lightDividerColor.withValues(alpha: 0.6)
                               ),
-                                child: const CustomBackButton(respectDirection: true)),
+                                child: IconButton(onPressed: (){
+                                  Provider.of<LayoutProvider>(context,listen: false).currentIndex=0;
+                                  AppRoutes.navigateTo(context, AppRoutes.mainLayoutScreen);
+                                }, icon: const Icon(Icons.arrow_back_ios,color: AppTheme.primaryColor))),
                           ) : const SizedBox.shrink(),
                         ],
                       ),

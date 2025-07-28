@@ -101,7 +101,7 @@ class _ProductImageWidgetState extends State<ProductImageWidget> {
                           dotHeight: 8,
                           dotWidth: 8,
                           activeDotColor: Theme.of(context).primaryColor,
-                          dotColor: Colors.white.withOpacity(0.8),
+                          dotColor: Colors.white.withValues(alpha: 0.8),
                           spacing: 8,
                         ),
                         onDotClicked: (index) {
