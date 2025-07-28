@@ -51,20 +51,53 @@ class NotificationRouter {
   }
 
   Map<String, dynamic>? _processArguments(String route, Map<String, dynamic>? arguments) {
-    if (arguments == null) return null;
+    debugPrint('=== NOTIFICATION ROUTER DEBUG ===');
+    debugPrint('Route: $route');
+    debugPrint('Raw arguments: $arguments');
+
+    if (arguments == null) {
+      debugPrint('Arguments are null!');
+      return null;
+    }
+
+    debugPrint('Available argument keys: ${arguments.keys.toList()}');
 
     // Process arguments based on route requirements
     switch (route) {
       case '/product-details':
-        return {'slug': arguments['slug'] ?? arguments['product_slug'] ?? ''};
+      // Handle both 'slug' and 'product_slug' keys from notification data
+        final slug = arguments['slug'] ?? arguments['product_slug'];
+        debugPrint('Extracted slug: $slug');
+
+        final processedArgs = {'slug': slug};
+        debugPrint('Processed arguments: $processedArgs');
+        return processedArgs;
+
+      case '/set-product-details':
+      // Handle both 'slug' and 'product_slug' keys from notification data
+        final slug = arguments['slug'] ?? arguments['product_slug'];
+        debugPrint('Extracted set product slug: $slug');
+
+        final processedArgs = {'slug': slug};
+        debugPrint('Processed arguments: $processedArgs');
+        return processedArgs;
+
       case '/order-details':
-        return {'orderId': int.tryParse(arguments['orderId']?.toString() ?? '') ?? 0};
+        final orderId = int.tryParse(arguments['orderId']?.toString() ?? '') ?? 0;
+        debugPrint('Extracted orderId: $orderId');
+        return {'orderId': orderId};
+
       case '/all-category-product':
-      // You might need to fetch the category object based on ID
+        debugPrint('Category product arguments: $arguments');
         return arguments;
+
       case '/verification':
-        return {'contactInfo': arguments['contactInfo'] ?? ''};
+        final contactInfo = arguments['contactInfo'] ?? '';
+        debugPrint('Extracted contactInfo: $contactInfo');
+        return {'contactInfo': contactInfo};
+
       default:
+        debugPrint('Using default arguments processing');
         return arguments;
     }
   }

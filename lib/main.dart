@@ -79,7 +79,7 @@ Future<void> getAndPrintFcmToken() async {
       badge: true,
       sound: true,
     );
-    FirebaseMessaging.instance.subscribeToTopic("all_devices");
+    //await FirebaseMessaging.instance.subscribeToTopic("all_devices");
 
     if (settings.authorizationStatus == AuthorizationStatus.authorized) {
       String? token = await messaging.getToken();
@@ -109,6 +109,7 @@ Future<void> main() async {
   );
   final notificationManager = NotificationManager(router: notificationRouter);
   await notificationManager.initialize();
+  await FirebaseMessaging.instance.subscribeToTopic("all_devices");
   // Initialize widget service
   await WidgetService().initialize();
   

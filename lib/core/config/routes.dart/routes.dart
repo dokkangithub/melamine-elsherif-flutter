@@ -114,18 +114,60 @@ class AppRoutes {
         break;
       case productDetailScreen:
         final args = settings.arguments as Map<String, dynamic>?;
-        page = ProductDetailScreen(slug: args?['slug'] as String);
+
+        // Debug: Print what we're receiving
+        debugPrint('=== PRODUCT DETAIL ROUTE DEBUG ===');
+        debugPrint('Arguments received: $args');
+        debugPrint('Arguments type: ${args.runtimeType}');
+
+        if (args != null) {
+          debugPrint('Available keys: ${args.keys.toList()}');
+          debugPrint('slug value: ${args['slug']}');
+          debugPrint('product_slug value: ${args['product_slug']}');
+        }
+
+        final slug = args?['slug'] as String?;
+
+        debugPrint('Final slug value: $slug');
+        debugPrint('================================');
+
+        if (slug == null || slug.isEmpty) {
+          page = Scaffold(
+            appBar: AppBar(title: const Text('Debug Info')),
+            body: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text('Invalid product slug'),
+                  const SizedBox(height: 20),
+                  Text('Raw arguments: $args'),
+                  const SizedBox(height: 10),
+                  Text('Slug value: $slug'),
+                  const SizedBox(height: 20),
+                ],
+              ),
+            ),
+          );
+        } else {
+          page = ProductDetailScreen(slug: slug);
+        }
+        break;
+      case setProductDetailsScreen:
+        final args = settings.arguments as Map<String, dynamic>?;
+        final slug = args?['slug'] as String?;
+
+        if (slug == null || slug.isEmpty) {
+          page = const Scaffold(
+            body: Center(child: Text('Invalid set product slug')),
+          );
+        } else {
+          page = SetProductDetailsScreen(slug: slug);
+        }
         break;
       case allCategoryProductsScreen:
         final args = settings.arguments as Map<String, dynamic>?;
         page = AllCategoryProductsScreen(
           category: args?['category'] as Category,
-        );
-        break;
-      case setProductDetailsScreen:
-        final args = settings.arguments as Map<String, dynamic>?;
-        page = SetProductDetailsScreen(
-          slug: args?['slug'] as String,
         );
         break;
       case AppRoutes.allProductsByTypeScreen:
