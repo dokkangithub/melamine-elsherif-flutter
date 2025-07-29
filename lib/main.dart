@@ -40,7 +40,12 @@ import 'features/presentation/wallet/controller/wallet_provider.dart';
 import 'features/presentation/club_point/controller/club_point_provider.dart';
 import 'firebase_options.dart';
 
+// Global navigation key and notification manager
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+late NotificationManager notificationManager;
+
 Future<void> getInitData() async {
+  debugPrint("Getting initial data...");
   AppStrings.token = await SecureStorage().get<String>(
     LocalStorageKey.userToken,
   );
@@ -54,6 +59,7 @@ Future<void> getInitData() async {
   AppStrings.tempUserId = await SecureStorage().get<String>(
     LocalStorageKey.tempUserId,
   );
+  debugPrint("Initial data loaded");
 }
 
 Future<void> checkAndGenerateTempUserId() async {
@@ -63,14 +69,15 @@ Future<void> checkAndGenerateTempUserId() async {
       LocalStorageKey.tempUserId,
       AppStrings.tempUserId,
     );
+    debugPrint("Generated new temp user ID: ${AppStrings.tempUserId}");
+  } else {
+    debugPrint("Using existing temp user ID: ${AppStrings.tempUserId}");
   }
 }
 
-final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
-
-
 Future<void> getAndPrintFcmToken() async {
   try {
+    debugPrint("Getting FCM token...");
     FirebaseMessaging messaging = FirebaseMessaging.instance;
 
     // Request permission on iOS and Android 13+
@@ -79,82 +86,128 @@ Future<void> getAndPrintFcmToken() async {
       badge: true,
       sound: true,
     );
-    //await FirebaseMessaging.instance.subscribeToTopic("all_devices");
 
     if (settings.authorizationStatus == AuthorizationStatus.authorized) {
       String? token = await messaging.getToken();
       if (token != null) {
-        print('✅ FCM Token: $token');
+        debugPrint('✅ FCM Token: $token');
       } else {
-        print('⚠️ Failed to get FCM token');
+        debugPrint('⚠️ Failed to get FCM token');
       }
     } else {
-      print('❌ Notifications permission not granted');
+      debugPrint('❌ Notifications permission not granted');
     }
   } catch (e) {
-    print('❗ Error getting FCM token: $e');
+    debugPrint('❗ Error getting FCM token: $e');
   }
 }
-Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await getAndPrintFcmToken();
-  // Set system UI overlay style for the entire app using our helper
-  UIHelper.setTransparentStatusBar();
-  
-  await SharedPrefs.init();
-  await setupDependencies();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  final notificationRouter = NotificationRouter(
-    navigatorKey: navigatorKey, // Use the global key
-  );
-  final notificationManager = NotificationManager(router: notificationRouter);
-  await notificationManager.initialize();
-  await FirebaseMessaging.instance.subscribeToTopic("all_devices");
-  // Initialize widget service
-  await WidgetService().initialize();
-  
-  // Register widget interactivity
-  await WidgetService().registerInteractivity();
 
-  // Get saved locale from storage
-  Locale locale = await sl<LanguageProvider>().getLocale();
-  await getInitData();
+Future<void> initializeNotifications() async {
+  try {
+    debugPrint("Initializing notifications...");
 
-  // Initialize API provider with the saved language
-  sl<ApiProvider>().setLanguage(locale.languageCode);
+    final notificationRouter = NotificationRouter(
+      navigatorKey: navigatorKey,
+    );
 
-  Future<String> getStartupScreen() async {
-    await checkAndGenerateTempUserId();
-    // Always return splash screen as the initial route
-    return AppRoutes.splash;
+    notificationManager = NotificationManager(router: notificationRouter);
+    await notificationManager.initialize();
+
+    // Subscribe to topics
+    await FirebaseMessaging.instance.subscribeToTopic("all_devices");
+
+    debugPrint("Notifications initialized successfully");
+  } catch (e) {
+    debugPrint("Error initializing notifications: $e");
   }
+}
 
-  runApp(
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => sl<AuthProvider>()),
-        ChangeNotifierProvider(create: (_) => sl<HomeProvider>()),
-        ChangeNotifierProvider(create: (_) => sl<LayoutProvider>()),
-        ChangeNotifierProvider(create: (_) => sl<ProductDetailsProvider>()),
-        ChangeNotifierProvider(create: (_) => sl<LanguageProvider>()..setLocale(locale)),
-        ChangeNotifierProvider(create: (_) => sl<CategoryProvider>()),
-        ChangeNotifierProvider(create: (_) => sl<SliderProvider>()),
-        ChangeNotifierProvider(create: (_) => sl<ReviewProvider>()),
-        ChangeNotifierProvider(create: (_) => sl<WishlistProvider>()),
-        ChangeNotifierProvider(create: (_) => sl<CartProvider>()),
-        ChangeNotifierProvider(create: (_) => sl<AddressProvider>()),
-        ChangeNotifierProvider(create: (_) => sl<CouponProvider>()),
-        ChangeNotifierProvider(create: (_) => sl<PaymentProvider>()),
-        ChangeNotifierProvider(create: (_) => sl<ProfileProvider>()),
-        ChangeNotifierProvider(create: (_) => sl<OrderProvider>()),
-        ChangeNotifierProvider(create: (_) => sl<SearchProvider>()),
-        ChangeNotifierProvider(create: (_) => sl<WalletProvider>()),
-        ChangeNotifierProvider(create: (_) => sl<ClubPointProvider>()),
-        ChangeNotifierProvider(create: (_) => sl<SetProductsProvider>()),
-      ],
-      child: MyApp(route: await getStartupScreen()),
-    ),
-  );
+Future<void> main() async {
+  try {
+    debugPrint("=== APP STARTUP ===");
+    WidgetsFlutterBinding.ensureInitialized();
+
+    // Set system UI overlay style
+    UIHelper.setTransparentStatusBar();
+
+    // Initialize core services
+    await SharedPrefs.init();
+    await setupDependencies();
+
+    // Initialize Firebase
+    debugPrint("Initializing Firebase...");
+    await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+    // Get FCM token early
+    await getAndPrintFcmToken();
+
+    // Initialize notifications (this must be done after Firebase init)
+    await initializeNotifications();
+
+    // Initialize widget service
+    await WidgetService().initialize();
+    await WidgetService().registerInteractivity();
+
+    // Get saved locale from storage
+    Locale locale = await sl<LanguageProvider>().getLocale();
+    await getInitData();
+
+    // Initialize API provider with the saved language
+    sl<ApiProvider>().setLanguage(locale.languageCode);
+
+    Future<String> getStartupScreen() async {
+      await checkAndGenerateTempUserId();
+      // Always return splash screen as the initial route
+      return AppRoutes.splash;
+    }
+
+    debugPrint("Starting app...");
+    runApp(
+      MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (_) => sl<AuthProvider>()),
+          ChangeNotifierProvider(create: (_) => sl<HomeProvider>()),
+          ChangeNotifierProvider(create: (_) => sl<LayoutProvider>()),
+          ChangeNotifierProvider(create: (_) => sl<ProductDetailsProvider>()),
+          ChangeNotifierProvider(create: (_) => sl<LanguageProvider>()..setLocale(locale)),
+          ChangeNotifierProvider(create: (_) => sl<CategoryProvider>()),
+          ChangeNotifierProvider(create: (_) => sl<SliderProvider>()),
+          ChangeNotifierProvider(create: (_) => sl<ReviewProvider>()),
+          ChangeNotifierProvider(create: (_) => sl<WishlistProvider>()),
+          ChangeNotifierProvider(create: (_) => sl<CartProvider>()),
+          ChangeNotifierProvider(create: (_) => sl<AddressProvider>()),
+          ChangeNotifierProvider(create: (_) => sl<CouponProvider>()),
+          ChangeNotifierProvider(create: (_) => sl<PaymentProvider>()),
+          ChangeNotifierProvider(create: (_) => sl<ProfileProvider>()),
+          ChangeNotifierProvider(create: (_) => sl<OrderProvider>()),
+          ChangeNotifierProvider(create: (_) => sl<SearchProvider>()),
+          ChangeNotifierProvider(create: (_) => sl<WalletProvider>()),
+          ChangeNotifierProvider(create: (_) => sl<ClubPointProvider>()),
+          ChangeNotifierProvider(create: (_) => sl<SetProductsProvider>()),
+        ],
+        child: MyApp(route: await getStartupScreen()),
+      ),
+    );
+  } catch (e) {
+    debugPrint("Error during app startup: $e");
+    // You might want to show an error screen here
+    runApp(MaterialApp(
+      home: Scaffold(
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(Icons.error, size: 64, color: Colors.red),
+              const SizedBox(height: 16),
+              const Text('Failed to start app'),
+              const SizedBox(height: 8),
+              Text('Error: $e'),
+            ],
+          ),
+        ),
+      ),
+    ));
+  }
 }
 
 class MyApp extends StatelessWidget {
@@ -167,8 +220,7 @@ class MyApp extends StatelessWidget {
     return Consumer<LanguageProvider>(
       builder: (context, languageProvider, child) {
         debugPrint('Building MyApp with locale: ${languageProvider.locale.languageCode}');
-        
-        // Wrap the MaterialApp with our helper to ensure consistent status bar styling
+
         return UIHelper.wrapWithStatusBarConfig(
           MaterialApp(
             title: AppConfig().appName,
@@ -189,7 +241,7 @@ class MyApp extends StatelessWidget {
             ],
             localeResolutionCallback: (locale, supportedLocales) {
               debugPrint('Resolving locale: ${locale?.languageCode}');
-              
+
               for (var supportedLocale in supportedLocales) {
                 if (supportedLocale.languageCode == locale?.languageCode) {
                   debugPrint('Resolved to supported locale: ${supportedLocale.languageCode}');

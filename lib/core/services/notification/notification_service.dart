@@ -12,6 +12,7 @@ import 'models/notification_models.dart';
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   debugPrint("Handling a background message: ${message.messageId}");
+  debugPrint("Background message data: ${message.data}");
   // You can add additional background processing here if needed
   // Note: UI operations are not allowed in background handlers
 }
@@ -46,6 +47,7 @@ class NotificationService implements INotificationService {
   // Private state
   bool _isInitialized = false;
   String? _currentToken;
+  Timer? _initialMessageTimer;
 
   // Public streams - following Open/Closed Principle
   @override
@@ -64,6 +66,8 @@ class NotificationService implements INotificationService {
     if (_isInitialized) return;
 
     try {
+      debugPrint("Initializing NotificationService...");
+
       // Set background message handler
       FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
@@ -90,11 +94,8 @@ class NotificationService implements INotificationService {
       // Handle messages when app is opened from notification
       FirebaseMessaging.onMessageOpenedApp.listen(_handleMessageTap);
 
-      // Handle initial message if app was terminated and opened via notification
-      final initialMessage = await _firebaseMessaging.getInitialMessage();
-      if (initialMessage != null) {
-        _handleMessageTap(initialMessage);
-      }
+      // Handle initial message with retry mechanism
+      await _handleInitialMessage();
 
       _isInitialized = true;
       debugPrint("NotificationService initialized successfully");
@@ -102,6 +103,48 @@ class NotificationService implements INotificationService {
     } catch (e) {
       debugPrint("Error initializing NotificationService: $e");
       rethrow;
+    }
+  }
+
+  /// Handle initial message when app is opened from terminated state
+  Future<void> _handleInitialMessage() async {
+    debugPrint("Checking for initial message...");
+
+    try {
+      // Try to get initial message immediately
+      final initialMessage = await _firebaseMessaging.getInitialMessage();
+
+      if (initialMessage != null) {
+        debugPrint("Found initial message: ${initialMessage.messageId}");
+        debugPrint("Initial message data: ${initialMessage.data}");
+        _handleMessageTap(initialMessage);
+      } else {
+        debugPrint("No initial message found");
+
+        // Set up a timer to retry getting the initial message
+        // This helps in cases where the message might not be immediately available
+        _initialMessageTimer = Timer.periodic(
+          const Duration(milliseconds: 500),
+              (timer) async {
+            if (timer.tick > 10) {
+              // Stop trying after 5 seconds (10 * 500ms)
+              timer.cancel();
+              debugPrint("Stopped checking for initial message after timeout");
+              return;
+            }
+
+            final retryMessage = await _firebaseMessaging.getInitialMessage();
+            if (retryMessage != null) {
+              debugPrint("Found initial message on retry ${timer.tick}: ${retryMessage.messageId}");
+              debugPrint("Retry message data: ${retryMessage.data}");
+              _handleMessageTap(retryMessage);
+              timer.cancel();
+            }
+          },
+        );
+      }
+    } catch (e) {
+      debugPrint("Error handling initial message: $e");
     }
   }
 
@@ -167,7 +210,11 @@ class NotificationService implements INotificationService {
 
   /// Handle foreground messages
   void _handleForegroundMessage(RemoteMessage message) {
-    debugPrint("Received foreground message: ${message.messageId}");
+    debugPrint("=== FOREGROUND MESSAGE RECEIVED ===");
+    debugPrint("Message ID: ${message.messageId}");
+    debugPrint("Title: ${message.notification?.title}");
+    debugPrint("Body: ${message.notification?.body}");
+    debugPrint("Data: ${message.data}");
 
     final payload = NotificationPayload.fromRemoteMessage(message);
 
@@ -180,20 +227,33 @@ class NotificationService implements INotificationService {
 
   /// Handle message tap events
   void _handleMessageTap(RemoteMessage message) {
-    debugPrint("Message tapped: ${message.messageId}");
+    debugPrint("=== MESSAGE TAP HANDLED ===");
+    debugPrint("Message ID: ${message.messageId}");
+    debugPrint("Title: ${message.notification?.title}");
+    debugPrint("Body: ${message.notification?.body}");
+    debugPrint("Data: ${message.data}");
+    debugPrint("From: ${message.from}");
+    debugPrint("Sent time: ${message.sentTime}");
 
-    final payload = NotificationPayload.fromRemoteMessage(message);
-    _onMessageTapController.add(payload);
+    // Add delay to ensure the app UI is ready
+    Future.delayed(const Duration(milliseconds: 300), () {
+      final payload = NotificationPayload.fromRemoteMessage(message);
+      debugPrint("Emitting message tap payload: ${payload.data}");
+      _onMessageTapController.add(payload);
+    });
   }
 
   /// Handle local notification tap
   void _onNotificationTap(NotificationResponse response) {
-    debugPrint("Local notification tapped: ${response.id}");
+    debugPrint("=== LOCAL NOTIFICATION TAP ===");
+    debugPrint("Notification ID: ${response.id}");
+    debugPrint("Payload: ${response.payload}");
 
     if (response.payload != null) {
       try {
         final payloadData = jsonDecode(response.payload!);
         final payload = NotificationPayload.fromJson(payloadData);
+        debugPrint("Parsed local notification payload: ${payload.data}");
         _onMessageTapController.add(payload);
       } catch (e) {
         debugPrint("Error parsing notification payload: $e");
@@ -308,6 +368,7 @@ class NotificationService implements INotificationService {
 
   @override
   void dispose() {
+    _initialMessageTimer?.cancel();
     _onTokenRefreshController.close();
     _onForegroundMessageController.close();
     _onMessageTapController.close();
