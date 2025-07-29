@@ -54,22 +54,14 @@ class NotificationRouter {
     debugPrint('Route: $route');
     debugPrint('Arguments: $arguments');
 
-    // Wait for navigation to be ready
-    await Future.delayed(const Duration(milliseconds: 100));
+    // Wait a bit for navigation to be ready
+    await Future.delayed(const Duration(milliseconds: 200));
 
     final context = navigatorKey.currentContext;
     if (context == null) {
-      debugPrint('Context is null, retrying...');
-      // If context is not ready, retry after a delay
-      await Future.delayed(const Duration(milliseconds: 500));
-      final retryContext = navigatorKey.currentContext;
-      if (retryContext == null) {
-        debugPrint('Context still null after retry, aborting navigation');
-        return;
-      }
+      debugPrint('Context is null, cannot navigate');
+      return;
     }
-
-    final finalContext = navigatorKey.currentContext!;
 
     // Process arguments and validate them
     final processedArguments = _processArguments(route, arguments);
@@ -78,15 +70,32 @@ class NotificationRouter {
     if (_validateRouteAndArguments(route, processedArguments)) {
       try {
         debugPrint('Navigating to: $route with arguments: $processedArguments');
-        Navigator.of(finalContext).pushNamed(route, arguments: processedArguments);
+
+        // Use pushNamedAndRemoveUntil to ensure clean navigation stack
+        Navigator.of(context).pushNamedAndRemoveUntil(
+          route,
+              (existingRoute) => false, // Remove all previous routes
+          arguments: processedArguments,
+        );
       } catch (e) {
         debugPrint('Error navigating to $route: $e');
         // Fallback to main layout
-        Navigator.of(finalContext).pushNamed('/mainLayout');
+        _navigateToMainLayout(context);
       }
     } else {
       debugPrint('Route validation failed, opening main app');
-      Navigator.of(finalContext).pushNamed('/mainLayout');
+      _navigateToMainLayout(context);
+    }
+  }
+
+  void _navigateToMainLayout(BuildContext context) {
+    try {
+      Navigator.of(context).pushNamedAndRemoveUntil(
+        '/mainLayout',
+            (route) => false,
+      );
+    } catch (e) {
+      debugPrint('Error navigating to main layout: $e');
     }
   }
 

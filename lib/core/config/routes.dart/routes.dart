@@ -4,6 +4,7 @@ import 'package:melamine_elsherif/features/presentation/category/screens/categor
 import 'package:melamine_elsherif/features/presentation/profile/screens/edit_profile_screen.dart';
 import 'package:melamine_elsherif/features/presentation/profile/screens/profile_screen.dart';
 import 'package:melamine_elsherif/features/presentation/wishlist/screens/wishlist_screen.dart';
+import '../../../core/services/notification/models/notification_models.dart';
 import '../../../features/domain/category/entities/category.dart';
 import '../../../features/presentation/address/screens/address_list_screen.dart';
 import '../../../features/presentation/all products/screens/all_category_products.dart';
@@ -61,10 +62,28 @@ class AppRoutes {
 
   static const PageTransitionType defaultTransition = PageTransitionType.sharedAxisHorizontal;
 
-  static Route<dynamic> generateRoute(RouteSettings settings, {PageTransitionType? transitionType}) {
+  static Route<dynamic> generateRoute(
+      RouteSettings settings, {
+        PageTransitionType? transitionType,
+        NotificationAction? pendingNotificationAction,
+      }) {
     Widget page;
 
     final transition = transitionType ?? defaultTransition;
+
+    // Check if we have a pending notification action for this route
+    Map<String, dynamic>? routeArguments = settings.arguments as Map<String, dynamic>?;
+
+    if (pendingNotificationAction != null &&
+        pendingNotificationAction.type == NotificationActionType.openScreen &&
+        pendingNotificationAction.route == settings.name) {
+      debugPrint('=== USING NOTIFICATION ARGUMENTS ===');
+      debugPrint('Route: ${settings.name}');
+      debugPrint('Notification arguments: ${pendingNotificationAction.arguments}');
+
+      // Use notification arguments instead of route arguments
+      routeArguments = pendingNotificationAction.arguments;
+    }
 
     switch (settings.name) {
       case splash:
@@ -86,9 +105,8 @@ class AppRoutes {
         page = const ResetPasswordScreen();
         break;
       case verificationScreen:
-        final args = settings.arguments as Map<String, dynamic>?;
         page = VerificationScreen(
-          contactInfo: args?['contactInfo'] as String? ?? '',
+          contactInfo: routeArguments?['contactInfo'] as String? ?? '',
         );
         break;
       case homeScreen:
@@ -113,76 +131,63 @@ class AppRoutes {
         page = const CartScreen();
         break;
       case productDetailScreen:
-        final args = settings.arguments as Map<String, dynamic>?;
-
-        // Debug: Print what we're receiving
+      // Debug: Print what we're receiving
         debugPrint('=== PRODUCT DETAIL ROUTE DEBUG ===');
-        debugPrint('Arguments received: $args');
-        debugPrint('Arguments type: ${args.runtimeType}');
+        debugPrint('Arguments received: $routeArguments');
+        debugPrint('Arguments type: ${routeArguments.runtimeType}');
 
-        if (args != null) {
-          debugPrint('Available keys: ${args.keys.toList()}');
-          debugPrint('slug value: ${args['slug']}');
-          debugPrint('product_slug value: ${args['product_slug']}');
+        if (routeArguments != null) {
+          debugPrint('Available keys: ${routeArguments.keys.toList()}');
+          debugPrint('slug value: ${routeArguments['slug']}');
+          debugPrint('product_slug value: ${routeArguments['product_slug']}');
         }
 
-        final slug = args?['slug'] as String?;
+        final slug = routeArguments?['slug'] as String?;
 
         debugPrint('Final slug value: $slug');
+        debugPrint('From notification: ${pendingNotificationAction != null}');
         debugPrint('================================');
 
         if (slug == null || slug.isEmpty) {
-          page = Scaffold(
-            appBar: AppBar(title: const Text('Debug Info')),
-            body: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text('Invalid product slug'),
-                  const SizedBox(height: 20),
-                  Text('Raw arguments: $args'),
-                  const SizedBox(height: 10),
-                  Text('Slug value: $slug'),
-                  const SizedBox(height: 20),
-                ],
-              ),
-            ),
-          );
+          debugPrint('⚠️ Invalid product slug, redirecting to main layout');
+          // Instead of showing error screen, redirect to main layout
+          page = const MainLayoutScreen();
         } else {
+          debugPrint('✅ Valid slug found, creating ProductDetailScreen');
           page = ProductDetailScreen(slug: slug);
         }
         break;
       case setProductDetailsScreen:
-        final args = settings.arguments as Map<String, dynamic>?;
-        final slug = args?['slug'] as String?;
+        final setSlug = routeArguments?['slug'] as String?;
 
-        if (slug == null || slug.isEmpty) {
-          page = const Scaffold(
-            body: Center(child: Text('Invalid set product slug')),
-          );
+        debugPrint('=== SET PRODUCT DETAIL ROUTE DEBUG ===');
+        debugPrint('Slug: $setSlug');
+        debugPrint('From notification: ${pendingNotificationAction != null}');
+
+        if (setSlug == null || setSlug.isEmpty) {
+          debugPrint('⚠️ Invalid set product slug, redirecting to main layout');
+          page = const MainLayoutScreen();
         } else {
-          page = SetProductDetailsScreen(slug: slug);
+          debugPrint('✅ Valid set slug found, creating SetProductDetailsScreen');
+          page = SetProductDetailsScreen(slug: setSlug);
         }
         break;
       case allCategoryProductsScreen:
-        final args = settings.arguments as Map<String, dynamic>?;
         page = AllCategoryProductsScreen(
-          category: args?['category'] as Category,
+          category: routeArguments?['category'] as Category,
         );
         break;
       case AppRoutes.allProductsByTypeScreen:
-        final args = settings.arguments as Map<String, dynamic>?;
-        if (args == null ||
-            args['productType'] == null ||
-            args['title'] == null) {
-          page = const Scaffold(
-            body: Center(child: Text('Invalid product details type')),
-          );
+        if (routeArguments == null ||
+            routeArguments['productType'] == null ||
+            routeArguments['title'] == null) {
+          debugPrint('⚠️ Invalid product type arguments, redirecting to main layout');
+          page = const MainLayoutScreen();
         } else {
           page = AllProductsByTypeScreen(
-            productType: args['productType'] as ProductType,
-            title: args['title'] as String,
-            dealId: args['dealId'] as int?,
+            productType: routeArguments['productType'] as ProductType,
+            title: routeArguments['title'] as String,
+            dealId: routeArguments['dealId'] as int?,
           );
         }
         break;
@@ -199,11 +204,31 @@ class AppRoutes {
         page = const OrdersListScreen();
         break;
       case AppRoutes.orderDetailsScreen:
-        final args = settings.arguments as Map<String, dynamic>?;
-        if (args == null || args['orderId'] == null) {
-          page = const Scaffold(body: Center(child: Text('Invalid order id')));
+        final orderId = routeArguments?['orderId'];
+
+        debugPrint('=== ORDER DETAILS ROUTE DEBUG ===');
+        debugPrint('OrderId: $orderId');
+        debugPrint('From notification: ${pendingNotificationAction != null}');
+
+        if (orderId == null) {
+          debugPrint('⚠️ Invalid order ID, redirecting to main layout');
+          page = const MainLayoutScreen();
         } else {
-          page = OrderDetailsScreen(orderId: args['orderId'] as int);
+          // Handle both int and string order IDs
+          int? parsedOrderId;
+          if (orderId is int) {
+            parsedOrderId = orderId;
+          } else if (orderId is String) {
+            parsedOrderId = int.tryParse(orderId);
+          }
+
+          if (parsedOrderId == null) {
+            debugPrint('⚠️ Could not parse order ID, redirecting to main layout');
+            page = const MainLayoutScreen();
+          } else {
+            debugPrint('✅ Valid order ID found, creating OrderDetailsScreen');
+            page = OrderDetailsScreen(orderId: parsedOrderId);
+          }
         }
         break;
       case searchScreen:
@@ -213,9 +238,8 @@ class AppRoutes {
         page = const WalletScreen();
         break;
       default:
-        page = Scaffold(
-          body: Center(child: Text('Route ${settings.name} not found')),
-        );
+        debugPrint('⚠️ Unknown route: ${settings.name}, redirecting to main layout');
+        page = const MainLayoutScreen();
     }
 
     return PageTransition(

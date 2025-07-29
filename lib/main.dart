@@ -19,6 +19,7 @@ import 'core/providers/localization/app_localizations.dart';
 import 'core/providers/localization/language_provider.dart';
 import 'core/services/notification/notification_manager.dart';
 import 'core/services/notification/notification_router.dart';
+import 'core/services/notification/models/notification_models.dart';
 import 'core/utils/local_storage/local_storage_keys.dart';
 import 'core/utils/local_storage/secure_storage.dart';
 import 'core/utils/local_storage/shared_pref.dart';
@@ -43,6 +44,9 @@ import 'firebase_options.dart';
 // Global navigation key and notification manager
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 late NotificationManager notificationManager;
+
+// Add a global variable to track initial notification action
+NotificationAction? _pendingNotificationAction;
 
 Future<void> getInitData() async {
   debugPrint("Getting initial data...");
@@ -102,6 +106,39 @@ Future<void> getAndPrintFcmToken() async {
   }
 }
 
+/// Check for initial notification when app is launched from terminated state
+Future<NotificationAction?> checkInitialNotification() async {
+  try {
+    debugPrint("=== CHECKING INITIAL NOTIFICATION ===");
+
+    final RemoteMessage? initialMessage = await FirebaseMessaging.instance.getInitialMessage();
+
+    if (initialMessage != null) {
+      debugPrint("Found initial notification message:");
+      debugPrint("Message ID: ${initialMessage.messageId}");
+      debugPrint("Title: ${initialMessage.notification?.title}");
+      debugPrint("Body: ${initialMessage.notification?.body}");
+      debugPrint("Data: ${initialMessage.data}");
+
+      final payload = NotificationPayload.fromRemoteMessage(initialMessage);
+      final action = NotificationAction.fromData(payload.data);
+
+      debugPrint("Parsed notification action:");
+      debugPrint("Action type: ${action.type}");
+      debugPrint("Route: ${action.route}");
+      debugPrint("Arguments: ${action.arguments}");
+
+      return action;
+    } else {
+      debugPrint("No initial notification found");
+      return null;
+    }
+  } catch (e) {
+    debugPrint("Error checking initial notification: $e");
+    return null;
+  }
+}
+
 Future<void> initializeNotifications() async {
   try {
     debugPrint("Initializing notifications...");
@@ -119,6 +156,105 @@ Future<void> initializeNotifications() async {
     debugPrint("Notifications initialized successfully");
   } catch (e) {
     debugPrint("Error initializing notifications: $e");
+  }
+}
+
+/// Get the initial route based on app state and notification
+Future<String> getStartupRoute() async {
+  try {
+    debugPrint("=== DETERMINING STARTUP ROUTE ===");
+
+    await checkAndGenerateTempUserId();
+
+    // Check for initial notification first
+    _pendingNotificationAction = await checkInitialNotification();
+
+    if (_pendingNotificationAction != null) {
+      debugPrint("Found pending notification action, determining route...");
+
+      // Validate the notification action before using it
+      if (_isValidNotificationAction(_pendingNotificationAction!)) {
+        final route = _getRouteFromNotificationAction(_pendingNotificationAction!);
+        debugPrint("Using notification route: $route");
+        return route;
+      } else {
+        debugPrint("Invalid notification action, using main layout");
+        _pendingNotificationAction = null;
+        return AppRoutes.mainLayoutScreen;
+      }
+    }
+
+    // No notification, use normal startup flow
+    debugPrint("No valid notification, using splash screen");
+    return AppRoutes.splash;
+
+  } catch (e) {
+    debugPrint("Error determining startup route: $e");
+    return AppRoutes.splash;
+  }
+}
+
+/// Validate if the notification action is valid and can be used for direct navigation
+bool _isValidNotificationAction(NotificationAction action) {
+  switch (action.type) {
+    case NotificationActionType.openScreen:
+      if (action.route == null || action.route!.isEmpty) {
+        debugPrint("Invalid openScreen action: route is null or empty");
+        return false;
+      }
+
+      // Validate specific routes that require arguments
+      switch (action.route) {
+        case '/product-details':
+        case '/set-product-details':
+          final slug = action.arguments?['slug'];
+          if (slug == null || slug.toString().isEmpty) {
+            debugPrint("Invalid product route: missing slug");
+            return false;
+          }
+          break;
+
+        case '/order-details':
+          final orderId = action.arguments?['orderId'];
+          if (orderId == null) {
+            debugPrint("Invalid order route: missing orderId");
+            return false;
+          }
+          break;
+
+        case '/verification':
+          final contactInfo = action.arguments?['contactInfo'];
+          if (contactInfo == null || contactInfo.toString().isEmpty) {
+            debugPrint("Invalid verification route: missing contactInfo");
+            return false;
+          }
+          break;
+      }
+
+      return true;
+
+    case NotificationActionType.openApp:
+      return true;
+
+    case NotificationActionType.openUrl:
+      return action.url != null && action.url!.isNotEmpty;
+
+    case NotificationActionType.custom:
+      return action.customAction != null && action.customAction!.isNotEmpty;
+
+    default:
+      return false;
+  }
+}
+
+/// Get the route from notification action
+String _getRouteFromNotificationAction(NotificationAction action) {
+  switch (action.type) {
+    case NotificationActionType.openScreen:
+      return action.route!;
+    case NotificationActionType.openApp:
+    default:
+      return AppRoutes.mainLayoutScreen;
   }
 }
 
@@ -155,12 +291,6 @@ Future<void> main() async {
     // Initialize API provider with the saved language
     sl<ApiProvider>().setLanguage(locale.languageCode);
 
-    Future<String> getStartupScreen() async {
-      await checkAndGenerateTempUserId();
-      // Always return splash screen as the initial route
-      return AppRoutes.splash;
-    }
-
     debugPrint("Starting app...");
     runApp(
       MultiProvider(
@@ -185,7 +315,7 @@ Future<void> main() async {
           ChangeNotifierProvider(create: (_) => sl<ClubPointProvider>()),
           ChangeNotifierProvider(create: (_) => sl<SetProductsProvider>()),
         ],
-        child: MyApp(route: await getStartupScreen()),
+        child: MyApp(route: await getStartupRoute()),
       ),
     );
   } catch (e) {
@@ -251,7 +381,10 @@ class MyApp extends StatelessWidget {
               debugPrint('No matching locale, using default: ${supportedLocales.first.languageCode}');
               return supportedLocales.first;
             },
-            onGenerateRoute: AppRoutes.generateRoute,
+            onGenerateRoute: (settings) => AppRoutes.generateRoute(
+              settings,
+              pendingNotificationAction: _pendingNotificationAction,
+            ),
             initialRoute: route,
           ),
         );
