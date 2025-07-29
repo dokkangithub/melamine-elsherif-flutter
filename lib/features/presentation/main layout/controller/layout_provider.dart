@@ -48,6 +48,7 @@ class LayoutProvider extends ChangeNotifier {
   void setCurrentIndex(int index) {
     if (_currentIndex == index) return; // Prevent unnecessary updates
 
+    final oldIndex = _currentIndex;
     _currentIndex = index;
 
     // Reset the flag when changing to any tab other than cart
@@ -58,10 +59,14 @@ class LayoutProvider extends ChangeNotifier {
     // Update screens with new active state
     _updateMainScreens();
 
-    // Notify external listeners (like PageController)
-    _onIndexChanged?.call();
-
+    // Notify listeners first
     notifyListeners();
+
+    // Then notify external listeners (like PageController) after a brief delay
+    // This prevents conflicts between state updates and navigation
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _onIndexChanged?.call();
+    });
   }
 
   set currentIndex(int index) {
@@ -75,10 +80,13 @@ class LayoutProvider extends ChangeNotifier {
     _currentIndex = 3; // Cart tab index
     _updateMainScreens(); // Update screens with new active state
 
-    // Notify external listeners (like PageController)
-    _onIndexChanged?.call();
-
+    // Notify listeners first
     notifyListeners();
+
+    // Then notify external listeners (like PageController)
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _onIndexChanged?.call();
+    });
   }
 
   void setLoading(bool value) {

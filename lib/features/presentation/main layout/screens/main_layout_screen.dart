@@ -19,9 +19,10 @@ class MainLayoutScreenState extends State<MainLayoutScreen> with SingleTickerPro
   late AnimationController _animationController;
   late PageController _pageController;
   final double _maxSlideAmount = 0.8;
+  bool _isNavigating = false; // Flag to prevent conflicts during navigation
 
   // Configuration options for swipe behavior
-  static const bool _enableSwipe = true; // Set to false to disable swipe
+  static const bool _enableSwipe = true;
   static const Duration _pageAnimationDuration = Duration(milliseconds: 300);
   static const Curve _pageAnimationCurve = Curves.easeInOut;
 
@@ -36,6 +37,9 @@ class MainLayoutScreenState extends State<MainLayoutScreen> with SingleTickerPro
     // Initialize PageController with the current index
     final provider = Provider.of<LayoutProvider>(context, listen: false);
     _pageController = PageController(initialPage: provider.currentIndex);
+
+    // Set up callback for external navigation
+    provider.setOnIndexChangedCallback(_handleExternalNavigation);
   }
 
   @override
@@ -53,52 +57,82 @@ class MainLayoutScreenState extends State<MainLayoutScreen> with SingleTickerPro
     }
   }
 
-  void _onPageChanged(int index) {
+  // Handle navigation triggered externally (bottom nav, drawer, etc.)
+  void _handleExternalNavigation() {
+    if (_isNavigating) return; // Prevent recursive calls
+
     final provider = Provider.of<LayoutProvider>(context, listen: false);
+    final targetIndex = provider.currentIndex;
+
+    // Skip wishlist if user is not authenticated
+    if (targetIndex == 2 && AppStrings.token == null) {
+      return; // Don't navigate to wishlist
+    }
+
+    if (_pageController.hasClients &&
+        _pageController.page?.round() != targetIndex) {
+      _navigateToPage(targetIndex);
+    }
+  }
+
+  void _onPageChanged(int index) {
+    if (_isNavigating) return; // Prevent conflicts during navigation
+
+    final provider = Provider.of<LayoutProvider>(context, listen: false);
+    final currentIndex = provider.currentIndex;
 
     // Skip wishlist if user is not authenticated
     if (index == 2 && AppStrings.token == null) {
-      // Determine swipe direction
-      final currentIndex = provider.currentIndex;
-      int nextIndex;
+      _isNavigating = true;
 
+      // Determine swipe direction and target index
+      int targetIndex;
       if (currentIndex < 2) {
-        // Swiping right to left (forward), skip to cart (index 3)
-        nextIndex = 3;
+        // Swiping forward (right to left), go to cart (index 3)
+        targetIndex = 3;
       } else {
-        // Swiping left to right (backward), skip to category (index 1)
-        nextIndex = 1;
+        // Swiping backward (left to right), go to category (index 1)
+        targetIndex = 1;
       }
 
-      // Navigate to the next valid screen without animation to avoid visual glitch
+      // Update provider first, then navigate
+      provider.setCurrentIndex(targetIndex);
+
+      // Navigate to target page without animation to avoid visual glitch
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (_pageController.hasClients) {
-          _pageController.jumpToPage(nextIndex);
+          _pageController.jumpToPage(targetIndex);
+          _isNavigating = false;
         }
       });
-
       return;
     }
 
     // Add haptic feedback on page change
     HapticFeedback.lightImpact();
 
+    // Update provider state
+    _isNavigating = true;
     provider.setCurrentIndex(index);
+    _isNavigating = false;
   }
 
   void _navigateToPage(int index) {
-    if (!_pageController.hasClients) return;
+    if (!_pageController.hasClients || _isNavigating) return;
 
-    // Skip wishlist if user is not authenticated and trying to navigate there
+    // Skip wishlist if user is not authenticated
     if (index == 2 && AppStrings.token == null) {
       return;
     }
 
+    _isNavigating = true;
     _pageController.animateToPage(
       index,
       duration: _pageAnimationDuration,
       curve: _pageAnimationCurve,
-    );
+    ).then((_) {
+      _isNavigating = false;
+    });
   }
 
   @override
@@ -107,15 +141,6 @@ class MainLayoutScreenState extends State<MainLayoutScreen> with SingleTickerPro
 
     return Consumer<LayoutProvider>(
       builder: (context, provider, child) {
-        // Update page controller when index changes from external sources
-        // (like bottom nav bar tap or programmatic navigation)
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          if (_pageController.hasClients &&
-              _pageController.page?.round() != provider.currentIndex) {
-            _navigateToPage(provider.currentIndex);
-          }
-        });
-
         return AnimatedBuilder(
           animation: _animationController,
           builder: (context, child) {
@@ -150,7 +175,6 @@ class MainLayoutScreenState extends State<MainLayoutScreen> with SingleTickerPro
     );
   }
 
-  // Build the main content with PageView for swipe navigation
   Widget _buildMainContent(BuildContext context, LayoutProvider provider) {
     return Scaffold(
       appBar: PreferredSize(

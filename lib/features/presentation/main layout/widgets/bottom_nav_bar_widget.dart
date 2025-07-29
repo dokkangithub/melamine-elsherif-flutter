@@ -30,14 +30,7 @@ class BottomNavBarWidget extends StatelessWidget {
             selectedItemColor: AppTheme.primaryColor,
             unselectedItemColor: AppTheme.lightSecondaryTextColor,
             currentIndex: layoutProvider.currentIndex,
-            onTap: (int index) {
-              if (index == 2 && AppStrings.token == null) {
-                AppRoutes.navigateTo(context, AppRoutes.login);
-                layoutProvider.setCurrentIndex(0);
-                return;
-              }
-              layoutProvider.setCurrentIndex(index);
-            },
+            onTap: (int index) => _handleNavigation(context, layoutProvider, index),
             useLegacyColorScheme: false,
             showSelectedLabels: true,
             showUnselectedLabels: false,
@@ -99,6 +92,19 @@ class BottomNavBarWidget extends StatelessWidget {
         );
       },
     );
+  }
+
+  void _handleNavigation(BuildContext context, LayoutProvider layoutProvider, int index) {
+    // Handle wishlist navigation for unauthenticated users
+    if (index == 2 && AppStrings.token == null) {
+      // Navigate to login and reset to home
+      AppRoutes.navigateTo(context, AppRoutes.login);
+      // Don't change the current index to avoid navigation conflicts
+      return;
+    }
+
+    // Handle normal navigation
+    layoutProvider.setCurrentIndex(index);
   }
 
   Widget _buildIconWithBadge({
