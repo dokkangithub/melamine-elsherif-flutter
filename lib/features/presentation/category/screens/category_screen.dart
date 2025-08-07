@@ -191,7 +191,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
         child: Column(
           children: [
             // Category Image
-            CustomImage(imageUrl: category.icon ),
+            Expanded(child: CustomImage(imageUrl: category.icon )),
             Column(
               children: [
                 const SizedBox(height: 4),
@@ -201,12 +201,12 @@ class _CategoryScreenState extends State<CategoryScreen> {
                   style: context.headlineSmall!.copyWith(fontWeight: FontWeight.w600),
                   maxLines: 1,
                 ),
-                const SizedBox(height: 4),
-                Text(
-                  'products_count'.tr(context).replaceAll('{count}', productCount.toString()),
-                  textAlign: TextAlign.center,
-                  style: context.titleMedium!.copyWith(color: AppTheme.darkDividerColor),
-                ),
+                // const SizedBox(height: 4),
+                // Text(
+                //   'products_count'.tr(context).replaceAll('{count}', productCount.toString()),
+                //   textAlign: TextAlign.center,
+                //   style: context.titleMedium!.copyWith(color: AppTheme.darkDividerColor),
+                // ),
                 const SizedBox(height: 8),
                 Container(
                   height: 2,

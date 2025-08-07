@@ -99,12 +99,9 @@ class _HomeScreenState extends State<HomeScreen> {
           controller: _scrollController,
           physics: const AlwaysScrollableScrollPhysics(),
           slivers: const [
-            // Convert TopHomeWidget to a sliver
             SliverToBoxAdapter(
               child: TopHomeWidget(),
             ),
-
-            // Main content as a sliver
             SliverToBoxAdapter(
               child: Padding(
                 padding: EdgeInsets.all(12.0),
@@ -112,17 +109,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   spacing: 20,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // First set products section (first 10)
                     SetProductsWidget(),
-
                     CategoriesWidget(),
                     NewProductsWidget(),
                     FeaturedProductsWidget(),
                     SimpleBannerCarousel(),
-
-                    // Second set products section (next 10) - in the center
                     SecondSetProductsWidget(),
-
                     BestSellingProductsWidget(),
                     FlashDealsWidget(),
                     SecondHomeImageWidget(),
