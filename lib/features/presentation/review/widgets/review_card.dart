@@ -69,7 +69,7 @@ class ReviewCard extends StatelessWidget {
           rating: review.rating,
           itemBuilder: (context, _) => const Icon(
             Icons.star,
-            color: Colors.amber,
+            color: AppTheme.accentColor,
           ),
           itemCount: 5,
           itemSize: 20.0,
