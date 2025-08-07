@@ -45,4 +45,16 @@ class UIHelper {
       child: child,
     );
   }
+
+
+  static Shader linearGradient = const LinearGradient(
+    begin: Alignment.centerRight,
+    end: Alignment.centerLeft,
+    colors: <Color>[
+      Color(0xFFD58B7A),
+      Color(0xFFA74F3B),
+    ],
+  ).createShader(const Rect.fromLTWH(0.0, 0.0, 200.0, 70.0));
+
+
 } 

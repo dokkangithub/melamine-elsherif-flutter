@@ -13,10 +13,11 @@ import 'package:melamine_elsherif/core/utils/widgets/custom_button.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_form_field.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
+import '../../../../core/utils/helpers/ui_helper.dart';
 import '../../../../core/utils/widgets/custom_cached_image.dart';
 
 class TopHomeWidget extends StatelessWidget {
-  const TopHomeWidget({super.key});
+   TopHomeWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -30,19 +31,23 @@ class TopHomeWidget extends StatelessWidget {
             'welcome'.tr(context),
             style: context.displayLarge!.copyWith(
               fontSize: 34,
-              fontWeight: FontWeight.normal
+              fontWeight: FontWeight.normal,
+              foreground: Paint()..shader = UIHelper.linearGradient,
             ),
           ),
           const SizedBox(height: 4),
           Text(
             'discover_luxury'.tr(context),
             style: context.displayLarge!.copyWith(
-                fontSize: 20,
-                fontWeight: FontWeight.normal
+              fontSize: 20,
+              fontWeight: FontWeight.normal,
+              foreground: Paint()..shader = UIHelper.linearGradient,
             ),
           ),
         ],
       ),
     );
   }
+
+
 }

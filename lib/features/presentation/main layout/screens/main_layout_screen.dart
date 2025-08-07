@@ -180,7 +180,7 @@ class MainLayoutScreenState extends State<MainLayoutScreen> with SingleTickerPro
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(0),
         child: AppBar(
-          backgroundColor: AppTheme.primaryColor,
+          backgroundColor: AppTheme.white,
           elevation: 0,
           systemOverlayStyle: const SystemUiOverlayStyle(
             statusBarColor: AppTheme.white,
