@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 import '../../../../../core/utils/enums/loading_state.dart';
 import '../../../../../core/utils/widgets/custom_back_button.dart';
 import '../../../../../features/domain/set products/entities/set_product_details.dart';
+import '../../../../core/utils/constants/app_assets.dart';
 import '../../../../core/utils/helpers.dart';
 import '../controller/set_product_provider.dart';
 import '../widgets/set_product_details_shimmer.dart';
@@ -400,6 +401,8 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
                   _buildSetTypeSelector(provider),
                   const SizedBox(height: 24),
                   _buildComponentsList(provider.setProductDetails!, provider),
+                  const SizedBox(height: 24),
+                  _buildCareInstructionsSection(provider.setProductDetails!), // Add this line
                   const SizedBox(height: 24),
                   _buildSelectedComponentsSummary(provider.setProductDetails!),
                   const SizedBox(height: 24),
@@ -1186,5 +1189,168 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
 
       provider.calculatePrice(request: request);
     }
+  }
+
+  Widget _buildCareInstructionsSection(SetProductDetailsData product) {
+    final List<Map<String, String>> careInstructions = [
+      {
+        'icon': AppImages.setProductIcon1,
+        'titleKey': 'extra_strong',
+        'descriptionKey': 'extra_strong_desc',
+      },
+      {
+        'icon': AppImages.setProductIcon2,
+        'titleKey': 'dishwasher_safe',
+        'descriptionKey': 'dishwasher_safe_desc',
+      },
+      {
+        'icon': AppImages.setProductIcon3,
+        'titleKey': 'microwave_safe',
+        'descriptionKey': 'microwave_safe_desc',
+      },
+      {
+        'icon': AppImages.setProductIcon4,
+        'titleKey': 'no_direct_fire',
+        'descriptionKey': 'no_direct_fire_desc',
+      },
+      {
+        'icon': AppImages.setProductIcon5,
+        'titleKey': 'no_oven',
+        'descriptionKey': 'no_oven_desc',
+      },
+      {
+        'icon': AppImages.setProductIcon6,
+        'titleKey': 'bpa_free',
+        'descriptionKey': 'bpa_free_desc',
+      },
+    ];
+
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 0),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(0),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withValues(alpha: 0.1),
+            spreadRadius: 1,
+            blurRadius: 6,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Header
+          Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: AppTheme.primaryColor.withValues(alpha: 0.2),
+              borderRadius: BorderRadius.circular(0),
+            ),
+            child: Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: Colors.transparent,
+                    borderRadius: BorderRadius.circular(0),
+                  ),
+                  child: const Icon(
+                    Icons.verified_user_outlined,
+                    color: AppTheme.accentColor,
+                    size: 24,
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Text(
+                  'care_guide'.tr(context),
+                  style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: AppTheme.accentColor,
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          // Care Instructions Grid
+          Padding(
+            padding: const EdgeInsets.all(8),
+            child: GridView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: 12,
+                mainAxisSpacing: 16,
+                childAspectRatio: 0.9, // More height for larger content
+              ),
+              itemCount: careInstructions.length,
+              itemBuilder: (context, index) {
+                final instruction = careInstructions[index];
+                return _buildCareInstructionCard(
+                  iconPath: instruction['icon']!,
+                  title: instruction['titleKey']!.tr(context),
+                  description: instruction['descriptionKey']!.tr(context),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCareInstructionCard({
+    required String iconPath,
+    required String title,
+    required String description,
+  }) {
+    return Container(
+      padding: const EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        color: Colors.grey.withValues(alpha: 0.02),
+        borderRadius: BorderRadius.circular(0),
+        border: Border.all(
+          color: Colors.grey.withValues(alpha: 0.1),
+          width: 1,
+        ),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // Icon
+          Center(
+            child: Image.asset(
+              iconPath,
+              width: 50,
+              height: 50,
+              fit: BoxFit.contain,
+            ),
+          ),
+
+          const SizedBox(height: 12),
+
+          // Title
+          Flexible(
+            child: Text(
+              title,
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                fontWeight: FontWeight.w600,
+                color: AppTheme.primaryColor,
+                fontSize: 14, // Increased from 12
+              ),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+
+        ],
+      ),
+    );
   }
 }

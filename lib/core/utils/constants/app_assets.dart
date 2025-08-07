@@ -15,7 +15,13 @@ class AppImages {
   static const String linearAppLogo = '$imagesPath/linear_app_logo.png';
   static const String wallet_icon = '$imagesPath/wallet.png';
   static const String splashBackground = '$imagesPath/splash_background.png';
-  
+  static const String setProductIcon1 = '$imagesPath/set_product_icon_1.png';
+  static const String setProductIcon2 = '$imagesPath/set_product_icon_2.png';
+  static const String setProductIcon3 = '$imagesPath/set_product_icon_3.png';
+  static const String setProductIcon4 = '$imagesPath/set_product_icon_4.png';
+  static const String setProductIcon5 = '$imagesPath/set_product_icon_5.png';
+  static const String setProductIcon6 = '$imagesPath/set_product_icon_6.png';
+
   // New onboarding background images
   static const String onboardingBg1 = '$imagesPath/onboarding_bg1.jpg';
   static const String onboardingBg2 = '$imagesPath/onboarding_bg2.jpg';

@@ -40,28 +40,49 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   bool isFavorite = false;
   final ScrollController _scrollController = ScrollController();
   bool _showAppBar = false;
+  String? _currentSlug; // Track current slug
 
   @override
   void initState() {
     super.initState();
+    _currentSlug = widget.slug;
+    _initializeProductData();
+    _scrollController.addListener(_onScroll);
+  }
+
+  @override
+  void didUpdateWidget(ProductDetailScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // Check if slug has changed
+    if (oldWidget.slug != widget.slug) {
+      _currentSlug = widget.slug;
+      _initializeProductData();
+    }
+  }
+
+  void _initializeProductData() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final productProvider = Provider.of<ProductDetailsProvider>(
         context,
         listen: false,
       );
-      productProvider.fetchProductDetails(widget.slug).then((_) {
-        final homeProvider = Provider.of<HomeProvider>(context, listen: false);
-        homeProvider.fetchRelatedProducts(productProvider.selectedProduct!.id);
 
-        final reviewProvider = Provider.of<ReviewProvider>(
-          context,
-          listen: false,
-        );
-        reviewProvider.fetchReviews(productProvider.selectedProduct!.id);
+      // Reset provider state before fetching new product
+      productProvider.resetState();
+
+      productProvider.fetchProductDetails(widget.slug).then((_) {
+        if (mounted && productProvider.selectedProduct != null) {
+          final homeProvider = Provider.of<HomeProvider>(context, listen: false);
+          homeProvider.fetchRelatedProducts(productProvider.selectedProduct!.id);
+
+          final reviewProvider = Provider.of<ReviewProvider>(
+            context,
+            listen: false,
+          );
+          reviewProvider.fetchReviews(productProvider.selectedProduct!.id);
+        }
       });
     });
-
-    _scrollController.addListener(_onScroll);
   }
 
   void _onScroll() {
@@ -91,7 +112,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
     return Consumer2<ProductDetailsProvider, HomeProvider>(
       builder: (context, productProvider, homeProvider, child) {
-        if (productProvider.productDetailsState == LoadingState.loading) {
+        // Check if we're loading or if the current product doesn't match the slug
+        if (productProvider.productDetailsState == LoadingState.loading ||
+            productProvider.selectedProduct?.slug != widget.slug) {
           return const ShimmerProductScreen();
         }
 
@@ -106,8 +129,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     style: const TextStyle(color: ProductTheme.errorColor),
                   ),
                   CustomButton(
-                    onPressed:
-                        () => productProvider.fetchProductDetails(widget.slug),
+                    onPressed: () {
+                      productProvider.resetState();
+                      productProvider.fetchProductDetails(widget.slug);
+                    },
                     child: Text(
                       'retry'.tr(context),
                       style: context.titleMedium.copyWith(
@@ -148,28 +173,28 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     collapsedHeight: kToolbarHeight,
                     backgroundColor: AppTheme.white,
                     leading:
-                        _showAppBar
-                            ? IconButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              icon: const Icon(
-                                Icons.arrow_back_ios,
-                                color: AppTheme.primaryColor,
-                              ),
-                            )
-                            : const SizedBox.shrink(),
+                    _showAppBar
+                        ? IconButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      icon: const Icon(
+                        Icons.arrow_back_ios,
+                        color: AppTheme.primaryColor,
+                      ),
+                    )
+                        : const SizedBox.shrink(),
                     title:
-                        _showAppBar
-                            ? Text(
-                              product.name,
-                              style: context.titleLarge.copyWith(
-                                color: AppTheme.primaryColor,
-                                fontWeight: FontWeight.w800,
-                              ),
-                              overflow: TextOverflow.ellipsis,
-                            )
-                            : null,
+                    _showAppBar
+                        ? Text(
+                      product.name,
+                      style: context.titleLarge.copyWith(
+                        color: AppTheme.primaryColor,
+                        fontWeight: FontWeight.w800,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    )
+                        : null,
                     flexibleSpace: FlexibleSpaceBar(
                       collapseMode: CollapseMode.parallax,
                       stretchModes: const [StretchMode.zoomBackground],
@@ -182,19 +207,19 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           ),
                           !_showAppBar
                               ? Positioned(
-                                top: statusBarHeight + 16,
-                                left:
-                                    Directionality.of(context) ==
-                                            TextDirection.rtl
-                                        ? null
-                                        : 16,
-                                right:
-                                    Directionality.of(context) ==
-                                            TextDirection.rtl
-                                        ? 16
-                                        : null,
-                                child: const CustomBackButton(),
-                              )
+                            top: statusBarHeight + 16,
+                            left:
+                            Directionality.of(context) ==
+                                TextDirection.rtl
+                                ? null
+                                : 16,
+                            right:
+                            Directionality.of(context) ==
+                                TextDirection.rtl
+                                ? 16
+                                : null,
+                            child: const CustomBackButton(),
+                          )
                               : const SizedBox.shrink(),
                         ],
                       ),
@@ -226,7 +251,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                               delay: const Duration(milliseconds: 200),
                               child: Row(
                                 mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                MainAxisAlignment.spaceBetween,
                                 children: [
                                   // Rating and review count
                                   Row(
@@ -264,7 +289,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                               delay: const Duration(milliseconds: 400),
                               child: Row(
                                 mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                MainAxisAlignment.spaceBetween,
                                 children: [
                                   RichText(
                                     text: TextSpan(
@@ -273,19 +298,19 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                           text: product.price,
                                           style: context.headlineMedium
                                               .copyWith(
-                                                color: AppTheme.primaryColor,
-                                                fontWeight: FontWeight.bold,
-                                              ),
+                                            color: AppTheme.primaryColor,
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                         ),
                                       ],
                                     ),
                                   ),
                                   Consumer<WishlistProvider>(
                                     builder: (
-                                      context,
-                                      wishlistProvider,
-                                      child,
-                                    ) {
+                                        context,
+                                        wishlistProvider,
+                                        child,
+                                        ) {
                                       return ZoomIn(
                                         duration: const Duration(
                                           milliseconds: 700,
@@ -296,9 +321,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                         child: IconButton(
                                           icon: Icon(
                                             wishlistProvider
-                                                    .isProductInWishlist(
-                                                      widget.slug,
-                                                    )
+                                                .isProductInWishlist(
+                                              widget.slug,
+                                            )
                                                 ? Icons.favorite
                                                 : Icons.favorite_border,
                                             color: AppTheme.primaryColor,
@@ -377,92 +402,92 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 right: 0,
                 bottom: 0,
                 child:
-                    productProvider.isAddingToCart
-                        ? const CustomLoadingWidget()
-                        : FadeInUp(
-                          duration: const Duration(milliseconds: 800),
-                          child: Container(
-                            padding: const EdgeInsets.all(16.0),
-                            decoration: BoxDecoration(
-                              color: ProductTheme.backgroundColor,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withValues(alpha: 0.1),
-                                  blurRadius: 10,
-                                  offset: const Offset(0, -5),
-                                ),
-                              ],
-                            ),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                QuantitySelectorWidget(product: product),
-                                SizedBox(
-                                  width: double.infinity,
-                                  height: 50,
-                                  child: CustomButton(
-                                    onPressed:
-                                        productProvider.isAddingToCart ||
-                                                !productProvider.canAddToCart
-                                            ? null
-                                            : () {
-                                              // For products with variations
-                                              if (product.hasVariation) {
-                                                final colorVariant =
-                                                    productProvider
-                                                        .selectedColor ??
-                                                    '';
-                                                final choiceVariants =
-                                                    productProvider
-                                                        .variantPrice
-                                                        ?.data
-                                                        .variant ??
-                                                    '';
+                productProvider.isAddingToCart
+                    ? const CustomLoadingWidget()
+                    : FadeInUp(
+                  duration: const Duration(milliseconds: 800),
+                  child: Container(
+                    padding: const EdgeInsets.all(16.0),
+                    decoration: BoxDecoration(
+                      color: ProductTheme.backgroundColor,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.1),
+                          blurRadius: 10,
+                          offset: const Offset(0, -5),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        QuantitySelectorWidget(product: product),
+                        SizedBox(
+                          width: double.infinity,
+                          height: 50,
+                          child: CustomButton(
+                            onPressed:
+                            productProvider.isAddingToCart ||
+                                !productProvider.canAddToCart
+                                ? null
+                                : () {
+                              // For products with variations
+                              if (product.hasVariation) {
+                                final colorVariant =
+                                    productProvider
+                                        .selectedColor ??
+                                        '';
+                                final choiceVariants =
+                                    productProvider
+                                        .variantPrice
+                                        ?.data
+                                        .variant ??
+                                        '';
 
-                                                AppFunctions.addProductToCart(
-                                                  context: context,
-                                                  productSlug: product.slug,
-                                                  productId: product.id,
-                                                  productName: product.name,
-                                                  variant: choiceVariants,
-                                                  quantity:
-                                                      productProvider.quantity,
-                                                  color: colorVariant,
-                                                  hasVariation: false,
-                                                );
-                                              } else {
-                                                AppFunctions.addProductToCart(
-                                                  context: context,
-                                                  productSlug: product.slug,
-                                                  productId: product.id,
-                                                  productName: product.name,
-                                                  variant: "",
-                                                  // No variant for non-variation products
-                                                  quantity:
-                                                      productProvider.quantity,
-                                                  color: "",
-                                                  // No color for non-variation products
-                                                  hasVariation: false,
-                                                );
-                                              }
-                                            },
-                                    child: Center(
-                                      child: Text(
-                                        productProvider.canAddToCart
-                                            ? 'add_to_cart'.tr(context)
-                                            : 'out_of_stock'.tr(context),
-                                        style: context.headlineMedium.copyWith(
-                                          color: AppTheme.white,
-                                          fontWeight: FontWeight.w700,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
+                                AppFunctions.addProductToCart(
+                                  context: context,
+                                  productSlug: product.slug,
+                                  productId: product.id,
+                                  productName: product.name,
+                                  variant: choiceVariants,
+                                  quantity:
+                                  productProvider.quantity,
+                                  color: colorVariant,
+                                  hasVariation: false,
+                                );
+                              } else {
+                                AppFunctions.addProductToCart(
+                                  context: context,
+                                  productSlug: product.slug,
+                                  productId: product.id,
+                                  productName: product.name,
+                                  variant: "",
+                                  // No variant for non-variation products
+                                  quantity:
+                                  productProvider.quantity,
+                                  color: "",
+                                  // No color for non-variation products
+                                  hasVariation: false,
+                                );
+                              }
+                            },
+                            child: Center(
+                              child: Text(
+                                productProvider.canAddToCart
+                                    ? 'add_to_cart'.tr(context)
+                                    : 'out_of_stock'.tr(context),
+                                style: context.headlineMedium.copyWith(
+                                  color: AppTheme.white,
+                                  fontWeight: FontWeight.w700,
                                 ),
-                              ],
+                              ),
                             ),
                           ),
                         ),
+                      ],
+                    ),
+                  ),
+                ),
               ),
             ],
           ),
