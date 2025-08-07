@@ -96,7 +96,7 @@ class _HomeScreenState extends State<HomeScreen> {
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-             TopHomeWidget(),
+            const TopHomeWidget(),
             Expanded(
               child: SingleChildScrollView(
                 controller: _scrollController, // Assign the controller here
@@ -108,7 +108,6 @@ class _HomeScreenState extends State<HomeScreen> {
                         spacing: 20,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-
 
                           SetProductsWidget(),
 
