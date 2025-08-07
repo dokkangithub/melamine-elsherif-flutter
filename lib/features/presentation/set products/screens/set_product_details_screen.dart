@@ -31,13 +31,13 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
     with TickerProviderStateMixin {
   Map<int, int> selectedQuantities = {};
   bool isDescriptionExpanded = false;
-  bool isSummaryExpanded = false; // Add this for summary dropdown
-  bool isFullSet = true; // Default to full set
+  bool isSummaryExpanded = false;
+  bool isFullSet = true;
   late AnimationController _descriptionController;
-  late AnimationController _summaryController; // Add this for summary
+  late AnimationController _summaryController;
   late AnimationController _priceAnimationController;
   late Animation<double> _descriptionAnimation;
-  late Animation<double> _summaryAnimation; // Add this for summary
+  late Animation<double> _summaryAnimation;
   late Animation<double> _priceAnimation;
 
   @override
@@ -47,7 +47,7 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
       duration: const Duration(milliseconds: 300),
       vsync: this,
     );
-    _summaryController = AnimationController( // Add this controller
+    _summaryController = AnimationController(
       duration: const Duration(milliseconds: 300),
       vsync: this,
     );
@@ -59,7 +59,7 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
       parent: _descriptionController,
       curve: Curves.easeInOut,
     );
-    _summaryAnimation = CurvedAnimation( // Add this animation
+    _summaryAnimation = CurvedAnimation(
       parent: _summaryController,
       curve: Curves.easeInOut,
     );
@@ -68,7 +68,6 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
       curve: Curves.easeInOut,
     );
 
-    // Reset state when entering the screen
     _resetScreenState();
 
     Future.microtask(() {
@@ -80,14 +79,14 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
   void _resetScreenState() {
     selectedQuantities.clear();
     isDescriptionExpanded = false;
-    isSummaryExpanded = false; // Reset summary state
+    isSummaryExpanded = false;
     isFullSet = true;
   }
 
   @override
   void dispose() {
     _descriptionController.dispose();
-    _summaryController.dispose(); // Dispose summary controller
+    _summaryController.dispose();
     _priceAnimationController.dispose();
     final provider = Provider.of<SetProductsProvider>(context, listen: false);
     provider.clearSetProductDetails();
@@ -107,7 +106,7 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
     });
   }
 
-  void _toggleSummary() { // Add this method for summary toggle
+  void _toggleSummary() {
     setState(() {
       isSummaryExpanded = !isSummaryExpanded;
       if (isSummaryExpanded) {
@@ -123,9 +122,8 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
       setState(() {
         isFullSet = fullSet;
         if (!fullSet) {
-          // Reset quantities to initial values for custom set
-          _resetQuantitiesToInitial();
-          // Calculate initial price for custom set
+          // FIX 2: Set initial quantities to 0 for custom set
+          _setQuantitiesToZero();
         } else {
           // Clear calculated price when switching to full set
           final provider = Provider.of<SetProductsProvider>(
@@ -140,6 +138,18 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
     }
   }
 
+  // FIX 2: New method to set all quantities to 0 for custom set
+  void _setQuantitiesToZero() {
+    final provider = Provider.of<SetProductsProvider>(context, listen: false);
+    if (provider.setProductDetails != null) {
+      selectedQuantities.clear();
+      for (final component in provider.setProductDetails!.components) {
+        selectedQuantities[component.id!] = 0;
+      }
+      provider.clearCalculatedPrice();
+    }
+  }
+
   void _resetQuantitiesToInitial() {
     final provider = Provider.of<SetProductsProvider>(context, listen: false);
     if (provider.setProductDetails != null) {
@@ -147,7 +157,6 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
       for (final component in provider.setProductDetails!.components) {
         selectedQuantities[component.id!] = component.initialQuantity ?? 1;
       }
-      // Clear any previous calculated price when resetting
       provider.clearCalculatedPrice();
     }
   }
@@ -156,16 +165,14 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
     if (provider.setProductDetails == null) return;
 
     if (isFullSet) {
-      // Add full set to cart using utility method
       await AppFunctions.addFullSetToCart(
         context: context,
         productId: provider.setProductDetails!.id!,
         productName: provider.setProductDetails!.name ?? '',
         productSlug: provider.setProductDetails!.slug ?? widget.slug,
-        quantity: 1, // You can make this dynamic if needed
+        quantity: 1,
       );
     } else {
-      // Validate custom set selection first
       if (!AppFunctions.validateCustomSetSelection(
         provider.setProductDetails!.components,
         selectedQuantities,
@@ -174,20 +181,18 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
         return;
       }
 
-      // Create components list from selections
       final components = AppFunctions.createComponentsFromSelections(
         provider.setProductDetails!.components,
         selectedQuantities,
       );
 
-      // Add custom set to cart using utility method
       await AppFunctions.addCustomSetToCart(
         context: context,
         productId: provider.setProductDetails!.id!,
         productName: provider.setProductDetails!.name ?? '',
         productSlug: provider.setProductDetails!.slug ?? widget.slug,
         components: components,
-        quantity: 1, // You can make this dynamic if needed
+        quantity: 1,
       );
     }
   }
@@ -214,12 +219,11 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
         .of(context)
         .size
         .height;
-    final imageHeight = screenHeight / 2.3; // 1/3 of screen height
+    final imageHeight = screenHeight / 2.3;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Image with back button stack
         Stack(
           children: [
             CustomImage(
@@ -228,12 +232,11 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
               width: double.infinity,
               fit: BoxFit.cover,
             ),
-            // Back button positioned at top-left with safe area padding
             Positioned(
               top: MediaQuery
                   .of(context)
                   .padding
-                  .top + 8, // Account for status bar
+                  .top + 8,
               left: 16,
               child: Container(
                 decoration: BoxDecoration(
@@ -258,7 +261,6 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
           ],
         ),
         const SizedBox(height: 16),
-        // Product name
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Text(
@@ -273,7 +275,6 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
           ),
         ),
         const SizedBox(height: 8),
-        // Price section
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Consumer<SetProductsProvider>(
@@ -349,7 +350,6 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
     );
   }
 
-// Also update your _buildBody method to remove top padding:
   Widget _buildBody(SetProductsProvider provider) {
     if (provider.setProductDetailsState == LoadingState.loading) {
       return const SetProductDetailsShimmer();
@@ -390,7 +390,6 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
           children: [
             _buildProductHeader(provider.setProductDetails!),
             const SizedBox(height: 24),
-            // Add padding to the rest of the content
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Column(
@@ -405,7 +404,7 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
                   _buildSelectedComponentsSummary(provider.setProductDetails!),
                   const SizedBox(height: 24),
                   _buildReviewsSection(provider.setProductDetails!),
-                  const SizedBox(height: 100), // Space for bottom bar
+                  const SizedBox(height: 100),
                 ],
               ),
             ),
@@ -594,190 +593,248 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
 
   Widget _buildComponentCard(Component component,
       SetProductsProvider provider) {
-    final int currentQuantity = selectedQuantities[component.id] ??
-        (component.initialQuantity ?? 1);
-    final int minQty = component.minQuantity ?? 1;
+    final int currentQuantity = isFullSet
+        ? (component.initialQuantity ?? 1)
+        : (selectedQuantities[component.id] ?? 0);
+
+    final int minQty = component.minQuantity ?? 0;
     final int maxQty = component.maxQuantity ?? 99;
     final bool isEnabled = !isFullSet;
 
     return AnimatedOpacity(
       duration: const Duration(milliseconds: 300),
       opacity: isEnabled ? 1.0 : 0.6,
-      child: Card(
-        margin: const EdgeInsets.only(bottom: 16),
-        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
-        elevation: isEnabled ? 3 : 1,
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  CustomImage(
-                    imageUrl: component.thumbnailImage ?? '',
-                    height: 80,
-                    width: 80,
-                    fit: BoxFit.contain,
-                  ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          component.name ?? '',
-                          style: Theme
-                              .of(context)
-                              .textTheme
-                              .titleMedium!
-                              .copyWith(
-                            fontWeight: FontWeight.w600,
-                            color: isEnabled ? null : Colors.grey,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        if (component.isRequired == true)
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 8,
-                                vertical: 2),
-                            decoration: BoxDecoration(
-                              color: AppTheme.primaryColor.withValues(
-                                  alpha: 0.1),
-                              borderRadius: BorderRadius.circular(0),
-                            ),
-                            child: Text(
-                              'required'.tr(context),
-                              style: Theme
-                                  .of(context)
-                                  .textTheme
-                                  .bodySmall!
-                                  .copyWith(
-                                color: AppTheme.primaryColor,
-                                fontWeight: FontWeight.w500,
+      child: SizedBox(
+        height: 160,
+        width: double.infinity,
+        child: Card(
+          margin: const EdgeInsets.only(bottom: 20),
+          shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+          elevation: isEnabled ? 2 : 1,
+          child: Padding(
+            padding: const EdgeInsets.all(10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    CustomImage(
+                      imageUrl: component.thumbnailImage ?? '',
+                      height: 110,
+                      width: 110,
+                      fit: BoxFit.cover,
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                component.name ?? '',
+                                style: Theme
+                                    .of(context)
+                                    .textTheme
+                                    .titleMedium!
+                                    .copyWith(
+                                  fontWeight: FontWeight.w600,
+                                  color: isEnabled ? null : Colors.grey,
+                                ),
                               ),
-                            ),
+                              const SizedBox(height: 4),
+                              if (component.isRequired == true)
+                                Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 8,
+                                      vertical: 2),
+                                  decoration: BoxDecoration(
+                                    color: AppTheme.primaryColor.withValues(
+                                        alpha: 0.1),
+                                    borderRadius: BorderRadius.circular(0),
+                                  ),
+                                  child: Text(
+                                    'required'.tr(context),
+                                    style: Theme
+                                        .of(context)
+                                        .textTheme
+                                        .bodySmall!
+                                        .copyWith(
+                                      color: AppTheme.primaryColor,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ),
+                              const SizedBox(height: 8),
+                              Text(
+                                component.discountedPrice ?? '',
+                                style: Theme
+                                    .of(context)
+                                    .textTheme
+                                    .titleMedium!
+                                    .copyWith(
+                                  color: isEnabled ? AppTheme.primaryColor : Colors
+                                      .grey,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
                           ),
-                        const SizedBox(height: 8),
-                        Text(
-                          component.discountedPrice ?? '',
-                          style: Theme
-                              .of(context)
-                              .textTheme
-                              .titleMedium!
-                              .copyWith(
-                            color: isEnabled ? AppTheme.primaryColor : Colors
-                                .grey,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 16),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'quantity'.tr(context),
-                    style: Theme
-                        .of(context)
-                        .textTheme
-                        .titleMedium!
-                        .copyWith(
-                      fontWeight: FontWeight.w500,
-                      color: isEnabled ? null : Colors.grey,
-                    ),
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: isEnabled ? AppTheme.darkDividerColor : Colors
-                            .grey.withOpacity(0.5),
+                          const SizedBox(height: 16),
+                          isFullSet
+                              ? _buildFullSetQuantityInfo(currentQuantity, context)
+                              : _buildCustomSetQuantityControls(
+                              component, currentQuantity, minQty, maxQty, provider, context),
+                        ],
                       ),
-                      borderRadius: BorderRadius.zero, // no radius
                     ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        InkWell(
-                          onTap: isEnabled && currentQuantity > minQty
-                              ? () {
-                            setState(() {
-                              selectedQuantities[component.id!] =
-                                  currentQuantity - 1;
-                            });
-                            _calculatePrice(provider);
-                          }
-                              : null,
-                          child: Container(
-                            color: Colors.transparent,
-                            padding: const EdgeInsets.all(8),
-                            child: Icon(
-                              Icons.remove,
-                              color: isEnabled ? null : Colors.grey,
-                              size: 20,
-                            ),
-                          ),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 16, vertical: 8),
-                          decoration: const BoxDecoration(
-                            border: Border.symmetric(
-                              vertical: BorderSide(
-                                  width: 0.5, color: Colors.grey),
-                            ),
-                          ),
-                          child: Text(
-                            currentQuantity.toString(),
-                            style: Theme
-                                .of(context)
-                                .textTheme
-                                .titleMedium!
-                                .copyWith(
-                              fontWeight: FontWeight.bold,
-                              color: isEnabled ? null : Colors.grey,
-                            ),
-                          ),
-                        ),
-                        InkWell(
-                          onTap: isEnabled && currentQuantity < maxQty
-                              ? () {
-                            setState(() {
-                              selectedQuantities[component.id!] =
-                                  currentQuantity + 1;
-                            });
-                            _calculatePrice(provider);
-                          }
-                              : null,
-                          child: Container(
-                            color: Colors.transparent,
-                            padding: const EdgeInsets.all(8),
-                            child: Icon(
-                              Icons.add,
-                              color: isEnabled ? null : Colors.grey,
-                              size: 20,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  )
-
-                ],
-              ),
-            ],
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 
+  Widget _buildFullSetQuantityInfo(int quantity, BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          'quantity'.tr(context),
+          style: Theme
+              .of(context)
+              .textTheme
+              .titleMedium!
+              .copyWith(
+            fontWeight: FontWeight.w500,
+            color: Colors.grey,
+          ),
+        ),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          decoration: BoxDecoration(
+            color: AppTheme.primaryColor.withValues(alpha: 0.1),
+            borderRadius: BorderRadius.circular(0),
+            border: Border.all(
+              color: AppTheme.primaryColor.withValues(alpha: 0.3),
+            ),
+          ),
+          child: Text(
+            '${quantity}x',
+            style: Theme
+                .of(context)
+                .textTheme
+                .titleMedium!
+                .copyWith(
+              fontWeight: FontWeight.bold,
+              color: AppTheme.primaryColor,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildCustomSetQuantityControls(
+      Component component,
+      int currentQuantity,
+      int minQty,
+      int maxQty,
+      SetProductsProvider provider,
+      BuildContext context,
+      ) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          'quantity'.tr(context),
+          style: Theme
+              .of(context)
+              .textTheme
+              .titleMedium!
+              .copyWith(
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+        Container(
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: AppTheme.darkDividerColor,
+            ),
+            borderRadius: BorderRadius.zero,
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              InkWell(
+                onTap: currentQuantity > minQty
+                    ? () {
+                  setState(() {
+                    selectedQuantities[component.id!] = currentQuantity - 1;
+                  });
+                  _calculatePrice(provider);
+                }
+                    : null,
+                child: Container(
+                  color: Colors.transparent,
+                  padding: const EdgeInsets.all(8),
+                  child: Icon(
+                    Icons.remove,
+                    color: currentQuantity > minQty ? null : Colors.grey,
+                    size: 20,
+                  ),
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 16, vertical: 8),
+                decoration: const BoxDecoration(
+                  border: Border.symmetric(
+                    vertical: BorderSide(
+                        width: 0.5, color: Colors.grey),
+                  ),
+                ),
+                child: Text(
+                  currentQuantity.toString(),
+                  style: Theme
+                      .of(context)
+                      .textTheme
+                      .titleMedium!
+                      .copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              InkWell(
+                onTap: currentQuantity < maxQty
+                    ? () {
+                  setState(() {
+                    selectedQuantities[component.id!] = currentQuantity + 1;
+                  });
+                  _calculatePrice(provider);
+                }
+                    : null,
+                child: Container(
+                  color: Colors.transparent,
+                  padding: const EdgeInsets.all(8),
+                  child: Icon(
+                    Icons.add,
+                    color: currentQuantity < maxQty ? null : Colors.grey,
+                    size: 20,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
   Widget _buildSelectedComponentsSummary(SetProductDetailsData product) {
-    // Define the components to show
     List<Component> componentsToShow;
     String titleKey;
 
@@ -786,7 +843,7 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
       titleKey = 'full_set_components';
     } else {
       componentsToShow = product.components.where((component) {
-        final quantity = selectedQuantities[component.id] ?? (component.initialQuantity ?? 1);
+        final quantity = selectedQuantities[component.id] ?? 0;
         return quantity > 0;
       }).toList();
       titleKey = 'selected_components';
@@ -840,7 +897,7 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
                     children: componentsToShow.map((component) {
                       final quantity = isFullSet
                           ? (component.initialQuantity ?? 1)
-                          : (selectedQuantities[component.id] ?? (component.initialQuantity ?? 1));
+                          : (selectedQuantities[component.id] ?? 0);
 
                       return Padding(
                         padding: const EdgeInsets.symmetric(vertical: 4),
@@ -977,7 +1034,7 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
                                         i < (review.rating ?? 0)
                                             ? Icons.star
                                             : Icons.star_border,
-                                        color: Colors.amber,
+                                        color: AppTheme.accentColor,
                                         size: 16,
                                       )),
                                   const SizedBox(width: 8),
@@ -986,8 +1043,9 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
                                     style: Theme
                                         .of(context)
                                         .textTheme
-                                        .bodySmall!
+                                        .bodyMedium!
                                         .copyWith(
+                                      fontWeight: FontWeight.w400,
                                       color: Colors.grey,
                                     ),
                                   ),
@@ -1107,24 +1165,26 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
   }
 
   void _calculatePrice(SetProductsProvider provider) {
-    final components = <ComponentRequest>[];
+    // Only calculate price for custom sets
+    if (!isFullSet) {
+      final components = <ComponentRequest>[];
 
-    for (final component in provider.setProductDetails!.components) {
-      final quantity = selectedQuantities[component.id] ??
-          (component.initialQuantity ?? 1);
-      components.add(
-        ComponentRequest(
-          productId: component.id!,
-          quantity: quantity,
-        ),
+      for (final component in provider.setProductDetails!.components) {
+        final quantity = selectedQuantities[component.id] ?? 0;
+        components.add(
+          ComponentRequest(
+            productId: component.id!,
+            quantity: quantity,
+          ),
+        );
+      }
+
+      final request = CalculatePriceRequest(
+        productId: provider.setProductDetails!.id!,
+        components: components,
       );
+
+      provider.calculatePrice(request: request);
     }
-
-    final request = CalculatePriceRequest(
-      productId: provider.setProductDetails!.id!,
-      components: components,
-    );
-
-    provider.calculatePrice(request: request);
   }
 }

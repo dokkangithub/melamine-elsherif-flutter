@@ -547,14 +547,14 @@ class _AllCategoryProductsScreenState extends State<AllCategoryProductsScreen> {
       HomeProvider homeProvider,
       ) {
     if (state == LoadingState.loading && products.isEmpty) {
-      return Container(
+      return const SizedBox(
         height: 400,
-        child: const Center(child: ProductsGridShimmer()),
+        child: Center(child: ProductsGridShimmer()),
       );
     }
 
     if (state == LoadingState.error && products.isEmpty) {
-      return Container(
+      return SizedBox(
         height: 400,
         child: Center(
           child: FadeIn(
@@ -576,7 +576,7 @@ class _AllCategoryProductsScreenState extends State<AllCategoryProductsScreen> {
     }
 
     if (products.isEmpty) {
-      return Container(
+      return SizedBox(
         height: 400,
         child: const Center(child: CustomEmptyWidget()),
       );
@@ -624,6 +624,11 @@ class _AllCategoryProductsScreenState extends State<AllCategoryProductsScreen> {
 
     return InkWell(
       onTap: () {
+        product.setProduct?AppRoutes.navigateTo(
+          context,
+          AppRoutes.setProductDetailsScreen,
+          arguments: {'slug': product.slug},
+        ):
         AppRoutes.navigateTo(
           context,
           AppRoutes.productDetailScreen,
