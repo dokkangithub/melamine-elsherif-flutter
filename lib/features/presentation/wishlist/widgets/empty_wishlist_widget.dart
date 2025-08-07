@@ -94,7 +94,7 @@ class EmptyWishlistWidget extends StatelessWidget {
                         Provider.of<LayoutProvider>(context, listen: false).currentIndex = 0;
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: AppTheme.accentColor,
+                        backgroundColor: AppTheme.primaryColor,
                         foregroundColor: Colors.white,
                         elevation: 0,
                         shape: RoundedRectangleBorder(

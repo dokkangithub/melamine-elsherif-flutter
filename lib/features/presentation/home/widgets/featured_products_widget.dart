@@ -103,21 +103,18 @@ class _FeaturedProductsWidgetState extends State<FeaturedProductsWidget>
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Header
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: SeeAllWidget(
-                    title: 'featured_collection'.tr(context),
-                    onTap: () {
-                      AppRoutes.navigateTo(
-                        context,
-                        AppRoutes.allProductsByTypeScreen,
-                        arguments: {
-                          'productType': ProductType.featured,
-                          'title': 'featured_collection'.tr(context),
-                        },
-                      );
-                    },
-                  ),
+                SeeAllWidget(
+                  title: 'featured_collection'.tr(context),
+                  onTap: () {
+                    AppRoutes.navigateTo(
+                      context,
+                      AppRoutes.allProductsByTypeScreen,
+                      arguments: {
+                        'productType': ProductType.featured,
+                        'title': 'featured_collection'.tr(context),
+                      },
+                    );
+                  },
                 ),
                 const SizedBox(height: 10),
 
@@ -126,7 +123,6 @@ class _FeaturedProductsWidgetState extends State<FeaturedProductsWidget>
                   height: 315,
                   child: ListView.builder(
                     controller: _scrollController,
-                    padding: const EdgeInsets.only(left: 16.0, right: 16.0),
                     scrollDirection: Axis.horizontal,
                     physics: const BouncingScrollPhysics(
                       parent: AlwaysScrollableScrollPhysics(),

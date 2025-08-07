@@ -8,8 +8,8 @@ import 'package:melamine_elsherif/core/utils/enums/loading_state.dart';
 import 'package:melamine_elsherif/features/presentation/set products/controller/set_product_provider.dart';
 import 'package:melamine_elsherif/features/presentation/home/widgets/shimmer/featured_products_shimmer.dart';
 
-class SetProductsWidget extends StatelessWidget {
-  const SetProductsWidget({super.key});
+class SecondSetProductsWidget extends StatelessWidget {
+  const SecondSetProductsWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -30,10 +30,10 @@ class SetProductsWidget extends StatelessWidget {
 
         final filteredProducts = products.where((product) => product.published == true).toList();
 
-        // Get first 10 products for the top section
-        final firstTenProducts = filteredProducts.take(10).toList();
+        // Get next 10 products (from index 10 to 19) for the center section
+        final nextTenProducts = filteredProducts.skip(10).take(10).toList();
 
-        if (firstTenProducts.isEmpty) {
+        if (nextTenProducts.isEmpty) {
           return _buildEmptyState();
         }
 
@@ -43,7 +43,7 @@ class SetProductsWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SeeAllWidget(
-                title: 'customize_yours'.tr(context),
+                title: 'build_premium_sets'.tr(context), // Different title
                 onTap: () {
                   AppRoutes.navigateTo(context, AppRoutes.setProductsScreen);
                 },
@@ -54,10 +54,10 @@ class SetProductsWidget extends StatelessWidget {
                 child: ListView.builder(
                   padding: const EdgeInsets.only(left: 16.0),
                   scrollDirection: Axis.horizontal,
-                  itemCount: firstTenProducts.length,
+                  itemCount: nextTenProducts.length,
                   itemBuilder: (context, index) =>
                       SetProductCard(
-                        setProduct: firstTenProducts[index],
+                        setProduct: nextTenProducts[index],
                         width: 250,
                       ),
                 ),

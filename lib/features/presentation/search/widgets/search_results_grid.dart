@@ -120,7 +120,7 @@ class SearchResultsGrid extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(vertical: 16.0),
                   child: Text(
                     'loading_more_products'.tr(context),
-                    style: context.titleSmall?.copyWith(color: AppTheme.accentColor),
+                    style: context.titleSmall?.copyWith(color: AppTheme.primaryColor),
                 ),
               ),
             ],

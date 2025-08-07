@@ -92,7 +92,7 @@ class _ProductGridCardState extends State<ProductGridCard> {
                           child: CustomImage(
                             width: double.infinity,
                             imageUrl: widget.product.thumbnailImage,
-                            fit: BoxFit.cover,
+                            fit: BoxFit.contain,
                           ),
                         ),
                       ),
@@ -190,7 +190,7 @@ class _ProductGridCardState extends State<ProductGridCard> {
                         decoration: BoxDecoration(
                           color:
                               !widget.availableAddToCart
-                                  ? AppTheme.accentColor.withValues(alpha: 0.1)
+                                  ? AppTheme.primaryColor.withValues(alpha: 0.1)
                                   : Colors.transparent,
                           borderRadius: BorderRadius.circular(30),
                         ),
@@ -201,7 +201,7 @@ class _ProductGridCardState extends State<ProductGridCard> {
                                   style: context.bodySmall?.copyWith(
                                     color:
                                         !widget.availableAddToCart
-                                            ? AppTheme.accentColor
+                                            ? AppTheme.primaryColor
                                             : AppTheme.primaryColor,
                                     fontWeight: FontWeight.w900,
                                   ),

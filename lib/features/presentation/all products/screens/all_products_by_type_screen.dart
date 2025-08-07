@@ -499,7 +499,7 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
                   imageUrl: product.thumbnailImage,
                   height: isEven ? 180 : 200, // Alternate heights
                   width: double.infinity,
-                  fit: BoxFit.cover,
+                  fit: BoxFit.contain,
                 ),
                 Positioned(
                   top: 8,

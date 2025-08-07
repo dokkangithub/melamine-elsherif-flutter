@@ -33,7 +33,7 @@ class SearchInputField extends StatelessWidget {
               onClear!();
             }
           },
-          child: const Icon(Icons.close,color: AppTheme.accentColor)),
+          child: const Icon(Icons.close,color: AppTheme.primaryColor)),
       hint: 'search_products'.tr(context),
       onChanged: onChanged,
       isBorderAvailable: false,

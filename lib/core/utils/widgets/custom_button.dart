@@ -31,7 +31,7 @@ class CustomButton extends StatelessWidget {
     this.backgroundColor,
     this.textColor,
     this.splashColor,
-    this.borderColor=AppTheme.accentColor,
+    this.borderColor=AppTheme.primaryColor,
     this.padding,
     this.elevation,
     this.onPressed,

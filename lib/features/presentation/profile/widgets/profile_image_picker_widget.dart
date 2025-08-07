@@ -43,7 +43,7 @@ class _ProfileImagePickerWidgetState extends State<ProfileImagePickerWidget> {
                     offset: const Offset(0, 2),
                   ),
                 ],
-                color: AppTheme.accentColor.withOpacity(0.2),
+                color: AppTheme.primaryColor.withOpacity(0.2),
               ),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(60),

@@ -12,6 +12,7 @@ import 'package:melamine_elsherif/features/presentation/home/widgets/featured_pr
 import 'package:melamine_elsherif/features/presentation/home/widgets/new_products_widget.dart';
 import 'package:melamine_elsherif/features/presentation/home/widgets/all_products_widget.dart';
 import 'package:melamine_elsherif/features/presentation/home/widgets/set_products_widget.dart';
+import 'package:melamine_elsherif/features/presentation/home/widgets/second_set_products_widget.dart'; // Import the new widget
 import '../../cart/controller/cart_provider.dart';
 import '../../slider/controller/provider.dart';
 import '../widgets/banners_widget.dart';
@@ -96,7 +97,7 @@ class _HomeScreenState extends State<HomeScreen> {
         onRefresh: _onRefresh,
         child: CustomScrollView(
           controller: _scrollController,
-          physics: const AlwaysScrollableScrollPhysics(), // This ensures pull-to-refresh works even with short content
+          physics: const AlwaysScrollableScrollPhysics(),
           slivers: const [
             // Convert TopHomeWidget to a sliver
             SliverToBoxAdapter(
@@ -111,14 +112,21 @@ class _HomeScreenState extends State<HomeScreen> {
                   spacing: 20,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    // First set products section (first 10)
                     SetProductsWidget(),
+
                     CategoriesWidget(),
                     NewProductsWidget(),
                     FeaturedProductsWidget(),
                     SimpleBannerCarousel(),
+
+                    // Second set products section (next 10) - in the center
+                    SecondSetProductsWidget(),
+
                     BestSellingProductsWidget(),
                     FlashDealsWidget(),
                     SecondHomeImageWidget(),
+                    SizedBox(height: 4),
                     AllProductsWidget(),
                   ],
                 ),

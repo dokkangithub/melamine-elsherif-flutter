@@ -302,7 +302,7 @@ class _WishlistWidgetState extends State<WishlistWidget> {
       confirmText: 'clear'.tr(context),
       cancelText: 'cancel'.tr(context),
       icon: Icons.delete_outline,
-      confirmButtonColor: AppTheme.accentColor,
+      confirmButtonColor: AppTheme.primaryColor,
       onConfirm: () {
         widget.provider.clearWishlist();
         CustomToast.showToast(message: 'wishlist_cleared'.tr(context), type: ToastType.success);

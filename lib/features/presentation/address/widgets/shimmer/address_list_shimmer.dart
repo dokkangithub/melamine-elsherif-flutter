@@ -27,7 +27,7 @@ class AddressListShimmer extends StatelessWidget {
                 gradient: LinearGradient(
                   colors: [
                     AppTheme.primaryColor.withValues(alpha: 0.05),
-                    AppTheme.accentColor.withValues(alpha: 0.05)
+                    AppTheme.primaryColor.withValues(alpha: 0.05)
                   ],
                 ),
               ),

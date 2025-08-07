@@ -6,7 +6,7 @@ class AppTheme {
   // Colors
   static const Color primaryColor = Color(0xFFB0A88E); // Deep Purple
   static const Color secondaryColor = Color(0x80C2665A); // Pink
-  static const Color accentColor = Color(0xFFB0A88E);
+  static const Color accentColor = Color(0xFFA74F3B);
   static const Color white = Color(0xFFFFFFFF);
   static const Color black = Color(0xFF111111);
 

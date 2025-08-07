@@ -111,7 +111,7 @@ class _ProductCardState extends State<ProductCard> {
                                 5,
                                 (index) => const Icon(
                                   Icons.star_outline_sharp,
-                                  color: Colors.amber,
+                                  color: AppTheme.accentColor,
                                   size: 16,
                                 ),
                               ),
@@ -151,7 +151,7 @@ class _ProductCardState extends State<ProductCard> {
                                             ? TextAlign.right
                                             : TextAlign.left,
                                   ),
-                                  Text(
+                                  widget.product.hasDiscount?Text(
                                     widget.product.mainPrice,
                                     style: context.titleMedium.copyWith(
                                       color: AppTheme.lightSecondaryTextColor,
@@ -163,7 +163,7 @@ class _ProductCardState extends State<ProductCard> {
                                                 TextDirection.rtl
                                             ? TextAlign.right
                                             : TextAlign.left,
-                                  ),
+                                  ):const SizedBox.shrink(),
                                 ],
                               ),
                             ),

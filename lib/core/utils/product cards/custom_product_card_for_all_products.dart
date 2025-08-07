@@ -71,7 +71,7 @@ class CustomProductCardForAllProducts extends StatelessWidget {
               child: CustomImage(
                 width: double.infinity,
                 imageUrl: product.thumbnailImage,
-                fit: BoxFit.cover,
+                fit: BoxFit.contain,
               ),
             ),
             const SizedBox(height: 4),
