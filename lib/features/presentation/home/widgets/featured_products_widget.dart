@@ -98,7 +98,7 @@ class _FeaturedProductsWidgetState extends State<FeaturedProductsWidget>
         return FadeTransition(
           opacity: _fadeAnimation,
           child: Padding(
-            padding: const EdgeInsets.only(top: 16.0),
+            padding: const EdgeInsets.only(top: 4.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -123,7 +123,7 @@ class _FeaturedProductsWidgetState extends State<FeaturedProductsWidget>
 
                 // Scroll-animated products list
                 SizedBox(
-                  height: 330,
+                  height: 315,
                   child: ListView.builder(
                     controller: _scrollController,
                     padding: const EdgeInsets.only(left: 16.0, right: 16.0),

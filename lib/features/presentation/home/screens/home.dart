@@ -69,66 +69,57 @@ class _HomeScreenState extends State<HomeScreen> {
     wishlistProvider.fetchWishlist();
   }
 
+  Future<void> _onRefresh() async {
+    final homeProvider = Provider.of<HomeProvider>(context, listen: false);
+    final categoryProvider = Provider.of<CategoryProvider>(
+      context,
+      listen: false,
+    );
+    final sliderProvider = Provider.of<SliderProvider>(context, listen: false);
+    final setProductProvider = Provider.of<SetProductsProvider>(
+      context,
+      listen: false,
+    );
+
+    await Future.wait([
+      sliderProvider.getSliders(refresh: true),
+      homeProvider.refreshHomeData(),
+      setProductProvider.getSetProducts(),
+      categoryProvider.getCategories(needRefresh: true),
+    ]);
+  }
 
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
-      onRefresh: () async {
-        final homeProvider = Provider.of<HomeProvider>(context, listen: false);
-        final categoryProvider = Provider.of<CategoryProvider>(
-          context,
-          listen: false,
-        );
-        final sliderProvider = Provider.of<SliderProvider>(context, listen: false);
-        final setProductProvider = Provider.of<SetProductsProvider>(
-          context,
-          listen: false,
-        );
+    return Scaffold(
+      body: RefreshIndicator(
+        onRefresh: _onRefresh,
+        child: CustomScrollView(
+          controller: _scrollController,
+          physics: const AlwaysScrollableScrollPhysics(), // This ensures pull-to-refresh works even with short content
+          slivers: const [
+            // Convert TopHomeWidget to a sliver
+            SliverToBoxAdapter(
+              child: TopHomeWidget(),
+            ),
 
-        await Future.wait([
-        sliderProvider.getSliders(refresh: true),
-          homeProvider.refreshHomeData(),
-          setProductProvider.getSetProducts(),
-          categoryProvider.getCategories(needRefresh: true),
-        ]);
-      },
-      child: Scaffold(
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const TopHomeWidget(),
-            Expanded(
-              child: SingleChildScrollView(
-                controller: _scrollController, // Assign the controller here
-                child: const Column(
+            // Main content as a sliver
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: EdgeInsets.all(12.0),
+                child: Column(
+                  spacing: 20,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Padding(
-                      padding: EdgeInsets.all(12.0),
-                      child: Column(
-                        spacing: 20,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-
-                          SetProductsWidget(),
-
-                          CategoriesWidget(),
-
-                          NewProductsWidget(),
-
-                          FeaturedProductsWidget(),
-
-                          SimpleBannerCarousel(),
-
-                          BestSellingProductsWidget(),
-
-                          FlashDealsWidget(),
-
-                          SecondHomeImageWidget(),
-
-                          AllProductsWidget(),
-                        ],
-                      ),
-                    ),
+                    SetProductsWidget(),
+                    CategoriesWidget(),
+                    NewProductsWidget(),
+                    FeaturedProductsWidget(),
+                    SimpleBannerCarousel(),
+                    BestSellingProductsWidget(),
+                    FlashDealsWidget(),
+                    SecondHomeImageWidget(),
+                    AllProductsWidget(),
                   ],
                 ),
               ),
@@ -138,5 +129,4 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
-
 }

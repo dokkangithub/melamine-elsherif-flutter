@@ -43,7 +43,7 @@ class TopHomeWidget extends StatelessWidget {
                 style: context.displayLarge!.copyWith(
                   fontSize: 16,
                   fontWeight: FontWeight.w200,
-                  color: Colors.white, // ← سيُستبدل بالـ gradient عبر ShaderMask
+                  color: Colors.white,
                 ),
                 textDirection: TextDirection.rtl,
                 velocity: 30.0,

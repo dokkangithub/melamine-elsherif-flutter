@@ -109,7 +109,7 @@ class _FeaturedProductCardState extends State<FeaturedProductCard> {
                     // Product Name
                     Text(
                       widget.product.name,
-                      maxLines: 2,
+                      maxLines: 1,
                       style: context.titleLarge!.copyWith(
                         fontWeight: FontWeight.w600,
                       ),

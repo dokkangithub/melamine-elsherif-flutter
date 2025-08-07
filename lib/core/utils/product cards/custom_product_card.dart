@@ -92,7 +92,7 @@ class _ProductCardState extends State<ProductCard> {
                         aspectRatio: 1.5,
                         child: CustomImage(
                           imageUrl: widget.product.thumbnailImage,
-                          fit: BoxFit.cover,
+                          fit: BoxFit.contain,
                         ),
                       ),
                     ),
