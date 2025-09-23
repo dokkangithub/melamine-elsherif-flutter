@@ -1,4 +1,3 @@
-// lib/features/domain/address/entities/address.dart
 enum AddressType { home, company, other }
 
 class Address {
