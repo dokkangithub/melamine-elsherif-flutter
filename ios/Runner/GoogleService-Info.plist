@@ -3,9 +3,11 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>113857629873-9i09rcimdbjrreuajcj199a9fmia41ee.apps.googleusercontent.com</string>
+	<string>113857629873-05nis5urrinr76qbmh65blrjun5p9iei.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.113857629873-9i09rcimdbjrreuajcj199a9fmia41ee</string>
+	<string>com.googleusercontent.apps.113857629873-05nis5urrinr76qbmh65blrjun5p9iei</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>113857629873-fv0hcu3koscqj0q7qj5lojnidv4e1jkd.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
 	<string>AIzaSyDYe692CZY4nJx_NjTtdPXV3g1XoMlWmHU</string>
 	<key>GCM_SENDER_ID</key>
@@ -13,7 +15,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.melamine_elsherif</string>
+	<string>com.melamine.elsherif</string>
 	<key>PROJECT_ID</key>
 	<string>melamine-elsherif</string>
 	<key>STORAGE_BUCKET</key>
@@ -29,6 +31,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:113857629873:ios:3ac3c2872e1f09b24edc90</string>
+	<string>1:113857629873:ios:c3ef9dafd41badb34edc90</string>
 </dict>
 </plist>

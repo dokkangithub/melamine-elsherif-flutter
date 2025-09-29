@@ -59,10 +59,13 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyDYe692CZY4nJx_NjTtdPXV3g1XoMlWmHU',
-    appId: '1:113857629873:ios:3ac3c2872e1f09b24edc90',
+    appId: '1:113857629873:ios:c3ef9dafd41badb34edc90',
     messagingSenderId: '113857629873',
     projectId: 'melamine-elsherif',
     storageBucket: 'melamine-elsherif.firebasestorage.app',
-    iosBundleId: 'com.example.laravelEcommerce',
+    androidClientId: '113857629873-fv0hcu3koscqj0q7qj5lojnidv4e1jkd.apps.googleusercontent.com',
+    iosClientId: '113857629873-05nis5urrinr76qbmh65blrjun5p9iei.apps.googleusercontent.com',
+    iosBundleId: 'com.melamine.elsherif',
   );
+
 }
