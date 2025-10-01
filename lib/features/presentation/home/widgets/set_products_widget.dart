@@ -39,32 +39,29 @@ class SetProductsWidget extends StatelessWidget {
           return _buildEmptyState();
         }
 
-        return Padding(
-          padding: const EdgeInsets.only(top: 16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SeeAllWidget(
-                title: 'customize_yours'.tr(context),
-                onTap: () {
-                  AppRoutes.navigateTo(context, AppRoutes.setProductsScreen);
-                },
-              ),
-              const SizedBox(height: 10),
-              SizedBox(
-                height: 300,
-                child: ListView.builder(
-                  padding: const EdgeInsets.only(left: 16.0),
-                  scrollDirection: Axis.horizontal,
-                  itemCount: firstTenProducts.length,
-                  itemBuilder: (context, index) => SetProductCard(
-                    setProduct: firstTenProducts[index],
-                    width: 250,
-                  ),
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SeeAllWidget(
+              title: 'customize_yours'.tr(context),
+              onTap: () {
+                AppRoutes.navigateTo(context, AppRoutes.setProductsScreen);
+              },
+            ),
+            const SizedBox(height: 10),
+            SizedBox(
+              height: 300,
+              child: ListView.builder(
+                padding: const EdgeInsets.only(left: 16.0),
+                scrollDirection: Axis.horizontal,
+                itemCount: firstTenProducts.length,
+                itemBuilder: (context, index) => SetProductCard(
+                  setProduct: firstTenProducts[index],
+                  width: 250,
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         );
       },
     );
