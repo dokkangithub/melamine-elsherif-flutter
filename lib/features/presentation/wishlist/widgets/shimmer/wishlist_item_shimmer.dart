@@ -34,7 +34,7 @@ class ShimmerProductItemInWishList extends StatelessWidget {
                 ),
               ),
             ),
-            
+
             // Details placeholder
             Padding(
               padding: const EdgeInsets.all(12),
@@ -47,13 +47,14 @@ class ShimmerProductItemInWishList extends StatelessWidget {
                     width: double.infinity,
                     color: Colors.grey,
                   ),
-                  
+
                   const SizedBox(height: 6),
-                  
+
                   // Rating bar shimmer instead of category
                   Row(
-                    children: List.generate(5, (index) => 
-                      Container(
+                    children: List.generate(
+                      5,
+                      (index) => Container(
                         height: 16,
                         width: 16,
                         margin: const EdgeInsets.only(right: 2),
@@ -64,20 +65,16 @@ class ShimmerProductItemInWishList extends StatelessWidget {
                       ),
                     ),
                   ),
-                  
+
                   const SizedBox(height: 16),
-                  
+
                   // Price and button row
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       // Price placeholder
-                      Container(
-                        height: 18,
-                        width: 80,
-                        color: Colors.grey,
-                      ),
-                      
+                      Container(height: 18, width: 80, color: Colors.grey),
+
                       // Button placeholder
                       Container(
                         height: 42,

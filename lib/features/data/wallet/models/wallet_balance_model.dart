@@ -4,10 +4,7 @@ class WalletBalanceModel extends WalletBalance {
   const WalletBalanceModel({
     required String balance,
     required String lastRecharged,
-  }) : super(
-          balance: balance,
-          lastRecharged: lastRecharged,
-        );
+  }) : super(balance: balance, lastRecharged: lastRecharged);
 
   factory WalletBalanceModel.fromJson(Map<String, dynamic> json) {
     return WalletBalanceModel(
@@ -17,9 +14,6 @@ class WalletBalanceModel extends WalletBalance {
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'balance': balance,
-      'last_recharged': lastRecharged,
-    };
+    return {'balance': balance, 'last_recharged': lastRecharged};
   }
-} 
+}

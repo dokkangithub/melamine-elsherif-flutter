@@ -68,8 +68,9 @@ class _WalletScreenState extends State<WalletScreen> {
   @override
   Widget build(BuildContext context) {
     final walletProvider = Provider.of<WalletProvider>(context);
-    final isInitialLoading = (walletProvider.balanceState == LoadingState.loading ||
-        walletProvider.historyState == LoadingState.loading) &&
+    final isInitialLoading =
+        (walletProvider.balanceState == LoadingState.loading ||
+            walletProvider.historyState == LoadingState.loading) &&
         walletProvider.transactions.isEmpty;
 
     return Scaffold(
@@ -82,48 +83,47 @@ class _WalletScreenState extends State<WalletScreen> {
         leading: const CustomBackButton(),
         title: Text(
           'my_wallet'.tr(context),
-          style: context.displaySmall.copyWith(
-            fontWeight: FontWeight.w500,
-          ),
+          style: context.displaySmall.copyWith(fontWeight: FontWeight.w500),
         ),
       ),
       body: RefreshIndicator(
         color: AppTheme.primaryColor,
         onRefresh: () async {
           await context.read<WalletProvider>().refreshWallet();
-          await context.read<ClubPointProvider>().fetchClubPoints(refresh: true);
+          await context.read<ClubPointProvider>().fetchClubPoints(
+            refresh: true,
+          );
         },
         child: isInitialLoading
             ? const WalletScreenShimmer()
             : CustomScrollView(
-          controller: _scrollController,
-          slivers: [
-            SliverToBoxAdapter(
-              child: _buildWalletBalance(),
-            ),
-            SliverToBoxAdapter(
-              child: _buildClubPointsSection(),
-            ),
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(20.0, 24.0, 20.0, 12.0),
-                child: Text(
-                  'transaction_history'.tr(context),
-                  style: context.titleLarge.copyWith(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 18,
-                    color: Colors.black87,
+                controller: _scrollController,
+                slivers: [
+                  SliverToBoxAdapter(child: _buildWalletBalance()),
+                  SliverToBoxAdapter(child: _buildClubPointsSection()),
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(
+                        20.0,
+                        24.0,
+                        20.0,
+                        12.0,
+                      ),
+                      child: Text(
+                        'transaction_history'.tr(context),
+                        style: context.titleLarge.copyWith(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 18,
+                          color: Colors.black87,
+                        ),
+                      ),
+                    ),
                   ),
-                ),
+                  _buildTransactionsList(),
+                  // Add some padding at the bottom
+                  const SliverToBoxAdapter(child: SizedBox(height: 20)),
+                ],
               ),
-            ),
-            _buildTransactionsList(),
-            // Add some padding at the bottom
-            const SliverToBoxAdapter(
-              child: SizedBox(height: 20),
-            ),
-          ],
-        ),
       ),
     );
   }
@@ -137,9 +137,9 @@ class _WalletScreenState extends State<WalletScreen> {
           case LoadingState.loaded:
             return provider.walletBalance != null
                 ? WalletBalanceCard(
-              balance: provider.walletBalance!.balance,
-              lastRecharged: provider.walletBalance!.lastRecharged,
-            )
+                    balance: provider.walletBalance!.balance,
+                    lastRecharged: provider.walletBalance!.lastRecharged,
+                  )
                 : Center(
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
@@ -157,9 +157,7 @@ class _WalletScreenState extends State<WalletScreen> {
                 padding: const EdgeInsets.all(16.0),
                 child: Text(
                   'Error: ${provider.errorMessage}',
-                  style: context.titleMedium.copyWith(
-                    color: Colors.red,
-                  ),
+                  style: context.titleMedium.copyWith(color: Colors.red),
                 ),
               ),
             );
@@ -203,7 +201,9 @@ class _WalletScreenState extends State<WalletScreen> {
                             Container(
                               padding: const EdgeInsets.all(8.0),
                               decoration: BoxDecoration(
-                                color: AppTheme.primaryColor.withValues(alpha: 0.15),
+                                color: AppTheme.primaryColor.withValues(
+                                  alpha: 0.15,
+                                ),
                                 borderRadius: BorderRadius.circular(10.0),
                               ),
                               child: const Icon(
@@ -263,9 +263,7 @@ class _WalletScreenState extends State<WalletScreen> {
                 padding: const EdgeInsets.all(16.0),
                 child: Text(
                   'Error: ${provider.errorMessage}',
-                  style: context.titleMedium.copyWith(
-                    color: Colors.red,
-                  ),
+                  style: context.titleMedium.copyWith(color: Colors.red),
                 ),
               ),
             );
@@ -279,23 +277,23 @@ class _WalletScreenState extends State<WalletScreen> {
   Widget _buildTransactionsList() {
     return Consumer<WalletProvider>(
       builder: (context, provider, child) {
-        if (provider.historyState == LoadingState.loading && provider.transactions.isEmpty) {
+        if (provider.historyState == LoadingState.loading &&
+            provider.transactions.isEmpty) {
           return SliverList(
             delegate: SliverChildBuilderDelegate(
-                  (context, index) => const TransactionItemShimmer(),
+              (context, index) => const TransactionItemShimmer(),
               childCount: 5,
             ),
           );
         }
 
-        if (provider.historyState == LoadingState.error && provider.transactions.isEmpty) {
+        if (provider.historyState == LoadingState.error &&
+            provider.transactions.isEmpty) {
           return SliverFillRemaining(
             child: Center(
               child: Text(
                 'Error: ${provider.errorMessage}',
-                style: context.titleMedium.copyWith(
-                  color: Colors.red,
-                ),
+                style: context.titleMedium.copyWith(color: Colors.red),
               ),
             ),
           );
@@ -307,11 +305,7 @@ class _WalletScreenState extends State<WalletScreen> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(
-                    Icons.history,
-                    size: 60,
-                    color: Colors.grey[300],
-                  ),
+                  Icon(Icons.history, size: 60, color: Colors.grey[300]),
                   const SizedBox(height: 16),
                   Text(
                     'no_transactions_available'.tr(context),
@@ -328,7 +322,7 @@ class _WalletScreenState extends State<WalletScreen> {
 
         return SliverList(
           delegate: SliverChildBuilderDelegate(
-                (context, index) {
+            (context, index) {
               if (index < provider.transactions.length) {
                 return TransactionItem(
                   transaction: provider.transactions[index],
@@ -352,18 +346,25 @@ class _WalletScreenState extends State<WalletScreen> {
                 return const SizedBox.shrink();
               }
             },
-            childCount: provider.transactions.length + (provider.hasMoreTransactions ? 1 : 0),
+            childCount:
+                provider.transactions.length +
+                (provider.hasMoreTransactions ? 1 : 0),
           ),
         );
       },
     );
   }
 
-  void _convertPointsToWallet(BuildContext context, ClubPointProvider provider) async {
+  void _convertPointsToWallet(
+    BuildContext context,
+    ClubPointProvider provider,
+  ) async {
     showCustomConfirmationDialog(
       context: context,
       title: 'convert_points'.tr(context),
-      message: 'are_you_sure_you_want_to_convert_all_your_club_points_to_wallet_balance'.tr(context),
+      message:
+          'are_you_sure_you_want_to_convert_all_your_club_points_to_wallet_balance'
+              .tr(context),
       confirmText: 'convert'.tr(context),
       cancelText: 'cancel'.tr(context),
       confirmButtonColor: AppTheme.primaryColor,

@@ -82,17 +82,17 @@ class PaymentRemoteDataSourceImpl implements PaymentRemoteDataSource {
     try {
       final data = {
         "name": AppStrings.userName,
-        "email": AppStrings.userEmail??'',
+        "email": AppStrings.userEmail ?? '',
         "address": address,
         "country": 'egypt',
         "state_id": stateId,
         "city": city,
-        "postal_code" : postalCode,
+        "postal_code": postalCode,
         "phone": phone,
         "payment_type": 'kashier',
         "order_from": 'mobile',
         "additional_info": additionalInfo ?? "",
-        if (AppStrings.userId==null) "temp_user_id": AppStrings.tempUserId,
+        if (AppStrings.userId == null) "temp_user_id": AppStrings.tempUserId,
         if (AppStrings.userId != null) "user_id": AppStrings.userId,
       };
       print(data);
@@ -125,16 +125,22 @@ class PaymentRemoteDataSourceImpl implements PaymentRemoteDataSource {
           final merchantOrderId = uri.queryParameters['merchantOrderId'];
 
           if (paymentStatus == 'SUCCESS' && merchantOrderId != null) {
-            final verificationResult = await verifyOrderSuccess(merchantOrderId);
+            final verificationResult = await verifyOrderSuccess(
+              merchantOrderId,
+            );
             print("Verification result: $verificationResult");
 
             if (verificationResult['result'] == true &&
                 verificationResult['combined_order'] != null &&
                 verificationResult['combined_order']['orders'] != null &&
-                verificationResult['combined_order']['orders'][0]['payment_status'] == 'paid') {
+                verificationResult['combined_order']['orders'][0]['payment_status'] ==
+                    'paid') {
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(builder: (context) =>  SuccessScreen(orderDetails: orderResponse)),
+                MaterialPageRoute(
+                  builder: (context) =>
+                      SuccessScreen(orderDetails: orderResponse),
+                ),
               );
               return OrderResponseModel(
                 result: true,
@@ -148,9 +154,9 @@ class PaymentRemoteDataSourceImpl implements PaymentRemoteDataSource {
               );
             }
           } else if (paymentStatus == 'FAILED') {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Payment failed')),
-            );
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(const SnackBar(content: Text('Payment failed')));
           }
         } else {
           // Handle case where WebViewResult is null or not a string
@@ -187,25 +193,22 @@ class PaymentRemoteDataSourceImpl implements PaymentRemoteDataSource {
     String? additionalInfo,
     required BuildContext context,
   }) async {
-
     try {
-
       final data = {
         "name": AppStrings.userName,
-        "email": AppStrings.userEmail??'',
+        "email": AppStrings.userEmail ?? '',
         "address": address,
         "country": 'egypt',
         "state_id": stateId,
         "city": city,
-        "postal_code" : postalCode,
+        "postal_code": postalCode,
         "phone": phone,
         "payment_type": 'cash_payment',
         "order_from": 'mobile',
         "additional_info": additionalInfo ?? "",
-        if (AppStrings.userId==null) "temp_user_id": AppStrings.tempUserId,
+        if (AppStrings.userId == null) "temp_user_id": AppStrings.tempUserId,
         if (AppStrings.userId != null) "user_id": AppStrings.userId,
       };
-
 
       final response = await apiProvider.post(
         LaravelApiEndPoint.orderStore,
@@ -214,18 +217,20 @@ class PaymentRemoteDataSourceImpl implements PaymentRemoteDataSource {
 
       print("Raw response from /order/store: ${response.data}");
 
-
       final orderResponse = OrderResponseModel.fromJson(response.data);
 
       // Check if order was created successfully
       if (orderResponse.result && orderResponse.combinedOrder != null) {
-
-        final verificationResult = await verifyOrderSuccess(orderResponse.combinedOrder!.id.toString());
+        final verificationResult = await verifyOrderSuccess(
+          orderResponse.combinedOrder!.id.toString(),
+        );
         print("Verification result: $verificationResult");
 
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) =>  SuccessScreen(orderDetails: orderResponse)),
+          MaterialPageRoute(
+            builder: (context) => SuccessScreen(orderDetails: orderResponse),
+          ),
         );
 
         return OrderResponseModel(
@@ -238,8 +243,6 @@ class PaymentRemoteDataSourceImpl implements PaymentRemoteDataSource {
 
       return orderResponse;
     } catch (e) {
-
-
       print("Error in createCashOrder: $e");
       return OrderResponseModel(
         result: false,
@@ -260,41 +263,41 @@ class PaymentRemoteDataSourceImpl implements PaymentRemoteDataSource {
     required BuildContext context,
   }) async {
     try {
-
       final data = {
         "name": AppStrings.userName,
-        "email": AppStrings.userEmail??'',
+        "email": AppStrings.userEmail ?? '',
         "address": address,
         "country": 'egypt',
         "state_id": stateId,
         "city": city,
-        "postal_code" : postalCode,
+        "postal_code": postalCode,
         "phone": phone,
         "payment_type": 'wallet',
         "order_from": 'mobile',
         "additional_info": additionalInfo ?? "",
-        if (AppStrings.userId==null) "temp_user_id": AppStrings.tempUserId,
+        if (AppStrings.userId == null) "temp_user_id": AppStrings.tempUserId,
         if (AppStrings.userId != null) "user_id": AppStrings.userId,
       };
-
 
       final response = await apiProvider.post(
         LaravelApiEndPoint.orderStore,
         data: data,
       );
 
-
-
       final orderResponse = OrderResponseModel.fromJson(response.data);
 
       // Check if order was created successfully
       if (orderResponse.result && orderResponse.combinedOrder != null) {
-        final verificationResult = await verifyOrderSuccess(orderResponse.combinedOrder!.id.toString());
+        final verificationResult = await verifyOrderSuccess(
+          orderResponse.combinedOrder!.id.toString(),
+        );
         print("Verification result: $verificationResult");
 
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => SuccessScreen(orderDetails: orderResponse)),
+          MaterialPageRoute(
+            builder: (context) => SuccessScreen(orderDetails: orderResponse),
+          ),
         );
 
         return OrderResponseModel(
@@ -337,7 +340,6 @@ class PaymentRemoteDataSourceImpl implements PaymentRemoteDataSource {
     }
   }
 
-
   @override
   Future<Map<String, dynamic>> updateShippingTypeInCart({
     required int stateId,
@@ -348,13 +350,13 @@ class PaymentRemoteDataSourceImpl implements PaymentRemoteDataSource {
       const int shippingId = 123;
 
       final data = {
-        if (AppStrings.userId==null) "temp_user_id": AppStrings.tempUserId,
+        if (AppStrings.userId == null) "temp_user_id": AppStrings.tempUserId,
         if (AppStrings.userId != null) "user_id": AppStrings.userId,
         "address": address,
         "shipping_type": shippingType,
         "shipping_id": shippingId.toString(),
         "country_id": 64,
-        "state_id": stateId
+        "state_id": stateId,
       };
 
       print("Updating shipping type in cart");
@@ -372,5 +374,4 @@ class PaymentRemoteDataSourceImpl implements PaymentRemoteDataSource {
       return {"result": false, "message": "Failed to update shipping type: $e"};
     }
   }
-
 }

@@ -76,11 +76,14 @@ class _VerificationScreenState extends State<VerificationScreen>
     setState(() => isLoading = true);
     // Simulate verification
     await Future.delayed(const Duration(seconds: 1));
-    
+
     // Save the login status in secure storage
     await sl<SecureStorage>().save(LocalStorageKey.isLoggedIn, true);
-    await sl<SecureStorage>().save(LocalStorageKey.hasCompletedOnboarding, true);
-    
+    await sl<SecureStorage>().save(
+      LocalStorageKey.hasCompletedOnboarding,
+      true,
+    );
+
     setState(() => isLoading = false);
 
     if (mounted) {
@@ -89,7 +92,7 @@ class _VerificationScreenState extends State<VerificationScreen>
         message: 'verification_success'.tr(context),
         isError: false,
       );
-      
+
       // Navigate to main screen after verification
       AppRoutes.navigateToAndRemoveUntil(context, AppRoutes.mainLayoutScreen);
     }
@@ -169,24 +172,24 @@ class _VerificationScreenState extends State<VerificationScreen>
                         .replaceAll('{contact}', widget.contactInfo),
                     textAlign: TextAlign.center,
                     style: theme.textTheme.bodyLarge?.copyWith(
-                      color: theme.textTheme.bodyMedium?.color?.withValues(alpha:
-                        0.7,
+                      color: theme.textTheme.bodyMedium?.color?.withValues(
+                        alpha: 0.7,
                       ),
                     ),
                   ),
                   SizedBox(height: isTablet ? 48 : 32),
                   OTPInput(
-                        controller: otpController,
-                        otpLength: widget.otpLength,
-                        hasError: hasError,
-                        isTablet: isTablet,
-                        onChanged: (value) {
-                          setState(() {
-                            hasError = false;
-                            isButtonEnabled = value.length == widget.otpLength;
-                          });
-                        },
-                      ),
+                    controller: otpController,
+                    otpLength: widget.otpLength,
+                    hasError: hasError,
+                    isTablet: isTablet,
+                    onChanged: (value) {
+                      setState(() {
+                        hasError = false;
+                        isButtonEnabled = value.length == widget.otpLength;
+                      });
+                    },
+                  ),
                   SizedBox(height: isTablet ? 48 : 32),
                   CustomButton(
                     text: 'verify'.tr(context),

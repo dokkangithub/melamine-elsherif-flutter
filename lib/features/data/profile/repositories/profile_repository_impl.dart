@@ -20,13 +20,25 @@ class ProfileRepositoryImpl implements ProfileRepository {
   }
 
   @override
-  Future<ProfileUpdateResponse> updateProfile(String userId, String name, String password) async {
+  Future<ProfileUpdateResponse> updateProfile(
+    String userId,
+    String name,
+    String password,
+  ) async {
     return await remoteDataSource.updateProfile(userId, name, password);
   }
 
   @override
-  Future<ProfileUpdateResponse> updateProfileImage(String userId, String filename, String base64Image) async {
-    return await remoteDataSource.updateProfileImage(userId, filename, base64Image);
+  Future<ProfileUpdateResponse> updateProfileImage(
+    String userId,
+    String filename,
+    String base64Image,
+  ) async {
+    return await remoteDataSource.updateProfileImage(
+      userId,
+      filename,
+      base64Image,
+    );
   }
 
   @override

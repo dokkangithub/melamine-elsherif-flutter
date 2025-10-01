@@ -50,10 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
       context,
       listen: false,
     );
-    final cartProvider = Provider.of<CartProvider>(
-      context,
-      listen: false,
-    );
+    final cartProvider = Provider.of<CartProvider>(context, listen: false);
     final categoryProvider = Provider.of<CategoryProvider>(
       context,
       listen: false,
@@ -99,9 +96,7 @@ class _HomeScreenState extends State<HomeScreen> {
           controller: _scrollController,
           physics: const AlwaysScrollableScrollPhysics(),
           slivers: const [
-            SliverToBoxAdapter(
-              child: TopHomeWidget(),
-            ),
+            SliverToBoxAdapter(child: TopHomeWidget()),
             SliverToBoxAdapter(
               child: Padding(
                 padding: EdgeInsets.all(12.0),

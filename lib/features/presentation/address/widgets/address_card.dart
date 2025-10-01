@@ -25,7 +25,8 @@ class AddressCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        width: MediaQuery.of(context).size.width - 32, // Full width minus padding
+        width:
+            MediaQuery.of(context).size.width - 32, // Full width minus padding
         margin: const EdgeInsets.only(bottom: 8),
         decoration: BoxDecoration(
           border: Border.all(
@@ -64,21 +65,32 @@ class AddressCard extends StatelessWidget {
               if (address.phone.isNotEmpty)
                 Text(
                   address.phone,
-                  style: context.titleMedium?.copyWith(color: AppTheme.darkDividerColor),
+                  style: context.titleMedium?.copyWith(
+                    color: AppTheme.darkDividerColor,
+                  ),
                 ),
               const SizedBox(height: 2),
               Text(
                 address.address,
-                style: context.titleMedium?.copyWith(color: AppTheme.darkDividerColor),
-              ),
-              const SizedBox(height: 2),
-              Text('${address.cityName}, ${address.stateName} ${address.postalCode}',
-                style: context.titleMedium?.copyWith(color: AppTheme.darkDividerColor),
+                style: context.titleMedium?.copyWith(
+                  color: AppTheme.darkDividerColor,
+                ),
               ),
               const SizedBox(height: 2),
               Text(
-                address.countryName.isNotEmpty ? address.countryName : 'United States',
-                style: context.titleMedium?.copyWith(color: AppTheme.darkDividerColor),
+                '${address.cityName}, ${address.stateName} ${address.postalCode}',
+                style: context.titleMedium?.copyWith(
+                  color: AppTheme.darkDividerColor,
+                ),
+              ),
+              const SizedBox(height: 2),
+              Text(
+                address.countryName.isNotEmpty
+                    ? address.countryName
+                    : 'United States',
+                style: context.titleMedium?.copyWith(
+                  color: AppTheme.darkDividerColor,
+                ),
               ),
             ],
           ),
@@ -86,4 +98,4 @@ class AddressCard extends StatelessWidget {
       ),
     );
   }
-} 
+}

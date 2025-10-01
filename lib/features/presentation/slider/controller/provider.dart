@@ -11,9 +11,7 @@ class SliderProvider extends ChangeNotifier {
   SliderResponseModel? slidersResponse;
   String? errorMessage;
 
-  SliderProvider({
-    required this.getSlidersUseCase,
-  });
+  SliderProvider({required this.getSlidersUseCase});
 
   Future<void> getSliders({bool refresh = false}) async {
     slidersState = SliderLoadingState.loading;
@@ -21,7 +19,9 @@ class SliderProvider extends ChangeNotifier {
 
     try {
       slidersResponse = await getSlidersUseCase(refresh: refresh);
-      print("Sliders fetched successfully: ${slidersResponse?.data.length ?? 0} items");
+      print(
+        "Sliders fetched successfully: ${slidersResponse?.data.length ?? 0} items",
+      );
       slidersState = SliderLoadingState.loaded;
     } catch (e) {
       print("Error fetching sliders: $e");

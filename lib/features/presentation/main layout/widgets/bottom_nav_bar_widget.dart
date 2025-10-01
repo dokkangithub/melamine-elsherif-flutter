@@ -30,7 +30,8 @@ class BottomNavBarWidget extends StatelessWidget {
             selectedItemColor: AppTheme.primaryColor,
             unselectedItemColor: AppTheme.lightSecondaryTextColor,
             currentIndex: layoutProvider.currentIndex,
-            onTap: (int index) => _handleNavigation(context, layoutProvider, index),
+            onTap: (int index) =>
+                _handleNavigation(context, layoutProvider, index),
             useLegacyColorScheme: false,
             showSelectedLabels: true,
             showUnselectedLabels: false,
@@ -46,7 +47,9 @@ class BottomNavBarWidget extends StatelessWidget {
             items: [
               BottomNavigationBarItem(
                 icon: const CustomImage(assetPath: AppSvgs.home_icon),
-                activeIcon: const CustomImage(assetPath: AppSvgs.active_home_icon),
+                activeIcon: const CustomImage(
+                  assetPath: AppSvgs.active_home_icon,
+                ),
                 label: 'home'.tr(context).toUpperCase(),
               ),
               BottomNavigationBarItem(
@@ -63,7 +66,9 @@ class BottomNavBarWidget extends StatelessWidget {
                   isActive: false,
                 ),
                 activeIcon: _buildIconWithBadge(
-                  icon: const CustomImage(assetPath: AppSvgs.active_wishlist_icon),
+                  icon: const CustomImage(
+                    assetPath: AppSvgs.active_wishlist_icon,
+                  ),
                   count: wishlistProvider.wishlistItems.length,
                   isActive: true,
                 ),
@@ -84,7 +89,9 @@ class BottomNavBarWidget extends StatelessWidget {
               ),
               BottomNavigationBarItem(
                 icon: const CustomImage(assetPath: AppSvgs.profile_icon),
-                activeIcon: const CustomImage(assetPath: AppSvgs.active_profile_icon),
+                activeIcon: const CustomImage(
+                  assetPath: AppSvgs.active_profile_icon,
+                ),
                 label: 'profile'.tr(context).toUpperCase(),
               ),
             ],
@@ -94,7 +101,11 @@ class BottomNavBarWidget extends StatelessWidget {
     );
   }
 
-  void _handleNavigation(BuildContext context, LayoutProvider layoutProvider, int index) {
+  void _handleNavigation(
+    BuildContext context,
+    LayoutProvider layoutProvider,
+    int index,
+  ) {
     // Handle wishlist navigation for unauthenticated users
     if (index == 2 && AppStrings.token == null) {
       // Navigate to login and reset to home
@@ -125,17 +136,11 @@ class BottomNavBarWidget extends StatelessWidget {
           right: -10,
           top: -10,
           child: Container(
-            constraints: const BoxConstraints(
-              minWidth: 18,
-              minHeight: 18,
-            ),
+            constraints: const BoxConstraints(minWidth: 18, minHeight: 18),
             decoration: BoxDecoration(
               color: AppTheme.primaryColor,
               borderRadius: BorderRadius.circular(50),
-              border: Border.all(
-                color: AppTheme.white,
-                width: 1,
-              ),
+              border: Border.all(color: AppTheme.white, width: 1),
             ),
             child: Text(
               count > 99 ? '99+' : count.toString(),

@@ -34,21 +34,18 @@ class BrandGrid extends StatelessWidget {
         crossAxisSpacing: 16,
         mainAxisSpacing: 16,
       ),
-      delegate: SliverChildBuilderDelegate(
-            (context, index) {
-          // Show loader at the end when loading more
-          if (index == brands.length && isLoadingMore) {
-            return const Center(child: CustomLoadingWidget());
-          }
+      delegate: SliverChildBuilderDelegate((context, index) {
+        // Show loader at the end when loading more
+        if (index == brands.length && isLoadingMore) {
+          return const Center(child: CustomLoadingWidget());
+        }
 
-          if (index < brands.length) {
-            return BrandItem(brand: brands[index]);
-          }
+        if (index < brands.length) {
+          return BrandItem(brand: brands[index]);
+        }
 
-          return null;
-        },
-        childCount: brands.length + (isLoadingMore ? 1 : 0),
-      ),
+        return null;
+      }, childCount: brands.length + (isLoadingMore ? 1 : 0)),
     );
   }
 }

@@ -30,7 +30,6 @@ import '../../../features/presentation/wallet/screens/wallet_screen.dart';
 import 'package:page_transition/page_transition.dart';
 
 class AppRoutes {
-
   static const String splash = '/';
   static const String onboarding = '/onboarding';
   static const String login = '/login';
@@ -59,27 +58,30 @@ class AppRoutes {
   static const String walletScreen = '/wallet-screen';
   static const String setProductDetailsScreen = '/set-product-details';
 
-
-  static const PageTransitionType defaultTransition = PageTransitionType.sharedAxisHorizontal;
+  static const PageTransitionType defaultTransition =
+      PageTransitionType.sharedAxisHorizontal;
 
   static Route<dynamic> generateRoute(
-      RouteSettings settings, {
-        PageTransitionType? transitionType,
-        NotificationAction? pendingNotificationAction,
-      }) {
+    RouteSettings settings, {
+    PageTransitionType? transitionType,
+    NotificationAction? pendingNotificationAction,
+  }) {
     Widget page;
 
     final transition = transitionType ?? defaultTransition;
 
     // Check if we have a pending notification action for this route
-    Map<String, dynamic>? routeArguments = settings.arguments as Map<String, dynamic>?;
+    Map<String, dynamic>? routeArguments =
+        settings.arguments as Map<String, dynamic>?;
 
     if (pendingNotificationAction != null &&
         pendingNotificationAction.type == NotificationActionType.openScreen &&
         pendingNotificationAction.route == settings.name) {
       debugPrint('=== USING NOTIFICATION ARGUMENTS ===');
       debugPrint('Route: ${settings.name}');
-      debugPrint('Notification arguments: ${pendingNotificationAction.arguments}');
+      debugPrint(
+        'Notification arguments: ${pendingNotificationAction.arguments}',
+      );
 
       // Use notification arguments instead of route arguments
       routeArguments = pendingNotificationAction.arguments;
@@ -131,7 +133,7 @@ class AppRoutes {
         page = const CartScreen();
         break;
       case productDetailScreen:
-      // Debug: Print what we're receiving
+        // Debug: Print what we're receiving
         debugPrint('=== PRODUCT DETAIL ROUTE DEBUG ===');
         debugPrint('Arguments received: $routeArguments');
         debugPrint('Arguments type: ${routeArguments.runtimeType}');
@@ -168,7 +170,9 @@ class AppRoutes {
           debugPrint('⚠️ Invalid set product slug, redirecting to main layout');
           page = const MainLayoutScreen();
         } else {
-          debugPrint('✅ Valid set slug found, creating SetProductDetailsScreen');
+          debugPrint(
+            '✅ Valid set slug found, creating SetProductDetailsScreen',
+          );
           page = SetProductDetailsScreen(slug: setSlug);
         }
         break;
@@ -181,7 +185,9 @@ class AppRoutes {
         if (routeArguments == null ||
             routeArguments['productType'] == null ||
             routeArguments['title'] == null) {
-          debugPrint('⚠️ Invalid product type arguments, redirecting to main layout');
+          debugPrint(
+            '⚠️ Invalid product type arguments, redirecting to main layout',
+          );
           page = const MainLayoutScreen();
         } else {
           page = AllProductsByTypeScreen(
@@ -223,7 +229,9 @@ class AppRoutes {
           }
 
           if (parsedOrderId == null) {
-            debugPrint('⚠️ Could not parse order ID, redirecting to main layout');
+            debugPrint(
+              '⚠️ Could not parse order ID, redirecting to main layout',
+            );
             page = const MainLayoutScreen();
           } else {
             debugPrint('✅ Valid order ID found, creating OrderDetailsScreen');
@@ -238,7 +246,9 @@ class AppRoutes {
         page = const WalletScreen();
         break;
       default:
-        debugPrint('⚠️ Unknown route: ${settings.name}, redirecting to main layout');
+        debugPrint(
+          '⚠️ Unknown route: ${settings.name}, redirecting to main layout',
+        );
         page = const MainLayoutScreen();
     }
 
@@ -252,40 +262,44 @@ class AppRoutes {
   }
 
   static void navigateTo(
-      BuildContext context,
-      String route, {
-        Object? arguments,
-        PageTransitionType? transitionType,
-      }) {
+    BuildContext context,
+    String route, {
+    Object? arguments,
+    PageTransitionType? transitionType,
+  }) {
     Navigator.push(
       context,
-      generateRoute(RouteSettings(name: route, arguments: arguments),
-          transitionType: transitionType),
+      generateRoute(
+        RouteSettings(name: route, arguments: arguments),
+        transitionType: transitionType,
+      ),
     );
   }
 
   static void navigateToAndReplace(
-      BuildContext context,
-      String route, {
-        Object? arguments,
-        PageTransitionType? transitionType,
-      }) {
+    BuildContext context,
+    String route, {
+    Object? arguments,
+    PageTransitionType? transitionType,
+  }) {
     Navigator.pushReplacement(
       context,
-      generateRoute(RouteSettings(name: route, arguments: arguments),
-          transitionType: transitionType),
+      generateRoute(
+        RouteSettings(name: route, arguments: arguments),
+        transitionType: transitionType,
+      ),
     );
   }
 
   static void navigateToAndRemoveUntil(
-      BuildContext context,
-      String route, {
-        PageTransitionType? transitionType,
-      }) {
+    BuildContext context,
+    String route, {
+    PageTransitionType? transitionType,
+  }) {
     Navigator.pushAndRemoveUntil(
       context,
       generateRoute(RouteSettings(name: route), transitionType: transitionType),
-          (route) => false,
+      (route) => false,
     );
   }
 }

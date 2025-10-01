@@ -9,10 +9,7 @@ import '../../../data/profile/models/profile_counters_model.dart';
 class ProfileCountersWidget extends StatelessWidget {
   final ProfileCountersModel counters;
 
-  const ProfileCountersWidget({
-    super.key,
-    required this.counters,
-  });
+  const ProfileCountersWidget({super.key, required this.counters});
 
   @override
   Widget build(BuildContext context) {
@@ -21,21 +18,46 @@ class ProfileCountersWidget extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          _buildCounterItem(context, counters.cartItemCount, 'cart_items'.tr(context), Icons.shopping_cart, () {
-            AppRoutes.navigateTo(context, AppRoutes.cartScreen);
-          }),
-          _buildCounterItem(context, counters.wishlistItemCount, 'wishlist'.tr(context), Icons.favorite, () {
-            Provider.of<LayoutProvider>(context,listen: false).currentIndex=2;
-          }),
-          _buildCounterItem(context, counters.orderCount, 'orders'.tr(context), Icons.shopping_bag, () {
-            AppRoutes.navigateTo(context, AppRoutes.allOrdersListScreen);
-          }),
+          _buildCounterItem(
+            context,
+            counters.cartItemCount,
+            'cart_items'.tr(context),
+            Icons.shopping_cart,
+            () {
+              AppRoutes.navigateTo(context, AppRoutes.cartScreen);
+            },
+          ),
+          _buildCounterItem(
+            context,
+            counters.wishlistItemCount,
+            'wishlist'.tr(context),
+            Icons.favorite,
+            () {
+              Provider.of<LayoutProvider>(context, listen: false).currentIndex =
+                  2;
+            },
+          ),
+          _buildCounterItem(
+            context,
+            counters.orderCount,
+            'orders'.tr(context),
+            Icons.shopping_bag,
+            () {
+              AppRoutes.navigateTo(context, AppRoutes.allOrdersListScreen);
+            },
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildCounterItem(BuildContext context, int count, String label, IconData icon, VoidCallback onTap) {
+  Widget _buildCounterItem(
+    BuildContext context,
+    int count,
+    String label,
+    IconData icon,
+    VoidCallback onTap,
+  ) {
     return GestureDetector(
       onTap: onTap,
       child: Container(

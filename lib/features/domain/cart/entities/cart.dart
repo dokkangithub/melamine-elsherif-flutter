@@ -9,8 +9,8 @@ class CartItem {
   final String discount;
   final String currencySymbol;
   final int quantity;
-  final int lowerLimit;  // Add this
-  final int upperLimit;  // Add this
+  final int lowerLimit; // Add this
+  final int upperLimit; // Add this
 
   CartItem({
     required this.id,
@@ -23,8 +23,8 @@ class CartItem {
     required this.discount,
     required this.currencySymbol,
     required this.quantity,
-    this.lowerLimit = 1,   // Default value
-    this.upperLimit = 10,  // Default value
+    this.lowerLimit = 1, // Default value
+    this.upperLimit = 10, // Default value
   });
 }
 

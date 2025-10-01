@@ -24,7 +24,10 @@ class CustomImage extends StatelessWidget {
     this.fit = BoxFit.contain,
     this.borderRadius,
     this.errorWidget,
-  }) : assert(imageUrl != null || assetPath != null, "Provide either an imageUrl or assetPath");
+  }) : assert(
+         imageUrl != null || assetPath != null,
+         "Provide either an imageUrl or assetPath",
+       );
 
   @override
   Widget build(BuildContext context) {
@@ -60,15 +63,21 @@ class CustomImage extends StatelessWidget {
         height: height,
         fit: fit,
         placeholder: (context, url) => _buildPlaceholder(),
-        errorWidget: (context, url, error) => errorWidget ??
-            Icon(Icons.error, size: width != null ? width! / 2 : 40, color: Colors.red),
+        errorWidget: (context, url, error) =>
+            errorWidget ??
+            Icon(
+              Icons.error,
+              size: width != null ? width! / 2 : 40,
+              color: Colors.red,
+            ),
       );
     }
   }
 
   /// Builds asset image, handling both raster and SVG formats.
   Widget _buildAssetImage() {
-    if (assetPath!.endsWith('.svg')) {  // Changed from .svgs to .svg
+    if (assetPath!.endsWith('.svg')) {
+      // Changed from .svgs to .svg
       return SvgPicture.asset(
         assetPath!,
         width: width,
@@ -76,12 +85,7 @@ class CustomImage extends StatelessWidget {
         fit: fit,
       );
     } else {
-      return Image.asset(
-        assetPath!,
-        width: width,
-        height: height,
-        fit: fit,
-      );
+      return Image.asset(assetPath!, width: width, height: height, fit: fit);
     }
   }
 

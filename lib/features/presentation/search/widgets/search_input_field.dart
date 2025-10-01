@@ -26,14 +26,15 @@ class SearchInputField extends StatelessWidget {
       controller: controller,
       textInputAction: TextInputAction.search,
       suffixIcon: InkWell(
-          onTap: (){
-            controller.clear();
-            onChanged('');
-            if (onClear != null) {
-              onClear!();
-            }
-          },
-          child: const Icon(Icons.close,color: AppTheme.primaryColor)),
+        onTap: () {
+          controller.clear();
+          onChanged('');
+          if (onClear != null) {
+            onClear!();
+          }
+        },
+        child: const Icon(Icons.close, color: AppTheme.primaryColor),
+      ),
       hint: 'search_products'.tr(context),
       onChanged: onChanged,
       isBorderAvailable: false,

@@ -29,10 +29,11 @@ class NotificationPayload {
       body: message.notification?.body ?? message.data['body'] ?? '',
       data: message.data,
       imageUrl:
-      message.notification?.android?.imageUrl ??
+          message.notification?.android?.imageUrl ??
           message.notification?.apple?.imageUrl ??
           message.data['image_url'],
-      channelId: message.notification?.android?.channelId ??
+      channelId:
+          message.notification?.android?.channelId ??
           message.data['channel_id'],
     );
   }
@@ -84,7 +85,8 @@ class NotificationAction {
     final cleanData = _cleanNotificationData(data);
     debugPrint('Cleaned data: $cleanData');
 
-    final String? actionType = cleanData['action_type'] ??
+    final String? actionType =
+        cleanData['action_type'] ??
         cleanData['actionType'] ??
         cleanData['type'];
     debugPrint('Extracted action type: $actionType');
@@ -110,7 +112,9 @@ class NotificationAction {
   }
 
   /// Clean and normalize notification data
-  static Map<String, dynamic> _cleanNotificationData(Map<String, dynamic> data) {
+  static Map<String, dynamic> _cleanNotificationData(
+    Map<String, dynamic> data,
+  ) {
     final cleanData = <String, dynamic>{};
 
     for (final entry in data.entries) {
@@ -141,10 +145,8 @@ class NotificationAction {
     debugPrint('Data for screen action: $data');
 
     // Extract route with multiple possible key names
-    final route = data['route'] ??
-        data['screen'] ??
-        data['page'] ??
-        data['destination'];
+    final route =
+        data['route'] ?? data['screen'] ?? data['page'] ?? data['destination'];
     debugPrint('Extracted route: $route');
 
     if (route == null || route.toString().isEmpty) {
@@ -167,10 +169,8 @@ class NotificationAction {
     debugPrint('=== PARSING OPEN URL ACTION ===');
     debugPrint('Data for URL action: $data');
 
-    final url = data['url'] ??
-        data['link'] ??
-        data['web_url'] ??
-        data['external_url'];
+    final url =
+        data['url'] ?? data['link'] ?? data['web_url'] ?? data['external_url'];
     debugPrint('Extracted URL: $url');
 
     if (url == null || url.toString().isEmpty) {
@@ -188,7 +188,8 @@ class NotificationAction {
     debugPrint('=== PARSING CUSTOM ACTION ===');
     debugPrint('Data for custom action: $data');
 
-    final customAction = data['custom_action'] ??
+    final customAction =
+        data['custom_action'] ??
         data['customaction'] ??
         data['action'] ??
         data['custom'];
@@ -216,7 +217,9 @@ class NotificationAction {
     final argumentsField = data['arguments'] ?? data['args'] ?? data['params'];
 
     if (argumentsField != null) {
-      debugPrint('Found arguments field: $argumentsField (${argumentsField.runtimeType})');
+      debugPrint(
+        'Found arguments field: $argumentsField (${argumentsField.runtimeType})',
+      );
 
       if (argumentsField is String) {
         // If it's a JSON string, parse it
@@ -239,14 +242,32 @@ class NotificationAction {
 
       // List of keys to exclude when extracting arguments
       final excludeKeys = {
-        'action_type', 'actiontype', 'type',
-        'route', 'screen', 'page', 'destination',
-        'url', 'link', 'web_url', 'external_url',
-        'custom_action', 'customaction', 'action', 'custom',
-        'arguments', 'args', 'params',
-        'title', 'body', 'message',
-        'channel_id', 'channelid',
-        'image_url', 'imageurl', 'image'
+        'action_type',
+        'actiontype',
+        'type',
+        'route',
+        'screen',
+        'page',
+        'destination',
+        'url',
+        'link',
+        'web_url',
+        'external_url',
+        'custom_action',
+        'customaction',
+        'action',
+        'custom',
+        'arguments',
+        'args',
+        'params',
+        'title',
+        'body',
+        'message',
+        'channel_id',
+        'channelid',
+        'image_url',
+        'imageurl',
+        'image',
       };
 
       // Extract all relevant data as arguments
@@ -268,7 +289,9 @@ class NotificationAction {
   }
 
   /// Normalize common argument patterns
-  static Map<String, dynamic> _normalizeCommonArguments(Map<String, dynamic> arguments) {
+  static Map<String, dynamic> _normalizeCommonArguments(
+    Map<String, dynamic> arguments,
+  ) {
     debugPrint('=== NORMALIZING ARGUMENTS ===');
     debugPrint('Arguments before normalization: $arguments');
 
@@ -276,7 +299,8 @@ class NotificationAction {
 
     // Normalize slug arguments (for product details)
     if (!normalized.containsKey('slug')) {
-      final slug = normalized['product_slug'] ??
+      final slug =
+          normalized['product_slug'] ??
           normalized['productSlug'] ??
           normalized['productslug'] ??
           normalized['id'] ??
@@ -292,7 +316,8 @@ class NotificationAction {
 
     // Normalize order ID arguments
     if (!normalized.containsKey('orderId')) {
-      final orderId = normalized['order_id'] ??
+      final orderId =
+          normalized['order_id'] ??
           normalized['orderid'] ??
           normalized['orderID'] ??
           normalized['id'];
@@ -309,7 +334,8 @@ class NotificationAction {
 
     // Normalize contact info arguments
     if (!normalized.containsKey('contactInfo')) {
-      final contactInfo = normalized['contact_info'] ??
+      final contactInfo =
+          normalized['contact_info'] ??
           normalized['contactinfo'] ??
           normalized['email'] ??
           normalized['phone'] ??
@@ -323,7 +349,8 @@ class NotificationAction {
 
     // Normalize product type arguments
     if (!normalized.containsKey('productType')) {
-      final productType = normalized['product_type'] ??
+      final productType =
+          normalized['product_type'] ??
           normalized['producttype'] ??
           normalized['type'];
 
@@ -335,7 +362,8 @@ class NotificationAction {
 
     // Normalize title arguments
     if (!normalized.containsKey('title')) {
-      final title = normalized['page_title'] ??
+      final title =
+          normalized['page_title'] ??
           normalized['screen_title'] ??
           normalized['name'];
 
@@ -347,9 +375,8 @@ class NotificationAction {
 
     // Normalize deal ID arguments
     if (!normalized.containsKey('dealId')) {
-      final dealId = normalized['deal_id'] ??
-          normalized['dealid'] ??
-          normalized['deal'];
+      final dealId =
+          normalized['deal_id'] ?? normalized['dealid'] ?? normalized['deal'];
 
       if (dealId != null) {
         final parsedDealId = int.tryParse(dealId.toString());

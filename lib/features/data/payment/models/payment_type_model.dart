@@ -10,14 +10,14 @@ class PaymentTypeModel extends PaymentType {
     required int offlinePaymentId,
     required String details,
   }) : super(
-          paymentType: paymentType,
-          paymentTypeKey: paymentTypeKey,
-          image: image,
-          name: name,
-          title: title,
-          offlinePaymentId: offlinePaymentId,
-          details: details,
-        );
+         paymentType: paymentType,
+         paymentTypeKey: paymentTypeKey,
+         image: image,
+         name: name,
+         title: title,
+         offlinePaymentId: offlinePaymentId,
+         details: details,
+       );
 
   factory PaymentTypeModel.fromJson(Map<String, dynamic> json) {
     return PaymentTypeModel(
@@ -52,12 +52,12 @@ class OrderResponseModel extends OrderResponse {
     String? checkoutUrl,
     required String status,
   }) : super(
-          result: result,
-          message: message,
-          combinedOrder: combinedOrder,
-          checkoutUrl: checkoutUrl,
-          status: status,
-        );
+         result: result,
+         message: message,
+         combinedOrder: combinedOrder,
+         checkoutUrl: checkoutUrl,
+         status: status,
+       );
 
   factory OrderResponseModel.fromJson(Map<String, dynamic> json) {
     return OrderResponseModel(
@@ -73,13 +73,8 @@ class OrderResponseModel extends OrderResponse {
 }
 
 class CombinedOrderModel extends CombinedOrder {
-  CombinedOrderModel({
-    required int id,
-    List<OrderModel>? orders,
-  }) : super(
-          id: id,
-          orders: orders,
-        );
+  CombinedOrderModel({required int id, List<OrderModel>? orders})
+    : super(id: id, orders: orders);
 
   factory CombinedOrderModel.fromJson(Map<String, dynamic> json) {
     List<OrderModel>? ordersList;
@@ -90,10 +85,7 @@ class CombinedOrderModel extends CombinedOrder {
       });
     }
 
-    return CombinedOrderModel(
-      id: json['id'] ?? 0,
-      orders: ordersList,
-    );
+    return CombinedOrderModel(id: json['id'] ?? 0, orders: ordersList);
   }
 }
 
@@ -104,18 +96,18 @@ class OrderModel extends Order {
     required String paymentStatus,
     required String paymentType,
   }) : super(
-          id: id,
-          code: code,
-          paymentStatus: paymentStatus,
-    paymentType: paymentType
-        );
+         id: id,
+         code: code,
+         paymentStatus: paymentStatus,
+         paymentType: paymentType,
+       );
 
   factory OrderModel.fromJson(Map<String, dynamic> json) {
     return OrderModel(
       id: json['id'] ?? 0,
       code: json['code'] ?? '',
       paymentStatus: json['payment_status'] ?? '',
-      paymentType: json['payment_type']??''
+      paymentType: json['payment_type'] ?? '',
     );
   }
 }

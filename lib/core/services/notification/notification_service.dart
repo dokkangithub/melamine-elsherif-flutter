@@ -34,15 +34,15 @@ class NotificationService implements INotificationService {
   // Dependencies
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
   final FlutterLocalNotificationsPlugin _localNotifications =
-  FlutterLocalNotificationsPlugin();
+      FlutterLocalNotificationsPlugin();
 
   // Stream controllers for reactive programming
   final StreamController<String> _onTokenRefreshController =
-  StreamController<String>.broadcast();
+      StreamController<String>.broadcast();
   final StreamController<NotificationPayload> _onForegroundMessageController =
-  StreamController<NotificationPayload>.broadcast();
+      StreamController<NotificationPayload>.broadcast();
   final StreamController<NotificationPayload> _onMessageTapController =
-  StreamController<NotificationPayload>.broadcast();
+      StreamController<NotificationPayload>.broadcast();
 
   // Private state
   bool _isInitialized = false;
@@ -69,7 +69,9 @@ class NotificationService implements INotificationService {
       debugPrint("Initializing NotificationService...");
 
       // Set background message handler
-      FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+      FirebaseMessaging.onBackgroundMessage(
+        _firebaseMessagingBackgroundHandler,
+      );
 
       // Initialize local notifications
       await _initializeLocalNotifications();
@@ -99,7 +101,6 @@ class NotificationService implements INotificationService {
 
       _isInitialized = true;
       debugPrint("NotificationService initialized successfully");
-
     } catch (e) {
       debugPrint("Error initializing NotificationService: $e");
       rethrow;
@@ -123,25 +124,26 @@ class NotificationService implements INotificationService {
 
         // Set up a timer to retry getting the initial message
         // This helps in cases where the message might not be immediately available
-        _initialMessageTimer = Timer.periodic(
-          const Duration(milliseconds: 500),
-              (timer) async {
-            if (timer.tick > 10) {
-              // Stop trying after 5 seconds (10 * 500ms)
-              timer.cancel();
-              debugPrint("Stopped checking for initial message after timeout");
-              return;
-            }
+        _initialMessageTimer = Timer.periodic(const Duration(milliseconds: 500), (
+          timer,
+        ) async {
+          if (timer.tick > 10) {
+            // Stop trying after 5 seconds (10 * 500ms)
+            timer.cancel();
+            debugPrint("Stopped checking for initial message after timeout");
+            return;
+          }
 
-            final retryMessage = await _firebaseMessaging.getInitialMessage();
-            if (retryMessage != null) {
-              debugPrint("Found initial message on retry ${timer.tick}: ${retryMessage.messageId}");
-              debugPrint("Retry message data: ${retryMessage.data}");
-              _handleMessageTap(retryMessage);
-              timer.cancel();
-            }
-          },
-        );
+          final retryMessage = await _firebaseMessaging.getInitialMessage();
+          if (retryMessage != null) {
+            debugPrint(
+              "Found initial message on retry ${timer.tick}: ${retryMessage.messageId}",
+            );
+            debugPrint("Retry message data: ${retryMessage.data}");
+            _handleMessageTap(retryMessage);
+            timer.cancel();
+          }
+        });
       }
     } catch (e) {
       debugPrint("Error handling initial message: $e");
@@ -152,15 +154,15 @@ class NotificationService implements INotificationService {
   Future<void> _initializeLocalNotifications() async {
     // Android initialization settings
     const AndroidInitializationSettings androidSettings =
-    AndroidInitializationSettings('@mipmap/ic_launcher');
+        AndroidInitializationSettings('@mipmap/ic_launcher');
 
     // iOS initialization settings
     const DarwinInitializationSettings iosSettings =
-    DarwinInitializationSettings(
-      requestSoundPermission: true,
-      requestBadgePermission: true,
-      requestAlertPermission: true,
-    );
+        DarwinInitializationSettings(
+          requestSoundPermission: true,
+          requestBadgePermission: true,
+          requestAlertPermission: true,
+        );
 
     const InitializationSettings initSettings = InitializationSettings(
       android: androidSettings,
@@ -181,30 +183,32 @@ class NotificationService implements INotificationService {
   /// Create Android notification channels
   Future<void> _createNotificationChannels() async {
     const AndroidNotificationChannel highImportanceChannel =
-    AndroidNotificationChannel(
-      'high_importance_channel',
-      'High Importance Notifications',
-      description: 'This channel is used for important notifications.',
-      importance: Importance.high,
-      playSound: true,
-    );
+        AndroidNotificationChannel(
+          'high_importance_channel',
+          'High Importance Notifications',
+          description: 'This channel is used for important notifications.',
+          importance: Importance.high,
+          playSound: true,
+        );
 
     const AndroidNotificationChannel defaultChannel =
-    AndroidNotificationChannel(
-      'default_channel',
-      'Default Notifications',
-      description: 'This channel is used for default notifications.',
-      importance: Importance.defaultImportance,
-    );
+        AndroidNotificationChannel(
+          'default_channel',
+          'Default Notifications',
+          description: 'This channel is used for default notifications.',
+          importance: Importance.defaultImportance,
+        );
 
     await _localNotifications
         .resolvePlatformSpecificImplementation<
-        AndroidFlutterLocalNotificationsPlugin>()
+          AndroidFlutterLocalNotificationsPlugin
+        >()
         ?.createNotificationChannel(highImportanceChannel);
 
     await _localNotifications
         .resolvePlatformSpecificImplementation<
-        AndroidFlutterLocalNotificationsPlugin>()
+          AndroidFlutterLocalNotificationsPlugin
+        >()
         ?.createNotificationChannel(defaultChannel);
   }
 
@@ -272,24 +276,25 @@ class NotificationService implements INotificationService {
   @override
   Future<bool> requestPermissions() async {
     try {
-      final NotificationSettings settings =
-      await _firebaseMessaging.requestPermission(
-        alert: true,
-        announcement: false,
-        badge: true,
-        carPlay: false,
-        criticalAlert: false,
-        provisional: false,
-        sound: true,
-      );
+      final NotificationSettings settings = await _firebaseMessaging
+          .requestPermission(
+            alert: true,
+            announcement: false,
+            badge: true,
+            carPlay: false,
+            criticalAlert: false,
+            provisional: false,
+            sound: true,
+          );
 
-      final bool isAuthorized = settings.authorizationStatus ==
-          AuthorizationStatus.authorized ||
+      final bool isAuthorized =
+          settings.authorizationStatus == AuthorizationStatus.authorized ||
           settings.authorizationStatus == AuthorizationStatus.provisional;
 
-      debugPrint("Notification permission status: ${settings.authorizationStatus}");
+      debugPrint(
+        "Notification permission status: ${settings.authorizationStatus}",
+      );
       return isAuthorized;
-
     } catch (e) {
       debugPrint("Error requesting notification permissions: $e");
       return false;
@@ -322,15 +327,16 @@ class NotificationService implements INotificationService {
   Future<void> showLocalNotification(NotificationPayload payload) async {
     try {
       const AndroidNotificationDetails androidDetails =
-      AndroidNotificationDetails(
-        'default_channel',
-        'Default Notifications',
-        channelDescription: 'This channel is used for default notifications.',
-        importance: Importance.high,
-        priority: Priority.high,
-        showWhen: true,
-        icon: '@mipmap/ic_launcher',
-      );
+          AndroidNotificationDetails(
+            'default_channel',
+            'Default Notifications',
+            channelDescription:
+                'This channel is used for default notifications.',
+            importance: Importance.high,
+            priority: Priority.high,
+            showWhen: true,
+            icon: '@mipmap/ic_launcher',
+          );
 
       const DarwinNotificationDetails iosDetails = DarwinNotificationDetails(
         presentAlert: true,
@@ -350,7 +356,6 @@ class NotificationService implements INotificationService {
         platformDetails,
         payload: jsonEncode(payload.toJson()),
       );
-
     } catch (e) {
       debugPrint("Error showing local notification: $e");
     }

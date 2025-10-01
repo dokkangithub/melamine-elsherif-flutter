@@ -43,9 +43,10 @@ class AddressFormFields extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Check if the selected state ID exists in the states list
-    final bool stateExists = selectedStateId != null && 
+    final bool stateExists =
+        selectedStateId != null &&
         states.any((state) => state['id'] == selectedStateId);
-        
+
     // Use null if the selected state doesn't exist in the list
     final effectiveStateId = stateExists ? selectedStateId : null;
 
@@ -108,21 +109,36 @@ class AddressFormFields extends StatelessWidget {
           hint: Text('select_state'.tr(context)),
           isExpanded: true,
           decoration: InputDecoration(
-            contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 12,
+              vertical: 12,
+            ),
             border: OutlineInputBorder(
-              borderSide: const BorderSide(color: AppTheme.darkDividerColor, width: 1.0),
+              borderSide: const BorderSide(
+                color: AppTheme.darkDividerColor,
+                width: 1.0,
+              ),
               borderRadius: BorderRadius.circular(4),
             ),
             enabledBorder: OutlineInputBorder(
-              borderSide: const BorderSide(color: AppTheme.darkDividerColor, width: 1.0),
+              borderSide: const BorderSide(
+                color: AppTheme.darkDividerColor,
+                width: 1.0,
+              ),
               borderRadius: BorderRadius.circular(4),
             ),
             focusedBorder: OutlineInputBorder(
-              borderSide: const BorderSide(color: AppTheme.primaryColor, width: 1.0),
+              borderSide: const BorderSide(
+                color: AppTheme.primaryColor,
+                width: 1.0,
+              ),
               borderRadius: BorderRadius.circular(4),
             ),
             errorBorder: OutlineInputBorder(
-              borderSide: const BorderSide(color: AppTheme.errorColor, width: 1.0),
+              borderSide: const BorderSide(
+                color: AppTheme.errorColor,
+                width: 1.0,
+              ),
               borderRadius: BorderRadius.circular(4),
             ),
             filled: false,
@@ -160,12 +176,11 @@ class AddressFormFields extends StatelessWidget {
             return null;
           },
         ),
-
-
       ],
     );
   }
-  Text customText(String title,BuildContext context){
+
+  Text customText(String title, BuildContext context) {
     return Text(
       title,
       style: context.titleSmall!.copyWith(fontWeight: FontWeight.w600),

@@ -31,7 +31,12 @@ class _SetProductsScreenState extends State<SetProductsScreen> {
     super.initState();
     _scrollController.addListener(_scrollListener);
     // Fetch initial data
-    Future.microtask(() => Provider.of<SetProductsProvider>(context, listen: false).getSetProducts());
+    Future.microtask(
+      () => Provider.of<SetProductsProvider>(
+        context,
+        listen: false,
+      ).getSetProducts(),
+    );
   }
 
   @override
@@ -82,12 +87,12 @@ class _SetProductsScreenState extends State<SetProductsScreen> {
       elevation: 0,
       title: Text(
         'customize_yours'.tr(context),
-        style: Theme.of(context).textTheme.displaySmall!.copyWith(fontWeight: FontWeight.w500),
+        style: Theme.of(
+          context,
+        ).textTheme.displaySmall!.copyWith(fontWeight: FontWeight.w500),
       ),
       centerTitle: true,
-      leading: CustomBackButton(
-        respectDirection: isRTL,
-      ),
+      leading: CustomBackButton(respectDirection: isRTL),
       actions: [
         IconButton(
           icon: const Icon(Icons.search, color: Colors.black),
@@ -101,10 +106,12 @@ class _SetProductsScreenState extends State<SetProductsScreen> {
   }
 
   Widget _buildProductsGrid(SetProductsProvider provider) {
-    if (provider.setProductsState == LoadingState.loading && provider.setProducts.isEmpty) {
+    if (provider.setProductsState == LoadingState.loading &&
+        provider.setProducts.isEmpty) {
       return const Center(child: ProductsGridShimmer());
     }
-    if (provider.setProductsState == LoadingState.error && provider.setProducts.isEmpty) {
+    if (provider.setProductsState == LoadingState.error &&
+        provider.setProducts.isEmpty) {
       return Center(
         child: FadeIn(
           duration: const Duration(milliseconds: 400),
@@ -125,7 +132,9 @@ class _SetProductsScreenState extends State<SetProductsScreen> {
       );
     }
     // Filter out unpublished products
-    final filteredProducts = provider.setProducts.where((product) => product.published == true).toList();
+    final filteredProducts = provider.setProducts
+        .where((product) => product.published == true)
+        .toList();
     if (filteredProducts.isEmpty) {
       return const Center(child: CustomEmptyWidget());
     }
@@ -168,7 +177,11 @@ class _SetProductsScreenState extends State<SetProductsScreen> {
     );
   }
 
-  Widget _buildProductCard(BuildContext context, SetProduct product, bool isEven) {
+  Widget _buildProductCard(
+    BuildContext context,
+    SetProduct product,
+    bool isEven,
+  ) {
     final bool isRTL = Directionality.of(context) == TextDirection.rtl;
     return InkWell(
       onTap: () {
@@ -210,26 +223,40 @@ class _SetProductsScreenState extends State<SetProductsScreen> {
                 children: [
                   Text(
                     product.name ?? '',
-                    style: Theme.of(context).textTheme.titleMedium!.copyWith(color: AppTheme.darkDividerColor, fontWeight: FontWeight.w600),
+                    style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                      color: AppTheme.darkDividerColor,
+                      fontWeight: FontWeight.w600,
+                    ),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     textAlign: isRTL ? TextAlign.right : TextAlign.left,
                   ),
                   const SizedBox(height: 4),
                   Row(
-                    textDirection: isRTL ? TextDirection.rtl : TextDirection.ltr,
+                    textDirection: isRTL
+                        ? TextDirection.rtl
+                        : TextDirection.ltr,
                     children: [
                       Text(
                         product.discountedPrice ?? '',
-                        style: Theme.of(context).textTheme.titleLarge!.copyWith(color: AppTheme.primaryColor, fontWeight: FontWeight.w900),
+                        style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                          color: AppTheme.primaryColor,
+                          fontWeight: FontWeight.w900,
+                        ),
                       ),
                       const SizedBox(width: 6),
-                      (product.hasDiscount ?? false) && (product.mainPrice != null)
-                        ? Text(
-                            product.mainPrice!,
-                            style: Theme.of(context).textTheme.titleMedium!.copyWith(color: AppTheme.darkDividerColor, fontWeight: FontWeight.w400, decoration: TextDecoration.lineThrough),
-                          )
-                        : const SizedBox.shrink(),
+                      (product.hasDiscount ?? false) &&
+                              (product.mainPrice != null)
+                          ? Text(
+                              product.mainPrice!,
+                              style: Theme.of(context).textTheme.titleMedium!
+                                  .copyWith(
+                                    color: AppTheme.darkDividerColor,
+                                    fontWeight: FontWeight.w400,
+                                    decoration: TextDecoration.lineThrough,
+                                  ),
+                            )
+                          : const SizedBox.shrink(),
                     ],
                   ),
                 ],

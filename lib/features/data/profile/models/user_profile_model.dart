@@ -35,10 +35,13 @@ class UserProfileModel {
         name: json['name'] ?? '',
         email: json['email'] ?? '',
         phone: json['phone'] ?? '',
-        avatar: json['avatar_original'] ?? json['avatar'] ?? '',  // Use avatar_original if available
-        token: '',  // Token is sent, not received in this API
-        isVerified: true,  // Assuming user is verified if we got their data
-        cartItemCount: 0,  // These will be set separately from profile counters
+        avatar:
+            json['avatar_original'] ??
+            json['avatar'] ??
+            '', // Use avatar_original if available
+        token: '', // Token is sent, not received in this API
+        isVerified: true, // Assuming user is verified if we got their data
+        cartItemCount: 0, // These will be set separately from profile counters
         wishlistItemCount: 0,
         orderCount: 0,
       );

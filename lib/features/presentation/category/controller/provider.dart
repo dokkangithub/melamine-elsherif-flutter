@@ -36,14 +36,17 @@ class CategoryProvider extends ChangeNotifier {
     required this.getSubCategoriesUseCase,
   });
 
-  Future<void> getCategories({String? parentId, bool needRefresh = false}) async {
+  Future<void> getCategories({
+    String? parentId,
+    bool needRefresh = false,
+  }) async {
     categoriesState = LoadingState.loading;
     notifyListeners();
 
     try {
       categoriesResponse = await getCategoriesUseCase(
-          parentId: parentId,
-          needRefresh: needRefresh
+        parentId: parentId,
+        needRefresh: needRefresh,
       );
       categoriesState = LoadingState.loaded;
     } catch (e) {
@@ -59,7 +62,7 @@ class CategoryProvider extends ChangeNotifier {
 
     try {
       featuredCategoriesResponse = await getFeaturedCategoriesUseCase(
-          needRefresh: needRefresh
+        needRefresh: needRefresh,
       );
       featuredCategoriesState = LoadingState.loaded;
     } catch (e) {
@@ -75,7 +78,7 @@ class CategoryProvider extends ChangeNotifier {
 
     try {
       topCategoriesResponse = await getTopCategoriesUseCase(
-          needRefresh: needRefresh
+        needRefresh: needRefresh,
       );
       topCategoriesState = LoadingState.loaded;
     } catch (e) {
@@ -91,7 +94,7 @@ class CategoryProvider extends ChangeNotifier {
 
     try {
       filterPageCategoriesResponse = await getFilterPageCategoriesUseCase(
-          needRefresh: needRefresh
+        needRefresh: needRefresh,
       );
       filterPageCategoriesState = LoadingState.loaded;
     } catch (e) {
@@ -101,14 +104,17 @@ class CategoryProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> getSubCategories({required String mainCategoryId, bool needRefresh = false}) async {
+  Future<void> getSubCategories({
+    required String mainCategoryId,
+    bool needRefresh = false,
+  }) async {
     subCategoriesState = LoadingState.loading;
     notifyListeners();
 
     try {
       subCategoriesResponse = await getSubCategoriesUseCase(
-          mainCategoryId: mainCategoryId,
-          needRefresh: needRefresh
+        mainCategoryId: mainCategoryId,
+        needRefresh: needRefresh,
       );
       subCategoriesState = LoadingState.loaded;
     } catch (e) {
@@ -126,7 +132,7 @@ class CategoryProvider extends ChangeNotifier {
     topCategoriesState = LoadingState.loading;
     filterPageCategoriesState = LoadingState.loading;
     notifyListeners();
-    
+
     // Force refresh all category data
     try {
       await Future.wait([
@@ -139,7 +145,7 @@ class CategoryProvider extends ChangeNotifier {
       errorMessage = e.toString();
       debugPrint('Error refreshing categories after language change: $e');
     }
-    
+
     notifyListeners();
   }
 }

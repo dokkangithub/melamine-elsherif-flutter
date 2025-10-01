@@ -25,13 +25,16 @@ class SubCategoryList extends StatelessWidget {
     if (categoryProvider.subCategoriesState == LoadingState.error) {
       return SizedBox(
         height: 50,
-        child: Center(child: Text('Error: ${categoryProvider.errorMessage}'.tr(context))),
+        child: Center(
+          child: Text('Error: ${categoryProvider.errorMessage}'.tr(context)),
+        ),
       );
     }
 
-    final subCategories = categoryProvider.subCategoriesResponse?.data
-        .map((c) => {'name': c.name, 'id': c.id})
-        .toList() ??
+    final subCategories =
+        categoryProvider.subCategoriesResponse?.data
+            .map((c) => {'name': c.name, 'id': c.id})
+            .toList() ??
         [];
 
     if (subCategories.isEmpty) {
@@ -72,7 +75,9 @@ class SubCategoryList extends StatelessWidget {
                       subCategory['name'] as String,
                       style: TextStyle(
                         color: isSelected ? Colors.white : Colors.black87,
-                        fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                        fontWeight: isSelected
+                            ? FontWeight.bold
+                            : FontWeight.normal,
                       ),
                     ),
                   ),

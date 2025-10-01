@@ -3,10 +3,7 @@ import 'package:flutter/material.dart';
 class CouponErrorMessage extends StatelessWidget {
   final String error;
 
-  const CouponErrorMessage({
-    Key? key,
-    required this.error,
-  }) : super(key: key);
+  const CouponErrorMessage({Key? key, required this.error}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,10 +13,7 @@ class CouponErrorMessage extends StatelessWidget {
         color: Colors.red.shade50,
         borderRadius: BorderRadius.circular(8),
       ),
-      child: Text(
-        error,
-        style: TextStyle(color: Colors.red.shade800),
-      ),
+      child: Text(error, style: TextStyle(color: Colors.red.shade800)),
     );
   }
 }

@@ -15,10 +15,7 @@ class AddressItemShimmer extends StatelessWidget {
           // Title and badge
           Row(
             children: [
-              const ShimmerWidget.rectangular(
-                width: 100,
-                height: 18,
-              ),
+              const ShimmerWidget.rectangular(width: 100, height: 18),
               const SizedBox(width: 10),
               Container(
                 width: 70,
@@ -26,9 +23,7 @@ class AddressItemShimmer extends StatelessWidget {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(0),
                 ),
-                child: const ShimmerWidget.rectangular(
-                  height: 24,
-                ),
+                child: const ShimmerWidget.rectangular(height: 24),
               ),
               const Spacer(),
               const ShimmerWidget.circular(width: 20, height: 20),
@@ -42,9 +37,7 @@ class AddressItemShimmer extends StatelessWidget {
             children: [
               ShimmerWidget.circular(width: 20, height: 20),
               SizedBox(width: 8),
-              Expanded(
-                child: ShimmerWidget.rectangular(height: 16),
-              ),
+              Expanded(child: ShimmerWidget.rectangular(height: 16)),
             ],
           ),
           const SizedBox(height: 12),
@@ -54,19 +47,15 @@ class AddressItemShimmer extends StatelessWidget {
             children: [
               ShimmerWidget.circular(width: 20, height: 20),
               SizedBox(width: 8),
-              Expanded(
-                child: ShimmerWidget.rectangular(height: 14),
-              ),
+              Expanded(child: ShimmerWidget.rectangular(height: 14)),
               SizedBox(width: 8),
               ShimmerWidget.circular(width: 20, height: 20),
             ],
           ),
           const SizedBox(height: 8),
-          
+
           // Divider
-          const ShimmerWidget.rectangular(
-            height: 1,
-          ),
+          const ShimmerWidget.rectangular(height: 1),
         ],
       ),
     );

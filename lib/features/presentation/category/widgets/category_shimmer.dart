@@ -27,7 +27,7 @@ class CategoryShimmer extends StatelessWidget {
               ),
             ),
           ),
-          
+
           // Shimmer for the section title
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -62,7 +62,7 @@ class CategoryShimmer extends StatelessWidget {
               ],
             ),
           ),
-          
+
           // Shimmer for category grid
           Padding(
             padding: const EdgeInsets.all(16.0),
@@ -94,4 +94,4 @@ class CategoryShimmer extends StatelessWidget {
       ),
     );
   }
-} 
+}

@@ -78,13 +78,13 @@ abstract class AppFunctions {
         // Show appropriate toast message
         isSuccess
             ? CustomToast.showToast(
-            message: result ?? 'added_to_cart_successfully'.tr(context),
-            type: ToastType.success
-        )
+                message: result ?? 'added_to_cart_successfully'.tr(context),
+                type: ToastType.success,
+              )
             : CustomToast.showToast(
-            message: result ?? 'failed_to_add_to_cart'.tr(context),
-            type: ToastType.error
-        );
+                message: result ?? 'failed_to_add_to_cart'.tr(context),
+                type: ToastType.error,
+              );
 
         // Show animation only if cart addition was successful
         if (isSuccess) {
@@ -102,35 +102,42 @@ abstract class AppFunctions {
       }
 
       if (context.mounted) {
-        CustomToast.showToast(
-            message: e.toString(),
-            type: ToastType.error
-        );
+        CustomToast.showToast(message: e.toString(), type: ToastType.error);
       }
     }
   }
 
   // Helper method to refresh cart data asynchronously
-  static Future<void> _refreshCartDataAsync(CartProvider cartProvider,
-      context) async {
+  static Future<void> _refreshCartDataAsync(
+    CartProvider cartProvider,
+    context,
+  ) async {
     await cartProvider.fetchCartItems();
     await cartProvider.fetchCartCount();
     await cartProvider.fetchCartSummary();
-    await Provider.of<ProfileProvider>(context, listen: false)
-        .getProfileCounters();
+    await Provider.of<ProfileProvider>(
+      context,
+      listen: false,
+    ).getProfileCounters();
   }
 
-  static Future<void> toggleWishlistStatus(BuildContext context,
-      String slug,) async {
+  static Future<void> toggleWishlistStatus(
+    BuildContext context,
+    String slug,
+  ) async {
     if (AppStrings.token == null) {
       CustomToast.showToast(
-          message: 'please_login'.tr(context), type: ToastType.warning);
+        message: 'please_login'.tr(context),
+        type: ToastType.warning,
+      );
     } else {
       final provider = Provider.of<WishlistProvider>(context, listen: false);
 
       await provider.toggleWishlistStatus(context, slug);
-      await Provider.of<ProfileProvider>(context, listen: false)
-          .getProfileCounters();
+      await Provider.of<ProfileProvider>(
+        context,
+        listen: false,
+      ).getProfileCounters();
     }
   }
 
@@ -139,18 +146,22 @@ abstract class AppFunctions {
   /// [context] - BuildContext for provider access and translations
   /// [languageCode] - The language code to change to (e.g., 'en', 'ar')
   /// [countryCode] - The country code to use with the language (e.g., 'US', 'Eg')
-  static Future<void> changeLanguage(BuildContext context,
-      String languageCode,
-      String countryCode,) async {
+  static Future<void> changeLanguage(
+    BuildContext context,
+    String languageCode,
+    String countryCode,
+  ) async {
     try {
       // Get language provider
       final languageProvider = Provider.of<LanguageProvider>(
-          context, listen: false);
+        context,
+        listen: false,
+      );
 
       // Check if this is a direction change (RTL/LTR)
       final isDirectionChange = languageProvider.isDirectionChange(
-          languageCode);
-
+        languageCode,
+      );
 
       // Change the language using the provider
       await languageProvider.changeLanguage(languageCode, countryCode);
@@ -167,7 +178,9 @@ abstract class AppFunctions {
         // Additionally refresh profile data if needed
         if (context.mounted) {
           final profileProvider = Provider.of<ProfileProvider>(
-              context, listen: false);
+            context,
+            listen: false,
+          );
           await profileProvider.getProfileCounters();
           await profileProvider.getUserProfile();
         }
@@ -175,16 +188,16 @@ abstract class AppFunctions {
         // Show success message
         if (context.mounted) {
           CustomToast.showToast(
-              message: 'language_changed_successfully'.tr(context),
-              type: ToastType.success
+            message: 'language_changed_successfully'.tr(context),
+            type: ToastType.success,
           );
         }
       } catch (e) {
         debugPrint('Error refreshing data after language change: $e');
         if (context.mounted) {
           CustomToast.showToast(
-              message: 'language_changed_data_refresh_failed'.tr(context),
-              type: ToastType.warning
+            message: 'language_changed_data_refresh_failed'.tr(context),
+            type: ToastType.warning,
           );
         }
       }
@@ -192,13 +205,12 @@ abstract class AppFunctions {
       debugPrint('Error changing language: $e');
       if (context.mounted) {
         CustomToast.showToast(
-            message: 'failed_to_change_language'.tr(context),
-            type: ToastType.error
+          message: 'failed_to_change_language'.tr(context),
+          type: ToastType.error,
         );
       }
     }
   }
-
 
   static Future<void> addFullSetToCart({
     required BuildContext context,
@@ -229,13 +241,11 @@ abstract class AppFunctions {
         if (success) {
           // Get the response message or use default
           final response = setProductProvider.addToCartResponse;
-          final message = response?['message'] ??
+          final message =
+              response?['message'] ??
               'full_set_added_to_cart_successfully'.tr(context);
 
-          CustomToast.showToast(
-            message: message,
-            type: ToastType.success,
-          );
+          CustomToast.showToast(message: message, type: ToastType.success);
 
           // Show animation only if cart addition was successful
           // showCartAddedAnimation(context);
@@ -253,10 +263,7 @@ abstract class AppFunctions {
       }
     } catch (e) {
       if (context.mounted) {
-        CustomToast.showToast(
-          message: e.toString(),
-          type: ToastType.error,
-        );
+        CustomToast.showToast(message: e.toString(), type: ToastType.error);
       }
     }
   }
@@ -296,13 +303,11 @@ abstract class AppFunctions {
         if (success) {
           // Get the response message or use default
           final response = setProductProvider.addToCartResponse;
-          final message = response?['message'] ??
+          final message =
+              response?['message'] ??
               'custom_set_added_to_cart_successfully'.tr(context);
 
-          CustomToast.showToast(
-            message: message,
-            type: ToastType.success,
-          );
+          CustomToast.showToast(message: message, type: ToastType.success);
 
           // Show animation only if cart addition was successful
           // showCartAddedAnimation(context);
@@ -320,30 +325,24 @@ abstract class AppFunctions {
       }
     } catch (e) {
       if (context.mounted) {
-        CustomToast.showToast(
-          message: e.toString(),
-          type: ToastType.error,
-        );
+        CustomToast.showToast(message: e.toString(), type: ToastType.error);
       }
     }
   }
 
-
   // Utility method to create components list from current selections
   static List<ComponentRequest> createComponentsFromSelections(
-      List<Component> allComponents,
-      Map<int, int> selectedQuantities,) {
+    List<Component> allComponents,
+    Map<int, int> selectedQuantities,
+  ) {
     final components = <ComponentRequest>[];
 
     for (final component in allComponents) {
-      final quantity = selectedQuantities[component.id] ??
-          (component.initialQuantity ?? 1);
+      final quantity =
+          selectedQuantities[component.id] ?? (component.initialQuantity ?? 1);
       if (quantity > 0) {
         components.add(
-          ComponentRequest(
-            productId: component.id!,
-            quantity: quantity,
-          ),
+          ComponentRequest(productId: component.id!, quantity: quantity),
         );
       }
     }
@@ -352,17 +351,21 @@ abstract class AppFunctions {
   }
 
   // Utility method to validate custom set selection
-  static bool validateCustomSetSelection(List<Component> allComponents,
-      Map<int, int> selectedQuantities,
-      BuildContext context,) {
+  static bool validateCustomSetSelection(
+    List<Component> allComponents,
+    Map<int, int> selectedQuantities,
+    BuildContext context,
+  ) {
     // Check if all required components are selected
     for (final component in allComponents) {
       if (component.isRequired == true) {
-        final quantity = selectedQuantities[component.id] ??
+        final quantity =
+            selectedQuantities[component.id] ??
             (component.initialQuantity ?? 1);
         if (quantity <= 0) {
           CustomToast.showToast(
-            message: 'please_select_required_component'.tr(context) +
+            message:
+                'please_select_required_component'.tr(context) +
                 ': ${component.name}',
             type: ToastType.error,
           );
@@ -372,8 +375,9 @@ abstract class AppFunctions {
     }
 
     // Check if at least one component is selected
-    final hasAnySelection = selectedQuantities.values.any((
-        quantity) => quantity > 0);
+    final hasAnySelection = selectedQuantities.values.any(
+      (quantity) => quantity > 0,
+    );
     if (!hasAnySelection) {
       CustomToast.showToast(
         message: 'please_select_at_least_one_component'.tr(context),
@@ -384,6 +388,4 @@ abstract class AppFunctions {
 
     return true;
   }
-
-
 }

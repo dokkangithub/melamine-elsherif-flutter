@@ -11,8 +11,8 @@ class CartItemModel {
   final String currencySymbol;
   final String productSlug;
   final int quantity;
-  final int lowerLimit;  // Add this
-  final int upperLimit;  // Add this
+  final int lowerLimit; // Add this
+  final int upperLimit; // Add this
 
   CartItemModel({
     required this.id,
@@ -25,8 +25,8 @@ class CartItemModel {
     required this.productSlug,
     required this.currencySymbol,
     required this.quantity,
-    this.lowerLimit = 1,   // Default value
-    this.upperLimit = 10,  // Default value
+    this.lowerLimit = 1, // Default value
+    this.upperLimit = 10, // Default value
   });
 
   factory CartItemModel.fromJson(Map<String, dynamic> json) {
@@ -40,8 +40,8 @@ class CartItemModel {
       discount: json['product_discount'],
       currencySymbol: json['currency_symbol'] ?? '',
       quantity: json['quantity'] ?? 1,
-      productSlug: json['product_slug']??'',
-      lowerLimit: json['lower_limit'] ?? 1,  // Parse from JSON if available
+      productSlug: json['product_slug'] ?? '',
+      lowerLimit: json['lower_limit'] ?? 1, // Parse from JSON if available
       upperLimit: json['upper_limit'] ?? 10, // Parse from JSON if available
     );
   }
@@ -57,8 +57,9 @@ class CartItemModel {
       discount: discount,
       currencySymbol: currencySymbol,
       quantity: quantity,
-      lowerLimit: lowerLimit,  // Pass to entity
-      upperLimit: upperLimit, productSlug: productSlug,  // Pass to entity
+      lowerLimit: lowerLimit, // Pass to entity
+      upperLimit: upperLimit,
+      productSlug: productSlug, // Pass to entity
     );
   }
 }

@@ -8,10 +8,7 @@ class ReviewProvider extends ChangeNotifier {
   final GetProductReviewsUseCase getProductReviews;
   final SubmitReviewUseCase submitReview;
 
-  ReviewProvider({
-    required this.getProductReviews,
-    required this.submitReview,
-  });
+  ReviewProvider({required this.getProductReviews, required this.submitReview});
 
   List<Review> reviews = [];
   LoadingState reviewState = LoadingState.loading;
@@ -54,7 +51,11 @@ class ReviewProvider extends ChangeNotifier {
     }
   }
 
-  Future<Map<String, dynamic>> submitNewReview(int productId, double rating, String comment) async {
+  Future<Map<String, dynamic>> submitNewReview(
+    int productId,
+    double rating,
+    String comment,
+  ) async {
     try {
       reviewState = LoadingState.loading;
       notifyListeners();

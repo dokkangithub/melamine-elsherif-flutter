@@ -9,7 +9,7 @@ import '../controller/wishlist_provider.dart';
 
 class WishlistScreen extends StatefulWidget {
   final bool isActive;
-  
+
   const WishlistScreen({super.key, this.isActive = false});
 
   @override
@@ -19,12 +19,12 @@ class WishlistScreen extends StatefulWidget {
 class _WishlistScreenState extends State<WishlistScreen> {
   final GlobalKey _animationKey = GlobalKey();
   bool _shouldAnimate = false;
-  
+
   @override
   void initState() {
     super.initState();
     _shouldAnimate = widget.isActive;
-    
+
     // Load wishlist data when screen initializes
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final provider = Provider.of<WishlistProvider>(context, listen: false);

@@ -45,8 +45,11 @@ class OrderSummarySection extends StatelessWidget {
             children: [
               Icon(Icons.receipt_outlined, color: Colors.grey[600], size: 20),
               const SizedBox(width: 8),
-              Text('order_summary'.tr(context),
-                style: context.titleLarge!.copyWith(fontWeight: FontWeight.w600),
+              Text(
+                'order_summary'.tr(context),
+                style: context.titleLarge!.copyWith(
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ],
           ),
@@ -75,16 +78,16 @@ class OrderSummarySection extends StatelessWidget {
                 _buildPriceRow(
                   context: context,
                   label: 'subtotal'.tr(context),
-                  value: '${(cartSummary.subtotal)} ${cartSummary.currencySymbol}',
+                  value:
+                      '${(cartSummary.subtotal)} ${cartSummary.currencySymbol}',
                 ),
                 const SizedBox(height: 12),
                 _buildPriceRow(
                   context: context,
                   label: 'shipping'.tr(context),
-                  value:
-                      cartSummary.shippingCost > 0
-                          ? '${cartSummary.shippingCost.toStringAsFixed(2)} ${cartSummary.currencySymbol}'
-                          : 'free_shipping'.tr(context),
+                  value: cartSummary.shippingCost > 0
+                      ? '${cartSummary.shippingCost.toStringAsFixed(2)} ${cartSummary.currencySymbol}'
+                      : 'free_shipping'.tr(context),
                   isLoading: isUpdatingShipping,
                   color: AppTheme.successColor,
                 ),
@@ -123,12 +126,10 @@ class OrderSummarySection extends StatelessWidget {
               ],
             ),
 
-          
           const SizedBox(height: 20),
-          
+
           // Add note to order section
           _buildNoteSection(context),
-          
         ],
       ),
     );
@@ -136,9 +137,7 @@ class OrderSummarySection extends StatelessWidget {
 
   Widget _buildNoteSection(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.grey[300]!),
-      ),
+      decoration: BoxDecoration(border: Border.all(color: Colors.grey[300]!)),
       child: TextField(
         controller: noteController,
         maxLines: 3,
@@ -232,12 +231,15 @@ class OrderSummarySection extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(label, style: context.titleMedium!.copyWith(color: AppTheme.black)),
+        Text(
+          label,
+          style: context.titleMedium!.copyWith(color: AppTheme.black),
+        ),
         if (isLoading)
           const CustomLoadingWidget()
         else
           Text(
-            value, 
+            value,
             style: valueStyle ?? context.titleMedium!.copyWith(color: color),
           ),
       ],

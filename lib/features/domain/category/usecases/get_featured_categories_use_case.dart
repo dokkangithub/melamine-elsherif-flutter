@@ -7,6 +7,8 @@ class GetFeaturedCategoriesUseCase {
   GetFeaturedCategoriesUseCase(this.categoryRepository);
 
   Future<CategoryResponseModel> call({bool needRefresh = false}) async {
-    return await categoryRepository.getFeaturedCategories(needRefresh: needRefresh);
+    return await categoryRepository.getFeaturedCategories(
+      needRefresh: needRefresh,
+    );
   }
 }

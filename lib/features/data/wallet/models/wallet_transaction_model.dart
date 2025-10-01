@@ -16,7 +16,9 @@ class WalletHistoryResponse {
 
   factory WalletHistoryResponse.fromJson(Map<String, dynamic> json) {
     return WalletHistoryResponse(
-      data: (json['data'] as List).map((item) => WalletTransactionModel.fromJson(item)).toList(),
+      data: (json['data'] as List)
+          .map((item) => WalletTransactionModel.fromJson(item))
+          .toList(),
       meta: Meta.fromJson(json['meta']),
       result: json['result'] ?? false,
       status: json['status'] ?? 0,
@@ -31,11 +33,11 @@ class WalletTransactionModel extends WalletTransaction {
     required String approvalString,
     required String date,
   }) : super(
-          amount: amount,
-          paymentMethod: paymentMethod,
-          approvalString: approvalString,
-          date: date,
-        );
+         amount: amount,
+         paymentMethod: paymentMethod,
+         approvalString: approvalString,
+         date: date,
+       );
 
   factory WalletTransactionModel.fromJson(Map<String, dynamic> json) {
     return WalletTransactionModel(
@@ -54,4 +56,4 @@ class WalletTransactionModel extends WalletTransaction {
       'date': date,
     };
   }
-} 
+}

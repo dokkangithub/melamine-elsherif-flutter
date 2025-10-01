@@ -47,16 +47,10 @@ class Links extends Equatable {
   final String? products;
   final String? subCategories;
 
-  const Links({
-    required this.products,
-    required this.subCategories,
-  });
+  const Links({required this.products, required this.subCategories});
 
   @override
-  List<Object?> get props => [
-    products,
-    subCategories,
-  ];
+  List<Object?> get props => [products, subCategories];
 }
 
 class CategoryResponse extends Equatable {
@@ -71,9 +65,5 @@ class CategoryResponse extends Equatable {
   });
 
   @override
-  List<Object?> get props => [
-    data,
-    success,
-    status,
-  ];
+  List<Object?> get props => [data, success, status];
 }

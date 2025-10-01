@@ -6,23 +6,19 @@ class SetProductDetailsModel {
   final bool? success;
   final SetProductDetailsDataModel? data;
 
-  SetProductDetailsModel({
-    this.success,
-    this.data,
-  });
+  SetProductDetailsModel({this.success, this.data});
 
   factory SetProductDetailsModel.fromJson(Map<String, dynamic> json) {
     return SetProductDetailsModel(
       success: json["success"],
-      data: json["data"] == null ? null : SetProductDetailsDataModel.fromJson(json["data"]),
+      data: json["data"] == null
+          ? null
+          : SetProductDetailsDataModel.fromJson(json["data"]),
     );
   }
 
   SetProductDetailsEntity toEntity() {
-    return SetProductDetailsEntity(
-      success: success,
-      data: data?.toEntity(),
-    );
+    return SetProductDetailsEntity(success: success, data: data?.toEntity());
   }
 }
 
@@ -87,11 +83,21 @@ class SetProductDetailsDataModel {
       minimumCustomPrice: json["minimum_custom_price"],
       thumbnailImage: json["thumbnail_image"],
       sku: json["sku"],
-      specification: json["specification"] == null ? [] : List<dynamic>.from(json["specification"]!.map((x) => x)),
-      components: json["components"] == null ? [] : List<ComponentModel>.from(json["components"]!.map((x) => ComponentModel.fromJson(x))),
+      specification: json["specification"] == null
+          ? []
+          : List<dynamic>.from(json["specification"]!.map((x) => x)),
+      components: json["components"] == null
+          ? []
+          : List<ComponentModel>.from(
+              json["components"]!.map((x) => ComponentModel.fromJson(x)),
+            ),
       componentCount: json["component_count"],
       requiredComponents: json["required_components"],
-      reviews: json["reviews"] == null ? [] : List<ReviewModel>.from(json["reviews"].map((x) => ReviewModel.fromJson(x))),
+      reviews: json["reviews"] == null
+          ? []
+          : List<ReviewModel>.from(
+              json["reviews"].map((x) => ReviewModel.fromJson(x)),
+            ),
       reviewCount: json["review_count"],
     );
   }
@@ -188,7 +194,9 @@ class ComponentModel {
       description: json["description"],
       stock: json["stock"],
       sku: json["sku"],
-      specification: json["specification"] == null ? [] : List<dynamic>.from(json["specification"]!.map((x) => x)),
+      specification: json["specification"] == null
+          ? []
+          : List<dynamic>.from(json["specification"]!.map((x) => x)),
     );
   }
 
@@ -225,13 +233,7 @@ class ReviewModel {
   final String? comment;
   final String? time;
 
-  ReviewModel({
-    this.userName,
-    this.type,
-    this.rating,
-    this.comment,
-    this.time,
-  });
+  ReviewModel({this.userName, this.type, this.rating, this.comment, this.time});
 
   factory ReviewModel.fromJson(Map<String, dynamic> json) {
     return ReviewModel(
@@ -274,10 +276,7 @@ class ComponentRequestModel {
   final int productId;
   final int quantity;
 
-  ComponentRequestModel({
-    required this.productId,
-    required this.quantity,
-  });
+  ComponentRequestModel({required this.productId, required this.quantity});
 
   Map<String, dynamic> toJson() => {
     "product_id": productId,
@@ -289,15 +288,14 @@ class CalculatePriceResponseModel {
   final bool? success;
   final CalculatedPriceDataModel? data;
 
-  CalculatePriceResponseModel({
-    this.success,
-    this.data,
-  });
+  CalculatePriceResponseModel({this.success, this.data});
 
   factory CalculatePriceResponseModel.fromJson(Map<String, dynamic> json) {
     return CalculatePriceResponseModel(
       success: json["success"],
-      data: json["data"] == null ? null : CalculatedPriceDataModel.fromJson(json["data"]),
+      data: json["data"] == null
+          ? null
+          : CalculatedPriceDataModel.fromJson(json["data"]),
     );
   }
 
@@ -323,7 +321,13 @@ class CalculatedPriceDataModel {
   factory CalculatedPriceDataModel.fromJson(Map<String, dynamic> json) {
     return CalculatedPriceDataModel(
       totalPrice: json["total_price"],
-      components: json["components"] == null ? [] : List<CalculatedComponentModel>.from(json["components"]!.map((x) => CalculatedComponentModel.fromJson(x))),
+      components: json["components"] == null
+          ? []
+          : List<CalculatedComponentModel>.from(
+              json["components"]!.map(
+                (x) => CalculatedComponentModel.fromJson(x),
+              ),
+            ),
       componentCount: json["component_count"],
     );
   }

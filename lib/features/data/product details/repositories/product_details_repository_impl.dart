@@ -14,7 +14,17 @@ class ProductDetailsRepositoryImpl implements ProductDetailsRepository {
   }
 
   @override
-  Future<VariantPriceModel> getVariantPrice(String slug, String color, String variants, int quantity) async {
-    return await remoteDataSource.getVariantPrice(slug, color, variants, quantity);
+  Future<VariantPriceModel> getVariantPrice(
+    String slug,
+    String color,
+    String variants,
+    int quantity,
+  ) async {
+    return await remoteDataSource.getVariantPrice(
+      slug,
+      color,
+      variants,
+      quantity,
+    );
   }
 }

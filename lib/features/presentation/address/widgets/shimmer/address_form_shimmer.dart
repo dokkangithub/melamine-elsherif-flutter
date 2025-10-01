@@ -19,7 +19,7 @@ class AddressFormShimmer extends StatelessWidget {
           child: const ShimmerWidget.rectangular(height: 60),
         ),
         const SizedBox(height: 16),
-        
+
         // Country dropdown shimmer
         Container(
           height: 60,
@@ -30,7 +30,7 @@ class AddressFormShimmer extends StatelessWidget {
           child: const ShimmerWidget.rectangular(height: 60),
         ),
         const SizedBox(height: 16),
-        
+
         // State dropdown shimmer
         Container(
           height: 60,
@@ -41,7 +41,7 @@ class AddressFormShimmer extends StatelessWidget {
           child: const ShimmerWidget.rectangular(height: 60),
         ),
         const SizedBox(height: 16),
-        
+
         // City dropdown shimmer
         Container(
           height: 60,
@@ -52,7 +52,7 @@ class AddressFormShimmer extends StatelessWidget {
           child: const ShimmerWidget.rectangular(height: 60),
         ),
         const SizedBox(height: 16),
-        
+
         // Address field shimmer
         Container(
           height: 100,
@@ -63,7 +63,7 @@ class AddressFormShimmer extends StatelessWidget {
           child: const ShimmerWidget.rectangular(height: 100),
         ),
         const SizedBox(height: 16),
-        
+
         // Postal code field shimmer
         Container(
           height: 60,
@@ -74,7 +74,7 @@ class AddressFormShimmer extends StatelessWidget {
           child: const ShimmerWidget.rectangular(height: 60),
         ),
         const SizedBox(height: 16),
-        
+
         // Phone field shimmer
         Container(
           height: 60,

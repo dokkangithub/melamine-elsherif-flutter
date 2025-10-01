@@ -10,7 +10,8 @@ import 'package:melamine_elsherif/core/utils/widgets/custom_button.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_empty_widgets.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_loading.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_back_button.dart';
-import 'package:melamine_elsherif/features/domain/product/entities/product.dart' as product_import;
+import 'package:melamine_elsherif/features/domain/product/entities/product.dart'
+    as product_import;
 import 'package:provider/provider.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import '../../../../core/config/routes.dart/routes.dart';
@@ -26,10 +27,7 @@ import '../widgets/shimmer/products_grid_shimmer.dart';
 class AllCategoryProductsScreen extends StatefulWidget {
   final Category category;
 
-  const AllCategoryProductsScreen({
-    super.key,
-    required this.category,
-  });
+  const AllCategoryProductsScreen({super.key, required this.category});
 
   @override
   _AllCategoryProductsScreenState createState() =>
@@ -60,7 +58,10 @@ class _AllCategoryProductsScreenState extends State<AllCategoryProductsScreen> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final homeProvider = Provider.of<HomeProvider>(context, listen: false);
-      final categoryProvider = Provider.of<CategoryProvider>(context, listen: false);
+      final categoryProvider = Provider.of<CategoryProvider>(
+        context,
+        listen: false,
+      );
 
       homeProvider.fetchCategoryProducts(
         _selectedCategoryId,
@@ -68,7 +69,9 @@ class _AllCategoryProductsScreenState extends State<AllCategoryProductsScreen> {
         refresh: true,
       );
       categoryProvider.getFilterPageCategories();
-      categoryProvider.getSubCategories(mainCategoryId: _selectedCategoryId.toString());
+      categoryProvider.getSubCategories(
+        mainCategoryId: _selectedCategoryId.toString(),
+      );
     });
   }
 
@@ -81,7 +84,8 @@ class _AllCategoryProductsScreenState extends State<AllCategoryProductsScreen> {
 
   void _scrollListener() {
     // Check if carousel is visible to show/hide scroll to top button
-    final bool shouldShowScrollToTop = _scrollController.offset > _carouselHeight;
+    final bool shouldShowScrollToTop =
+        _scrollController.offset > _carouselHeight;
     if (shouldShowScrollToTop != _showScrollToTop) {
       setState(() {
         _showScrollToTop = shouldShowScrollToTop;
@@ -146,7 +150,10 @@ class _AllCategoryProductsScreenState extends State<AllCategoryProductsScreen> {
       _selectedSubCategoryId = null;
       _selectedSubCategoryName = null;
       final provider = Provider.of<HomeProvider>(context, listen: false);
-      final categoryProvider = Provider.of<CategoryProvider>(context, listen: false);
+      final categoryProvider = Provider.of<CategoryProvider>(
+        context,
+        listen: false,
+      );
       provider.fetchCategoryProducts(id, refresh: true, name: _searchQuery);
       categoryProvider.getSubCategories(mainCategoryId: id.toString());
     });
@@ -242,7 +249,12 @@ class _AllCategoryProductsScreenState extends State<AllCategoryProductsScreen> {
                     delegate: SliverChildListDelegate([
                       FadeInUp(
                         duration: const Duration(milliseconds: 600),
-                        child: _buildProductsGrid(products, state, error, homeProvider),
+                        child: _buildProductsGrid(
+                          products,
+                          state,
+                          error,
+                          homeProvider,
+                        ),
                       ),
                     ]),
                   ),
@@ -285,7 +297,9 @@ class _AllCategoryProductsScreenState extends State<AllCategoryProductsScreen> {
       return Container(
         height: _carouselHeight,
         child: Center(
-          child: Text(categoryProvider.errorMessage ?? 'Error loading categories'),
+          child: Text(
+            categoryProvider.errorMessage ?? 'Error loading categories',
+          ),
         ),
       );
     } else if (categoryProvider.categoriesResponse?.data.isEmpty ?? true) {
@@ -363,8 +377,12 @@ class _AllCategoryProductsScreenState extends State<AllCategoryProductsScreen> {
                                 const SizedBox(height: 20),
                                 CustomButton(
                                   onPressed: () {
-                                    if (category.id != null && category.name != null) {
-                                      _selectCategory(category.name!, category.id!);
+                                    if (category.id != null &&
+                                        category.name != null) {
+                                      _selectCategory(
+                                        category.name!,
+                                        category.id!,
+                                      );
                                       // Note: _currentCategoryIndex is already updated by onPageChanged
                                       // when user manually selects, so no need to update it here again
                                     }
@@ -432,7 +450,9 @@ class _AllCategoryProductsScreenState extends State<AllCategoryProductsScreen> {
         height: 54,
         color: Colors.white,
         child: Center(
-          child: Text(categoryProvider.errorMessage ?? 'Error loading subcategories'),
+          child: Text(
+            categoryProvider.errorMessage ?? 'Error loading subcategories',
+          ),
         ),
       );
     } else if (categoryProvider.subCategoriesResponse?.data.isEmpty ?? true) {
@@ -448,16 +468,13 @@ class _AllCategoryProductsScreenState extends State<AllCategoryProductsScreen> {
 
     // Create a list with "All" as the first tab, then all subcategories
     final List<Map<String, dynamic>> tabs = [
-      {'id': null, 'name': 'all'.tr(context)}
+      {'id': null, 'name': 'all'.tr(context)},
     ];
 
     // Add all subcategories to the tabs list
     if (categoryProvider.subCategoriesResponse?.data != null) {
       categoryProvider.subCategoriesResponse!.data.forEach((subCategory) {
-        tabs.add({
-          'id': subCategory.id,
-          'name': subCategory.name ?? ''
-        });
+        tabs.add({'id': subCategory.id, 'name': subCategory.name ?? ''});
       });
     }
 
@@ -482,7 +499,9 @@ class _AllCategoryProductsScreenState extends State<AllCategoryProductsScreen> {
       ),
       child: DefaultTabController(
         length: displayedTabs.length,
-        initialIndex: displayedTabs.indexWhere((tab) => tab['id'] == _selectedSubCategoryId).clamp(0, displayedTabs.length - 1),
+        initialIndex: displayedTabs
+            .indexWhere((tab) => tab['id'] == _selectedSubCategoryId)
+            .clamp(0, displayedTabs.length - 1),
         child: TabBar(
           isScrollable: false,
           labelColor: AppTheme.primaryColor,
@@ -511,14 +530,20 @@ class _AllCategoryProductsScreenState extends State<AllCategoryProductsScreen> {
               setState(() {
                 _selectedSubCategoryId = null;
                 _selectedSubCategoryName = null;
-                final provider = Provider.of<HomeProvider>(context, listen: false);
-                provider.fetchCategoryProducts(_selectedCategoryId, refresh: true);
+                final provider = Provider.of<HomeProvider>(
+                  context,
+                  listen: false,
+                );
+                provider.fetchCategoryProducts(
+                  _selectedCategoryId,
+                  refresh: true,
+                );
               });
             } else {
               // Subcategory tab
               _selectSubCategory(
-                  selectedTab['name'] as String,
-                  selectedTab['id'] as int
+                selectedTab['name'] as String,
+                selectedTab['id'] as int,
               );
             }
           },
@@ -541,11 +566,11 @@ class _AllCategoryProductsScreenState extends State<AllCategoryProductsScreen> {
   }
 
   Widget _buildProductsGrid(
-      List<product_import.Product> products,
-      LoadingState state,
-      String errorMessage,
-      HomeProvider homeProvider,
-      ) {
+    List<product_import.Product> products,
+    LoadingState state,
+    String errorMessage,
+    HomeProvider homeProvider,
+  ) {
     if (state == LoadingState.loading && products.isEmpty) {
       return const SizedBox(
         height: 400,
@@ -566,7 +591,12 @@ class _AllCategoryProductsScreenState extends State<AllCategoryProductsScreen> {
                 const SizedBox(height: 16),
                 CustomButton(
                   onPressed: _retryLoading,
-                  child: Text('retry'.tr(context), style: context.titleLarge?.copyWith(color: AppTheme.white) ?? const TextStyle(color: Colors.white)),
+                  child: Text(
+                    'retry'.tr(context),
+                    style:
+                        context.titleLarge?.copyWith(color: AppTheme.white) ??
+                        const TextStyle(color: Colors.white),
+                  ),
                 ),
               ],
             ),
@@ -582,7 +612,9 @@ class _AllCategoryProductsScreenState extends State<AllCategoryProductsScreen> {
       );
     }
 
-    final filteredProducts = products.where((product) => product.published == 1).toList();
+    final filteredProducts = products
+        .where((product) => product.published == 1)
+        .toList();
 
     return Column(
       children: [
@@ -608,7 +640,9 @@ class _AllCategoryProductsScreenState extends State<AllCategoryProductsScreen> {
               padding: const EdgeInsets.symmetric(vertical: 16.0),
               child: Text(
                 'loading_more_products'.tr(context),
-                style: context.titleSmall?.copyWith(color: AppTheme.primaryColor),
+                style: context.titleSmall?.copyWith(
+                  color: AppTheme.primaryColor,
+                ),
               ),
             ),
           ),
@@ -618,22 +652,27 @@ class _AllCategoryProductsScreenState extends State<AllCategoryProductsScreen> {
     );
   }
 
-  Widget _buildProductCard(BuildContext context, product_import.Product product, bool isEven) {
+  Widget _buildProductCard(
+    BuildContext context,
+    product_import.Product product,
+    bool isEven,
+  ) {
     // Check if the current locale is RTL
     final bool isRTL = Directionality.of(context) == TextDirection.rtl;
 
     return InkWell(
       onTap: () {
-        product.setProduct?AppRoutes.navigateTo(
-          context,
-          AppRoutes.setProductDetailsScreen,
-          arguments: {'slug': product.slug},
-        ):
-        AppRoutes.navigateTo(
-          context,
-          AppRoutes.productDetailScreen,
-          arguments: {'slug': product.slug},
-        );
+        product.setProduct
+            ? AppRoutes.navigateTo(
+                context,
+                AppRoutes.setProductDetailsScreen,
+                arguments: {'slug': product.slug},
+              )
+            : AppRoutes.navigateTo(
+                context,
+                AppRoutes.productDetailScreen,
+                arguments: {'slug': product.slug},
+              );
       },
       child: Container(
         margin: const EdgeInsets.all(4),
@@ -650,7 +689,9 @@ class _AllCategoryProductsScreenState extends State<AllCategoryProductsScreen> {
           ],
         ),
         child: Column(
-          crossAxisAlignment: isRTL ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+          crossAxisAlignment: isRTL
+              ? CrossAxisAlignment.end
+              : CrossAxisAlignment.start,
           children: [
             // Product image with favorite button
             Stack(
@@ -668,10 +709,15 @@ class _AllCategoryProductsScreenState extends State<AllCategoryProductsScreen> {
                   left: isRTL ? 8 : null,
                   child: Consumer<WishlistProvider>(
                     builder: (context, wishlistProvider, _) {
-                      final isInWishlist = wishlistProvider.isProductInWishlist(product.slug);
+                      final isInWishlist = wishlistProvider.isProductInWishlist(
+                        product.slug,
+                      );
                       return GestureDetector(
                         onTap: () {
-                          AppFunctions.toggleWishlistStatus(context, product.slug);
+                          AppFunctions.toggleWishlistStatus(
+                            context,
+                            product.slug,
+                          );
                         },
                         child: Container(
                           padding: const EdgeInsets.all(4),
@@ -680,7 +726,9 @@ class _AllCategoryProductsScreenState extends State<AllCategoryProductsScreen> {
                             color: Colors.white,
                           ),
                           child: Icon(
-                            isInWishlist ? Icons.favorite : Icons.favorite_border,
+                            isInWishlist
+                                ? Icons.favorite
+                                : Icons.favorite_border,
                             color: AppTheme.primaryColor,
                             size: 20,
                           ),
@@ -696,11 +744,18 @@ class _AllCategoryProductsScreenState extends State<AllCategoryProductsScreen> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(
-                crossAxisAlignment: isRTL ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+                crossAxisAlignment: isRTL
+                    ? CrossAxisAlignment.end
+                    : CrossAxisAlignment.start,
                 children: [
                   Text(
                     product.name,
-                    style: context.titleMedium?.copyWith(color: AppTheme.darkDividerColor, fontWeight: FontWeight.w600) ?? const TextStyle(),
+                    style:
+                        context.titleMedium?.copyWith(
+                          color: AppTheme.darkDividerColor,
+                          fontWeight: FontWeight.w600,
+                        ) ??
+                        const TextStyle(),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     textAlign: isRTL ? TextAlign.right : TextAlign.left,
@@ -708,18 +763,35 @@ class _AllCategoryProductsScreenState extends State<AllCategoryProductsScreen> {
                   const SizedBox(height: 4),
                   Row(
                     // Adjust row direction based on language
-                    mainAxisAlignment: isRTL ? MainAxisAlignment.end : MainAxisAlignment.start,
-                    textDirection: isRTL ? TextDirection.rtl : TextDirection.ltr,
+                    mainAxisAlignment: isRTL
+                        ? MainAxisAlignment.end
+                        : MainAxisAlignment.start,
+                    textDirection: isRTL
+                        ? TextDirection.rtl
+                        : TextDirection.ltr,
                     children: [
                       Text(
                         product.discountedPrice,
-                        style: context.titleLarge?.copyWith(color: AppTheme.primaryColor, fontWeight: FontWeight.w900) ?? const TextStyle(),
+                        style:
+                            context.titleLarge?.copyWith(
+                              color: AppTheme.primaryColor,
+                              fontWeight: FontWeight.w900,
+                            ) ??
+                            const TextStyle(),
                       ),
                       const SizedBox(width: 6),
-                      product.hasDiscount? Text(
-                        product.mainPrice,
-                        style: context.titleMedium?.copyWith(color: AppTheme.darkDividerColor, fontWeight: FontWeight.w400, decoration: TextDecoration.lineThrough) ?? const TextStyle(),
-                      ):const SizedBox.shrink(),
+                      product.hasDiscount
+                          ? Text(
+                              product.mainPrice,
+                              style:
+                                  context.titleMedium?.copyWith(
+                                    color: AppTheme.darkDividerColor,
+                                    fontWeight: FontWeight.w400,
+                                    decoration: TextDecoration.lineThrough,
+                                  ) ??
+                                  const TextStyle(),
+                            )
+                          : const SizedBox.shrink(),
                     ],
                   ),
                 ],

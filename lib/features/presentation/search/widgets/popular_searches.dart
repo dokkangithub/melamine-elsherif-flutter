@@ -10,13 +10,20 @@ import '../controller/search_provider.dart';
 
 class PopularSearches extends StatelessWidget {
   final bool isLoading;
-  final List<Product> popularProducts; // Example terms, replace with actual data
+  final List<Product>
+  popularProducts; // Example terms, replace with actual data
 
-  const PopularSearches({super.key, this.isLoading = false, required this.popularProducts});
+  const PopularSearches({
+    super.key,
+    this.isLoading = false,
+    required this.popularProducts,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final filteredProducts = popularProducts.where((product) => product.published == 1).toList();
+    final filteredProducts = popularProducts
+        .where((product) => product.published == 1)
+        .toList();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

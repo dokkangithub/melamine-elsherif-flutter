@@ -73,8 +73,10 @@ class _ProductImageWidgetState extends State<ProductImageWidget> {
                       return InkWell(
                         onTap: () => _openGallery(context, provider),
                         child: CustomImage(
-                          imageUrl: widget.product.photos[index].path.contains(
-                              'placeholder.jpg')
+                          imageUrl:
+                              widget.product.photos[index].path.contains(
+                                'placeholder.jpg',
+                              )
                               ? widget.product.thumbnailImage
                               : widget.product.photos[index].path,
                           fit: BoxFit.contain,
@@ -103,9 +105,7 @@ class _ProductImageWidgetState extends State<ProductImageWidget> {
                         effect: WormEffect(
                           dotHeight: 8,
                           dotWidth: 8,
-                          activeDotColor: Theme
-                              .of(context)
-                              .primaryColor,
+                          activeDotColor: Theme.of(context).primaryColor,
                           dotColor: Colors.white.withValues(alpha: 0.8),
                           spacing: 8,
                         ),
@@ -130,17 +130,17 @@ class _ProductImageWidgetState extends State<ProductImageWidget> {
 
   void _openGallery(BuildContext context, ProductDetailsProvider provider) {
     // Convert the Photo objects to URL strings for the GalleryImagePreview
-    final List<String> imageUrls = widget.product.photos.map((photo) =>
-    photo.path).toList();
+    final List<String> imageUrls = widget.product.photos
+        .map((photo) => photo.path)
+        .toList();
 
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) =>
-            GalleryImagePreview(
-              imageUrls: imageUrls,
-              initialIndex: provider.currentPhotoIndex,
-            ),
+        builder: (context) => GalleryImagePreview(
+          imageUrls: imageUrls,
+          initialIndex: provider.currentPhotoIndex,
+        ),
       ),
     );
   }

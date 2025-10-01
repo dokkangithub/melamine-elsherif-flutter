@@ -28,7 +28,8 @@ class WishlistRemoteDataSourceImpl implements WishlistRemoteDataSource {
   @override
   Future<WishlistCheckModel> checkWishlist(String slug) async {
     final response = await apiProvider.get(
-        '${LaravelApiEndPoint.wishlistCheck}$slug');
+      '${LaravelApiEndPoint.wishlistCheck}$slug',
+    );
     if (response.data != null) {
       return WishlistCheckModel.fromJson(response.data);
     }
@@ -37,7 +38,9 @@ class WishlistRemoteDataSourceImpl implements WishlistRemoteDataSource {
 
   @override
   Future<WishlistCheckModel> addToWishlist(String slug) async {
-    final response = await apiProvider.get('${LaravelApiEndPoint.wishlistAdd}$slug');
+    final response = await apiProvider.get(
+      '${LaravelApiEndPoint.wishlistAdd}$slug',
+    );
     if (response.data != null) {
       return WishlistCheckModel.fromJson(response.data);
     }
@@ -46,7 +49,9 @@ class WishlistRemoteDataSourceImpl implements WishlistRemoteDataSource {
 
   @override
   Future<WishlistCheckModel> removeFromWishlist(String slug) async {
-    final response = await apiProvider.get('${LaravelApiEndPoint.wishlistRemove}$slug');
+    final response = await apiProvider.get(
+      '${LaravelApiEndPoint.wishlistRemove}$slug',
+    );
     if (response.data != null) {
       return WishlistCheckModel.fromJson(response.data);
     }

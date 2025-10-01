@@ -35,7 +35,9 @@ class PaymentMethodSection extends StatelessWidget {
               const SizedBox(width: 8),
               Text(
                 'payment_method'.tr(context),
-                style: context.titleLarge?.copyWith(fontWeight: FontWeight.w600),
+                style: context.titleLarge?.copyWith(
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ],
           ),
@@ -47,7 +49,8 @@ class PaymentMethodSection extends StatelessWidget {
           else
             Column(
               children: paymentTypes.map((paymentType) {
-                final isSelected = selectedPaymentTypeKey == paymentType.paymentTypeKey;
+                final isSelected =
+                    selectedPaymentTypeKey == paymentType.paymentTypeKey;
                 return _buildPaymentMethodItem(
                   context,
                   paymentType,
@@ -65,26 +68,27 @@ class PaymentMethodSection extends StatelessWidget {
       baseColor: Colors.grey[300]!,
       highlightColor: Colors.grey[100]!,
       child: Column(
-        children: List.generate(2, (index) =>
-        Container(
-          width: double.infinity,
-          height: 60,
-          margin: const EdgeInsets.only(bottom: 8),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            border: Border.all(color: Colors.grey[300]!),
+        children: List.generate(
+          2,
+          (index) => Container(
+            width: double.infinity,
+            height: 60,
+            margin: const EdgeInsets.only(bottom: 8),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              border: Border.all(color: Colors.grey[300]!),
+            ),
           ),
-        ),
         ),
       ),
     );
   }
 
   Widget _buildPaymentMethodItem(
-      BuildContext context,
-      PaymentType paymentType,
-      bool isSelected,
-      ) {
+    BuildContext context,
+    PaymentType paymentType,
+    bool isSelected,
+  ) {
     Widget paymentIcon;
     bool isArabic = Directionality.of(context) == TextDirection.rtl;
 
@@ -120,7 +124,7 @@ class PaymentMethodSection extends StatelessWidget {
     );
 
     // Translate payment method name based on language
-    String paymentMethodName = isArabic 
+    String paymentMethodName = isArabic
         ? _getArabicPaymentMethodName(paymentType.paymentTypeKey)
         : paymentType.name;
 
@@ -148,9 +152,9 @@ class PaymentMethodSection extends StatelessWidget {
               paymentIcon,
               const SizedBox(width: 16),
               Text(
-                paymentMethodName, 
+                paymentMethodName,
                 style: context.titleMedium?.copyWith(
-                  fontWeight: isSelected ? FontWeight.w500 : FontWeight.normal
+                  fontWeight: isSelected ? FontWeight.w500 : FontWeight.normal,
                 ),
               ),
             ],

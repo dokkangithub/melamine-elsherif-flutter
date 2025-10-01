@@ -33,7 +33,7 @@ class BannerShimmer extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: List.generate(
                 3, // Showing 3 indicator dots in shimmer
-                    (index) => Container(
+                (index) => Container(
                   width: 8.0,
                   height: 8.0,
                   margin: const EdgeInsets.symmetric(horizontal: 4.0),

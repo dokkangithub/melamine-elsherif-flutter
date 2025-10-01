@@ -13,10 +13,7 @@ import '../widgets/shimmer/applied_coupon_card_shimmer.dart';
 class CouponScreen extends StatefulWidget {
   final Function(double)? onCouponApplied;
 
-  const CouponScreen({
-    super.key,
-    this.onCouponApplied,
-  });
+  const CouponScreen({super.key, this.onCouponApplied});
 
   @override
   State<CouponScreen> createState() => _CouponScreenState();
@@ -43,8 +40,9 @@ class _CouponScreenState extends State<CouponScreen> {
                 isLoading
                     ? const CouponFormShimmer()
                     : CouponForm(
-                  onApplyCoupon: (couponCode) => _applyCoupon(couponCode, couponProvider),
-                ),
+                        onApplyCoupon: (couponCode) =>
+                            _applyCoupon(couponCode, couponProvider),
+                      ),
 
                 const SizedBox(height: 24),
 
@@ -59,7 +57,7 @@ class _CouponScreenState extends State<CouponScreen> {
 
                 // Error message
                 if (couponProvider.couponState == LoadingState.error)
-                  CouponErrorMessage(error: couponProvider.couponError)
+                  CouponErrorMessage(error: couponProvider.couponError),
               ],
             ),
           );
@@ -68,7 +66,10 @@ class _CouponScreenState extends State<CouponScreen> {
     );
   }
 
-  Future<void> _applyCoupon(String couponCode, CouponProvider couponProvider) async {
+  Future<void> _applyCoupon(
+    String couponCode,
+    CouponProvider couponProvider,
+  ) async {
     await couponProvider.applyCoupon(couponCode);
 
     if (!mounted) return;
@@ -89,7 +90,8 @@ class _CouponScreenState extends State<CouponScreen> {
 
     if (!mounted) return;
 
-    if (couponProvider.appliedCoupon == null && widget.onCouponApplied != null) {
+    if (couponProvider.appliedCoupon == null &&
+        widget.onCouponApplied != null) {
       widget.onCouponApplied!(0); // Reset discount to zero
     }
 
@@ -97,8 +99,8 @@ class _CouponScreenState extends State<CouponScreen> {
   }
 
   void _showSuccessMessage(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message)),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(message)));
   }
 }

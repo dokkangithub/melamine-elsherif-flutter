@@ -31,7 +31,7 @@ class EmptyCartWidget extends StatelessWidget {
             height: double.infinity,
           ),
         ),
-        
+
         // Content overlay
         Container(
           width: double.infinity,
@@ -41,7 +41,7 @@ class EmptyCartWidget extends StatelessWidget {
             children: [
               // Top space - approximately 40% of screen height
               SizedBox(height: screenHeight * 0.35),
-              
+
               // Text content
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 32.0),
@@ -78,10 +78,10 @@ class EmptyCartWidget extends StatelessWidget {
                   ],
                 ),
               ),
-              
+
               // Expandable space before button
               const SizedBox(height: 50),
-              
+
               // Button at bottom
               Padding(
                 padding: const EdgeInsets.all(24.0),
@@ -92,7 +92,10 @@ class EmptyCartWidget extends StatelessWidget {
                     height: 52,
                     child: CustomButton(
                       onPressed: () {
-                        Provider.of<LayoutProvider>(context, listen: false).currentIndex = 0;
+                        Provider.of<LayoutProvider>(
+                          context,
+                          listen: false,
+                        ).currentIndex = 0;
                       },
                       child: Text(
                         'continue_shopping'.tr(context),
@@ -114,4 +117,3 @@ class EmptyCartWidget extends StatelessWidget {
     );
   }
 }
-

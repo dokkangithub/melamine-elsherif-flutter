@@ -20,10 +20,10 @@ class ProductImageWidget extends StatelessWidget {
     return isLoading
         ? ShimmerWidget(height: height)
         : CustomImage(
-      imageUrl: product.thumbnailImage,
-      fit: BoxFit.cover,
-      height: height,
-      width: double.infinity,
-    );
+            imageUrl: product.thumbnailImage,
+            fit: BoxFit.cover,
+            height: height,
+            width: double.infinity,
+          );
   }
 }

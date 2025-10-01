@@ -81,39 +81,39 @@ class LanguageProvider extends ChangeNotifier {
   }
 
   // This method changes the language and refreshes all data
-  Future<void> changeLanguage(String languageCode, String countryCode, {BuildContext? context}) async {
+  Future<void> changeLanguage(
+    String languageCode,
+    String countryCode, {
+    BuildContext? context,
+  }) async {
     debugPrint('Changing language to: $languageCode');
-    
+
     // Create the new locale
     Locale tempLocale = Locale(languageCode, countryCode);
-    
+
     // Save to storage first
-    await SecureStorage().save(
-      LocalStorageKey.languageCode,
-      languageCode,
-    );
-    await SecureStorage().save(
-      LocalStorageKey.countryCode,
-      countryCode,
-    );
+    await SecureStorage().save(LocalStorageKey.languageCode, languageCode);
+    await SecureStorage().save(LocalStorageKey.countryCode, countryCode);
 
     // Update ApiProvider with new language
     sl<ApiProvider>().setLanguage(languageCode);
-    
+
     // Update the locale
     _locale = tempLocale;
-    
+
     // Force UI rebuild
     notifyListeners();
-    
+
     // Trigger data refresh directly (without relying on context)
     try {
       // Get singleton instances from service locator and refresh them
       final homeProvider = sl<HomeProvider>();
-      homeProvider.refreshAfterLanguageChange(); // Use the new method for complete refresh
-      
+      homeProvider
+          .refreshAfterLanguageChange(); // Use the new method for complete refresh
+
       final categoryProvider = sl<CategoryProvider>();
-      categoryProvider.refreshAfterLanguageChange(); // Use the new method for complete refresh
+      categoryProvider
+          .refreshAfterLanguageChange(); // Use the new method for complete refresh
     } catch (e) {
       debugPrint('Error refreshing data providers: $e');
     }

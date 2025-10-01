@@ -6,10 +6,7 @@ import '../../../../core/utils/widgets/custom_button.dart';
 class CouponForm extends StatefulWidget {
   final Function(String) onApplyCoupon;
 
-  const CouponForm({
-    Key? key,
-    required this.onApplyCoupon,
-  }) : super(key: key);
+  const CouponForm({Key? key, required this.onApplyCoupon}) : super(key: key);
 
   @override
   State<CouponForm> createState() => _CouponFormState();

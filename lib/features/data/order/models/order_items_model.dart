@@ -91,9 +91,10 @@ class OrderItemsResponse {
 
   factory OrderItemsResponse.fromJson(Map<String, dynamic> json) {
     return OrderItemsResponse(
-      data: (json['data'] as List?)
-          ?.map((item) => OrderItemModel.fromJson(item))
-          .toList() ??
+      data:
+          (json['data'] as List?)
+              ?.map((item) => OrderItemModel.fromJson(item))
+              .toList() ??
           [],
       success: json['success'] ?? false,
       status: json['status'] ?? 0,

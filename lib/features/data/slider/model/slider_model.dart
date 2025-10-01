@@ -15,7 +15,9 @@ class SliderResponseModel {
     return SliderResponseModel(
       data: json["data"] == null
           ? []
-          : List<SliderModel>.from(json["data"]!.map((x) => SliderModel.fromJson(x))),
+          : List<SliderModel>.from(
+              json["data"]!.map((x) => SliderModel.fromJson(x)),
+            ),
       success: json["success"],
       status: json["status"],
     );
@@ -31,22 +33,13 @@ class SliderResponseModel {
 }
 
 class SliderModel extends Slider {
-  const SliderModel({
-    required super.photo,
-    required super.url,
-  });
+  const SliderModel({required super.photo, required super.url});
 
   factory SliderModel.fromJson(Map<String, dynamic> json) {
-    return SliderModel(
-      photo: json["photo"],
-      url: json["url"],
-    );
+    return SliderModel(photo: json["photo"], url: json["url"]);
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'photo': photo,
-      'url': url,
-    };
+    return {'photo': photo, 'url': url};
   }
 }

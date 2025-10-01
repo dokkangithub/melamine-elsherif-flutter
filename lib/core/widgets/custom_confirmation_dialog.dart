@@ -34,9 +34,7 @@ class CustomConfirmationDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(0),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
       elevation: 0,
       backgroundColor: Colors.transparent,
       child: contentBox(context),
@@ -54,28 +52,17 @@ class CustomConfirmationDialog extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          if (icon != null)
-            Icon(
-              icon,
-              size: 28,
-              color: Colors.black54,
-            ),
+          if (icon != null) Icon(icon, size: 28, color: Colors.black54),
           const SizedBox(height: 16),
           Text(
             title,
-            style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 10),
           Text(
             message,
-            style: const TextStyle(
-              fontSize: 14,
-              color: Colors.black54,
-            ),
+            style: const TextStyle(fontSize: 14, color: Colors.black54),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 24),
@@ -95,9 +82,7 @@ class CustomConfirmationDialog extends StatelessWidget {
                   ),
                   child: Text(
                     cancelText,
-                    style: TextStyle(
-                      color: cancelTextColor,
-                    ),
+                    style: TextStyle(color: cancelTextColor),
                   ),
                 ),
               ),
@@ -115,7 +100,10 @@ class CustomConfirmationDialog extends StatelessWidget {
                   ),
                   child: Text(
                     confirmText,
-                    style: context.headlineSmall!.copyWith(fontWeight: FontWeight.w700,color: AppTheme.white),
+                    style: context.headlineSmall!.copyWith(
+                      fontWeight: FontWeight.w700,
+                      color: AppTheme.white,
+                    ),
                   ),
                 ),
               ),
@@ -156,4 +144,4 @@ Future<bool?> showCustomConfirmationDialog({
       );
     },
   );
-} 
+}

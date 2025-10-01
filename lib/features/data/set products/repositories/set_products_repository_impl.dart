@@ -4,7 +4,6 @@ import '../../../domain/set products/repositories/set_products_repository.dart';
 import '../datasources/set_products_remote_datasource.dart';
 import '../datasources/set_products_local_datasource.dart';
 import '../models/set_product_details_model.dart';
-import '../models/set_products_model.dart';
 
 class SetProductsRepositoryImpl implements SetProductsRepository {
   final SetProductsRemoteDataSource remoteDataSource;
@@ -13,12 +12,21 @@ class SetProductsRepositoryImpl implements SetProductsRepository {
   SetProductsRepositoryImpl(this.remoteDataSource, this.localDataSource);
 
   @override
-  Future<SetProductsResponse> getSetProducts({int page = 1, bool needUpdate = false}) async {
+  Future<SetProductsResponse> getSetProducts({
+    int page = 1,
+    bool needUpdate = false,
+  }) async {
     const collectionType = 'set_products';
     if (!needUpdate) {
-      final isCacheValid = await localDataSource.isCollectionCacheValid(collectionType, page);
+      final isCacheValid = await localDataSource.isCollectionCacheValid(
+        collectionType,
+        page,
+      );
       if (isCacheValid) {
-        final cached = await localDataSource.getCollectionFromCache(collectionType, page);
+        final cached = await localDataSource.getCollectionFromCache(
+          collectionType,
+          page,
+        );
         if (cached != null) {
           return SetProductsResponse(
             success: true,
@@ -37,24 +45,37 @@ class SetProductsRepositoryImpl implements SetProductsRepository {
     final model = await remoteDataSource.getSetProducts(page: page);
     final products = model.data?.data ?? [];
     final totalPages = model.data?.lastPage ?? 1;
-    await localDataSource.saveCollection(collectionType, page, products, totalPages);
+    await localDataSource.saveCollection(
+      collectionType,
+      page,
+      products,
+      totalPages,
+    );
     return model.toEntity();
   }
 
   @override
-  Future<SetProductDetailsEntity> getSetProductDetails({required String slug}) async {
+  Future<SetProductDetailsEntity> getSetProductDetails({
+    required String slug,
+  }) async {
     final model = await remoteDataSource.getSetProductDetails(slug: slug);
     return model.toEntity();
   }
 
   @override
-  Future<CalculatePriceResponseEntity> calculatePrice({required CalculatePriceRequest request}) async {
+  Future<CalculatePriceResponseEntity> calculatePrice({
+    required CalculatePriceRequest request,
+  }) async {
     final requestModel = CalculatePriceRequestModel(
       productId: request.productId,
-      components: request.components.map((c) => ComponentRequestModel(
-        productId: c.productId,
-        quantity: c.quantity,
-      )).toList(),
+      components: request.components
+          .map(
+            (c) => ComponentRequestModel(
+              productId: c.productId,
+              quantity: c.quantity,
+            ),
+          )
+          .toList(),
     );
 
     final model = await remoteDataSource.calculatePrice(request: requestModel);
@@ -62,7 +83,10 @@ class SetProductsRepositoryImpl implements SetProductsRepository {
   }
 
   @override
-  Future<Map<String, dynamic>> addFullSetToCart({required int productId, required int quantity}) async {
+  Future<Map<String, dynamic>> addFullSetToCart({
+    required int productId,
+    required int quantity,
+  }) async {
     return await remoteDataSource.addFullSetToCart(
       productId: productId,
       quantity: quantity,
@@ -73,12 +97,16 @@ class SetProductsRepositoryImpl implements SetProductsRepository {
   Future<Map<String, dynamic>> addCustomSetToCart({
     required int productId,
     required int quantity,
-    required List<ComponentRequest> components
+    required List<ComponentRequest> components,
   }) async {
-    final componentModels = components.map((c) => ComponentRequestModel(
-      productId: c.productId,
-      quantity: c.quantity,
-    )).toList();
+    final componentModels = components
+        .map(
+          (c) => ComponentRequestModel(
+            productId: c.productId,
+            quantity: c.quantity,
+          ),
+        )
+        .toList();
 
     return await remoteDataSource.addCustomSetToCart(
       productId: productId,

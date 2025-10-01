@@ -93,17 +93,19 @@ class ProductEntity {
         .toList();
 
     final stockModels = stock
-        .map((s) => StockModel(
-      id: s.stockId,
-      productId: s.productId,
-      variant: s.variant,
-      sku: s.sku,
-      price: s.price,
-      qty: s.qty,
-      image: s.image,
-      createdAt: s.createdAt,
-      updatedAt: s.updatedAt,
-    ))
+        .map(
+          (s) => StockModel(
+            id: s.stockId,
+            productId: s.productId,
+            variant: s.variant,
+            sku: s.sku,
+            price: s.price,
+            qty: s.qty,
+            image: s.image,
+            createdAt: s.createdAt,
+            updatedAt: s.updatedAt,
+          ),
+        )
         .toList();
 
     return ProductModel(
@@ -147,16 +149,10 @@ class CategoryEntity {
   CategoryEntity();
 
   // Named constructor
-  CategoryEntity.create({
-    required this.categoryId,
-    required this.name,
-  });
+  CategoryEntity.create({required this.categoryId, required this.name});
 
   static CategoryEntity fromModel(CategoryModel model) {
-    return CategoryEntity.create(
-      categoryId: model.id,
-      name: model.name,
-    );
+    return CategoryEntity.create(categoryId: model.id, name: model.name);
   }
 }
 

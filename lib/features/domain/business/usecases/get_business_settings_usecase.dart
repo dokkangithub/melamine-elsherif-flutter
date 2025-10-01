@@ -9,4 +9,4 @@ class GetBusinessSettingsUseCase {
   Future<List<BusinessSetting>> call() async {
     return await repository.getBusinessSettings();
   }
-} 
+}

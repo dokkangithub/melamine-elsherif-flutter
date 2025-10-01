@@ -5,9 +5,7 @@ import 'package:melamine_elsherif/core/utils/extension/text_theme_extension.dart
 
 import '../vaidation/phone_validator.dart';
 
-
 class CustomTextFormField extends StatefulWidget {
-
   final TextEditingController controller;
   final String? label;
   final String? hint;
@@ -16,7 +14,7 @@ class CustomTextFormField extends StatefulWidget {
   final bool isMobileNumber;
   final bool isReadOnly;
   final bool autoFocus;
-  final bool isBorderAvailable;  // New parameter to control border visibility
+  final bool isBorderAvailable; // New parameter to control border visibility
   final TextInputType keyboardType;
   final TextInputAction textInputAction;
   final Function(String)? onChanged;
@@ -40,7 +38,7 @@ class CustomTextFormField extends StatefulWidget {
     this.isMobileNumber = false,
     this.isReadOnly = false,
     this.autoFocus = false,
-    this.isBorderAvailable = true,  // Default to having borders
+    this.isBorderAvailable = true, // Default to having borders
     this.keyboardType = TextInputType.text,
     this.textInputAction = TextInputAction.done,
     this.onChanged,
@@ -99,7 +97,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
         _errorText = null;
       });
     }
-    
+
     // Return null when valid (this is what Flutter form validation expects)
     return null;
   }
@@ -116,19 +114,19 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
     // Create password visibility toggle icon if it's a password field
     Widget? passwordSuffixIcon = widget.isPassword
         ? IconButton(
-      icon: Icon(
-        _obscureText ? Icons.visibility_off : Icons.visibility,
-        color: AppTheme.darkDividerColor,
-      ),
-      onPressed: _togglePasswordVisibility,
-    )
+            icon: Icon(
+              _obscureText ? Icons.visibility_off : Icons.visibility,
+              color: AppTheme.darkDividerColor,
+            ),
+            onPressed: _togglePasswordVisibility,
+          )
         : widget.suffixIcon;
 
     // Determine fill color based on isBorderAvailable
     Color fillColor = widget.isBorderAvailable
         ? Colors.white
         : AppTheme.darkTextColor;
-        
+
     // Get the directionality from context for RTL support
     final textDirection = Directionality.of(context);
     final isRTL = textDirection == TextDirection.rtl;
@@ -139,17 +137,22 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
       ),
       child: TextFormField(
         controller: widget.controller,
-        obscureText: widget.isPassword && _obscureText,  // Use the _obscureText state
+        obscureText:
+            widget.isPassword && _obscureText, // Use the _obscureText state
         readOnly: widget.isReadOnly,
         autofocus: widget.autoFocus,
-        keyboardType: widget.isMobileNumber ? TextInputType.phone : widget.keyboardType,
+        keyboardType: widget.isMobileNumber
+            ? TextInputType.phone
+            : widget.keyboardType,
         textInputAction: widget.textInputAction,
         maxLines: widget.maxLines,
         minLines: widget.minLines,
         maxLength: widget.maxLength,
         style: widget.textStyle ?? context.titleMedium,
         textDirection: textDirection, // Apply text direction based on locale
-        textAlign: isRTL ? TextAlign.right : TextAlign.left, // Align text based on direction
+        textAlign: isRTL
+            ? TextAlign.right
+            : TextAlign.left, // Align text based on direction
         inputFormatters: widget.isMobileNumber
             ? [FilteringTextInputFormatter.digitsOnly]
             : null,
@@ -158,9 +161,14 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
           hintText: widget.hint,
           errorText: _errorText,
           prefixIcon: widget.prefixIcon,
-          suffixIcon: passwordSuffixIcon,  // Use our custom suffix icon for password fields
-          labelStyle: context.bodyMedium?.copyWith(color: AppTheme.lightSecondaryTextColor),
-          hintStyle: context.titleMedium?.copyWith(color: AppTheme.lightSecondaryTextColor),
+          suffixIcon:
+              passwordSuffixIcon, // Use our custom suffix icon for password fields
+          labelStyle: context.bodyMedium?.copyWith(
+            color: AppTheme.lightSecondaryTextColor,
+          ),
+          hintStyle: context.titleMedium?.copyWith(
+            color: AppTheme.lightSecondaryTextColor,
+          ),
           filled: true,
           fillColor: fillColor,
           contentPadding: const EdgeInsets.symmetric(
@@ -172,41 +180,35 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
           hintTextDirection: textDirection,
           enabledBorder: widget.isBorderAvailable
               ? OutlineInputBorder(
-            borderRadius: BorderRadius.circular(widget.borderRadius),
-            borderSide: BorderSide(
-              color: AppTheme.darkDividerColor.withValues(alpha: 0.3),
-              width: 1,
-            ),
-          )
+                  borderRadius: BorderRadius.circular(widget.borderRadius),
+                  borderSide: BorderSide(
+                    color: AppTheme.darkDividerColor.withValues(alpha: 0.3),
+                    width: 1,
+                  ),
+                )
               : OutlineInputBorder(
-            borderRadius: BorderRadius.circular(widget.borderRadius),
-            borderSide: BorderSide.none,  // No border
-          ),
+                  borderRadius: BorderRadius.circular(widget.borderRadius),
+                  borderSide: BorderSide.none, // No border
+                ),
           focusedBorder: widget.isBorderAvailable
               ? OutlineInputBorder(
-            borderRadius: BorderRadius.circular(widget.borderRadius),
-            borderSide: const BorderSide(
-              color: AppTheme.primaryColor,
-              width: 1.5,
-            ),
-          )
+                  borderRadius: BorderRadius.circular(widget.borderRadius),
+                  borderSide: const BorderSide(
+                    color: AppTheme.primaryColor,
+                    width: 1.5,
+                  ),
+                )
               : OutlineInputBorder(
-            borderRadius: BorderRadius.circular(widget.borderRadius),
-            borderSide: BorderSide.none,  // No border
-          ),
+                  borderRadius: BorderRadius.circular(widget.borderRadius),
+                  borderSide: BorderSide.none, // No border
+                ),
           errorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(widget.borderRadius),
-            borderSide: const BorderSide(
-              color: Colors.red,
-              width: 1,
-            ),
+            borderSide: const BorderSide(color: Colors.red, width: 1),
           ),
           focusedErrorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(widget.borderRadius),
-            borderSide: const BorderSide(
-              color: Colors.red,
-              width: 2,
-            ),
+            borderSide: const BorderSide(color: Colors.red, width: 2),
           ),
         ),
         onChanged: (value) {

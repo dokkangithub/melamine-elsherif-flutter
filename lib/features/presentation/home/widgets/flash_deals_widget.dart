@@ -43,10 +43,9 @@ class FlashDealsWidget extends StatelessWidget {
         // Create a list of sections, one for each flash deal
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children:
-              deals
-                  .map((deal) => _buildFlashDealSection(context, deal))
-                  .toList(),
+          children: deals
+              .map((deal) => _buildFlashDealSection(context, deal))
+              .toList(),
         );
       },
     );
@@ -86,7 +85,9 @@ class FlashDealsWidget extends StatelessWidget {
                       height: 200,
                       width: double.infinity,
                       decoration: BoxDecoration(
-                        color: Colors.black.withValues(alpha: 0.4), // Slightly darker for better text contrast
+                        color: Colors.black.withValues(
+                          alpha: 0.4,
+                        ), // Slightly darker for better text contrast
                       ),
                     ),
                     // Text overlay
@@ -106,12 +107,23 @@ class FlashDealsWidget extends StatelessWidget {
                                 // Deal title
                                 Text(
                                   'premium_dinnerware_collection'.tr(context),
-                                  style: context.displaySmall!.copyWith(color: AppTheme.white,fontWeight: FontWeight.w600,fontSize: 22),
+                                  style: context.displaySmall!.copyWith(
+                                    color: AppTheme.white,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 22,
+                                  ),
                                 ),
                                 const SizedBox(height: 5),
                                 Text(
-                                  'discover_premium_quality_and_service'.tr(context),
-                                  style: context.titleLarge!.copyWith(color: AppTheme.white.withValues(alpha: 0.7),fontWeight: FontWeight.w400),
+                                  'discover_premium_quality_and_service'.tr(
+                                    context,
+                                  ),
+                                  style: context.titleLarge!.copyWith(
+                                    color: AppTheme.white.withValues(
+                                      alpha: 0.7,
+                                    ),
+                                    fontWeight: FontWeight.w400,
+                                  ),
                                 ),
                               ],
                             ),
@@ -123,7 +135,10 @@ class FlashDealsWidget extends StatelessWidget {
                                 // Space for your countdown timer
                                 Text(
                                   'ends_in'.tr(context),
-                                  style: context.titleLarge!.copyWith(color: AppTheme.white,fontWeight: FontWeight.w600),
+                                  style: context.titleLarge!.copyWith(
+                                    color: AppTheme.white,
+                                    fontWeight: FontWeight.w600,
+                                  ),
                                 ),
                                 FlashDealCountdown(endDate: deal.date),
                               ],
@@ -138,17 +153,19 @@ class FlashDealsWidget extends StatelessWidget {
             ),
           ),
 
-
-        SeeAllWidget(title: deal.title, onTap: () {
-          AppRoutes.navigateTo(
-            context,
-            AppRoutes.allProductsByTypeScreen,
-            arguments: {
-              'productType': ProductType.flashDeal,
-              'title': deal.title,
-            },
-          );
-        },),
+        SeeAllWidget(
+          title: deal.title,
+          onTap: () {
+            AppRoutes.navigateTo(
+              context,
+              AppRoutes.allProductsByTypeScreen,
+              arguments: {
+                'productType': ProductType.flashDeal,
+                'title': deal.title,
+              },
+            );
+          },
+        ),
 
         const SizedBox(height: 10),
 
@@ -158,11 +175,10 @@ class FlashDealsWidget extends StatelessWidget {
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             itemCount: products.length,
-            itemBuilder:
-                (context, index) => ProductCard(
-                  product: products[index],
-                  isOutlinedAddToCart: true,
-                ),
+            itemBuilder: (context, index) => ProductCard(
+              product: products[index],
+              isOutlinedAddToCart: true,
+            ),
           ),
         ),
 
@@ -226,10 +242,7 @@ class _FlashDealCountdownState extends State<FlashDealCountdown> {
     final seconds = _remainingTime.inSeconds % 60;
 
     return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 12,
-        vertical: 6,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
         color: AppTheme.primaryColor,
         borderRadius: BorderRadius.circular(0),

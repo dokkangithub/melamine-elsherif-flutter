@@ -22,9 +22,9 @@ class WishlistWidget extends StatefulWidget {
   final bool triggerAnimation;
 
   const WishlistWidget({
-    super.key, 
-    required this.provider, 
-    this.triggerAnimation = true
+    super.key,
+    required this.provider,
+    this.triggerAnimation = true,
   });
 
   @override
@@ -39,7 +39,7 @@ class _WishlistWidgetState extends State<WishlistWidget> {
     super.initState();
     _shouldAnimate = widget.triggerAnimation;
   }
-  
+
   @override
   void didUpdateWidget(WishlistWidget oldWidget) {
     super.didUpdateWidget(oldWidget);
@@ -53,11 +53,11 @@ class _WishlistWidgetState extends State<WishlistWidget> {
   @override
   Widget build(BuildContext context) {
     // If wishlist is empty, return the full-screen empty widget
-    if (widget.provider.wishlistState != LoadingState.loading && 
+    if (widget.provider.wishlistState != LoadingState.loading &&
         widget.provider.wishlistItems.isEmpty) {
       return const EmptyWishlistWidget();
     }
-    
+
     // If wishlist has items, show the regular layout with AppBar
     return Scaffold(
       appBar: AppBar(
@@ -77,6 +77,7 @@ class _WishlistWidgetState extends State<WishlistWidget> {
               child: Column(
                 children: [
                   const SizedBox(height: 20),
+
                   /// Remove All button
                   // Align(
                   //   alignment: Alignment.centerRight,
@@ -95,23 +96,24 @@ class _WishlistWidgetState extends State<WishlistWidget> {
                   //     ),
                   //   ),
                   // ),
-                  
+
                   // Products grid
                   Expanded(
                     child: GridView.builder(
                       padding: const EdgeInsets.only(bottom: 20),
-                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 1,
-                        childAspectRatio: 1,
-                        mainAxisSpacing: 16,
-                      ),
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 1,
+                            childAspectRatio: 1,
+                            mainAxisSpacing: 16,
+                          ),
                       itemCount: widget.provider.wishlistItems.length,
                       itemBuilder: (context, index) {
                         final item = widget.provider.wishlistItems[index];
                         if (item.name == "Loading...") {
                           return const SizedBox.shrink();
                         }
-                        
+
                         return _buildProductCard(context, item);
                       },
                     ),
@@ -148,7 +150,8 @@ class _WishlistWidgetState extends State<WishlistWidget> {
                 children: [
                   // Product image
                   InkWell(
-                    onTap: () => _navigateToProductDetails(context, wishlistItem.slug),
+                    onTap: () =>
+                        _navigateToProductDetails(context, wishlistItem.slug),
                     child: ClipRRect(
                       child: CustomImage(
                         imageUrl: wishlistItem.thumbnailImage,
@@ -158,7 +161,7 @@ class _WishlistWidgetState extends State<WishlistWidget> {
                       ),
                     ),
                   ),
-                  
+
                   // Remove button
                   Positioned(
                     top: 8,
@@ -184,7 +187,7 @@ class _WishlistWidgetState extends State<WishlistWidget> {
                 ],
               ),
             ),
-            
+
             // Product details
             Padding(
               padding: const EdgeInsets.all(12),
@@ -193,7 +196,8 @@ class _WishlistWidgetState extends State<WishlistWidget> {
                 children: [
                   // Product title
                   GestureDetector(
-                    onTap: () => _navigateToProductDetails(context, wishlistItem.slug),
+                    onTap: () =>
+                        _navigateToProductDetails(context, wishlistItem.slug),
                     child: Text(
                       wishlistItem.name,
                       style: context.headlineMedium.copyWith(
@@ -204,9 +208,9 @@ class _WishlistWidgetState extends State<WishlistWidget> {
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                  
+
                   const SizedBox(height: 4),
-                  
+
                   // Rating bar instead of category
                   Row(
                     children: [
@@ -216,8 +220,8 @@ class _WishlistWidgetState extends State<WishlistWidget> {
                           index < wishlistItem.rating.floor()
                               ? Icons.star
                               : index < wishlistItem.rating
-                                  ? Icons.star_half
-                                  : Icons.star_border,
+                              ? Icons.star_half
+                              : Icons.star_border,
                           color: const Color(0xFFFFB800),
                           size: 16,
                         );
@@ -235,9 +239,9 @@ class _WishlistWidgetState extends State<WishlistWidget> {
                         ),
                     ],
                   ),
-                  
+
                   const SizedBox(height: 4),
-                  
+
                   // Price and Add to Cart button
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -250,7 +254,7 @@ class _WishlistWidgetState extends State<WishlistWidget> {
                           color: AppTheme.primaryColor,
                         ),
                       ),
-                      
+
                       // Add to Cart button
                       SizedBox(
                         height: 50,
@@ -283,7 +287,7 @@ class _WishlistWidgetState extends State<WishlistWidget> {
       arguments: {'slug': slug},
     );
   }
-  
+
   void _addToCart(BuildContext context, wishlistItem) {
     AppFunctions.addProductToCart(
       context: context,
@@ -293,7 +297,7 @@ class _WishlistWidgetState extends State<WishlistWidget> {
       hasVariation: wishlistItem.hasVariation,
     );
   }
-  
+
   void _showClearWishlistDialog(BuildContext context) {
     showCustomConfirmationDialog(
       context: context,
@@ -305,7 +309,10 @@ class _WishlistWidgetState extends State<WishlistWidget> {
       confirmButtonColor: AppTheme.primaryColor,
       onConfirm: () {
         widget.provider.clearWishlist();
-        CustomToast.showToast(message: 'wishlist_cleared'.tr(context), type: ToastType.success);
+        CustomToast.showToast(
+          message: 'wishlist_cleared'.tr(context),
+          type: ToastType.success,
+        );
       },
     );
   }

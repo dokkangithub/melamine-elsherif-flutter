@@ -30,4 +30,4 @@ class ClubPointRepositoryImpl implements ClubPointRepository {
       throw Exception('No internet connection');
     }
   }
-} 
+}

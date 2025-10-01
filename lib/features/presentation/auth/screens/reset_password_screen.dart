@@ -119,18 +119,17 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen>
                         textAlign: TextAlign.center,
                       ),
                       const SizedBox(height: 40),
-                       ResetPasswordForm(
-                            formKey: _formKey,
-                            passwordController: _passwordController,
-                            confirmPasswordController:
-                                _confirmPasswordController,
-                            isLoading: _isLoading,
-                            onSubmit: () {
-                              if (_formKey.currentState!.validate()) {
-                                _handleResetPassword();
-                              }
-                            },
-                          ),
+                      ResetPasswordForm(
+                        formKey: _formKey,
+                        passwordController: _passwordController,
+                        confirmPasswordController: _confirmPasswordController,
+                        isLoading: _isLoading,
+                        onSubmit: () {
+                          if (_formKey.currentState!.validate()) {
+                            _handleResetPassword();
+                          }
+                        },
+                      ),
                     ],
                   ),
                 ),

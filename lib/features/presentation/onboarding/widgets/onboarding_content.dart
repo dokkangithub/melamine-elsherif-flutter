@@ -6,11 +6,7 @@ import 'package:melamine_elsherif/core/utils/extension/translate_extension.dart'
 import 'package:melamine_elsherif/core/utils/widgets/custom_cached_image.dart';
 import '../../../../core/utils/widgets/custom_button.dart';
 
-enum ContentType {
-  image,
-  features,
-  final_page,
-}
+enum ContentType { image, features, final_page }
 
 class OnboardingContent extends StatelessWidget {
   final String image;
@@ -51,10 +47,7 @@ class OnboardingContent extends StatelessWidget {
             padding: const EdgeInsets.all(16.0),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(16),
-              child: CustomImage(
-                assetPath: image,
-                fit: BoxFit.contain,
-              ),
+              child: CustomImage(assetPath: image, fit: BoxFit.contain),
             ),
           ),
         ),
@@ -72,9 +65,7 @@ class OnboardingContent extends StatelessWidget {
               const SizedBox(height: 8),
               Text(
                 description,
-                style: context.bodyMedium.copyWith(
-                  color: Colors.grey[600],
-                ),
+                style: context.bodyMedium.copyWith(color: Colors.grey[600]),
                 textAlign: TextAlign.center,
               ),
             ],
@@ -156,10 +147,7 @@ class OnboardingContent extends StatelessWidget {
             padding: const EdgeInsets.all(16.0),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(16),
-              child: CustomImage(
-                assetPath: image,
-                fit: BoxFit.contain,
-              ),
+              child: CustomImage(assetPath: image, fit: BoxFit.contain),
             ),
           ),
         ),
@@ -177,9 +165,7 @@ class OnboardingContent extends StatelessWidget {
               const SizedBox(height: 8),
               Text(
                 description,
-                style: context.bodyMedium.copyWith(
-                  color: Colors.grey[600],
-                ),
+                style: context.bodyMedium.copyWith(color: Colors.grey[600]),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 24),

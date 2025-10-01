@@ -124,10 +124,7 @@ class SetProductsModel {
   final bool? success;
   final DataModel? data;
 
-  SetProductsModel({
-    this.success,
-    this.data,
-  });
+  SetProductsModel({this.success, this.data});
 
   factory SetProductsModel.fromJson(Map<String, dynamic> json) {
     return SetProductsModel(
@@ -184,7 +181,9 @@ class DataModel {
       currentPage: json["current_page"],
       data: json["data"] == null
           ? []
-          : List<DatumModel>.from(json["data"]!.map((x) => DatumModel.fromJson(x))),
+          : List<DatumModel>.from(
+              json["data"]!.map((x) => DatumModel.fromJson(x)),
+            ),
       firstPageUrl: json["first_page_url"],
       from: json["from"],
       lastPage: json["last_page"],

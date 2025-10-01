@@ -58,8 +58,11 @@ class _AddressItemWidgetState extends State<AddressItemWidget> {
                 ),
                 const SizedBox(width: 10),
                 InkWell(
-                  onTap: _isLoading || widget.address.isDefault || widget.onSetDefault == null 
-                      ? null 
+                  onTap:
+                      _isLoading ||
+                          widget.address.isDefault ||
+                          widget.onSetDefault == null
+                      ? null
                       : () {
                           setState(() {
                             _isLoading = true;
@@ -79,36 +82,38 @@ class _AddressItemWidgetState extends State<AddressItemWidget> {
                       vertical: 4,
                     ),
                     decoration: BoxDecoration(
-                      color:
-                          widget.address.isDefault
-                              ? const Color(0xFFE6F4FF)
-                              : Colors.grey[100],
+                      color: widget.address.isDefault
+                          ? const Color(0xFFE6F4FF)
+                          : Colors.grey[100],
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    child: _isLoading 
-                      ? SizedBox(
-                          width: 50,
-                          height: 14,
-                          child: Center(
-                            child: SizedBox(
-                              width: 10,
-                              height: 10,
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2,
-                                color: AppTheme.primaryColor,
+                    child: _isLoading
+                        ? SizedBox(
+                            width: 50,
+                            height: 14,
+                            child: Center(
+                              child: SizedBox(
+                                width: 10,
+                                height: 10,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  color: AppTheme.primaryColor,
+                                ),
                               ),
                             ),
+                          )
+                        : Text(
+                            widget.address.isDefault
+                                ? 'default'.tr(context)
+                                : 'make_default'.tr(context),
+                            style: context.bodySmall!.copyWith(
+                              color: AppTheme.primaryColor,
+                              fontWeight: widget.address.isDefault
+                                  ? FontWeight.w800
+                                  : FontWeight.w300,
+                              fontSize: widget.address.isDefault ? 12 : 10,
+                            ),
                           ),
-                        )
-                      : Text(
-                          widget.address.isDefault ? 'default'.tr(context) : 'make_default'.tr(context),
-                          style: context.bodySmall!.copyWith(
-                            color: AppTheme.primaryColor,
-                            fontWeight:
-                                widget.address.isDefault ? FontWeight.w800 : FontWeight.w300,
-                            fontSize: widget.address.isDefault ? 12 : 10,
-                          ),
-                        ),
                   ),
                 ),
                 const Spacer(),
@@ -131,7 +136,10 @@ class _AddressItemWidgetState extends State<AddressItemWidget> {
                 const Icon(Icons.location_on, color: Colors.grey, size: 20),
                 const SizedBox(width: 8),
                 Expanded(
-                  child: Text(widget.address.address, style: context.bodyMedium),
+                  child: Text(
+                    widget.address.address,
+                    style: context.bodyMedium,
+                  ),
                 ),
               ],
             ),
@@ -143,7 +151,9 @@ class _AddressItemWidgetState extends State<AddressItemWidget> {
                 const Icon(Icons.map, color: Colors.grey, size: 20),
                 const SizedBox(width: 8),
                 Expanded(
-                  child: Text('${widget.address.cityName}, ${widget.address.stateName}, ${widget.address.countryName}'.tr(context),
+                  child: Text(
+                    '${widget.address.cityName}, ${widget.address.stateName}, ${widget.address.countryName}'
+                        .tr(context),
                     style: const TextStyle(fontSize: 14, color: Colors.grey),
                   ),
                 ),

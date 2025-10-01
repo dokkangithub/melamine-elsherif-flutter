@@ -6,8 +6,16 @@ import '../models/set_products_model.dart';
 
 abstract class SetProductsLocalDataSource {
   Future<bool> isCollectionCacheValid(String collectionType, int page);
-  Future<List<DatumModel>?> getCollectionFromCache(String collectionType, int page);
-  Future<void> saveCollection(String collectionType, int page, List<DatumModel> products, int totalPages);
+  Future<List<DatumModel>?> getCollectionFromCache(
+    String collectionType,
+    int page,
+  );
+  Future<void> saveCollection(
+    String collectionType,
+    int page,
+    List<DatumModel> products,
+    int totalPages,
+  );
   Future<void> clearCache();
 }
 
@@ -22,10 +30,12 @@ class SetProductsLocalDataSourceImpl implements SetProductsLocalDataSource {
 
   @override
   Future<bool> isCollectionCacheValid(String collectionType, int page) async {
-    final query = objectBox.setProductCollectionBox.query(
-      SetProductCollectionEntity_.collectionType.equals(collectionType) &
-      SetProductCollectionEntity_.page.equals(page)
-    ).build();
+    final query = objectBox.setProductCollectionBox
+        .query(
+          SetProductCollectionEntity_.collectionType.equals(collectionType) &
+              SetProductCollectionEntity_.page.equals(page),
+        )
+        .build();
     final collection = query.findFirst();
     query.close();
     if (collection == null) return false;
@@ -33,11 +43,16 @@ class SetProductsLocalDataSourceImpl implements SetProductsLocalDataSource {
   }
 
   @override
-  Future<List<DatumModel>?> getCollectionFromCache(String collectionType, int page) async {
-    final query = objectBox.setProductCollectionBox.query(
-      SetProductCollectionEntity_.collectionType.equals(collectionType) &
-      SetProductCollectionEntity_.page.equals(page)
-    ).build();
+  Future<List<DatumModel>?> getCollectionFromCache(
+    String collectionType,
+    int page,
+  ) async {
+    final query = objectBox.setProductCollectionBox
+        .query(
+          SetProductCollectionEntity_.collectionType.equals(collectionType) &
+              SetProductCollectionEntity_.page.equals(page),
+        )
+        .build();
     final collection = query.findFirst();
     query.close();
     if (collection == null) return null;
@@ -45,21 +60,30 @@ class SetProductsLocalDataSourceImpl implements SetProductsLocalDataSource {
   }
 
   @override
-  Future<void> saveCollection(String collectionType, int page, List<DatumModel> products, int totalPages) async {
+  Future<void> saveCollection(
+    String collectionType,
+    int page,
+    List<DatumModel> products,
+    int totalPages,
+  ) async {
     objectBox.store.runInTransaction(TxMode.write, () {
       final timestamp = timestampService.getCurrentTimestamp();
-      final existingQuery = objectBox.setProductCollectionBox.query(
-        SetProductCollectionEntity_.collectionType.equals(collectionType) &
-        SetProductCollectionEntity_.page.equals(page)
-      ).build();
+      final existingQuery = objectBox.setProductCollectionBox
+          .query(
+            SetProductCollectionEntity_.collectionType.equals(collectionType) &
+                SetProductCollectionEntity_.page.equals(page),
+          )
+          .build();
       final existingCollection = existingQuery.findFirst();
       existingQuery.close();
-      final collection = existingCollection ?? SetProductCollectionEntity(
-        collectionType: collectionType,
-        page: page,
-        totalPages: totalPages,
-        timestamp: timestamp,
-      );
+      final collection =
+          existingCollection ??
+          SetProductCollectionEntity(
+            collectionType: collectionType,
+            page: page,
+            totalPages: totalPages,
+            timestamp: timestamp,
+          );
       if (existingCollection != null) {
         collection.timestamp = timestamp;
         collection.totalPages = totalPages;
@@ -79,4 +103,4 @@ class SetProductsLocalDataSourceImpl implements SetProductsLocalDataSource {
     objectBox.setProductBox.removeAll();
     objectBox.setProductCollectionBox.removeAll();
   }
-} 
+}

@@ -15,13 +15,27 @@ class ProductResponseModel extends entity.ProductsResponse {
       data: json['data'] == null
           ? []
           : List<ProductModel>.from(
-          json['data'].map((x) => ProductModel.fromJson(x))
-      ),
+              json['data'].map((x) => ProductModel.fromJson(x)),
+            ),
       links: json['links'] == null
-          ? const ProductResponseLinksModel(first: '', last: '', prev: null, next: '')
+          ? const ProductResponseLinksModel(
+              first: '',
+              last: '',
+              prev: null,
+              next: '',
+            )
           : ProductResponseLinksModel.fromJson(json['links']),
       meta: json['meta'] == null
-          ? const MetaModel(currentPage: 0, from: 0, lastPage: 0, links: [], path: '', perPage: 0, to: 0, total: 0)
+          ? const MetaModel(
+              currentPage: 0,
+              from: 0,
+              lastPage: 0,
+              links: [],
+              path: '',
+              perPage: 0,
+              to: 0,
+              total: 0,
+            )
           : MetaModel.fromJson(json['meta']),
       success: json['success'] ?? false,
       status: json['status'] ?? 0,
@@ -57,12 +71,7 @@ class ProductResponseLinksModel extends entity.ProductResponseLinks {
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'first': first,
-      'last': last,
-      'prev': prev,
-      'next': next,
-    };
+    return {'first': first, 'last': last, 'prev': prev, 'next': next};
   }
 }
 
@@ -86,8 +95,8 @@ class MetaModel extends entity.Meta {
       links: json['links'] == null
           ? []
           : List<LinkModel>.from(
-          json['links'].map((x) => LinkModel.fromJson(x))
-      ),
+              json['links'].map((x) => LinkModel.fromJson(x)),
+            ),
       path: json['path'] ?? '',
       perPage: json['per_page'] ?? 0,
       to: json['to'] ?? 0,
@@ -125,10 +134,6 @@ class LinkModel extends entity.Link {
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'url': url,
-      'label': label,
-      'active': active,
-    };
+    return {'url': url, 'label': label, 'active': active};
   }
 }

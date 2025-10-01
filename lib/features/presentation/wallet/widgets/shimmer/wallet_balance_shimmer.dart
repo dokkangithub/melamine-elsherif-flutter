@@ -43,7 +43,7 @@ class WalletBalanceShimmer extends StatelessWidget {
                       borderRadius: BorderRadius.circular(0),
                     ),
                   ),
-                  
+
                   // Icon
                   Container(
                     width: 36,
@@ -56,7 +56,7 @@ class WalletBalanceShimmer extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 16.0),
-              
+
               // Balance amount
               Container(
                 width: 180,
@@ -66,9 +66,9 @@ class WalletBalanceShimmer extends StatelessWidget {
                   borderRadius: BorderRadius.circular(0),
                 ),
               ),
-              
+
               const SizedBox(height: 24.0),
-              
+
               // Last recharged badge
               Container(
                 width: 200,
@@ -84,4 +84,4 @@ class WalletBalanceShimmer extends StatelessWidget {
       ),
     );
   }
-} 
+}

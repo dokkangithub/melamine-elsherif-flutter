@@ -19,7 +19,7 @@ class CategoriesShimmer extends StatelessWidget {
             child: Container(width: 120, height: 20, color: Colors.white),
           ),
           const SizedBox(height: 16),
-          
+
           // Grid shimmer matching the 2x2 grid in the category widget
           GridView.builder(
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(

@@ -17,4 +17,4 @@ class ClubPoint extends Equatable {
 
   @override
   List<Object?> get props => [id, userId, orderCode, points, convertedAt];
-} 
+}

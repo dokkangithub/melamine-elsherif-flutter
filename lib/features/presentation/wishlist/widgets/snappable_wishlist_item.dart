@@ -60,10 +60,12 @@ class SnappableWishlistItemState extends State<SnappableWishlistItem>
         _isDeleting = true;
       });
       _animationController.forward();
-      CustomToast.showToast(message: 'item_removed_from_wishlist'.tr(context), type: ToastType.success);
+      CustomToast.showToast(
+        message: 'item_removed_from_wishlist'.tr(context),
+        type: ToastType.success,
+      );
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -86,4 +88,4 @@ class SnappableWishlistItemState extends State<SnappableWishlistItem>
       ),
     );
   }
-} 
+}

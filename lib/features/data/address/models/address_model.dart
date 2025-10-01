@@ -120,10 +120,7 @@ class ShippingCostModel {
   final double cost;
   final String currencySymbol;
 
-  ShippingCostModel({
-    required this.cost,
-    required this.currencySymbol,
-  });
+  ShippingCostModel({required this.cost, required this.currencySymbol});
 
   factory ShippingCostModel.fromJson(Map<String, dynamic> json) {
     return ShippingCostModel(

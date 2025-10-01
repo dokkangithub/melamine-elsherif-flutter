@@ -19,7 +19,8 @@ class ProfileImagePickerWidget extends StatefulWidget {
   });
 
   @override
-  State<ProfileImagePickerWidget> createState() => _ProfileImagePickerWidgetState();
+  State<ProfileImagePickerWidget> createState() =>
+      _ProfileImagePickerWidgetState();
 }
 
 class _ProfileImagePickerWidgetState extends State<ProfileImagePickerWidget> {
@@ -48,20 +49,13 @@ class _ProfileImagePickerWidgetState extends State<ProfileImagePickerWidget> {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(60),
                 child: widget.selectedImage != null
-                    ? Image.file(
-                  widget.selectedImage!,
-                  fit: BoxFit.cover,
-                )
+                    ? Image.file(widget.selectedImage!, fit: BoxFit.cover)
                     : widget.profileProvider.profileImageUrl != null
                     ? CustomImage(
-                  imageUrl:  widget.profileProvider.profileImageUrl!,
-                  fit: BoxFit.cover,
-                )
-                    : const Icon(
-                  Icons.person,
-                  size: 60,
-                  color: Colors.grey,
-                ),
+                        imageUrl: widget.profileProvider.profileImageUrl!,
+                        fit: BoxFit.cover,
+                      )
+                    : const Icon(Icons.person, size: 60, color: Colors.grey),
               ),
             ),
           ),

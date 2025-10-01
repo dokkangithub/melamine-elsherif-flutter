@@ -21,402 +21,476 @@ export 'package:objectbox/objectbox.dart'; // so that callers only have to impor
 
 final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
-      id: const obx_int.IdUid(1, 8638712449437527854),
-      name: 'CategoryEntity',
-      lastPropertyId: const obx_int.IdUid(3, 1763280433084254237),
-      flags: 0,
-      properties: <obx_int.ModelProperty>[
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(1, 719211818453317816),
-            name: 'id',
-            type: 6,
-            flags: 1),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(2, 5158749531052822028),
-            name: 'categoryId',
-            type: 6,
-            flags: 0),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(3, 1763280433084254237),
-            name: 'name',
-            type: 9,
-            flags: 0)
-      ],
-      relations: <obx_int.ModelRelation>[
-        obx_int.ModelRelation(
-            id: const obx_int.IdUid(1, 8367945834778922797),
-            name: 'products',
-            targetId: const obx_int.IdUid(3, 4095868136943594840))
-      ],
-      backlinks: <obx_int.ModelBacklink>[]),
+    id: const obx_int.IdUid(1, 8638712449437527854),
+    name: 'CategoryEntity',
+    lastPropertyId: const obx_int.IdUid(3, 1763280433084254237),
+    flags: 0,
+    properties: <obx_int.ModelProperty>[
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(1, 719211818453317816),
+        name: 'id',
+        type: 6,
+        flags: 1,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(2, 5158749531052822028),
+        name: 'categoryId',
+        type: 6,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(3, 1763280433084254237),
+        name: 'name',
+        type: 9,
+        flags: 0,
+      ),
+    ],
+    relations: <obx_int.ModelRelation>[
+      obx_int.ModelRelation(
+        id: const obx_int.IdUid(1, 8367945834778922797),
+        name: 'products',
+        targetId: const obx_int.IdUid(3, 4095868136943594840),
+      ),
+    ],
+    backlinks: <obx_int.ModelBacklink>[],
+  ),
   obx_int.ModelEntity(
-      id: const obx_int.IdUid(2, 5598909031534082164),
-      name: 'ProductCollectionEntity',
-      lastPropertyId: const obx_int.IdUid(5, 8006397216102723126),
-      flags: 0,
-      properties: <obx_int.ModelProperty>[
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(1, 5470074521737787394),
-            name: 'id',
-            type: 6,
-            flags: 1),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(2, 6931379104485379367),
-            name: 'collectionType',
-            type: 9,
-            flags: 0),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(3, 5459266029165535540),
-            name: 'page',
-            type: 6,
-            flags: 0),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(4, 1933920722541831139),
-            name: 'totalPages',
-            type: 6,
-            flags: 0),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(5, 8006397216102723126),
-            name: 'timestamp',
-            type: 10,
-            flags: 0)
-      ],
-      relations: <obx_int.ModelRelation>[
-        obx_int.ModelRelation(
-            id: const obx_int.IdUid(2, 9115716044548867821),
-            name: 'products',
-            targetId: const obx_int.IdUid(3, 4095868136943594840))
-      ],
-      backlinks: <obx_int.ModelBacklink>[]),
+    id: const obx_int.IdUid(2, 5598909031534082164),
+    name: 'ProductCollectionEntity',
+    lastPropertyId: const obx_int.IdUid(5, 8006397216102723126),
+    flags: 0,
+    properties: <obx_int.ModelProperty>[
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(1, 5470074521737787394),
+        name: 'id',
+        type: 6,
+        flags: 1,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(2, 6931379104485379367),
+        name: 'collectionType',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(3, 5459266029165535540),
+        name: 'page',
+        type: 6,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(4, 1933920722541831139),
+        name: 'totalPages',
+        type: 6,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(5, 8006397216102723126),
+        name: 'timestamp',
+        type: 10,
+        flags: 0,
+      ),
+    ],
+    relations: <obx_int.ModelRelation>[
+      obx_int.ModelRelation(
+        id: const obx_int.IdUid(2, 9115716044548867821),
+        name: 'products',
+        targetId: const obx_int.IdUid(3, 4095868136943594840),
+      ),
+    ],
+    backlinks: <obx_int.ModelBacklink>[],
+  ),
   obx_int.ModelEntity(
-      id: const obx_int.IdUid(3, 4095868136943594840),
-      name: 'ProductEntity',
-      lastPropertyId: const obx_int.IdUid(20, 1083295562264930565),
-      flags: 0,
-      properties: <obx_int.ModelProperty>[
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(1, 4406830327501351553),
-            name: 'id',
-            type: 6,
-            flags: 1),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(2, 737305590362867954),
-            name: 'productId',
-            type: 6,
-            flags: 0),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(3, 2238289586954849433),
-            name: 'slug',
-            type: 9,
-            flags: 0),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(4, 3165622567512012466),
-            name: 'name',
-            type: 9,
-            flags: 0),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(5, 4375573571924360312),
-            name: 'mainCategoryId',
-            type: 6,
-            flags: 0),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(6, 4631507971064964837),
-            name: 'mainCategoryName',
-            type: 9,
-            flags: 0),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(7, 3980456500015154692),
-            name: 'thumbnailImage',
-            type: 9,
-            flags: 0),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(8, 2405193171518806450),
-            name: 'hasDiscount',
-            type: 1,
-            flags: 0),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(9, 4796154669676198108),
-            name: 'discount',
-            type: 9,
-            flags: 0),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(10, 4807669363338663374),
-            name: 'mainPrice',
-            type: 9,
-            flags: 0),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(11, 4388054952245118992),
-            name: 'discountedPrice',
-            type: 9,
-            flags: 0),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(12, 7806426239302605727),
-            name: 'published',
-            type: 6,
-            flags: 0),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(13, 5098171222057708878),
-            name: 'hasVariation',
-            type: 1,
-            flags: 0),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(14, 4473564397930041378),
-            name: 'stockQuantity',
-            type: 6,
-            flags: 0),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(15, 3415679130691693704),
-            name: 'currentStock',
-            type: 6,
-            flags: 0),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(17, 9204720155855688237),
-            name: 'ratingCount',
-            type: 6,
-            flags: 0),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(18, 3529639646781607165),
-            name: 'sales',
-            type: 6,
-            flags: 0),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(19, 1883239343550954415),
-            name: 'details',
-            type: 9,
-            flags: 0),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(20, 1083295562264930565),
-            name: 'timestamp',
-            type: 10,
-            flags: 0)
-      ],
-      relations: <obx_int.ModelRelation>[
-        obx_int.ModelRelation(
-            id: const obx_int.IdUid(3, 2572516860409265599),
-            name: 'categories',
-            targetId: const obx_int.IdUid(1, 8638712449437527854)),
-        obx_int.ModelRelation(
-            id: const obx_int.IdUid(4, 5158101576197910839),
-            name: 'stock',
-            targetId: const obx_int.IdUid(4, 6191226038099156628))
-      ],
-      backlinks: <obx_int.ModelBacklink>[]),
+    id: const obx_int.IdUid(3, 4095868136943594840),
+    name: 'ProductEntity',
+    lastPropertyId: const obx_int.IdUid(20, 1083295562264930565),
+    flags: 0,
+    properties: <obx_int.ModelProperty>[
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(1, 4406830327501351553),
+        name: 'id',
+        type: 6,
+        flags: 1,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(2, 737305590362867954),
+        name: 'productId',
+        type: 6,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(3, 2238289586954849433),
+        name: 'slug',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(4, 3165622567512012466),
+        name: 'name',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(5, 4375573571924360312),
+        name: 'mainCategoryId',
+        type: 6,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(6, 4631507971064964837),
+        name: 'mainCategoryName',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(7, 3980456500015154692),
+        name: 'thumbnailImage',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(8, 2405193171518806450),
+        name: 'hasDiscount',
+        type: 1,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(9, 4796154669676198108),
+        name: 'discount',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(10, 4807669363338663374),
+        name: 'mainPrice',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(11, 4388054952245118992),
+        name: 'discountedPrice',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(12, 7806426239302605727),
+        name: 'published',
+        type: 6,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(13, 5098171222057708878),
+        name: 'hasVariation',
+        type: 1,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(14, 4473564397930041378),
+        name: 'stockQuantity',
+        type: 6,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(15, 3415679130691693704),
+        name: 'currentStock',
+        type: 6,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(17, 9204720155855688237),
+        name: 'ratingCount',
+        type: 6,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(18, 3529639646781607165),
+        name: 'sales',
+        type: 6,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(19, 1883239343550954415),
+        name: 'details',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(20, 1083295562264930565),
+        name: 'timestamp',
+        type: 10,
+        flags: 0,
+      ),
+    ],
+    relations: <obx_int.ModelRelation>[
+      obx_int.ModelRelation(
+        id: const obx_int.IdUid(3, 2572516860409265599),
+        name: 'categories',
+        targetId: const obx_int.IdUid(1, 8638712449437527854),
+      ),
+      obx_int.ModelRelation(
+        id: const obx_int.IdUid(4, 5158101576197910839),
+        name: 'stock',
+        targetId: const obx_int.IdUid(4, 6191226038099156628),
+      ),
+    ],
+    backlinks: <obx_int.ModelBacklink>[],
+  ),
   obx_int.ModelEntity(
-      id: const obx_int.IdUid(4, 6191226038099156628),
-      name: 'ProductStockEntity',
-      lastPropertyId: const obx_int.IdUid(10, 8028435548347895621),
-      flags: 0,
-      properties: <obx_int.ModelProperty>[
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(1, 2388981952011004594),
-            name: 'id',
-            type: 6,
-            flags: 1),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(2, 486110851360306284),
-            name: 'stockId',
-            type: 6,
-            flags: 0),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(3, 7824696177561534414),
-            name: 'productId',
-            type: 11,
-            flags: 520,
-            indexId: const obx_int.IdUid(7, 2071029441306199466),
-            relationTarget: 'ProductEntity'),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(4, 4742895382719928929),
-            name: 'variant',
-            type: 9,
-            flags: 0),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(5, 6993284252310181992),
-            name: 'sku',
-            type: 9,
-            flags: 0),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(6, 6733518382099447512),
-            name: 'price',
-            type: 8,
-            flags: 0),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(7, 7489836127110857773),
-            name: 'qty',
-            type: 6,
-            flags: 0),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(8, 1931481616223955313),
-            name: 'image',
-            type: 9,
-            flags: 0),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(9, 5826917548997431793),
-            name: 'createdAt',
-            type: 10,
-            flags: 0),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(10, 8028435548347895621),
-            name: 'updatedAt',
-            type: 10,
-            flags: 0)
-      ],
-      relations: <obx_int.ModelRelation>[],
-      backlinks: <obx_int.ModelBacklink>[]),
+    id: const obx_int.IdUid(4, 6191226038099156628),
+    name: 'ProductStockEntity',
+    lastPropertyId: const obx_int.IdUid(10, 8028435548347895621),
+    flags: 0,
+    properties: <obx_int.ModelProperty>[
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(1, 2388981952011004594),
+        name: 'id',
+        type: 6,
+        flags: 1,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(2, 486110851360306284),
+        name: 'stockId',
+        type: 6,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(3, 7824696177561534414),
+        name: 'productId',
+        type: 11,
+        flags: 520,
+        indexId: const obx_int.IdUid(7, 2071029441306199466),
+        relationTarget: 'ProductEntity',
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(4, 4742895382719928929),
+        name: 'variant',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(5, 6993284252310181992),
+        name: 'sku',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(6, 6733518382099447512),
+        name: 'price',
+        type: 8,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(7, 7489836127110857773),
+        name: 'qty',
+        type: 6,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(8, 1931481616223955313),
+        name: 'image',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(9, 5826917548997431793),
+        name: 'createdAt',
+        type: 10,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(10, 8028435548347895621),
+        name: 'updatedAt',
+        type: 10,
+        flags: 0,
+      ),
+    ],
+    relations: <obx_int.ModelRelation>[],
+    backlinks: <obx_int.ModelBacklink>[],
+  ),
   obx_int.ModelEntity(
-      id: const obx_int.IdUid(5, 75256651470345789),
-      name: 'SetProductCollectionEntity',
-      lastPropertyId: const obx_int.IdUid(5, 140532944370020962),
-      flags: 0,
-      properties: <obx_int.ModelProperty>[
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(1, 5948486492779826352),
-            name: 'id',
-            type: 6,
-            flags: 1),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(2, 4402176182304737212),
-            name: 'collectionType',
-            type: 9,
-            flags: 0),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(3, 8024429530676212170),
-            name: 'page',
-            type: 6,
-            flags: 0),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(4, 2591584715713854128),
-            name: 'totalPages',
-            type: 6,
-            flags: 0),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(5, 140532944370020962),
-            name: 'timestamp',
-            type: 10,
-            flags: 0)
-      ],
-      relations: <obx_int.ModelRelation>[],
-      backlinks: <obx_int.ModelBacklink>[
-        obx_int.ModelBacklink(
-            name: 'setProducts',
-            srcEntity: 'SetProductEntity',
-            srcField: 'collection')
-      ]),
+    id: const obx_int.IdUid(5, 75256651470345789),
+    name: 'SetProductCollectionEntity',
+    lastPropertyId: const obx_int.IdUid(5, 140532944370020962),
+    flags: 0,
+    properties: <obx_int.ModelProperty>[
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(1, 5948486492779826352),
+        name: 'id',
+        type: 6,
+        flags: 1,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(2, 4402176182304737212),
+        name: 'collectionType',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(3, 8024429530676212170),
+        name: 'page',
+        type: 6,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(4, 2591584715713854128),
+        name: 'totalPages',
+        type: 6,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(5, 140532944370020962),
+        name: 'timestamp',
+        type: 10,
+        flags: 0,
+      ),
+    ],
+    relations: <obx_int.ModelRelation>[],
+    backlinks: <obx_int.ModelBacklink>[
+      obx_int.ModelBacklink(
+        name: 'setProducts',
+        srcEntity: 'SetProductEntity',
+        srcField: 'collection',
+      ),
+    ],
+  ),
   obx_int.ModelEntity(
-      id: const obx_int.IdUid(6, 4686267185390874861),
-      name: 'SetProductEntity',
-      lastPropertyId: const obx_int.IdUid(21, 5950924827491299167),
-      flags: 0,
-      properties: <obx_int.ModelProperty>[
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(1, 1446513566208531704),
-            name: 'id',
-            type: 6,
-            flags: 1),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(2, 3069899723645343592),
-            name: 'setProductId',
-            type: 6,
-            flags: 0),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(3, 4631919926901680491),
-            name: 'name',
-            type: 9,
-            flags: 0),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(4, 8626841771148667334),
-            name: 'slug',
-            type: 9,
-            flags: 0),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(5, 681225881389745572),
-            name: 'description',
-            type: 9,
-            flags: 0),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(6, 3928356945678449415),
-            name: 'fullSetPrice',
-            type: 6,
-            flags: 0),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(7, 7836722684664207112),
-            name: 'hasDiscount',
-            type: 1,
-            flags: 0),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(8, 4172829610031103777),
-            name: 'discount',
-            type: 9,
-            flags: 0),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(9, 9160476089554570880),
-            name: 'mainPrice',
-            type: 9,
-            flags: 0),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(10, 4177955080616639602),
-            name: 'discountedPrice',
-            type: 9,
-            flags: 0),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(11, 8404174426487224003),
-            name: 'calculablePrice',
-            type: 6,
-            flags: 0),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(12, 3921196799415188029),
-            name: 'thumbnailImage',
-            type: 9,
-            flags: 0),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(13, 5669817167617969412),
-            name: 'mainCategoryId',
-            type: 6,
-            flags: 0),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(14, 3851088205061439550),
-            name: 'mainCategoryName',
-            type: 9,
-            flags: 0),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(15, 3021287921222937209),
-            name: 'componentCount',
-            type: 6,
-            flags: 0),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(16, 7887991490410957751),
-            name: 'published',
-            type: 1,
-            flags: 0),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(17, 6264187060238851480),
-            name: 'approved',
-            type: 1,
-            flags: 0),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(18, 3811286192340397030),
-            name: 'createdAt',
-            type: 10,
-            flags: 0),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(19, 5714055337165355458),
-            name: 'updatedAt',
-            type: 10,
-            flags: 0),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(20, 8478605236907332985),
-            name: 'timestamp',
-            type: 10,
-            flags: 0),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(21, 5950924827491299167),
-            name: 'collectionId',
-            type: 11,
-            flags: 520,
-            indexId: const obx_int.IdUid(8, 4767468883453088849),
-            relationTarget: 'SetProductCollectionEntity')
-      ],
-      relations: <obx_int.ModelRelation>[],
-      backlinks: <obx_int.ModelBacklink>[])
+    id: const obx_int.IdUid(6, 4686267185390874861),
+    name: 'SetProductEntity',
+    lastPropertyId: const obx_int.IdUid(21, 5950924827491299167),
+    flags: 0,
+    properties: <obx_int.ModelProperty>[
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(1, 1446513566208531704),
+        name: 'id',
+        type: 6,
+        flags: 1,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(2, 3069899723645343592),
+        name: 'setProductId',
+        type: 6,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(3, 4631919926901680491),
+        name: 'name',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(4, 8626841771148667334),
+        name: 'slug',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(5, 681225881389745572),
+        name: 'description',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(6, 3928356945678449415),
+        name: 'fullSetPrice',
+        type: 6,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(7, 7836722684664207112),
+        name: 'hasDiscount',
+        type: 1,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(8, 4172829610031103777),
+        name: 'discount',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(9, 9160476089554570880),
+        name: 'mainPrice',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(10, 4177955080616639602),
+        name: 'discountedPrice',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(11, 8404174426487224003),
+        name: 'calculablePrice',
+        type: 6,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(12, 3921196799415188029),
+        name: 'thumbnailImage',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(13, 5669817167617969412),
+        name: 'mainCategoryId',
+        type: 6,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(14, 3851088205061439550),
+        name: 'mainCategoryName',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(15, 3021287921222937209),
+        name: 'componentCount',
+        type: 6,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(16, 7887991490410957751),
+        name: 'published',
+        type: 1,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(17, 6264187060238851480),
+        name: 'approved',
+        type: 1,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(18, 3811286192340397030),
+        name: 'createdAt',
+        type: 10,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(19, 5714055337165355458),
+        name: 'updatedAt',
+        type: 10,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(20, 8478605236907332985),
+        name: 'timestamp',
+        type: 10,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(21, 5950924827491299167),
+        name: 'collectionId',
+        type: 11,
+        flags: 520,
+        indexId: const obx_int.IdUid(8, 4767468883453088849),
+        relationTarget: 'SetProductCollectionEntity',
+      ),
+    ],
+    relations: <obx_int.ModelRelation>[],
+    backlinks: <obx_int.ModelBacklink>[],
+  ),
 ];
 
 /// Shortcut for [obx.Store.new] that passes [getObjectBoxModel] and for Flutter
@@ -430,469 +504,617 @@ final _entities = <obx_int.ModelEntity>[
 /// For Flutter apps, also calls `loadObjectBoxLibraryAndroidCompat()` from
 /// the ObjectBox Flutter library to fix loading the native ObjectBox library
 /// on Android 6 and older.
-Future<obx.Store> openStore(
-    {String? directory,
-    int? maxDBSizeInKB,
-    int? maxDataSizeInKB,
-    int? fileMode,
-    int? maxReaders,
-    bool queriesCaseSensitiveDefault = true,
-    String? macosApplicationGroup}) async {
+Future<obx.Store> openStore({
+  String? directory,
+  int? maxDBSizeInKB,
+  int? maxDataSizeInKB,
+  int? fileMode,
+  int? maxReaders,
+  bool queriesCaseSensitiveDefault = true,
+  String? macosApplicationGroup,
+}) async {
   await loadObjectBoxLibraryAndroidCompat();
-  return obx.Store(getObjectBoxModel(),
-      directory: directory ?? (await defaultStoreDirectory()).path,
-      maxDBSizeInKB: maxDBSizeInKB,
-      maxDataSizeInKB: maxDataSizeInKB,
-      fileMode: fileMode,
-      maxReaders: maxReaders,
-      queriesCaseSensitiveDefault: queriesCaseSensitiveDefault,
-      macosApplicationGroup: macosApplicationGroup);
+  return obx.Store(
+    getObjectBoxModel(),
+    directory: directory ?? (await defaultStoreDirectory()).path,
+    maxDBSizeInKB: maxDBSizeInKB,
+    maxDataSizeInKB: maxDataSizeInKB,
+    fileMode: fileMode,
+    maxReaders: maxReaders,
+    queriesCaseSensitiveDefault: queriesCaseSensitiveDefault,
+    macosApplicationGroup: macosApplicationGroup,
+  );
 }
 
 /// Returns the ObjectBox model definition for this project for use with
 /// [obx.Store.new].
 obx_int.ModelDefinition getObjectBoxModel() {
   final model = obx_int.ModelInfo(
-      entities: _entities,
-      lastEntityId: const obx_int.IdUid(6, 4686267185390874861),
-      lastIndexId: const obx_int.IdUid(8, 4767468883453088849),
-      lastRelationId: const obx_int.IdUid(4, 5158101576197910839),
-      lastSequenceId: const obx_int.IdUid(0, 0),
-      retiredEntityUids: const [],
-      retiredIndexUids: const [
-        8911391201139428133,
-        6939879753518239501,
-        5170633160563148609,
-        1404418803750877277,
-        1397916786979179608,
-        4069748724318163954
-      ],
-      retiredPropertyUids: const [905316272912219989],
-      retiredRelationUids: const [],
-      modelVersion: 5,
-      modelVersionParserMinimum: 5,
-      version: 1);
+    entities: _entities,
+    lastEntityId: const obx_int.IdUid(6, 4686267185390874861),
+    lastIndexId: const obx_int.IdUid(8, 4767468883453088849),
+    lastRelationId: const obx_int.IdUid(4, 5158101576197910839),
+    lastSequenceId: const obx_int.IdUid(0, 0),
+    retiredEntityUids: const [],
+    retiredIndexUids: const [
+      8911391201139428133,
+      6939879753518239501,
+      5170633160563148609,
+      1404418803750877277,
+      1397916786979179608,
+      4069748724318163954,
+    ],
+    retiredPropertyUids: const [905316272912219989],
+    retiredRelationUids: const [],
+    modelVersion: 5,
+    modelVersionParserMinimum: 5,
+    version: 1,
+  );
 
   final bindings = <Type, obx_int.EntityDefinition>{
     CategoryEntity: obx_int.EntityDefinition<CategoryEntity>(
-        model: _entities[0],
-        toOneRelations: (CategoryEntity object) => [],
-        toManyRelations: (CategoryEntity object) => {
-              obx_int.RelInfo<CategoryEntity>.toMany(1, object.id):
-                  object.products
-            },
-        getId: (CategoryEntity object) => object.id,
-        setId: (CategoryEntity object, int id) {
-          object.id = id;
-        },
-        objectToFB: (CategoryEntity object, fb.Builder fbb) {
-          final nameOffset = fbb.writeString(object.name);
-          fbb.startTable(4);
-          fbb.addInt64(0, object.id);
-          fbb.addInt64(1, object.categoryId);
-          fbb.addOffset(2, nameOffset);
-          fbb.finish(fbb.endTable());
-          return object.id;
-        },
-        objectFromFB: (obx.Store store, ByteData fbData) {
-          final buffer = fb.BufferContext(fbData);
-          final rootOffset = buffer.derefObject(0);
+      model: _entities[0],
+      toOneRelations: (CategoryEntity object) => [],
+      toManyRelations: (CategoryEntity object) => {
+        obx_int.RelInfo<CategoryEntity>.toMany(1, object.id): object.products,
+      },
+      getId: (CategoryEntity object) => object.id,
+      setId: (CategoryEntity object, int id) {
+        object.id = id;
+      },
+      objectToFB: (CategoryEntity object, fb.Builder fbb) {
+        final nameOffset = fbb.writeString(object.name);
+        fbb.startTable(4);
+        fbb.addInt64(0, object.id);
+        fbb.addInt64(1, object.categoryId);
+        fbb.addOffset(2, nameOffset);
+        fbb.finish(fbb.endTable());
+        return object.id;
+      },
+      objectFromFB: (obx.Store store, ByteData fbData) {
+        final buffer = fb.BufferContext(fbData);
+        final rootOffset = buffer.derefObject(0);
 
-          final object = CategoryEntity()
-            ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0)
-            ..categoryId =
-                const fb.Int64Reader().vTableGet(buffer, rootOffset, 6, 0)
-            ..name = const fb.StringReader(asciiOptimization: true)
-                .vTableGet(buffer, rootOffset, 8, '');
-          obx_int.InternalToManyAccess.setRelInfo<CategoryEntity>(
-              object.products,
-              store,
-              obx_int.RelInfo<CategoryEntity>.toMany(1, object.id));
-          return object;
-        }),
+        final object = CategoryEntity()
+          ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0)
+          ..categoryId = const fb.Int64Reader().vTableGet(
+            buffer,
+            rootOffset,
+            6,
+            0,
+          )
+          ..name = const fb.StringReader(
+            asciiOptimization: true,
+          ).vTableGet(buffer, rootOffset, 8, '');
+        obx_int.InternalToManyAccess.setRelInfo<CategoryEntity>(
+          object.products,
+          store,
+          obx_int.RelInfo<CategoryEntity>.toMany(1, object.id),
+        );
+        return object;
+      },
+    ),
     ProductCollectionEntity: obx_int.EntityDefinition<ProductCollectionEntity>(
-        model: _entities[1],
-        toOneRelations: (ProductCollectionEntity object) => [],
-        toManyRelations: (ProductCollectionEntity object) => {
-              obx_int.RelInfo<ProductCollectionEntity>.toMany(2, object.id):
-                  object.products
-            },
-        getId: (ProductCollectionEntity object) => object.id,
-        setId: (ProductCollectionEntity object, int id) {
-          object.id = id;
-        },
-        objectToFB: (ProductCollectionEntity object, fb.Builder fbb) {
-          final collectionTypeOffset = fbb.writeString(object.collectionType);
-          fbb.startTable(6);
-          fbb.addInt64(0, object.id);
-          fbb.addOffset(1, collectionTypeOffset);
-          fbb.addInt64(2, object.page);
-          fbb.addInt64(3, object.totalPages);
-          fbb.addInt64(4, object.timestamp.millisecondsSinceEpoch);
-          fbb.finish(fbb.endTable());
-          return object.id;
-        },
-        objectFromFB: (obx.Store store, ByteData fbData) {
-          final buffer = fb.BufferContext(fbData);
-          final rootOffset = buffer.derefObject(0);
-          final collectionTypeParam =
-              const fb.StringReader(asciiOptimization: true)
-                  .vTableGet(buffer, rootOffset, 6, '');
-          final pageParam =
-              const fb.Int64Reader().vTableGet(buffer, rootOffset, 8, 0);
-          final totalPagesParam =
-              const fb.Int64Reader().vTableGet(buffer, rootOffset, 10, 0);
-          final timestampParam = DateTime.fromMillisecondsSinceEpoch(
-              const fb.Int64Reader().vTableGet(buffer, rootOffset, 12, 0));
-          final object = ProductCollectionEntity(
-              collectionType: collectionTypeParam,
-              page: pageParam,
-              totalPages: totalPagesParam,
-              timestamp: timestampParam)
-            ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
-          obx_int.InternalToManyAccess.setRelInfo<ProductCollectionEntity>(
-              object.products,
-              store,
-              obx_int.RelInfo<ProductCollectionEntity>.toMany(2, object.id));
-          return object;
-        }),
+      model: _entities[1],
+      toOneRelations: (ProductCollectionEntity object) => [],
+      toManyRelations: (ProductCollectionEntity object) => {
+        obx_int.RelInfo<ProductCollectionEntity>.toMany(2, object.id):
+            object.products,
+      },
+      getId: (ProductCollectionEntity object) => object.id,
+      setId: (ProductCollectionEntity object, int id) {
+        object.id = id;
+      },
+      objectToFB: (ProductCollectionEntity object, fb.Builder fbb) {
+        final collectionTypeOffset = fbb.writeString(object.collectionType);
+        fbb.startTable(6);
+        fbb.addInt64(0, object.id);
+        fbb.addOffset(1, collectionTypeOffset);
+        fbb.addInt64(2, object.page);
+        fbb.addInt64(3, object.totalPages);
+        fbb.addInt64(4, object.timestamp.millisecondsSinceEpoch);
+        fbb.finish(fbb.endTable());
+        return object.id;
+      },
+      objectFromFB: (obx.Store store, ByteData fbData) {
+        final buffer = fb.BufferContext(fbData);
+        final rootOffset = buffer.derefObject(0);
+        final collectionTypeParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 6, '');
+        final pageParam = const fb.Int64Reader().vTableGet(
+          buffer,
+          rootOffset,
+          8,
+          0,
+        );
+        final totalPagesParam = const fb.Int64Reader().vTableGet(
+          buffer,
+          rootOffset,
+          10,
+          0,
+        );
+        final timestampParam = DateTime.fromMillisecondsSinceEpoch(
+          const fb.Int64Reader().vTableGet(buffer, rootOffset, 12, 0),
+        );
+        final object = ProductCollectionEntity(
+          collectionType: collectionTypeParam,
+          page: pageParam,
+          totalPages: totalPagesParam,
+          timestamp: timestampParam,
+        )..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
+        obx_int.InternalToManyAccess.setRelInfo<ProductCollectionEntity>(
+          object.products,
+          store,
+          obx_int.RelInfo<ProductCollectionEntity>.toMany(2, object.id),
+        );
+        return object;
+      },
+    ),
     ProductEntity: obx_int.EntityDefinition<ProductEntity>(
-        model: _entities[2],
-        toOneRelations: (ProductEntity object) => [],
-        toManyRelations: (ProductEntity object) => {
-              obx_int.RelInfo<ProductEntity>.toMany(3, object.id):
-                  object.categories,
-              obx_int.RelInfo<ProductEntity>.toMany(4, object.id): object.stock
-            },
-        getId: (ProductEntity object) => object.id,
-        setId: (ProductEntity object, int id) {
-          object.id = id;
-        },
-        objectToFB: (ProductEntity object, fb.Builder fbb) {
-          final slugOffset = fbb.writeString(object.slug);
-          final nameOffset = fbb.writeString(object.name);
-          final mainCategoryNameOffset =
-              fbb.writeString(object.mainCategoryName);
-          final thumbnailImageOffset = fbb.writeString(object.thumbnailImage);
-          final discountOffset = fbb.writeString(object.discount);
-          final mainPriceOffset = fbb.writeString(object.mainPrice);
-          final discountedPriceOffset = fbb.writeString(object.discountedPrice);
-          final detailsOffset = fbb.writeString(object.details);
-          fbb.startTable(21);
-          fbb.addInt64(0, object.id);
-          fbb.addInt64(1, object.productId);
-          fbb.addOffset(2, slugOffset);
-          fbb.addOffset(3, nameOffset);
-          fbb.addInt64(4, object.mainCategoryId);
-          fbb.addOffset(5, mainCategoryNameOffset);
-          fbb.addOffset(6, thumbnailImageOffset);
-          fbb.addBool(7, object.hasDiscount);
-          fbb.addOffset(8, discountOffset);
-          fbb.addOffset(9, mainPriceOffset);
-          fbb.addOffset(10, discountedPriceOffset);
-          fbb.addInt64(11, object.published);
-          fbb.addBool(12, object.hasVariation);
-          fbb.addInt64(13, object.stockQuantity);
-          fbb.addInt64(14, object.currentStock);
-          fbb.addInt64(16, object.ratingCount);
-          fbb.addInt64(17, object.sales);
-          fbb.addOffset(18, detailsOffset);
-          fbb.addInt64(19, object.timestamp.millisecondsSinceEpoch);
-          fbb.finish(fbb.endTable());
-          return object.id;
-        },
-        objectFromFB: (obx.Store store, ByteData fbData) {
-          final buffer = fb.BufferContext(fbData);
-          final rootOffset = buffer.derefObject(0);
+      model: _entities[2],
+      toOneRelations: (ProductEntity object) => [],
+      toManyRelations: (ProductEntity object) => {
+        obx_int.RelInfo<ProductEntity>.toMany(3, object.id): object.categories,
+        obx_int.RelInfo<ProductEntity>.toMany(4, object.id): object.stock,
+      },
+      getId: (ProductEntity object) => object.id,
+      setId: (ProductEntity object, int id) {
+        object.id = id;
+      },
+      objectToFB: (ProductEntity object, fb.Builder fbb) {
+        final slugOffset = fbb.writeString(object.slug);
+        final nameOffset = fbb.writeString(object.name);
+        final mainCategoryNameOffset = fbb.writeString(object.mainCategoryName);
+        final thumbnailImageOffset = fbb.writeString(object.thumbnailImage);
+        final discountOffset = fbb.writeString(object.discount);
+        final mainPriceOffset = fbb.writeString(object.mainPrice);
+        final discountedPriceOffset = fbb.writeString(object.discountedPrice);
+        final detailsOffset = fbb.writeString(object.details);
+        fbb.startTable(21);
+        fbb.addInt64(0, object.id);
+        fbb.addInt64(1, object.productId);
+        fbb.addOffset(2, slugOffset);
+        fbb.addOffset(3, nameOffset);
+        fbb.addInt64(4, object.mainCategoryId);
+        fbb.addOffset(5, mainCategoryNameOffset);
+        fbb.addOffset(6, thumbnailImageOffset);
+        fbb.addBool(7, object.hasDiscount);
+        fbb.addOffset(8, discountOffset);
+        fbb.addOffset(9, mainPriceOffset);
+        fbb.addOffset(10, discountedPriceOffset);
+        fbb.addInt64(11, object.published);
+        fbb.addBool(12, object.hasVariation);
+        fbb.addInt64(13, object.stockQuantity);
+        fbb.addInt64(14, object.currentStock);
+        fbb.addInt64(16, object.ratingCount);
+        fbb.addInt64(17, object.sales);
+        fbb.addOffset(18, detailsOffset);
+        fbb.addInt64(19, object.timestamp.millisecondsSinceEpoch);
+        fbb.finish(fbb.endTable());
+        return object.id;
+      },
+      objectFromFB: (obx.Store store, ByteData fbData) {
+        final buffer = fb.BufferContext(fbData);
+        final rootOffset = buffer.derefObject(0);
 
-          final object = ProductEntity()
-            ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0)
-            ..productId =
-                const fb.Int64Reader().vTableGet(buffer, rootOffset, 6, 0)
-            ..slug = const fb.StringReader(asciiOptimization: true)
-                .vTableGet(buffer, rootOffset, 8, '')
-            ..name = const fb.StringReader(asciiOptimization: true)
-                .vTableGet(buffer, rootOffset, 10, '')
-            ..mainCategoryId =
-                const fb.Int64Reader().vTableGet(buffer, rootOffset, 12, 0)
-            ..mainCategoryName = const fb.StringReader(asciiOptimization: true)
-                .vTableGet(buffer, rootOffset, 14, '')
-            ..thumbnailImage = const fb.StringReader(asciiOptimization: true)
-                .vTableGet(buffer, rootOffset, 16, '')
-            ..hasDiscount =
-                const fb.BoolReader().vTableGet(buffer, rootOffset, 18, false)
-            ..discount = const fb.StringReader(asciiOptimization: true)
-                .vTableGet(buffer, rootOffset, 20, '')
-            ..mainPrice = const fb.StringReader(asciiOptimization: true)
-                .vTableGet(buffer, rootOffset, 22, '')
-            ..discountedPrice = const fb.StringReader(asciiOptimization: true)
-                .vTableGet(buffer, rootOffset, 24, '')
-            ..published =
-                const fb.Int64Reader().vTableGet(buffer, rootOffset, 26, 0)
-            ..hasVariation =
-                const fb.BoolReader().vTableGet(buffer, rootOffset, 28, false)
-            ..stockQuantity =
-                const fb.Int64Reader().vTableGet(buffer, rootOffset, 30, 0)
-            ..currentStock =
-                const fb.Int64Reader().vTableGet(buffer, rootOffset, 32, 0)
-            ..ratingCount =
-                const fb.Int64Reader().vTableGet(buffer, rootOffset, 36, 0)
-            ..sales =
-                const fb.Int64Reader().vTableGet(buffer, rootOffset, 38, 0)
-            ..details = const fb.StringReader(asciiOptimization: true)
-                .vTableGet(buffer, rootOffset, 40, '')
-            ..timestamp = DateTime.fromMillisecondsSinceEpoch(
-                const fb.Int64Reader().vTableGet(buffer, rootOffset, 42, 0));
-          obx_int.InternalToManyAccess.setRelInfo<ProductEntity>(
-              object.categories,
-              store,
-              obx_int.RelInfo<ProductEntity>.toMany(3, object.id));
-          obx_int.InternalToManyAccess.setRelInfo<ProductEntity>(object.stock,
-              store, obx_int.RelInfo<ProductEntity>.toMany(4, object.id));
-          return object;
-        }),
+        final object = ProductEntity()
+          ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0)
+          ..productId = const fb.Int64Reader().vTableGet(
+            buffer,
+            rootOffset,
+            6,
+            0,
+          )
+          ..slug = const fb.StringReader(
+            asciiOptimization: true,
+          ).vTableGet(buffer, rootOffset, 8, '')
+          ..name = const fb.StringReader(
+            asciiOptimization: true,
+          ).vTableGet(buffer, rootOffset, 10, '')
+          ..mainCategoryId = const fb.Int64Reader().vTableGet(
+            buffer,
+            rootOffset,
+            12,
+            0,
+          )
+          ..mainCategoryName = const fb.StringReader(
+            asciiOptimization: true,
+          ).vTableGet(buffer, rootOffset, 14, '')
+          ..thumbnailImage = const fb.StringReader(
+            asciiOptimization: true,
+          ).vTableGet(buffer, rootOffset, 16, '')
+          ..hasDiscount = const fb.BoolReader().vTableGet(
+            buffer,
+            rootOffset,
+            18,
+            false,
+          )
+          ..discount = const fb.StringReader(
+            asciiOptimization: true,
+          ).vTableGet(buffer, rootOffset, 20, '')
+          ..mainPrice = const fb.StringReader(
+            asciiOptimization: true,
+          ).vTableGet(buffer, rootOffset, 22, '')
+          ..discountedPrice = const fb.StringReader(
+            asciiOptimization: true,
+          ).vTableGet(buffer, rootOffset, 24, '')
+          ..published = const fb.Int64Reader().vTableGet(
+            buffer,
+            rootOffset,
+            26,
+            0,
+          )
+          ..hasVariation = const fb.BoolReader().vTableGet(
+            buffer,
+            rootOffset,
+            28,
+            false,
+          )
+          ..stockQuantity = const fb.Int64Reader().vTableGet(
+            buffer,
+            rootOffset,
+            30,
+            0,
+          )
+          ..currentStock = const fb.Int64Reader().vTableGet(
+            buffer,
+            rootOffset,
+            32,
+            0,
+          )
+          ..ratingCount = const fb.Int64Reader().vTableGet(
+            buffer,
+            rootOffset,
+            36,
+            0,
+          )
+          ..sales = const fb.Int64Reader().vTableGet(buffer, rootOffset, 38, 0)
+          ..details = const fb.StringReader(
+            asciiOptimization: true,
+          ).vTableGet(buffer, rootOffset, 40, '')
+          ..timestamp = DateTime.fromMillisecondsSinceEpoch(
+            const fb.Int64Reader().vTableGet(buffer, rootOffset, 42, 0),
+          );
+        obx_int.InternalToManyAccess.setRelInfo<ProductEntity>(
+          object.categories,
+          store,
+          obx_int.RelInfo<ProductEntity>.toMany(3, object.id),
+        );
+        obx_int.InternalToManyAccess.setRelInfo<ProductEntity>(
+          object.stock,
+          store,
+          obx_int.RelInfo<ProductEntity>.toMany(4, object.id),
+        );
+        return object;
+      },
+    ),
     ProductStockEntity: obx_int.EntityDefinition<ProductStockEntity>(
-        model: _entities[3],
-        toOneRelations: (ProductStockEntity object) => [object.product],
-        toManyRelations: (ProductStockEntity object) => {},
-        getId: (ProductStockEntity object) => object.id,
-        setId: (ProductStockEntity object, int id) {
-          object.id = id;
-        },
-        objectToFB: (ProductStockEntity object, fb.Builder fbb) {
-          final variantOffset = fbb.writeString(object.variant);
-          final skuOffset = fbb.writeString(object.sku);
-          final imageOffset =
-              object.image == null ? null : fbb.writeString(object.image!);
-          fbb.startTable(11);
-          fbb.addInt64(0, object.id);
-          fbb.addInt64(1, object.stockId);
-          fbb.addInt64(2, object.product.targetId);
-          fbb.addOffset(3, variantOffset);
-          fbb.addOffset(4, skuOffset);
-          fbb.addFloat64(5, object.price);
-          fbb.addInt64(6, object.qty);
-          fbb.addOffset(7, imageOffset);
-          fbb.addInt64(8, object.createdAt.millisecondsSinceEpoch);
-          fbb.addInt64(9, object.updatedAt.millisecondsSinceEpoch);
-          fbb.finish(fbb.endTable());
-          return object.id;
-        },
-        objectFromFB: (obx.Store store, ByteData fbData) {
-          final buffer = fb.BufferContext(fbData);
-          final rootOffset = buffer.derefObject(0);
+      model: _entities[3],
+      toOneRelations: (ProductStockEntity object) => [object.product],
+      toManyRelations: (ProductStockEntity object) => {},
+      getId: (ProductStockEntity object) => object.id,
+      setId: (ProductStockEntity object, int id) {
+        object.id = id;
+      },
+      objectToFB: (ProductStockEntity object, fb.Builder fbb) {
+        final variantOffset = fbb.writeString(object.variant);
+        final skuOffset = fbb.writeString(object.sku);
+        final imageOffset = object.image == null
+            ? null
+            : fbb.writeString(object.image!);
+        fbb.startTable(11);
+        fbb.addInt64(0, object.id);
+        fbb.addInt64(1, object.stockId);
+        fbb.addInt64(2, object.product.targetId);
+        fbb.addOffset(3, variantOffset);
+        fbb.addOffset(4, skuOffset);
+        fbb.addFloat64(5, object.price);
+        fbb.addInt64(6, object.qty);
+        fbb.addOffset(7, imageOffset);
+        fbb.addInt64(8, object.createdAt.millisecondsSinceEpoch);
+        fbb.addInt64(9, object.updatedAt.millisecondsSinceEpoch);
+        fbb.finish(fbb.endTable());
+        return object.id;
+      },
+      objectFromFB: (obx.Store store, ByteData fbData) {
+        final buffer = fb.BufferContext(fbData);
+        final rootOffset = buffer.derefObject(0);
 
-          final object = ProductStockEntity()
-            ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0)
-            ..stockId =
-                const fb.Int64Reader().vTableGet(buffer, rootOffset, 6, 0)
-            ..variant = const fb.StringReader(asciiOptimization: true)
-                .vTableGet(buffer, rootOffset, 10, '')
-            ..sku = const fb.StringReader(asciiOptimization: true)
-                .vTableGet(buffer, rootOffset, 12, '')
-            ..price =
-                const fb.Float64Reader().vTableGet(buffer, rootOffset, 14, 0)
-            ..qty = const fb.Int64Reader().vTableGet(buffer, rootOffset, 16, 0)
-            ..image = const fb.StringReader(asciiOptimization: true)
-                .vTableGetNullable(buffer, rootOffset, 18)
-            ..createdAt = DateTime.fromMillisecondsSinceEpoch(
-                const fb.Int64Reader().vTableGet(buffer, rootOffset, 20, 0))
-            ..updatedAt = DateTime.fromMillisecondsSinceEpoch(
-                const fb.Int64Reader().vTableGet(buffer, rootOffset, 22, 0));
-          object.product.targetId =
-              const fb.Int64Reader().vTableGet(buffer, rootOffset, 8, 0);
-          object.product.attach(store);
-          return object;
-        }),
-    SetProductCollectionEntity: obx_int.EntityDefinition<
-            SetProductCollectionEntity>(
-        model: _entities[4],
-        toOneRelations: (SetProductCollectionEntity object) => [],
-        toManyRelations: (SetProductCollectionEntity object) => {
-              obx_int.RelInfo<SetProductEntity>.toOneBacklink(21, object.id,
-                      (SetProductEntity srcObject) => srcObject.collection):
-                  object.setProducts
-            },
-        getId: (SetProductCollectionEntity object) => object.id,
-        setId: (SetProductCollectionEntity object, int id) {
-          object.id = id;
-        },
-        objectToFB: (SetProductCollectionEntity object, fb.Builder fbb) {
-          final collectionTypeOffset = fbb.writeString(object.collectionType);
-          fbb.startTable(6);
-          fbb.addInt64(0, object.id);
-          fbb.addOffset(1, collectionTypeOffset);
-          fbb.addInt64(2, object.page);
-          fbb.addInt64(3, object.totalPages);
-          fbb.addInt64(4, object.timestamp.millisecondsSinceEpoch);
-          fbb.finish(fbb.endTable());
-          return object.id;
-        },
-        objectFromFB: (obx.Store store, ByteData fbData) {
-          final buffer = fb.BufferContext(fbData);
-          final rootOffset = buffer.derefObject(0);
-          final idParam =
-              const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
-          final collectionTypeParam =
-              const fb.StringReader(asciiOptimization: true)
-                  .vTableGet(buffer, rootOffset, 6, '');
-          final pageParam =
-              const fb.Int64Reader().vTableGet(buffer, rootOffset, 8, 0);
-          final totalPagesParam =
-              const fb.Int64Reader().vTableGet(buffer, rootOffset, 10, 0);
-          final timestampParam = DateTime.fromMillisecondsSinceEpoch(
-              const fb.Int64Reader().vTableGet(buffer, rootOffset, 12, 0));
-          final object = SetProductCollectionEntity(
+        final object = ProductStockEntity()
+          ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0)
+          ..stockId = const fb.Int64Reader().vTableGet(buffer, rootOffset, 6, 0)
+          ..variant = const fb.StringReader(
+            asciiOptimization: true,
+          ).vTableGet(buffer, rootOffset, 10, '')
+          ..sku = const fb.StringReader(
+            asciiOptimization: true,
+          ).vTableGet(buffer, rootOffset, 12, '')
+          ..price = const fb.Float64Reader().vTableGet(
+            buffer,
+            rootOffset,
+            14,
+            0,
+          )
+          ..qty = const fb.Int64Reader().vTableGet(buffer, rootOffset, 16, 0)
+          ..image = const fb.StringReader(
+            asciiOptimization: true,
+          ).vTableGetNullable(buffer, rootOffset, 18)
+          ..createdAt = DateTime.fromMillisecondsSinceEpoch(
+            const fb.Int64Reader().vTableGet(buffer, rootOffset, 20, 0),
+          )
+          ..updatedAt = DateTime.fromMillisecondsSinceEpoch(
+            const fb.Int64Reader().vTableGet(buffer, rootOffset, 22, 0),
+          );
+        object.product.targetId = const fb.Int64Reader().vTableGet(
+          buffer,
+          rootOffset,
+          8,
+          0,
+        );
+        object.product.attach(store);
+        return object;
+      },
+    ),
+    SetProductCollectionEntity:
+        obx_int.EntityDefinition<SetProductCollectionEntity>(
+          model: _entities[4],
+          toOneRelations: (SetProductCollectionEntity object) => [],
+          toManyRelations: (SetProductCollectionEntity object) => {
+            obx_int.RelInfo<SetProductEntity>.toOneBacklink(
+              21,
+              object.id,
+              (SetProductEntity srcObject) => srcObject.collection,
+            ): object.setProducts,
+          },
+          getId: (SetProductCollectionEntity object) => object.id,
+          setId: (SetProductCollectionEntity object, int id) {
+            object.id = id;
+          },
+          objectToFB: (SetProductCollectionEntity object, fb.Builder fbb) {
+            final collectionTypeOffset = fbb.writeString(object.collectionType);
+            fbb.startTable(6);
+            fbb.addInt64(0, object.id);
+            fbb.addOffset(1, collectionTypeOffset);
+            fbb.addInt64(2, object.page);
+            fbb.addInt64(3, object.totalPages);
+            fbb.addInt64(4, object.timestamp.millisecondsSinceEpoch);
+            fbb.finish(fbb.endTable());
+            return object.id;
+          },
+          objectFromFB: (obx.Store store, ByteData fbData) {
+            final buffer = fb.BufferContext(fbData);
+            final rootOffset = buffer.derefObject(0);
+            final idParam = const fb.Int64Reader().vTableGet(
+              buffer,
+              rootOffset,
+              4,
+              0,
+            );
+            final collectionTypeParam = const fb.StringReader(
+              asciiOptimization: true,
+            ).vTableGet(buffer, rootOffset, 6, '');
+            final pageParam = const fb.Int64Reader().vTableGet(
+              buffer,
+              rootOffset,
+              8,
+              0,
+            );
+            final totalPagesParam = const fb.Int64Reader().vTableGet(
+              buffer,
+              rootOffset,
+              10,
+              0,
+            );
+            final timestampParam = DateTime.fromMillisecondsSinceEpoch(
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 12, 0),
+            );
+            final object = SetProductCollectionEntity(
               id: idParam,
               collectionType: collectionTypeParam,
               page: pageParam,
               totalPages: totalPagesParam,
-              timestamp: timestampParam);
-          obx_int.InternalToManyAccess.setRelInfo<SetProductCollectionEntity>(
+              timestamp: timestampParam,
+            );
+            obx_int.InternalToManyAccess.setRelInfo<SetProductCollectionEntity>(
               object.setProducts,
               store,
-              obx_int.RelInfo<SetProductEntity>.toOneBacklink(21, object.id,
-                  (SetProductEntity srcObject) => srcObject.collection));
-          return object;
-        }),
+              obx_int.RelInfo<SetProductEntity>.toOneBacklink(
+                21,
+                object.id,
+                (SetProductEntity srcObject) => srcObject.collection,
+              ),
+            );
+            return object;
+          },
+        ),
     SetProductEntity: obx_int.EntityDefinition<SetProductEntity>(
-        model: _entities[5],
-        toOneRelations: (SetProductEntity object) => [object.collection],
-        toManyRelations: (SetProductEntity object) => {},
-        getId: (SetProductEntity object) => object.id,
-        setId: (SetProductEntity object, int id) {
-          object.id = id;
-        },
-        objectToFB: (SetProductEntity object, fb.Builder fbb) {
-          final nameOffset =
-              object.name == null ? null : fbb.writeString(object.name!);
-          final slugOffset =
-              object.slug == null ? null : fbb.writeString(object.slug!);
-          final descriptionOffset = object.description == null
-              ? null
-              : fbb.writeString(object.description!);
-          final discountOffset = object.discount == null
-              ? null
-              : fbb.writeString(object.discount!);
-          final mainPriceOffset = object.mainPrice == null
-              ? null
-              : fbb.writeString(object.mainPrice!);
-          final discountedPriceOffset = object.discountedPrice == null
-              ? null
-              : fbb.writeString(object.discountedPrice!);
-          final thumbnailImageOffset = object.thumbnailImage == null
-              ? null
-              : fbb.writeString(object.thumbnailImage!);
-          final mainCategoryNameOffset = object.mainCategoryName == null
-              ? null
-              : fbb.writeString(object.mainCategoryName!);
-          fbb.startTable(22);
-          fbb.addInt64(0, object.id);
-          fbb.addInt64(1, object.setProductId);
-          fbb.addOffset(2, nameOffset);
-          fbb.addOffset(3, slugOffset);
-          fbb.addOffset(4, descriptionOffset);
-          fbb.addInt64(5, object.fullSetPrice);
-          fbb.addBool(6, object.hasDiscount);
-          fbb.addOffset(7, discountOffset);
-          fbb.addOffset(8, mainPriceOffset);
-          fbb.addOffset(9, discountedPriceOffset);
-          fbb.addInt64(10, object.calculablePrice);
-          fbb.addOffset(11, thumbnailImageOffset);
-          fbb.addInt64(12, object.mainCategoryId);
-          fbb.addOffset(13, mainCategoryNameOffset);
-          fbb.addInt64(14, object.componentCount);
-          fbb.addBool(15, object.published);
-          fbb.addBool(16, object.approved);
-          fbb.addInt64(17, object.createdAt?.millisecondsSinceEpoch);
-          fbb.addInt64(18, object.updatedAt?.millisecondsSinceEpoch);
-          fbb.addInt64(19, object.timestamp?.millisecondsSinceEpoch);
-          fbb.addInt64(20, object.collection.targetId);
-          fbb.finish(fbb.endTable());
-          return object.id;
-        },
-        objectFromFB: (obx.Store store, ByteData fbData) {
-          final buffer = fb.BufferContext(fbData);
-          final rootOffset = buffer.derefObject(0);
-          final createdAtValue =
-              const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 38);
-          final updatedAtValue =
-              const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 40);
-          final timestampValue =
-              const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 42);
-          final idParam =
-              const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
-          final setProductIdParam =
-              const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 6);
-          final nameParam = const fb.StringReader(asciiOptimization: true)
-              .vTableGetNullable(buffer, rootOffset, 8);
-          final slugParam = const fb.StringReader(asciiOptimization: true)
-              .vTableGetNullable(buffer, rootOffset, 10);
-          final descriptionParam =
-              const fb.StringReader(asciiOptimization: true)
-                  .vTableGetNullable(buffer, rootOffset, 12);
-          final fullSetPriceParam =
-              const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 14);
-          final hasDiscountParam =
-              const fb.BoolReader().vTableGetNullable(buffer, rootOffset, 16);
-          final discountParam = const fb.StringReader(asciiOptimization: true)
-              .vTableGetNullable(buffer, rootOffset, 18);
-          final mainPriceParam = const fb.StringReader(asciiOptimization: true)
-              .vTableGetNullable(buffer, rootOffset, 20);
-          final discountedPriceParam =
-              const fb.StringReader(asciiOptimization: true)
-                  .vTableGetNullable(buffer, rootOffset, 22);
-          final calculablePriceParam =
-              const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 24);
-          final thumbnailImageParam =
-              const fb.StringReader(asciiOptimization: true)
-                  .vTableGetNullable(buffer, rootOffset, 26);
-          final mainCategoryIdParam =
-              const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 28);
-          final mainCategoryNameParam =
-              const fb.StringReader(asciiOptimization: true)
-                  .vTableGetNullable(buffer, rootOffset, 30);
-          final componentCountParam =
-              const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 32);
-          final publishedParam =
-              const fb.BoolReader().vTableGetNullable(buffer, rootOffset, 34);
-          final approvedParam =
-              const fb.BoolReader().vTableGetNullable(buffer, rootOffset, 36);
-          final createdAtParam = createdAtValue == null
-              ? null
-              : DateTime.fromMillisecondsSinceEpoch(createdAtValue);
-          final updatedAtParam = updatedAtValue == null
-              ? null
-              : DateTime.fromMillisecondsSinceEpoch(updatedAtValue);
-          final timestampParam = timestampValue == null
-              ? null
-              : DateTime.fromMillisecondsSinceEpoch(timestampValue);
-          final object = SetProductEntity(
-              id: idParam,
-              setProductId: setProductIdParam,
-              name: nameParam,
-              slug: slugParam,
-              description: descriptionParam,
-              fullSetPrice: fullSetPriceParam,
-              hasDiscount: hasDiscountParam,
-              discount: discountParam,
-              mainPrice: mainPriceParam,
-              discountedPrice: discountedPriceParam,
-              calculablePrice: calculablePriceParam,
-              thumbnailImage: thumbnailImageParam,
-              mainCategoryId: mainCategoryIdParam,
-              mainCategoryName: mainCategoryNameParam,
-              componentCount: componentCountParam,
-              published: publishedParam,
-              approved: approvedParam,
-              createdAt: createdAtParam,
-              updatedAt: updatedAtParam,
-              timestamp: timestampParam);
-          object.collection.targetId =
-              const fb.Int64Reader().vTableGet(buffer, rootOffset, 44, 0);
-          object.collection.attach(store);
-          return object;
-        })
+      model: _entities[5],
+      toOneRelations: (SetProductEntity object) => [object.collection],
+      toManyRelations: (SetProductEntity object) => {},
+      getId: (SetProductEntity object) => object.id,
+      setId: (SetProductEntity object, int id) {
+        object.id = id;
+      },
+      objectToFB: (SetProductEntity object, fb.Builder fbb) {
+        final nameOffset = object.name == null
+            ? null
+            : fbb.writeString(object.name!);
+        final slugOffset = object.slug == null
+            ? null
+            : fbb.writeString(object.slug!);
+        final descriptionOffset = object.description == null
+            ? null
+            : fbb.writeString(object.description!);
+        final discountOffset = object.discount == null
+            ? null
+            : fbb.writeString(object.discount!);
+        final mainPriceOffset = object.mainPrice == null
+            ? null
+            : fbb.writeString(object.mainPrice!);
+        final discountedPriceOffset = object.discountedPrice == null
+            ? null
+            : fbb.writeString(object.discountedPrice!);
+        final thumbnailImageOffset = object.thumbnailImage == null
+            ? null
+            : fbb.writeString(object.thumbnailImage!);
+        final mainCategoryNameOffset = object.mainCategoryName == null
+            ? null
+            : fbb.writeString(object.mainCategoryName!);
+        fbb.startTable(22);
+        fbb.addInt64(0, object.id);
+        fbb.addInt64(1, object.setProductId);
+        fbb.addOffset(2, nameOffset);
+        fbb.addOffset(3, slugOffset);
+        fbb.addOffset(4, descriptionOffset);
+        fbb.addInt64(5, object.fullSetPrice);
+        fbb.addBool(6, object.hasDiscount);
+        fbb.addOffset(7, discountOffset);
+        fbb.addOffset(8, mainPriceOffset);
+        fbb.addOffset(9, discountedPriceOffset);
+        fbb.addInt64(10, object.calculablePrice);
+        fbb.addOffset(11, thumbnailImageOffset);
+        fbb.addInt64(12, object.mainCategoryId);
+        fbb.addOffset(13, mainCategoryNameOffset);
+        fbb.addInt64(14, object.componentCount);
+        fbb.addBool(15, object.published);
+        fbb.addBool(16, object.approved);
+        fbb.addInt64(17, object.createdAt?.millisecondsSinceEpoch);
+        fbb.addInt64(18, object.updatedAt?.millisecondsSinceEpoch);
+        fbb.addInt64(19, object.timestamp?.millisecondsSinceEpoch);
+        fbb.addInt64(20, object.collection.targetId);
+        fbb.finish(fbb.endTable());
+        return object.id;
+      },
+      objectFromFB: (obx.Store store, ByteData fbData) {
+        final buffer = fb.BufferContext(fbData);
+        final rootOffset = buffer.derefObject(0);
+        final createdAtValue = const fb.Int64Reader().vTableGetNullable(
+          buffer,
+          rootOffset,
+          38,
+        );
+        final updatedAtValue = const fb.Int64Reader().vTableGetNullable(
+          buffer,
+          rootOffset,
+          40,
+        );
+        final timestampValue = const fb.Int64Reader().vTableGetNullable(
+          buffer,
+          rootOffset,
+          42,
+        );
+        final idParam = const fb.Int64Reader().vTableGet(
+          buffer,
+          rootOffset,
+          4,
+          0,
+        );
+        final setProductIdParam = const fb.Int64Reader().vTableGetNullable(
+          buffer,
+          rootOffset,
+          6,
+        );
+        final nameParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGetNullable(buffer, rootOffset, 8);
+        final slugParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGetNullable(buffer, rootOffset, 10);
+        final descriptionParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGetNullable(buffer, rootOffset, 12);
+        final fullSetPriceParam = const fb.Int64Reader().vTableGetNullable(
+          buffer,
+          rootOffset,
+          14,
+        );
+        final hasDiscountParam = const fb.BoolReader().vTableGetNullable(
+          buffer,
+          rootOffset,
+          16,
+        );
+        final discountParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGetNullable(buffer, rootOffset, 18);
+        final mainPriceParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGetNullable(buffer, rootOffset, 20);
+        final discountedPriceParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGetNullable(buffer, rootOffset, 22);
+        final calculablePriceParam = const fb.Int64Reader().vTableGetNullable(
+          buffer,
+          rootOffset,
+          24,
+        );
+        final thumbnailImageParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGetNullable(buffer, rootOffset, 26);
+        final mainCategoryIdParam = const fb.Int64Reader().vTableGetNullable(
+          buffer,
+          rootOffset,
+          28,
+        );
+        final mainCategoryNameParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGetNullable(buffer, rootOffset, 30);
+        final componentCountParam = const fb.Int64Reader().vTableGetNullable(
+          buffer,
+          rootOffset,
+          32,
+        );
+        final publishedParam = const fb.BoolReader().vTableGetNullable(
+          buffer,
+          rootOffset,
+          34,
+        );
+        final approvedParam = const fb.BoolReader().vTableGetNullable(
+          buffer,
+          rootOffset,
+          36,
+        );
+        final createdAtParam = createdAtValue == null
+            ? null
+            : DateTime.fromMillisecondsSinceEpoch(createdAtValue);
+        final updatedAtParam = updatedAtValue == null
+            ? null
+            : DateTime.fromMillisecondsSinceEpoch(updatedAtValue);
+        final timestampParam = timestampValue == null
+            ? null
+            : DateTime.fromMillisecondsSinceEpoch(timestampValue);
+        final object = SetProductEntity(
+          id: idParam,
+          setProductId: setProductIdParam,
+          name: nameParam,
+          slug: slugParam,
+          description: descriptionParam,
+          fullSetPrice: fullSetPriceParam,
+          hasDiscount: hasDiscountParam,
+          discount: discountParam,
+          mainPrice: mainPriceParam,
+          discountedPrice: discountedPriceParam,
+          calculablePrice: calculablePriceParam,
+          thumbnailImage: thumbnailImageParam,
+          mainCategoryId: mainCategoryIdParam,
+          mainCategoryName: mainCategoryNameParam,
+          componentCount: componentCountParam,
+          published: publishedParam,
+          approved: approvedParam,
+          createdAt: createdAtParam,
+          updatedAt: updatedAtParam,
+          timestamp: timestampParam,
+        );
+        object.collection.targetId = const fb.Int64Reader().vTableGet(
+          buffer,
+          rootOffset,
+          44,
+          0,
+        );
+        object.collection.attach(store);
+        return object;
+      },
+    ),
   };
 
   return obx_int.ModelDefinition(model, bindings);
@@ -901,299 +1123,367 @@ obx_int.ModelDefinition getObjectBoxModel() {
 /// [CategoryEntity] entity fields to define ObjectBox queries.
 class CategoryEntity_ {
   /// See [CategoryEntity.id].
-  static final id =
-      obx.QueryIntegerProperty<CategoryEntity>(_entities[0].properties[0]);
+  static final id = obx.QueryIntegerProperty<CategoryEntity>(
+    _entities[0].properties[0],
+  );
 
   /// See [CategoryEntity.categoryId].
-  static final categoryId =
-      obx.QueryIntegerProperty<CategoryEntity>(_entities[0].properties[1]);
+  static final categoryId = obx.QueryIntegerProperty<CategoryEntity>(
+    _entities[0].properties[1],
+  );
 
   /// See [CategoryEntity.name].
-  static final name =
-      obx.QueryStringProperty<CategoryEntity>(_entities[0].properties[2]);
+  static final name = obx.QueryStringProperty<CategoryEntity>(
+    _entities[0].properties[2],
+  );
 
   /// see [CategoryEntity.products]
   static final products =
       obx.QueryRelationToMany<CategoryEntity, ProductEntity>(
-          _entities[0].relations[0]);
+        _entities[0].relations[0],
+      );
 }
 
 /// [ProductCollectionEntity] entity fields to define ObjectBox queries.
 class ProductCollectionEntity_ {
   /// See [ProductCollectionEntity.id].
   static final id = obx.QueryIntegerProperty<ProductCollectionEntity>(
-      _entities[1].properties[0]);
+    _entities[1].properties[0],
+  );
 
   /// See [ProductCollectionEntity.collectionType].
   static final collectionType =
       obx.QueryStringProperty<ProductCollectionEntity>(
-          _entities[1].properties[1]);
+        _entities[1].properties[1],
+      );
 
   /// See [ProductCollectionEntity.page].
   static final page = obx.QueryIntegerProperty<ProductCollectionEntity>(
-      _entities[1].properties[2]);
+    _entities[1].properties[2],
+  );
 
   /// See [ProductCollectionEntity.totalPages].
   static final totalPages = obx.QueryIntegerProperty<ProductCollectionEntity>(
-      _entities[1].properties[3]);
+    _entities[1].properties[3],
+  );
 
   /// See [ProductCollectionEntity.timestamp].
   static final timestamp = obx.QueryDateProperty<ProductCollectionEntity>(
-      _entities[1].properties[4]);
+    _entities[1].properties[4],
+  );
 
   /// see [ProductCollectionEntity.products]
   static final products =
       obx.QueryRelationToMany<ProductCollectionEntity, ProductEntity>(
-          _entities[1].relations[0]);
+        _entities[1].relations[0],
+      );
 }
 
 /// [ProductEntity] entity fields to define ObjectBox queries.
 class ProductEntity_ {
   /// See [ProductEntity.id].
-  static final id =
-      obx.QueryIntegerProperty<ProductEntity>(_entities[2].properties[0]);
+  static final id = obx.QueryIntegerProperty<ProductEntity>(
+    _entities[2].properties[0],
+  );
 
   /// See [ProductEntity.productId].
-  static final productId =
-      obx.QueryIntegerProperty<ProductEntity>(_entities[2].properties[1]);
+  static final productId = obx.QueryIntegerProperty<ProductEntity>(
+    _entities[2].properties[1],
+  );
 
   /// See [ProductEntity.slug].
-  static final slug =
-      obx.QueryStringProperty<ProductEntity>(_entities[2].properties[2]);
+  static final slug = obx.QueryStringProperty<ProductEntity>(
+    _entities[2].properties[2],
+  );
 
   /// See [ProductEntity.name].
-  static final name =
-      obx.QueryStringProperty<ProductEntity>(_entities[2].properties[3]);
+  static final name = obx.QueryStringProperty<ProductEntity>(
+    _entities[2].properties[3],
+  );
 
   /// See [ProductEntity.mainCategoryId].
-  static final mainCategoryId =
-      obx.QueryIntegerProperty<ProductEntity>(_entities[2].properties[4]);
+  static final mainCategoryId = obx.QueryIntegerProperty<ProductEntity>(
+    _entities[2].properties[4],
+  );
 
   /// See [ProductEntity.mainCategoryName].
-  static final mainCategoryName =
-      obx.QueryStringProperty<ProductEntity>(_entities[2].properties[5]);
+  static final mainCategoryName = obx.QueryStringProperty<ProductEntity>(
+    _entities[2].properties[5],
+  );
 
   /// See [ProductEntity.thumbnailImage].
-  static final thumbnailImage =
-      obx.QueryStringProperty<ProductEntity>(_entities[2].properties[6]);
+  static final thumbnailImage = obx.QueryStringProperty<ProductEntity>(
+    _entities[2].properties[6],
+  );
 
   /// See [ProductEntity.hasDiscount].
-  static final hasDiscount =
-      obx.QueryBooleanProperty<ProductEntity>(_entities[2].properties[7]);
+  static final hasDiscount = obx.QueryBooleanProperty<ProductEntity>(
+    _entities[2].properties[7],
+  );
 
   /// See [ProductEntity.discount].
-  static final discount =
-      obx.QueryStringProperty<ProductEntity>(_entities[2].properties[8]);
+  static final discount = obx.QueryStringProperty<ProductEntity>(
+    _entities[2].properties[8],
+  );
 
   /// See [ProductEntity.mainPrice].
-  static final mainPrice =
-      obx.QueryStringProperty<ProductEntity>(_entities[2].properties[9]);
+  static final mainPrice = obx.QueryStringProperty<ProductEntity>(
+    _entities[2].properties[9],
+  );
 
   /// See [ProductEntity.discountedPrice].
-  static final discountedPrice =
-      obx.QueryStringProperty<ProductEntity>(_entities[2].properties[10]);
+  static final discountedPrice = obx.QueryStringProperty<ProductEntity>(
+    _entities[2].properties[10],
+  );
 
   /// See [ProductEntity.published].
-  static final published =
-      obx.QueryIntegerProperty<ProductEntity>(_entities[2].properties[11]);
+  static final published = obx.QueryIntegerProperty<ProductEntity>(
+    _entities[2].properties[11],
+  );
 
   /// See [ProductEntity.hasVariation].
-  static final hasVariation =
-      obx.QueryBooleanProperty<ProductEntity>(_entities[2].properties[12]);
+  static final hasVariation = obx.QueryBooleanProperty<ProductEntity>(
+    _entities[2].properties[12],
+  );
 
   /// See [ProductEntity.stockQuantity].
-  static final stockQuantity =
-      obx.QueryIntegerProperty<ProductEntity>(_entities[2].properties[13]);
+  static final stockQuantity = obx.QueryIntegerProperty<ProductEntity>(
+    _entities[2].properties[13],
+  );
 
   /// See [ProductEntity.currentStock].
-  static final currentStock =
-      obx.QueryIntegerProperty<ProductEntity>(_entities[2].properties[14]);
+  static final currentStock = obx.QueryIntegerProperty<ProductEntity>(
+    _entities[2].properties[14],
+  );
 
   /// See [ProductEntity.ratingCount].
-  static final ratingCount =
-      obx.QueryIntegerProperty<ProductEntity>(_entities[2].properties[15]);
+  static final ratingCount = obx.QueryIntegerProperty<ProductEntity>(
+    _entities[2].properties[15],
+  );
 
   /// See [ProductEntity.sales].
-  static final sales =
-      obx.QueryIntegerProperty<ProductEntity>(_entities[2].properties[16]);
+  static final sales = obx.QueryIntegerProperty<ProductEntity>(
+    _entities[2].properties[16],
+  );
 
   /// See [ProductEntity.details].
-  static final details =
-      obx.QueryStringProperty<ProductEntity>(_entities[2].properties[17]);
+  static final details = obx.QueryStringProperty<ProductEntity>(
+    _entities[2].properties[17],
+  );
 
   /// See [ProductEntity.timestamp].
-  static final timestamp =
-      obx.QueryDateProperty<ProductEntity>(_entities[2].properties[18]);
+  static final timestamp = obx.QueryDateProperty<ProductEntity>(
+    _entities[2].properties[18],
+  );
 
   /// see [ProductEntity.categories]
   static final categories =
       obx.QueryRelationToMany<ProductEntity, CategoryEntity>(
-          _entities[2].relations[0]);
+        _entities[2].relations[0],
+      );
 
   /// see [ProductEntity.stock]
   static final stock =
       obx.QueryRelationToMany<ProductEntity, ProductStockEntity>(
-          _entities[2].relations[1]);
+        _entities[2].relations[1],
+      );
 }
 
 /// [ProductStockEntity] entity fields to define ObjectBox queries.
 class ProductStockEntity_ {
   /// See [ProductStockEntity.id].
-  static final id =
-      obx.QueryIntegerProperty<ProductStockEntity>(_entities[3].properties[0]);
+  static final id = obx.QueryIntegerProperty<ProductStockEntity>(
+    _entities[3].properties[0],
+  );
 
   /// See [ProductStockEntity.stockId].
-  static final stockId =
-      obx.QueryIntegerProperty<ProductStockEntity>(_entities[3].properties[1]);
+  static final stockId = obx.QueryIntegerProperty<ProductStockEntity>(
+    _entities[3].properties[1],
+  );
 
   /// See [ProductStockEntity.product].
   static final product =
       obx.QueryRelationToOne<ProductStockEntity, ProductEntity>(
-          _entities[3].properties[2]);
+        _entities[3].properties[2],
+      );
 
   /// See [ProductStockEntity.variant].
-  static final variant =
-      obx.QueryStringProperty<ProductStockEntity>(_entities[3].properties[3]);
+  static final variant = obx.QueryStringProperty<ProductStockEntity>(
+    _entities[3].properties[3],
+  );
 
   /// See [ProductStockEntity.sku].
-  static final sku =
-      obx.QueryStringProperty<ProductStockEntity>(_entities[3].properties[4]);
+  static final sku = obx.QueryStringProperty<ProductStockEntity>(
+    _entities[3].properties[4],
+  );
 
   /// See [ProductStockEntity.price].
-  static final price =
-      obx.QueryDoubleProperty<ProductStockEntity>(_entities[3].properties[5]);
+  static final price = obx.QueryDoubleProperty<ProductStockEntity>(
+    _entities[3].properties[5],
+  );
 
   /// See [ProductStockEntity.qty].
-  static final qty =
-      obx.QueryIntegerProperty<ProductStockEntity>(_entities[3].properties[6]);
+  static final qty = obx.QueryIntegerProperty<ProductStockEntity>(
+    _entities[3].properties[6],
+  );
 
   /// See [ProductStockEntity.image].
-  static final image =
-      obx.QueryStringProperty<ProductStockEntity>(_entities[3].properties[7]);
+  static final image = obx.QueryStringProperty<ProductStockEntity>(
+    _entities[3].properties[7],
+  );
 
   /// See [ProductStockEntity.createdAt].
-  static final createdAt =
-      obx.QueryDateProperty<ProductStockEntity>(_entities[3].properties[8]);
+  static final createdAt = obx.QueryDateProperty<ProductStockEntity>(
+    _entities[3].properties[8],
+  );
 
   /// See [ProductStockEntity.updatedAt].
-  static final updatedAt =
-      obx.QueryDateProperty<ProductStockEntity>(_entities[3].properties[9]);
+  static final updatedAt = obx.QueryDateProperty<ProductStockEntity>(
+    _entities[3].properties[9],
+  );
 }
 
 /// [SetProductCollectionEntity] entity fields to define ObjectBox queries.
 class SetProductCollectionEntity_ {
   /// See [SetProductCollectionEntity.id].
   static final id = obx.QueryIntegerProperty<SetProductCollectionEntity>(
-      _entities[4].properties[0]);
+    _entities[4].properties[0],
+  );
 
   /// See [SetProductCollectionEntity.collectionType].
   static final collectionType =
       obx.QueryStringProperty<SetProductCollectionEntity>(
-          _entities[4].properties[1]);
+        _entities[4].properties[1],
+      );
 
   /// See [SetProductCollectionEntity.page].
   static final page = obx.QueryIntegerProperty<SetProductCollectionEntity>(
-      _entities[4].properties[2]);
+    _entities[4].properties[2],
+  );
 
   /// See [SetProductCollectionEntity.totalPages].
   static final totalPages =
       obx.QueryIntegerProperty<SetProductCollectionEntity>(
-          _entities[4].properties[3]);
+        _entities[4].properties[3],
+      );
 
   /// See [SetProductCollectionEntity.timestamp].
   static final timestamp = obx.QueryDateProperty<SetProductCollectionEntity>(
-      _entities[4].properties[4]);
+    _entities[4].properties[4],
+  );
 
   /// see [SetProductCollectionEntity.setProducts]
   static final setProducts =
       obx.QueryBacklinkToMany<SetProductEntity, SetProductCollectionEntity>(
-          SetProductEntity_.collection);
+        SetProductEntity_.collection,
+      );
 }
 
 /// [SetProductEntity] entity fields to define ObjectBox queries.
 class SetProductEntity_ {
   /// See [SetProductEntity.id].
-  static final id =
-      obx.QueryIntegerProperty<SetProductEntity>(_entities[5].properties[0]);
+  static final id = obx.QueryIntegerProperty<SetProductEntity>(
+    _entities[5].properties[0],
+  );
 
   /// See [SetProductEntity.setProductId].
-  static final setProductId =
-      obx.QueryIntegerProperty<SetProductEntity>(_entities[5].properties[1]);
+  static final setProductId = obx.QueryIntegerProperty<SetProductEntity>(
+    _entities[5].properties[1],
+  );
 
   /// See [SetProductEntity.name].
-  static final name =
-      obx.QueryStringProperty<SetProductEntity>(_entities[5].properties[2]);
+  static final name = obx.QueryStringProperty<SetProductEntity>(
+    _entities[5].properties[2],
+  );
 
   /// See [SetProductEntity.slug].
-  static final slug =
-      obx.QueryStringProperty<SetProductEntity>(_entities[5].properties[3]);
+  static final slug = obx.QueryStringProperty<SetProductEntity>(
+    _entities[5].properties[3],
+  );
 
   /// See [SetProductEntity.description].
-  static final description =
-      obx.QueryStringProperty<SetProductEntity>(_entities[5].properties[4]);
+  static final description = obx.QueryStringProperty<SetProductEntity>(
+    _entities[5].properties[4],
+  );
 
   /// See [SetProductEntity.fullSetPrice].
-  static final fullSetPrice =
-      obx.QueryIntegerProperty<SetProductEntity>(_entities[5].properties[5]);
+  static final fullSetPrice = obx.QueryIntegerProperty<SetProductEntity>(
+    _entities[5].properties[5],
+  );
 
   /// See [SetProductEntity.hasDiscount].
-  static final hasDiscount =
-      obx.QueryBooleanProperty<SetProductEntity>(_entities[5].properties[6]);
+  static final hasDiscount = obx.QueryBooleanProperty<SetProductEntity>(
+    _entities[5].properties[6],
+  );
 
   /// See [SetProductEntity.discount].
-  static final discount =
-      obx.QueryStringProperty<SetProductEntity>(_entities[5].properties[7]);
+  static final discount = obx.QueryStringProperty<SetProductEntity>(
+    _entities[5].properties[7],
+  );
 
   /// See [SetProductEntity.mainPrice].
-  static final mainPrice =
-      obx.QueryStringProperty<SetProductEntity>(_entities[5].properties[8]);
+  static final mainPrice = obx.QueryStringProperty<SetProductEntity>(
+    _entities[5].properties[8],
+  );
 
   /// See [SetProductEntity.discountedPrice].
-  static final discountedPrice =
-      obx.QueryStringProperty<SetProductEntity>(_entities[5].properties[9]);
+  static final discountedPrice = obx.QueryStringProperty<SetProductEntity>(
+    _entities[5].properties[9],
+  );
 
   /// See [SetProductEntity.calculablePrice].
-  static final calculablePrice =
-      obx.QueryIntegerProperty<SetProductEntity>(_entities[5].properties[10]);
+  static final calculablePrice = obx.QueryIntegerProperty<SetProductEntity>(
+    _entities[5].properties[10],
+  );
 
   /// See [SetProductEntity.thumbnailImage].
-  static final thumbnailImage =
-      obx.QueryStringProperty<SetProductEntity>(_entities[5].properties[11]);
+  static final thumbnailImage = obx.QueryStringProperty<SetProductEntity>(
+    _entities[5].properties[11],
+  );
 
   /// See [SetProductEntity.mainCategoryId].
-  static final mainCategoryId =
-      obx.QueryIntegerProperty<SetProductEntity>(_entities[5].properties[12]);
+  static final mainCategoryId = obx.QueryIntegerProperty<SetProductEntity>(
+    _entities[5].properties[12],
+  );
 
   /// See [SetProductEntity.mainCategoryName].
-  static final mainCategoryName =
-      obx.QueryStringProperty<SetProductEntity>(_entities[5].properties[13]);
+  static final mainCategoryName = obx.QueryStringProperty<SetProductEntity>(
+    _entities[5].properties[13],
+  );
 
   /// See [SetProductEntity.componentCount].
-  static final componentCount =
-      obx.QueryIntegerProperty<SetProductEntity>(_entities[5].properties[14]);
+  static final componentCount = obx.QueryIntegerProperty<SetProductEntity>(
+    _entities[5].properties[14],
+  );
 
   /// See [SetProductEntity.published].
-  static final published =
-      obx.QueryBooleanProperty<SetProductEntity>(_entities[5].properties[15]);
+  static final published = obx.QueryBooleanProperty<SetProductEntity>(
+    _entities[5].properties[15],
+  );
 
   /// See [SetProductEntity.approved].
-  static final approved =
-      obx.QueryBooleanProperty<SetProductEntity>(_entities[5].properties[16]);
+  static final approved = obx.QueryBooleanProperty<SetProductEntity>(
+    _entities[5].properties[16],
+  );
 
   /// See [SetProductEntity.createdAt].
-  static final createdAt =
-      obx.QueryDateProperty<SetProductEntity>(_entities[5].properties[17]);
+  static final createdAt = obx.QueryDateProperty<SetProductEntity>(
+    _entities[5].properties[17],
+  );
 
   /// See [SetProductEntity.updatedAt].
-  static final updatedAt =
-      obx.QueryDateProperty<SetProductEntity>(_entities[5].properties[18]);
+  static final updatedAt = obx.QueryDateProperty<SetProductEntity>(
+    _entities[5].properties[18],
+  );
 
   /// See [SetProductEntity.timestamp].
-  static final timestamp =
-      obx.QueryDateProperty<SetProductEntity>(_entities[5].properties[19]);
+  static final timestamp = obx.QueryDateProperty<SetProductEntity>(
+    _entities[5].properties[19],
+  );
 
   /// See [SetProductEntity.collection].
   static final collection =
       obx.QueryRelationToOne<SetProductEntity, SetProductCollectionEntity>(
-          _entities[5].properties[20]);
+        _entities[5].properties[20],
+      );
 }

@@ -6,14 +6,14 @@ import '../models/search_suggestion_model.dart';
 abstract class SearchRemoteDataSource {
   Future<List<SearchSuggestion>> getSearchSuggestions(String query);
   Future<ProductResponseModel> getFilteredProducts(
-      int page, {
-        String? name,
-        String? sortKey,
-        String? brands,
-        String? categories,
-        double? min,
-        double? max,
-      });
+    int page, {
+    String? name,
+    String? sortKey,
+    String? brands,
+    String? categories,
+    double? min,
+    double? max,
+  });
 }
 
 class SearchRemoteDataSourceImpl implements SearchRemoteDataSource {
@@ -35,14 +35,14 @@ class SearchRemoteDataSourceImpl implements SearchRemoteDataSource {
 
   @override
   Future<ProductResponseModel> getFilteredProducts(
-      int page, {
-        String? name,
-        String? sortKey,
-        String? brands,
-        String? categories,
-        double? min,
-        double? max,
-      }) async {
+    int page, {
+    String? name,
+    String? sortKey,
+    String? brands,
+    String? categories,
+    double? min,
+    double? max,
+  }) async {
     Map<String, dynamic> queryParams = {'page': page.toString()};
 
     if (name != null && name.isNotEmpty) queryParams['name'] = name;

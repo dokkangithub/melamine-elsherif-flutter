@@ -14,12 +14,9 @@ class BrandRemoteDataSourceImpl implements BrandRemoteDataSource {
 
   BrandRemoteDataSourceImpl(this.apiProvider, this.secureStorage);
 
-
   @override
   Future<BrandResponseModel> getFilterPageBrands() async {
-    final response = await apiProvider.get(
-      LaravelApiEndPoint.filterBrands,
-    );
+    final response = await apiProvider.get(LaravelApiEndPoint.filterBrands);
     if (response.data != null) {
       return BrandResponseModel.fromJson(response.data);
     }

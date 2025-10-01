@@ -43,7 +43,9 @@ class AllProductsWidget extends StatelessWidget {
         }
 
         // Filter only published products
-        final filteredProducts = allProducts.where((product) => product.published == 1).toList();
+        final filteredProducts = allProducts
+            .where((product) => product.published == 1)
+            .toList();
 
         // Show empty state if no published products
         if (filteredProducts.isEmpty) {
@@ -82,10 +84,12 @@ class AllProductsWidget extends StatelessWidget {
                 crossAxisSpacing: 0,
                 mainAxisSpacing: 0,
               ),
-              itemCount: filteredProducts.length > 8 ? 8 : filteredProducts.length,
+              itemCount: filteredProducts.length > 8
+                  ? 8
+                  : filteredProducts.length,
               itemBuilder: (context, index) {
                 final product = filteredProducts[index];
-                return ProductCard(product: product,isOutlinedAddToCart: true);
+                return ProductCard(product: product, isOutlinedAddToCart: true);
               },
             ),
             // If we have less than 8 published products and more data available, load more

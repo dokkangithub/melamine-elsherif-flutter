@@ -27,7 +27,6 @@ import 'package:google_sign_in/google_sign_in.dart';
 import '../widgets/login_screen_logo.dart';
 import '../widgets/social_login_widget.dart';
 
-
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
@@ -65,220 +64,224 @@ class _LoginScreenState extends State<LoginScreen> {
         // Match the light gray of the background
         // Remove app bar completely
         body: Consumer<AuthProvider>(
-          builder: (context, authProvider, _) =>
-              Form(
-                key: _formKey,
-                child: Stack(
-                  children: [
-                    // Background image
-                    Container(
-                      width: MediaQuery
-                          .of(context)
-                          .size
-                          .width,
-                      height: MediaQuery
-                          .of(context)
-                          .size
-                          .height,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: const AssetImage(AppImages.loginBackground),
-                          fit: BoxFit.cover,
-                          alignment: Alignment.bottomCenter,
-                          colorFilter: ColorFilter.mode(
-                            AppTheme.white.withValues(alpha: 0.8),
-                            BlendMode.lighten,
-                          ),
-                        ),
+          builder: (context, authProvider, _) => Form(
+            key: _formKey,
+            child: Stack(
+              children: [
+                // Background image
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: const AssetImage(AppImages.loginBackground),
+                      fit: BoxFit.cover,
+                      alignment: Alignment.bottomCenter,
+                      colorFilter: ColorFilter.mode(
+                        AppTheme.white.withValues(alpha: 0.8),
+                        BlendMode.lighten,
                       ),
                     ),
+                  ),
+                ),
 
-                    // Content
-                    SafeArea(
-                      child: SingleChildScrollView(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                // Content
+                SafeArea(
+                  child: SingleChildScrollView(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(height: 16),
+
+                          // Language switcher at the top right
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              const SizedBox(height: 16),
-
-                              // Language switcher at the top right
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  const LanguageSwitcher(),
-                                  FadeInLeft(
-                                    duration: const Duration(milliseconds: 500),
-                                    child: InkWell(
-                                        onTap: () {
-                                          Provider.of<LayoutProvider>(context,listen: false).currentIndex=0;
-                                          AppRoutes.navigateTo(
-                                            context,
-                                            AppRoutes.mainLayoutScreen,
-                                          );
-                                        },
-                                        child: const Icon(Icons.arrow_forward_ios,color: AppTheme.primaryColor,size: 24)
-                                    ),
-                                  ),
-
-                                ],
-                              ),
-
-                              const SizedBox(height: 60),
-
-                              // Logo/Brand name
-                              Center(
-                                child: Text(
-                                  'app_name'.tr(context),
-                                  style: context.displayLarge.copyWith(
-                                    fontWeight: FontWeight.normal,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              ),
-
-                              const SizedBox(height: 60),
-
-                              // Welcome Back text
-                              Center(
-                                child: Text(
-                                    'welcome_back'.tr(context),
-                                    style: Directionality.of(context) == TextDirection.rtl
-                                      ? GoogleFonts.tajawal(
-                                          fontSize: 32,
-                                          fontWeight: FontWeight.w200,
-                                          color: Colors.black54,
-                                        )
-                                      : GoogleFonts.jost(
-                                          fontSize: 32,
-                                          fontWeight: FontWeight.w200,
-                                          color: Colors.black54,
-                                        )
-                                ),
-                              ),
-
-                              const SizedBox(height: 40),
-
-                              // Email field
-                              CustomTextFormField(
-                                controller: emailController,
-                                hint: 'email_address'.tr(context),
-                                keyboardType: TextInputType.emailAddress,
-                                prefixIcon: null,
-                                isBorderAvailable: false,
-                              ),
-
-                              const SizedBox(height: 16),
-
-                              // Password field
-                              CustomTextFormField(
-                                controller: passwordController,
-                                hint: 'password'.tr(context),
-                                isPassword: true,
-                                prefixIcon: null,
-                                isBorderAvailable: false,
-                              ),
-
-                              const SizedBox(height: 35),
-
-                              // Login button
-                              authProvider.isLoading
-                                  ? const CustomLoadingWidget()
-                                  : CustomButton(
-                                onPressed: () =>
-                                    _handleLogin(context, authProvider),
-                                text: 'login'.tr(context),
-                                fullWidth: true,
-                              ),
-
-                              const SizedBox(height: 24),
-
-                              // Forgot password
-                              Center(
-                                child: TextButton(
-                                  onPressed: () {
+                              const LanguageSwitcher(),
+                              FadeInLeft(
+                                duration: const Duration(milliseconds: 500),
+                                child: InkWell(
+                                  onTap: () {
+                                    Provider.of<LayoutProvider>(
+                                      context,
+                                      listen: false,
+                                    ).currentIndex = 0;
                                     AppRoutes.navigateTo(
                                       context,
-                                      AppRoutes.forgetPassword,
+                                      AppRoutes.mainLayoutScreen,
                                     );
                                   },
-                                  child: Text(
-                                    'forgot_password'.tr(context),
-                                    style: context.titleLarge.copyWith(
-                                      color: AppTheme.primaryColor,
-                                      fontWeight: FontWeight.w900
-                                    ),
+                                  child: const Icon(
+                                    Icons.arrow_forward_ios,
+                                    color: AppTheme.primaryColor,
+                                    size: 24,
                                   ),
-                                ),
-                              ),
-
-                              const SizedBox(height: 16),
-
-                              // Divider with "or" text
-                              Row(
-                                children: [
-                                  Expanded(child: Divider(
-                                      color: Colors.grey.shade300)),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 16),
-                                    child: Text(
-                                      'or'.tr(context),
-                                      style: context.bodyLarge.copyWith(
-                                        color: Colors.black54,
-                                      ),
-                                    ),
-                                  ),
-                                  Expanded(child: Divider(
-                                      color: Colors.grey.shade300)),
-                                ],
-                              ),
-
-                              const SizedBox(height: 16),
-
-                              // Social login options
-                              const SocialLoginWidget(isLoginScreen: true),
-
-                              const SizedBox(height: 24),
-
-                              // Sign up prompt
-                              Center(
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      "t_have_an_account?".tr(context),
-                                      style: context.titleLarge.copyWith(
-                                        color: Colors.black54,
-                                      ),
-                                    ),
-                                    GestureDetector(
-                                      onTap: () {
-                                        AppRoutes.navigateTo(
-                                          context,
-                                          AppRoutes.signUp,
-                                        );
-                                      },
-                                      child: Text(
-                                        'sign_up'.tr(context),
-                                        style: context.titleLarge.copyWith(
-                                          color: AppTheme.primaryColor,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
                                 ),
                               ),
                             ],
                           ),
-                        ),
+
+                          const SizedBox(height: 60),
+
+                          // Logo/Brand name
+                          Center(
+                            child: Text(
+                              'app_name'.tr(context),
+                              style: context.displayLarge.copyWith(
+                                fontWeight: FontWeight.normal,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ),
+
+                          const SizedBox(height: 60),
+
+                          // Welcome Back text
+                          Center(
+                            child: Text(
+                              'welcome_back'.tr(context),
+                              style:
+                                  Directionality.of(context) ==
+                                      TextDirection.rtl
+                                  ? GoogleFonts.tajawal(
+                                      fontSize: 32,
+                                      fontWeight: FontWeight.w200,
+                                      color: Colors.black54,
+                                    )
+                                  : GoogleFonts.jost(
+                                      fontSize: 32,
+                                      fontWeight: FontWeight.w200,
+                                      color: Colors.black54,
+                                    ),
+                            ),
+                          ),
+
+                          const SizedBox(height: 40),
+
+                          // Email field
+                          CustomTextFormField(
+                            controller: emailController,
+                            hint: 'email_address'.tr(context),
+                            keyboardType: TextInputType.emailAddress,
+                            prefixIcon: null,
+                            isBorderAvailable: false,
+                          ),
+
+                          const SizedBox(height: 16),
+
+                          // Password field
+                          CustomTextFormField(
+                            controller: passwordController,
+                            hint: 'password'.tr(context),
+                            isPassword: true,
+                            prefixIcon: null,
+                            isBorderAvailable: false,
+                          ),
+
+                          const SizedBox(height: 35),
+
+                          // Login button
+                          authProvider.isLoading
+                              ? const CustomLoadingWidget()
+                              : CustomButton(
+                                  onPressed: () =>
+                                      _handleLogin(context, authProvider),
+                                  text: 'login'.tr(context),
+                                  fullWidth: true,
+                                ),
+
+                          const SizedBox(height: 24),
+
+                          // Forgot password
+                          Center(
+                            child: TextButton(
+                              onPressed: () {
+                                AppRoutes.navigateTo(
+                                  context,
+                                  AppRoutes.forgetPassword,
+                                );
+                              },
+                              child: Text(
+                                'forgot_password'.tr(context),
+                                style: context.titleLarge.copyWith(
+                                  color: AppTheme.primaryColor,
+                                  fontWeight: FontWeight.w900,
+                                ),
+                              ),
+                            ),
+                          ),
+
+                          const SizedBox(height: 16),
+
+                          // Divider with "or" text
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Divider(color: Colors.grey.shade300),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 16,
+                                ),
+                                child: Text(
+                                  'or'.tr(context),
+                                  style: context.bodyLarge.copyWith(
+                                    color: Colors.black54,
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: Divider(color: Colors.grey.shade300),
+                              ),
+                            ],
+                          ),
+
+                          const SizedBox(height: 16),
+
+                          // Social login options
+                          const SocialLoginWidget(isLoginScreen: true),
+
+                          const SizedBox(height: 24),
+
+                          // Sign up prompt
+                          Center(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "t_have_an_account?".tr(context),
+                                  style: context.titleLarge.copyWith(
+                                    color: Colors.black54,
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    AppRoutes.navigateTo(
+                                      context,
+                                      AppRoutes.signUp,
+                                    );
+                                  },
+                                  child: Text(
+                                    'sign_up'.tr(context),
+                                    style: context.titleLarge.copyWith(
+                                      color: AppTheme.primaryColor,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                  ],
+                  ),
                 ),
-              ),
+              ],
+            ),
+          ),
         ),
       ),
     );

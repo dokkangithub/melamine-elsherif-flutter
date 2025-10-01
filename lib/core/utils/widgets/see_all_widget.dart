@@ -8,11 +8,7 @@ import 'package:provider/provider.dart';
 import '../helpers/ui_helper.dart';
 
 class SeeAllWidget extends StatelessWidget {
-  const SeeAllWidget({
-    super.key,
-    required this.title,
-    required this.onTap,
-  });
+  const SeeAllWidget({super.key, required this.title, required this.onTap});
 
   final String title;
   final VoidCallback onTap;
@@ -25,16 +21,38 @@ class SeeAllWidget extends StatelessWidget {
         Text(
           title,
 
-          style: Theme.of(context).textTheme.headlineMedium!.copyWith(fontWeight: FontWeight.w700,foreground: Paint()..shader = UIHelper.linearGradient,letterSpacing:
-          Provider.of<LanguageProvider>(context, listen: false).locale.languageCode == 'en' ? 1.2 : 1)
+          style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+            fontWeight: FontWeight.w700,
+            foreground: Paint()..shader = UIHelper.linearGradient,
+            letterSpacing:
+                Provider.of<LanguageProvider>(
+                      context,
+                      listen: false,
+                    ).locale.languageCode ==
+                    'en'
+                ? 1.2
+                : 1,
           ),
+        ),
         InkWell(
           onTap: onTap,
-          child: Text(
-            'see_all'.tr(context).toUpperCase(),
-            style: context.titleLarge.copyWith(
-              fontWeight: FontWeight.w800,
-              foreground: Paint()..shader = UIHelper.linearGradient,
+          child: Container(
+            decoration: BoxDecoration(
+              // borderRadius: BorderRadius.circular(5),
+              // border: Border.all(
+              //   color: AppTheme.accentColor,
+              //
+              // )
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(2.0),
+              child: Text(
+                'see_all'.tr(context).toUpperCase(),
+                style: context.titleLarge.copyWith(
+                  fontWeight: FontWeight.w800,
+                  color:AppTheme.primaryColor,
+                ),
+              ),
             ),
           ),
         ),

@@ -24,10 +24,10 @@ class WidgetService {
   Future<void> initialize() async {
     // Initialize HomeWidget with your group ID (important for iOS)
     await HomeWidget.setAppGroupId('group.com.melamine_elsherif.widget');
-    
+
     // Register for widget clicks
     await registerInteractivity();
-    
+
     // Initial widget update
     await updateWidgets();
   }
@@ -55,17 +55,23 @@ class WidgetService {
       final prefs = await SharedPreferences.getInstance();
 
       // Convert products to a simple format that can be easily serialized
-      final widgetProducts = products.map((product) => {
-        'id': product.id,
-        'name': product.name,
-        'image': product.thumbnailImage,
-        'price': product.hasDiscount ? product.discountedPrice : product.mainPrice,
-        // Include regular price if the product has a discount
-        if (product.hasDiscount) 'regularPrice': product.mainPrice,
-      }).toList();
- 
+      final widgetProducts = products
+          .map(
+            (product) => {
+              'id': product.id,
+              'name': product.name,
+              'image': product.thumbnailImage,
+              'price': product.hasDiscount
+                  ? product.discountedPrice
+                  : product.mainPrice,
+              // Include regular price if the product has a discount
+              if (product.hasDiscount) 'regularPrice': product.mainPrice,
+            },
+          )
+          .toList();
+
       debugPrint('Widget product data: ${widgetProducts[0]}');
-  
+
       // Save as JSON string
       await prefs.setString(widgetProductsKey, jsonEncode(widgetProducts));
 
@@ -123,7 +129,7 @@ class WidgetService {
       // Save the whole product data as JSON for better reliability
       final productJson = jsonEncode(product);
       await HomeWidget.saveWidgetData<String>(productKey, productJson);
-      
+
       // Direct keys for Android widget
       final directData = <String, dynamic>{
         'product_id': product['id'].toString(),
@@ -132,23 +138,24 @@ class WidgetService {
         'product_price': product['price'].toString(),
         'product_has_discount': false,
       };
-      
+
       // Save discount information if available
-      if (product.containsKey('regularPrice') && 
-          product['regularPrice'] != null && 
+      if (product.containsKey('regularPrice') &&
+          product['regularPrice'] != null &&
           product['regularPrice'].toString().isNotEmpty) {
-        directData['product_regular_price'] = product['regularPrice'].toString();
+        directData['product_regular_price'] = product['regularPrice']
+            .toString();
         directData['product_has_discount'] = true;
       }
 
       // Log what we're saving
       debugPrint('Saving widget data: $directData');
-      
+
       // Save all data
       for (final entry in directData.entries) {
         final key = entry.key;
         final value = entry.value;
-        
+
         if (value is String) {
           await HomeWidget.saveWidgetData<String>(key, value);
         } else if (value is bool) {
@@ -159,37 +166,36 @@ class WidgetService {
           await HomeWidget.saveWidgetData<double>(key, value);
         }
       }
-      
+
       // Update the widget
       await HomeWidget.updateWidget(
         name: 'ProductWidgetProvider',
         androidName: 'ProductWidgetProvider',
       );
-      
+
       // Also save data directly to shared preferences as a fallback
       await _saveToSharedPreferences(directData);
-      
     } catch (e) {
       debugPrint('Error updating Android widget: $e');
     }
   }
-  
+
   // Save data directly to shared preferences in multiple formats for reliability
   Future<void> _saveToSharedPreferences(Map<String, dynamic> data) async {
     try {
       final prefs = await SharedPreferences.getInstance();
-      
+
       // Save to multiple locations to ensure the widget can find the data
       final locations = [
         '', // Direct key
         'flutter.', // Flutter prefix
       ];
-      
+
       for (final prefix in locations) {
         for (final entry in data.entries) {
           final key = '$prefix${entry.key}';
           final value = entry.value;
-          
+
           // Save based on type
           if (value is String) {
             await prefs.setString(key, value);
@@ -205,25 +211,28 @@ class WidgetService {
           }
         }
       }
-      
+
       debugPrint('Saved all data to SharedPreferences');
-      
+
       // Also save raw data to a special key for easier access
       final rawData = jsonEncode(data);
       await prefs.setString('widget_raw_data', rawData);
       await prefs.setString('flutter.widget_raw_data', rawData);
-      
+
       // Also force a direct broadcast to update widgets
       if (Platform.isAndroid) {
         await HomeWidget.updateWidget(
           name: 'ProductWidgetProvider',
           androidName: 'ProductWidgetProvider',
         );
-        
+
         // Force a direct update to any installed widgets
         try {
           // Use platform channel to force broadcast intent
-          await HomeWidget.saveWidgetData<String>('widget_force_update', DateTime.now().toString());
+          await HomeWidget.saveWidgetData<String>(
+            'widget_force_update',
+            DateTime.now().toString(),
+          );
           await HomeWidget.updateWidget(
             name: 'WidgetUpdateReceiver',
             androidName: 'WidgetUpdateReceiver',

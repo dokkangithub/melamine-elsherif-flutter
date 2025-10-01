@@ -35,7 +35,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     final bool isRtl = Directionality.of(context) == TextDirection.rtl;
-    
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -46,9 +46,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
         leading: const CustomBackButton(respectDirection: true),
         title: Text(
           'order_details'.tr(context),
-          style: context.displaySmall!.copyWith(
-            fontWeight: FontWeight.w500,
-          ),
+          style: context.displaySmall!.copyWith(fontWeight: FontWeight.w500),
         ),
       ),
       body: Consumer<OrderProvider>(
@@ -90,7 +88,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
             // If parsing fails, use the current date as a fallback
             orderDate = DateTime.now();
           }
-          
+
           return Column(
             children: [
               Expanded(
@@ -108,65 +106,83 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                             children: [
                               Text(
                                 'order_number'.tr(context),
-                                style: context.titleSmall!.copyWith(fontWeight: FontWeight.w600),
+                                style: context.titleSmall!.copyWith(
+                                  fontWeight: FontWeight.w600,
+                                ),
                               ),
                               const SizedBox(height: 4),
-                              Text('#${orderDetails.code}',
-                                style: context.titleMedium!.copyWith(fontWeight: FontWeight.w600),
+                              Text(
+                                '#${orderDetails.code}',
+                                style: context.titleMedium!.copyWith(
+                                  fontWeight: FontWeight.w600,
+                                ),
                               ),
                             ],
                           ),
-                          
+
                           _buildStatusBadge(orderDetails.deliveryStatus),
                         ],
                       ),
-                      
+
                       // Order Progress Bar
                       const SizedBox(height: 10),
                       _buildOrderProgressBar(orderDetails.deliveryStatus),
-                      
+
                       // Order Timeline Steps
                       const SizedBox(height: 8),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           _buildSimpleOrderStep('ordered'.tr(context), true),
-                          _buildSimpleOrderStep('in_transit'.tr(context), 
-                              orderDetails.deliveryStatus.toLowerCase() == 'picked_up' || 
-                              orderDetails.deliveryStatus.toLowerCase() == 'on_the_way' ||
-                              orderDetails.deliveryStatus == 'On The Way' ||
-                              orderDetails.deliveryStatus.toLowerCase().contains('انتظار')),
-                          _buildSimpleOrderStep('delivered'.tr(context), 
-                              orderDetails.deliveryStatus.toLowerCase() == 'delivered'),
+                          _buildSimpleOrderStep(
+                            'in_transit'.tr(context),
+                            orderDetails.deliveryStatus.toLowerCase() ==
+                                    'picked_up' ||
+                                orderDetails.deliveryStatus.toLowerCase() ==
+                                    'on_the_way' ||
+                                orderDetails.deliveryStatus == 'On The Way' ||
+                                orderDetails.deliveryStatus
+                                    .toLowerCase()
+                                    .contains('انتظار'),
+                          ),
+                          _buildSimpleOrderStep(
+                            'delivered'.tr(context),
+                            orderDetails.deliveryStatus.toLowerCase() ==
+                                'delivered',
+                          ),
                         ],
                       ),
 
-                      
                       const SizedBox(height: 20),
-                      
+
                       // Delivery Address
-                       Text(
+                      Text(
                         'delivery_address'.tr(context),
-                        style: context.titleMedium!.copyWith(fontWeight: FontWeight.w800),
+                        style: context.titleMedium!.copyWith(
+                          fontWeight: FontWeight.w800,
+                        ),
                       ),
                       const SizedBox(height: 8),
                       _buildAddressCard(orderDetails.shippingAddress),
-                      
+
                       const SizedBox(height: 20),
-                      
+
                       // Order Items
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('${'order_items'.tr(context)} (${provider.orderItems.length})',
-                            style: context.titleMedium!.copyWith(fontWeight: FontWeight.w800),
+                          Text(
+                            '${'order_items'.tr(context)} (${provider.orderItems.length})',
+                            style: context.titleMedium!.copyWith(
+                              fontWeight: FontWeight.w800,
+                            ),
                           ),
                         ],
                       ),
                       const SizedBox(height: 16),
-                      
+
                       // Order Items List
-                      isLoadingItems 
+                      isLoadingItems
                           ? const Center(child: CircularProgressIndicator())
                           : ListView.builder(
                               shrinkWrap: true,
@@ -177,43 +193,51 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                                 return _buildOrderItemCard(item);
                               },
                             ),
-                              
+
                       const SizedBox(height: 20),
-                      
+
                       // Price Details
-                       Text(
+                      Text(
                         'price_details'.tr(context),
-                        style: context.titleMedium!.copyWith(fontWeight: FontWeight.w800,color: AppTheme.black),
+                        style: context.titleMedium!.copyWith(
+                          fontWeight: FontWeight.w800,
+                          color: AppTheme.black,
+                        ),
                       ),
                       const SizedBox(height: 10),
                       _buildPriceDetailsCard(orderDetails),
-                      
+
                       const SizedBox(height: 32),
-                      
+
                       // Payment Information
-                       Text(
+                      Text(
                         'payment_information'.tr(context),
-                        style: context.titleMedium!.copyWith(fontWeight: FontWeight.w800,color: AppTheme.black),
+                        style: context.titleMedium!.copyWith(
+                          fontWeight: FontWeight.w800,
+                          color: AppTheme.black,
+                        ),
                       ),
                       const SizedBox(height: 16),
                       _buildPaymentInfoCard(orderDetails),
-                      
+
                       const SizedBox(height: 32),
-                      
+
                       // Order Timeline
                       Text(
                         'order_timeline'.tr(context),
-                        style: context.titleMedium!.copyWith(fontWeight: FontWeight.w800),
+                        style: context.titleMedium!.copyWith(
+                          fontWeight: FontWeight.w800,
+                        ),
                       ),
                       const SizedBox(height: 16),
                       _buildOrderTimelineCard(orderDetails),
-                      
+
                       const SizedBox(height: 20),
                     ],
                   ),
                 ),
               ),
-              
+
               /// Support and Cancel Buttons
               // Container(
               //   padding: const EdgeInsets.all(16),
@@ -288,11 +312,11 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
       ),
     );
   }
-  
+
   // Status Badge
   Widget _buildStatusBadge(String status) {
     final statusInfo = getStatusInfo(status, '');
-    
+
     return Text(
       statusInfo.label.tr(context),
       style: context.titleSmall!.copyWith(
@@ -301,20 +325,22 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
       ),
     );
   }
-  
+
   // Order Progress Bar
   Widget _buildOrderProgressBar(String status) {
     String statusLower = status.toLowerCase();
     int progress = 0;
-    
+
     if (statusLower == 'pending' || statusLower.contains('انتظار')) {
       progress = 1;
-    } else if (statusLower == 'picked_up' || statusLower == 'on_the_way' || status == 'On The Way') {
+    } else if (statusLower == 'picked_up' ||
+        statusLower == 'on_the_way' ||
+        status == 'On The Way') {
       progress = 2;
     } else if (statusLower == 'delivered') {
       progress = 3;
     }
-    
+
     return Container(
       height: 4,
       decoration: BoxDecoration(
@@ -366,28 +392,33 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
       ),
     );
   }
-  
+
   // Helper to get status color and label
   StatusInfo getStatusInfo(String status, String statusString) {
     // Handle arabic and english status values
     String statusLower = status.toLowerCase();
-    
+
     if (statusLower == 'pending' || statusLower.contains('انتظار')) {
       return StatusInfo('processing', const Color(0xFFCB997E));
-    } else if (statusLower == 'picked_up' || statusLower == 'on_the_way' || status == 'On The Way') {
+    } else if (statusLower == 'picked_up' ||
+        statusLower == 'on_the_way' ||
+        status == 'On The Way') {
       return StatusInfo('in_transit', const Color(0xFF2196F3));
     } else if (statusLower == 'delivered') {
       return StatusInfo('delivered', const Color(0xFF4CAF50));
     } else {
       // Use the status string provided by API if available
-      return StatusInfo(statusString.isNotEmpty ? statusString : 'processing', const Color(0xFFFF9800));
+      return StatusInfo(
+        statusString.isNotEmpty ? statusString : 'processing',
+        const Color(0xFFFF9800),
+      );
     }
   }
-  
+
   // Order Step
   Widget _buildOrderStep(String label, bool isActive, DateTime date) {
     final formattedDate = '${date.day}/${date.month}/${date.year}';
-    
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -401,15 +432,12 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
         if (isActive)
           Text(
             formattedDate,
-            style: TextStyle(
-              fontSize: 12,
-              color: Colors.grey[600],
-            ),
+            style: TextStyle(fontSize: 12, color: Colors.grey[600]),
           ),
       ],
     );
   }
-  
+
   // Address Card
   Widget _buildAddressCard(dynamic address) {
     return Container(
@@ -422,37 +450,30 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(
-            Icons.location_on_outlined,
-            color: Colors.grey[600],
-            size: 24,
-          ),
+          Icon(Icons.location_on_outlined, color: Colors.grey[600], size: 24),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  address.name,
-                  style: context.titleSmall
-                ),
+                Text(address.name, style: context.titleSmall),
                 const SizedBox(height: 8),
                 Text(
                   '${address.address}, ${address.city}, ${address.state}, ${address.country} ${address.postalCode}',
-                  style: context.titleSmall!.copyWith(fontWeight: FontWeight.w600),
+                  style: context.titleSmall!.copyWith(
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
                 const SizedBox(height: 8),
                 Row(
                   children: [
-                    Icon(
-                      Icons.phone,
-                      color: Colors.grey[600],
-                      size: 16,
-                    ),
+                    Icon(Icons.phone, color: Colors.grey[600], size: 16),
                     const SizedBox(width: 8),
                     Text(
                       address.phone,
-                      style: context.titleSmall!.copyWith(fontWeight: FontWeight.w600),
+                      style: context.titleSmall!.copyWith(
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ],
                 ),
@@ -484,7 +505,10 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
               children: [
                 Text(
                   item.productName,
-                  style: context.titleSmall!.copyWith(fontWeight: FontWeight.w600,color: AppTheme.black),
+                  style: context.titleSmall!.copyWith(
+                    fontWeight: FontWeight.w600,
+                    color: AppTheme.black,
+                  ),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -494,17 +518,25 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                     padding: const EdgeInsets.only(bottom: 4),
                     child: Text(
                       '${'variation'.tr(context)}: ${item.variation}',
-                      style: context.titleSmall!.copyWith(fontWeight: FontWeight.w600),
+                      style: context.titleSmall!.copyWith(
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
                 Text(
                   '${'quantity'.tr(context)}: ${item.quantity}',
-                  style: context.titleSmall!.copyWith(fontWeight: FontWeight.w600,color: AppTheme.black),
+                  style: context.titleSmall!.copyWith(
+                    fontWeight: FontWeight.w600,
+                    color: AppTheme.black,
+                  ),
                 ),
                 const SizedBox(height: 8),
                 Text(
                   item.price,
-                  style: context.titleSmall!.copyWith(fontWeight: FontWeight.w600,color: AppTheme.black),
+                  style: context.titleSmall!.copyWith(
+                    fontWeight: FontWeight.w600,
+                    color: AppTheme.black,
+                  ),
                 ),
               ],
             ),
@@ -521,11 +553,16 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
       {'label': 'shipping_fee'.tr(context), 'value': orderDetails.shippingCost},
       {'label': 'tax'.tr(context), 'value': orderDetails.tax},
     ];
-    
-    if (orderDetails.couponDiscount.isNotEmpty && orderDetails.couponDiscount != '0' && orderDetails.couponDiscount != '0.00') {
-      items.add({'label': 'coupon_discount'.tr(context), 'value': orderDetails.couponDiscount});
+
+    if (orderDetails.couponDiscount.isNotEmpty &&
+        orderDetails.couponDiscount != '0' &&
+        orderDetails.couponDiscount != '0.00') {
+      items.add({
+        'label': 'coupon_discount'.tr(context),
+        'value': orderDetails.couponDiscount,
+      });
     }
-    
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -535,14 +572,20 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
       ),
       child: Column(
         children: [
-          ...items.map((item) => _buildPriceRow(item['label']!, item['value']!)),
+          ...items.map(
+            (item) => _buildPriceRow(item['label']!, item['value']!),
+          ),
           const Divider(height: 24),
-          _buildPriceRow('total'.tr(context), orderDetails.grandTotal, isTotal: true),
+          _buildPriceRow(
+            'total'.tr(context),
+            orderDetails.grandTotal,
+            isTotal: true,
+          ),
         ],
       ),
     );
   }
-  
+
   // Price row
   Widget _buildPriceRow(String label, String value, {bool isTotal = false}) {
     return Padding(
@@ -570,31 +613,37 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
       ),
     );
   }
-  
+
   // Payment Information Card
   Widget _buildPaymentInfoCard(dynamic orderDetails) {
-    final paymentStatus = orderDetails.paymentStatus.toLowerCase() == 'paid' ? 'paid'.tr(context) : 'pending'.tr(context);
-    final statusColor = paymentStatus == 'paid'.tr(context) ? Colors.green[700] : Colors.orange[700];
-    final bgColor = paymentStatus == 'paid'.tr(context) ? Colors.green[50] : Colors.orange[50];
-    
+    final paymentStatus = orderDetails.paymentStatus.toLowerCase() == 'paid'
+        ? 'paid'.tr(context)
+        : 'pending'.tr(context);
+    final statusColor = paymentStatus == 'paid'.tr(context)
+        ? Colors.green[700]
+        : Colors.orange[700];
+    final bgColor = paymentStatus == 'paid'.tr(context)
+        ? Colors.green[50]
+        : Colors.orange[50];
+
     // Get payment type icon based on payment_type
     IconData paymentIcon = Icons.credit_card;
     String paymentType = orderDetails.paymentType ?? 'Cash Payment';
     String paymentTypeKey = 'credit_card_payment';
-    
+
     if (paymentType.toLowerCase().contains('cash')) {
       paymentIcon = Icons.money;
       paymentTypeKey = 'cash_payment';
     } else if (paymentType.toLowerCase().contains('wallet')) {
       paymentIcon = Icons.account_balance_wallet;
       paymentTypeKey = 'wallet_payment';
-    } else if (paymentType.toLowerCase().contains('visa') || 
-               paymentType.toLowerCase().contains('mastercard') || 
-               paymentType.toLowerCase().contains('credit')) {
+    } else if (paymentType.toLowerCase().contains('visa') ||
+        paymentType.toLowerCase().contains('mastercard') ||
+        paymentType.toLowerCase().contains('credit')) {
       paymentIcon = Icons.credit_card;
       paymentTypeKey = 'credit_card_payment';
     }
-    
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -604,11 +653,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
       ),
       child: Row(
         children: [
-          Icon(
-            paymentIcon,
-            color: Colors.grey[600],
-            size: 24,
-          ),
+          Icon(paymentIcon, color: Colors.grey[600], size: 24),
           const SizedBox(width: 16),
           Expanded(
             child: Column(
@@ -618,15 +663,12 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                   paymentTypeKey.tr(context),
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: 14
+                    fontSize: 14,
                   ),
                 ),
                 Text(
                   '${'date'.tr(context)}: ${orderDetails.date}',
-                  style: TextStyle(
-                    color: Colors.grey[600],
-                    fontSize: 13,
-                  ),
+                  style: TextStyle(color: Colors.grey[600], fontSize: 13),
                 ),
               ],
             ),
@@ -650,7 +692,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
       ),
     );
   }
-  
+
   // Order Timeline Card
   Widget _buildOrderTimelineCard(dynamic orderDetails) {
     // Parse the order date
@@ -669,29 +711,30 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
     } catch (e) {
       orderDate = DateTime.now();
     }
-    
+
     // Format dates for display
     String formatDate(DateTime date) {
       return '${date.day}/${date.month}/${date.year}';
     }
-    
+
     final deliveryStatus = orderDetails.deliveryStatus.toLowerCase();
     final confirmedDate = formatDate(orderDate);
-    
+
     // Determine if in transit (picked up, on the way, etc.)
-    final isInTransit = deliveryStatus == 'picked_up' || 
-                         deliveryStatus == 'on_the_way' || 
-                         orderDetails.deliveryStatus == 'On The Way' ||
-                         deliveryStatus.contains('انتظار');
-                         
+    final isInTransit =
+        deliveryStatus == 'picked_up' ||
+        deliveryStatus == 'on_the_way' ||
+        orderDetails.deliveryStatus == 'On The Way' ||
+        deliveryStatus.contains('انتظار');
+
     final shippedDate = isInTransit || deliveryStatus == 'delivered'
         ? formatDate(orderDate.add(const Duration(days: 1)))
         : 'pending'.tr(context);
-        
+
     final deliveredDate = deliveryStatus == 'delivered'
         ? formatDate(orderDate.add(const Duration(days: 3)))
         : 'expected_in_3_5_days'.tr(context);
-    
+
     final timelineItems = [
       {
         'icon': Icons.check_circle,
@@ -715,7 +758,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
         'active': true,
       },
     ];
-    
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -724,18 +767,22 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
         border: Border.all(color: Colors.grey[200]!),
       ),
       child: Column(
-        children: timelineItems.map((item) => _buildTimelineItem(
-          icon: item['icon'] as IconData,
-          color: item['color'] as Color,
-          title: item['title'] as String,
-          date: item['date'] as String,
-          isActive: item['active'] as bool,
-          isLast: item == timelineItems.last,
-        )).toList(),
+        children: timelineItems
+            .map(
+              (item) => _buildTimelineItem(
+                icon: item['icon'] as IconData,
+                color: item['color'] as Color,
+                title: item['title'] as String,
+                date: item['date'] as String,
+                isActive: item['active'] as bool,
+                isLast: item == timelineItems.last,
+              ),
+            )
+            .toList(),
       ),
     );
   }
-  
+
   // Timeline Item
   Widget _buildTimelineItem({
     required IconData icon,
@@ -752,11 +799,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
           width: 24,
           child: Column(
             children: [
-              Icon(
-                icon,
-                color: isActive ? color : Colors.grey[400],
-                size: 20,
-              ),
+              Icon(icon, color: isActive ? color : Colors.grey[400], size: 20),
               if (!isLast)
                 Container(
                   width: 2,
@@ -811,7 +854,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
       ],
     );
   }
-  
+
   // Contact Support Dialog
   void _showContactSupportDialog(BuildContext context) {
     QuickAlert.show(
@@ -827,7 +870,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
       },
     );
   }
-  
+
   // Cancel Order Dialog
   void _showCancelOrderDialog(BuildContext context) {
     QuickAlert.show(
@@ -850,6 +893,6 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
 class StatusInfo {
   final String label;
   final Color color;
-  
+
   StatusInfo(this.label, this.color);
 }

@@ -13,10 +13,7 @@ class OnboardingDots extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      children: List.generate(
-        count,
-            (index) => _buildDot(index: index),
-      ),
+      children: List.generate(count, (index) => _buildDot(index: index)),
     );
   }
 

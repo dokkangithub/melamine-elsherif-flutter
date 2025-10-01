@@ -21,7 +21,8 @@ class QuantitySelectorWidget extends StatelessWidget {
         String displayPrice = product.price;
         bool isLoading = false;
 
-        if (product.hasVariation && provider.variantPriceState == LoadingState.loading) {
+        if (product.hasVariation &&
+            provider.variantPriceState == LoadingState.loading) {
           isLoading = true;
         } else if (product.hasVariation && provider.variantPrice != null) {
           displayPrice = provider.variantPrice!.data.price;
@@ -47,7 +48,7 @@ class QuantitySelectorWidget extends StatelessWidget {
                 ),
                 Text(
                   quantity.toString().padLeft(2, '0'),
-                  style: context.headlineSmall
+                  style: context.headlineSmall,
                 ),
                 IconButton(
                   onPressed: () => provider.setQuantity(quantity + 1),
@@ -57,9 +58,13 @@ class QuantitySelectorWidget extends StatelessWidget {
             ),
             isLoading
                 ? const CustomLoadingWidget()
-                : Text('${(price * quantity).toStringAsFixed(2)} ${product.currencySymbol  }',
-              style: context.headlineSmall!.copyWith(color: AppTheme.primaryColor,fontWeight: FontWeight.w900),
-            ),
+                : Text(
+                    '${(price * quantity).toStringAsFixed(2)} ${product.currencySymbol}',
+                    style: context.headlineSmall!.copyWith(
+                      color: AppTheme.primaryColor,
+                      fontWeight: FontWeight.w900,
+                    ),
+                  ),
           ],
         );
       },

@@ -74,9 +74,7 @@ class _OrdersListScreenState extends State<OrdersListScreen>
         centerTitle: true,
         title: Text(
           'my_orders'.tr(context),
-          style: context.displaySmall.copyWith(
-            fontWeight: FontWeight.w500,
-          ),
+          style: context.displaySmall.copyWith(fontWeight: FontWeight.w500),
         ),
         leading: const CustomBackButton(),
       ),
@@ -210,12 +208,11 @@ class _OrdersListScreenState extends State<OrdersListScreen>
                     itemCount:
                         filteredOrders.length +
                         (provider.isLoadingMore ? 1 : 0),
-                    separatorBuilder:
-                        (context, index) => const Divider(
-                          height: 1,
-                          thickness: 1,
-                          color: Color(0xFFEEEEEE),
-                        ),
+                    separatorBuilder: (context, index) => const Divider(
+                      height: 1,
+                      thickness: 1,
+                      color: Color(0xFFEEEEEE),
+                    ),
                     itemBuilder: (context, index) {
                       if (index == filteredOrders.length) {
                         return const Padding(
@@ -445,7 +442,10 @@ class _OrdersListScreenState extends State<OrdersListScreen>
                 child: Text(
                   'start_shopping'.tr(context),
                   textAlign: TextAlign.center,
-                  style: context.titleLarge.copyWith(color: AppTheme.white,fontWeight: FontWeight.w600),
+                  style: context.titleLarge.copyWith(
+                    color: AppTheme.white,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
             ),

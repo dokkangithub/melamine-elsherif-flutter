@@ -6,7 +6,6 @@ import '../../../domain/product/entities/product.dart';
 import '../../../domain/search/usecases/get_filtered_products_use_case.dart';
 import '../../../domain/search/usecases/get_search_suggestions_use_case.dart';
 
-
 class SearchProvider extends ChangeNotifier {
   final GetSearchSuggestionsUseCase getSearchSuggestionsUseCase;
   final GetFilteredProductsUseCase getFilteredProductsUseCase;
@@ -14,7 +13,8 @@ class SearchProvider extends ChangeNotifier {
   // Search suggestions state
   LoadingState suggestionState = LoadingState.initial;
   List<SearchSuggestion> suggestions = [];
-  List<SearchSuggestion> cachedEmptySuggestions = []; // Cache for empty query suggestions
+  List<SearchSuggestion> cachedEmptySuggestions =
+      []; // Cache for empty query suggestions
   String currentQuery = '';
   String errorMessage = '';
   Timer? _debounce;
@@ -25,7 +25,7 @@ class SearchProvider extends ChangeNotifier {
   LoadingState filteredProductsState = LoadingState.initial;
   bool hasMoreFilteredProducts = false;
   int currentPage = 1;
-  
+
   // Cache state
   bool _hasInitialSuggestionsCache = false;
   bool _hasInitialProductsCache = false;
@@ -50,14 +50,14 @@ class SearchProvider extends ChangeNotifier {
         suggestions = [];
         suggestionState = LoadingState.initial;
       }
-      
+
       // Use cached initial products if available
       if (_hasInitialProductsCache) {
         restoreInitialProducts();
       } else {
         clearFilteredProducts(); // Clear results when search is empty
       }
-      
+
       notifyListeners();
       return;
     }
@@ -77,14 +77,14 @@ class SearchProvider extends ChangeNotifier {
       notifyListeners();
       return;
     }
-    
+
     suggestionState = LoadingState.loading;
     notifyListeners();
 
     try {
       suggestions = await getSearchSuggestionsUseCase(query);
       suggestionState = LoadingState.loaded;
-      
+
       // Cache empty query suggestions
       if (query.isEmpty) {
         cachedEmptySuggestions = List.from(suggestions);
@@ -112,7 +112,7 @@ class SearchProvider extends ChangeNotifier {
       restoreInitialProducts();
       return;
     }
-  
+
     // Reset page if refreshing
     if (refresh) {
       currentPage = 1;
@@ -137,7 +137,7 @@ class SearchProvider extends ChangeNotifier {
       // Add new products to the list
       if (refresh) {
         filteredProducts = result.data;
-        
+
         // Cache initial results (when no search query)
         if (name == null || name.isEmpty) {
           cachedInitialProducts = List.from(result.data);
@@ -162,7 +162,7 @@ class SearchProvider extends ChangeNotifier {
 
     notifyListeners();
   }
-  
+
   // Method to restore initial products from cache
   void restoreInitialProducts() {
     filteredProducts = List.from(cachedInitialProducts);
@@ -180,7 +180,7 @@ class SearchProvider extends ChangeNotifier {
     hasMoreFilteredProducts = false;
     notifyListeners();
   }
-  
+
   // Method to reset cache if needed (e.g., for refreshing stale data)
   void resetCache() {
     _hasInitialSuggestionsCache = false;

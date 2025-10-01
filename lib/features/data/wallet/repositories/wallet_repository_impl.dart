@@ -8,10 +8,7 @@ class WalletRepositoryImpl implements WalletRepository {
   final WalletDataSource dataSource;
   final NetworkInfo networkInfo;
 
-  WalletRepositoryImpl({
-    required this.dataSource,
-    required this.networkInfo,
-  });
+  WalletRepositoryImpl({required this.dataSource, required this.networkInfo});
 
   @override
   Future<WalletBalance> getWalletBalance() async {
@@ -31,4 +28,4 @@ class WalletRepositoryImpl implements WalletRepository {
       throw Exception('No internet connection');
     }
   }
-} 
+}

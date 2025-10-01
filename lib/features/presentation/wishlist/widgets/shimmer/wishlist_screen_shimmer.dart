@@ -29,9 +29,9 @@ class WishlistScreenShimmer extends StatelessWidget {
                 ),
               ),
             ),
-            
+
             const SizedBox(height: 16),
-            
+
             // Products grid shimmer
             Expanded(
               child: GridView.builder(

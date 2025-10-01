@@ -33,7 +33,7 @@ class CheckoutScreen extends StatefulWidget {
 class _CheckoutScreenState extends State<CheckoutScreen> {
   Address? _selectedAddress;
   bool _isProcessingPayment = false;
-  
+
   bool get _isGuestUser => AppStrings.token == null;
 
   final TextEditingController _noteController = TextEditingController();
@@ -72,14 +72,12 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           orElse: () => addressProvider.addresses.first,
         );
 
-        if (defaultAddress != null) {
-          setState(() {
-            _selectedAddress = defaultAddress;
-          });
+        setState(() {
+          _selectedAddress = defaultAddress;
+        });
 
-          // Update shipping with the default address
-          await _updateShippingWithSelectedAddress(paymentProvider);
-        }
+        // Update shipping with the default address
+        await _updateShippingWithSelectedAddress(paymentProvider);
       }
     }
   }
@@ -137,22 +135,25 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       // If no address was explicitly selected, get the default address
       // This handles the case when a user sets a new default address but doesn't select it
       final addressProvider = context.read<AddressProvider>();
-      
+
       // Refresh addresses to get the latest default
       await addressProvider.fetchAddresses();
-      
+
       if (addressProvider.addresses.isNotEmpty) {
         final defaultAddress = addressProvider.addresses.firstWhere(
           (addr) => addr.isDefault,
           orElse: () => addressProvider.addresses.first,
         );
-        
+
         // Only update if the default address is different from the current selection
-        if (_selectedAddress == null || defaultAddress.id != _selectedAddress!.id) {
+        if (_selectedAddress == null ||
+            defaultAddress.id != _selectedAddress!.id) {
           setState(() {
             _selectedAddress = defaultAddress;
           });
-          await _updateShippingWithSelectedAddress(context.read<PaymentProvider>());
+          await _updateShippingWithSelectedAddress(
+            context.read<PaymentProvider>(),
+          );
         }
       }
     }
@@ -162,9 +163,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     final result = await Navigator.push(
       context,
       MaterialPageRoute(
-        builder:
-            (context) =>
-                GuestAddressFormScreen(initialAddress: _selectedAddress),
+        builder: (context) =>
+            GuestAddressFormScreen(initialAddress: _selectedAddress),
       ),
     );
 
@@ -176,11 +176,11 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   void onAddressSelected(Address address) async {
     // Don't do anything if address is already selected
     if (_selectedAddress?.id == address.id) return;
-    
+
     setState(() {
       _selectedAddress = address;
     });
-    
+
     // Making the selected address the default one if user is logged in
     if (!_isGuestUser && !address.isDefault) {
       try {
@@ -190,7 +190,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         debugPrint('Error setting address as default: $e');
       }
     }
-    
+
     _updateShippingWithSelectedAddress(context.read<PaymentProvider>());
   }
 
@@ -328,11 +328,13 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   child: Column(
                     children: [
                       const SizedBox(height: 8),
-                      
+
                       // Shipping Address Section
                       ShippingAddressSection(
                         selectedAddress: _selectedAddress,
-                        addresses: _isGuestUser ? [] : addressProvider.addresses,
+                        addresses: _isGuestUser
+                            ? []
+                            : addressProvider.addresses,
                         onAddressSelected: (address) {
                           setState(() {
                             _selectedAddress = address;
@@ -349,7 +351,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                         paymentTypes: paymentProvider.paymentTypes,
                         selectedPaymentTypeKey:
                             paymentProvider.selectedPaymentTypeKey,
-                        onPaymentTypeSelected: paymentProvider.selectPaymentType,
+                        onPaymentTypeSelected:
+                            paymentProvider.selectPaymentType,
                         isLoading: isLoading,
                       ),
 
@@ -361,27 +364,34 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                             paymentProvider.shippingUpdateState ==
                             LoadingState.loading,
                         shippingError: paymentProvider.errorMessage,
-                        isInitialLoading: isLoading, 
+                        isInitialLoading: isLoading,
                         noteController: _noteController,
                       ),
 
                       Consumer<PaymentProvider>(
                         builder: (context, paymentProvider, _) {
-                          final bool isLoading = paymentProvider.paymentTypesState == LoadingState.loading;
+                          final bool isLoading =
+                              paymentProvider.paymentTypesState ==
+                              LoadingState.loading;
 
                           if (isLoading || _isProcessingPayment) {
                             return const CustomLoadingWidget();
                           }
 
                           return Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 25.0,
+                            ),
                             child: CustomButton(
                               onPressed: _processPayment,
                               fullWidth: true,
                               child: Text(
                                 'place_order'.tr(context),
                                 textAlign: TextAlign.center,
-                                style: context.headlineSmall!.copyWith(color: AppTheme.white,fontWeight: FontWeight.w700),
+                                style: context.headlineSmall!.copyWith(
+                                  color: AppTheme.white,
+                                  fontWeight: FontWeight.w700,
+                                ),
                               ),
                             ),
                           );

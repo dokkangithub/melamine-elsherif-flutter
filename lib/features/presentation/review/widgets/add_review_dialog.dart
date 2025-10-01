@@ -10,10 +10,7 @@ import '../controller/reviews_provider.dart';
 class AddReviewDialog extends StatefulWidget {
   final int productId;
 
-  const AddReviewDialog({
-    super.key,
-    required this.productId,
-  });
+  const AddReviewDialog({super.key, required this.productId});
 
   @override
   State<AddReviewDialog> createState() => _AddReviewDialogState();
@@ -33,9 +30,7 @@ class _AddReviewDialogState extends State<AddReviewDialog> {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16.0),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
       child: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(
@@ -60,7 +55,9 @@ class _AddReviewDialogState extends State<AddReviewDialog> {
                     highlightColor: Colors.transparent,
                     child: Icon(
                       Icons.star,
-                      color: index < rating ? Colors.amber : Colors.grey.shade200,
+                      color: index < rating
+                          ? Colors.amber
+                          : Colors.grey.shade200,
                       size: 30,
                     ),
                     onTap: () {
@@ -83,7 +80,9 @@ class _AddReviewDialogState extends State<AddReviewDialog> {
                 maxLines: 4,
                 decoration: InputDecoration(
                   hintText: 'write_your_opinion_here'.tr(context),
-                  hintStyle: context.bodyLarge!.copyWith(color: AppTheme.darkDividerColor),
+                  hintStyle: context.bodyLarge!.copyWith(
+                    color: AppTheme.darkDividerColor,
+                  ),
                   border: InputBorder.none,
                   contentPadding: const EdgeInsets.all(16),
                 ),
@@ -92,7 +91,9 @@ class _AddReviewDialogState extends State<AddReviewDialog> {
             const SizedBox(height: 20),
             CustomButton(
               onPressed: isSubmitting ? null : _submitReview,
-              text: isSubmitting ? 'submitting'.tr(context) : 'submit'.tr(context),
+              text: isSubmitting
+                  ? 'submitting'.tr(context)
+                  : 'submit'.tr(context),
               fullWidth: true,
             ),
             const SizedBox(height: 12),
@@ -127,7 +128,11 @@ class _AddReviewDialogState extends State<AddReviewDialog> {
 
     try {
       final result = await Provider.of<ReviewProvider>(context, listen: false)
-          .submitNewReview(widget.productId, rating.toDouble(), reviewController.text);
+          .submitNewReview(
+            widget.productId,
+            rating.toDouble(),
+            reviewController.text,
+          );
 
       if (result['result'] == true) {
         Navigator.pop(context);
@@ -137,11 +142,9 @@ class _AddReviewDialogState extends State<AddReviewDialog> {
         );
       } else {
         // Show the specific error message from the API
-        final errorMessage = result['message'] ?? 'failed_to_submit_review'.tr(context);
-        CustomToast.showToast(
-          message: errorMessage,
-          type: ToastType.error,
-        );
+        final errorMessage =
+            result['message'] ?? 'failed_to_submit_review'.tr(context);
+        CustomToast.showToast(message: errorMessage, type: ToastType.error);
       }
     } catch (e) {
       CustomToast.showToast(

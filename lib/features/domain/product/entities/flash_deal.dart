@@ -16,4 +16,4 @@ class FlashDeal {
     required this.banner,
     required this.products,
   });
-} 
+}

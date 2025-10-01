@@ -49,7 +49,10 @@ class NotificationRouter {
     }
   }
 
-  Future<void> _navigateToScreen(String route, Map<String, dynamic>? arguments) async {
+  Future<void> _navigateToScreen(
+    String route,
+    Map<String, dynamic>? arguments,
+  ) async {
     debugPrint('=== NAVIGATING TO SCREEN ===');
     debugPrint('Route: $route');
     debugPrint('Arguments: $arguments');
@@ -74,7 +77,7 @@ class NotificationRouter {
         // Use pushNamedAndRemoveUntil to ensure clean navigation stack
         Navigator.of(context).pushNamedAndRemoveUntil(
           route,
-              (existingRoute) => false, // Remove all previous routes
+          (existingRoute) => false, // Remove all previous routes
           arguments: processedArguments,
         );
       } catch (e) {
@@ -90,16 +93,18 @@ class NotificationRouter {
 
   void _navigateToMainLayout(BuildContext context) {
     try {
-      Navigator.of(context).pushNamedAndRemoveUntil(
-        '/mainLayout',
-            (route) => false,
-      );
+      Navigator.of(
+        context,
+      ).pushNamedAndRemoveUntil('/mainLayout', (route) => false);
     } catch (e) {
       debugPrint('Error navigating to main layout: $e');
     }
   }
 
-  bool _validateRouteAndArguments(String route, Map<String, dynamic>? arguments) {
+  bool _validateRouteAndArguments(
+    String route,
+    Map<String, dynamic>? arguments,
+  ) {
     debugPrint('=== VALIDATING ROUTE AND ARGUMENTS ===');
     debugPrint('Route: $route');
     debugPrint('Arguments: $arguments');
@@ -114,7 +119,9 @@ class NotificationRouter {
 
       case '/order-details':
         final orderId = arguments?['orderId'];
-        final isValid = orderId != null && (orderId is int || int.tryParse(orderId.toString()) != null);
+        final isValid =
+            orderId != null &&
+            (orderId is int || int.tryParse(orderId.toString()) != null);
         debugPrint('OrderId validation: $isValid (orderId: $orderId)');
         return isValid;
 
@@ -126,7 +133,8 @@ class NotificationRouter {
 
       case '/verification':
         final contactInfo = arguments?['contactInfo'];
-        final isValid = contactInfo != null && contactInfo.toString().isNotEmpty;
+        final isValid =
+            contactInfo != null && contactInfo.toString().isNotEmpty;
         debugPrint('ContactInfo validation: $isValid');
         return isValid;
 
@@ -137,7 +145,7 @@ class NotificationRouter {
         debugPrint('ProductsByType validation: $isValid');
         return isValid;
 
-    // Routes that don't require arguments
+      // Routes that don't require arguments
       case '/mainLayout':
       case '/home':
       case '/category':
@@ -159,7 +167,10 @@ class NotificationRouter {
     }
   }
 
-  Map<String, dynamic>? _processArguments(String route, Map<String, dynamic>? arguments) {
+  Map<String, dynamic>? _processArguments(
+    String route,
+    Map<String, dynamic>? arguments,
+  ) {
     debugPrint('=== PROCESSING ARGUMENTS ===');
     debugPrint('Route: $route');
     debugPrint('Raw arguments: $arguments');
@@ -175,8 +186,9 @@ class NotificationRouter {
     switch (route) {
       case '/product-details':
       case '/set-product-details':
-      // Handle multiple possible slug key names
-        final slug = arguments['slug'] ??
+        // Handle multiple possible slug key names
+        final slug =
+            arguments['slug'] ??
             arguments['product_slug'] ??
             arguments['productSlug'] ??
             arguments['id'] ??
@@ -194,8 +206,9 @@ class NotificationRouter {
         return processedArgs;
 
       case '/order-details':
-      // Handle multiple possible order ID key names
-        final orderId = arguments['orderId'] ??
+        // Handle multiple possible order ID key names
+        final orderId =
+            arguments['orderId'] ??
             arguments['order_id'] ??
             arguments['orderID'] ??
             arguments['id'];
@@ -218,14 +231,15 @@ class NotificationRouter {
         return {'orderId': parsedOrderId};
 
       case '/all-category-product':
-      // For category products, we need a Category object
-      // This is complex as it requires creating a Category entity
-      // For now, return arguments as-is and let the validation handle it
+        // For category products, we need a Category object
+        // This is complex as it requires creating a Category entity
+        // For now, return arguments as-is and let the validation handle it
         debugPrint('Category product arguments: $arguments');
         return arguments;
 
       case '/verification':
-        final contactInfo = arguments['contactInfo'] ??
+        final contactInfo =
+            arguments['contactInfo'] ??
             arguments['contact_info'] ??
             arguments['email'] ??
             arguments['phone'];
@@ -240,7 +254,8 @@ class NotificationRouter {
         return {'contactInfo': contactInfo.toString()};
 
       case '/allProductsByType':
-        final productTypeStr = arguments['productType'] ?? arguments['product_type'];
+        final productTypeStr =
+            arguments['productType'] ?? arguments['product_type'];
         final title = arguments['title'];
         final dealId = arguments['dealId'] ?? arguments['deal_id'];
 
@@ -283,7 +298,10 @@ class NotificationRouter {
     }
   }
 
-  Future<void> _handleCustomAction(String customAction, Map<String, dynamic> data) async {
+  Future<void> _handleCustomAction(
+    String customAction,
+    Map<String, dynamic> data,
+  ) async {
     debugPrint("=== HANDLING CUSTOM ACTION ===");
     debugPrint("Custom action: $customAction");
     debugPrint("Data: $data");
@@ -302,7 +320,8 @@ class NotificationRouter {
           break;
 
         case 'open_product':
-          final productSlug = data['product_slug'] ?? data['slug'] ?? data['productSlug'];
+          final productSlug =
+              data['product_slug'] ?? data['slug'] ?? data['productSlug'];
           if (productSlug != null) {
             await _navigateToScreen('/product-details', {'slug': productSlug});
           } else {
@@ -312,9 +331,12 @@ class NotificationRouter {
           break;
 
         case 'open_set_product':
-          final setProductSlug = data['product_slug'] ?? data['slug'] ?? data['setProductSlug'];
+          final setProductSlug =
+              data['product_slug'] ?? data['slug'] ?? data['setProductSlug'];
           if (setProductSlug != null) {
-            await _navigateToScreen('/set-product-details', {'slug': setProductSlug});
+            await _navigateToScreen('/set-product-details', {
+              'slug': setProductSlug,
+            });
           } else {
             debugPrint('No set product slug found for open_set_product action');
             await _navigateToScreen('/mainLayout', null);
@@ -322,7 +344,7 @@ class NotificationRouter {
           break;
 
         case 'open_category':
-        // This would need a Category object, for now just open categories screen
+          // This would need a Category object, for now just open categories screen
           await _navigateToScreen('/category', null);
           break;
 

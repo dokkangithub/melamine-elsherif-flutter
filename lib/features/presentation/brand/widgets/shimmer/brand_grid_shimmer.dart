@@ -14,7 +14,7 @@ class BrandGridShimmer extends StatelessWidget {
         mainAxisSpacing: 16,
       ),
       delegate: SliverChildBuilderDelegate(
-            (context, index) => _buildShimmerItem(),
+        (context, index) => _buildShimmerItem(),
         childCount: 6, // Show 6 shimmer items
       ),
     );
@@ -37,9 +37,7 @@ class BrandGridShimmer extends StatelessWidget {
               child: Container(
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.vertical(
-                    top: Radius.circular(20),
-                  ),
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
                 ),
               ),
             ),
@@ -47,10 +45,7 @@ class BrandGridShimmer extends StatelessWidget {
               flex: 1,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  height: 20,
-                  color: Colors.white,
-                ),
+                child: Container(height: 20, color: Colors.white),
               ),
             ),
           ],

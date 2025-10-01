@@ -20,15 +20,19 @@ class LanguageSelector extends StatelessWidget {
               itemCount: languageProvider.languages.length,
               itemBuilder: (context, index) {
                 final language = languageProvider.languages[index];
-                final isSelected = languageProvider.locale.languageCode == language.languageCode;
-                
+                final isSelected =
+                    languageProvider.locale.languageCode ==
+                    language.languageCode;
+
                 return ListTile(
                   leading: Container(
                     width: 40,
                     height: 40,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: isSelected ? Colors.red.withValues(alpha: 0.1) : Colors.grey.withValues(alpha: 0.1),
+                      color: isSelected
+                          ? Colors.red.withValues(alpha: 0.1)
+                          : Colors.grey.withValues(alpha: 0.1),
                     ),
                     child: Center(
                       child: Text(
@@ -44,24 +48,26 @@ class LanguageSelector extends StatelessWidget {
                     language.name,
                     style: TextStyle(
                       color: isSelected ? Colors.red : Colors.black,
-                      fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                      fontWeight: isSelected
+                          ? FontWeight.bold
+                          : FontWeight.normal,
                     ),
                   ),
-                  trailing: isSelected 
-                    ? const Icon(Icons.check_circle, color: Colors.red)
-                    : null,
+                  trailing: isSelected
+                      ? const Icon(Icons.check_circle, color: Colors.red)
+                      : null,
                   onTap: () async {
                     // Close the dialog first
                     Navigator.of(context).pop();
-                    
+
                     // Wait slightly before changing language to allow dialog to close
                     await Future.delayed(const Duration(milliseconds: 300));
-                    
+
                     // Use the helper function to change language and refresh data
                     await AppFunctions.changeLanguage(
                       context,
-                      language.languageCode, 
-                      language.countryCode
+                      language.languageCode,
+                      language.countryCode,
                     );
                   },
                 );
@@ -89,4 +95,4 @@ class LanguageSelector extends StatelessWidget {
       },
     );
   }
-} 
+}

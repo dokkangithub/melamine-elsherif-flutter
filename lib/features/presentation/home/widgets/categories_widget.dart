@@ -41,7 +41,6 @@ class CategoriesWidget extends StatelessWidget {
         // Only display first 4 categories
         final displayCategories = categories.take(4).toList();
 
-
         // Show categories grid
         return Container(
           padding: const EdgeInsets.only(top: 0.0, bottom: 16.0),
@@ -59,14 +58,12 @@ class CategoriesWidget extends StatelessWidget {
             itemBuilder: (context, index) => CategoryCard(
               imageUrl: displayCategories[index].banner ?? '',
               // Use predefined display names for better UI match
-              name: displayCategories[index].name??'',
+              name: displayCategories[index].name ?? '',
               onTap: () {
                 AppRoutes.navigateTo(
                   context,
                   AppRoutes.allCategoryProductsScreen,
-                  arguments: {
-                    'category': displayCategories[index],
-                  },
+                  arguments: {'category': displayCategories[index]},
                 );
               },
             ),

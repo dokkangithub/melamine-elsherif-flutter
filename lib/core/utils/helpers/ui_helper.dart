@@ -15,7 +15,7 @@ class UIHelper {
       ),
     );
   }
-  
+
   /// Set the status bar to be transparent with light icons
   /// This is useful for dark-colored backgrounds
   static void setTransparentStatusBarWithLightIcons() {
@@ -28,7 +28,7 @@ class UIHelper {
       ),
     );
   }
-  
+
   /// Wraps a widget with an AnnotatedRegion to ensure system UI overlay styles
   /// are properly applied throughout the widget's lifecycle
   static Widget wrapWithStatusBarConfig(
@@ -38,23 +38,21 @@ class UIHelper {
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
-        statusBarIconBrightness: useDarkIcons ? Brightness.dark : Brightness.light,
+        statusBarIconBrightness: useDarkIcons
+            ? Brightness.dark
+            : Brightness.light,
         systemNavigationBarColor: Colors.transparent,
-        systemNavigationBarIconBrightness: useDarkIcons ? Brightness.dark : Brightness.light,
+        systemNavigationBarIconBrightness: useDarkIcons
+            ? Brightness.dark
+            : Brightness.light,
       ),
       child: child,
     );
   }
 
-
   static Shader linearGradient = const LinearGradient(
     begin: Alignment.centerRight,
     end: Alignment.centerLeft,
-    colors: <Color>[
-      Color(0xFFD58B7A),
-      Color(0xFFA74F3B),
-    ],
+    colors: <Color>[Color(0xFFD58B7A), Color(0xFFA74F3B)],
   ).createShader(const Rect.fromLTWH(0.0, 0.0, 200.0, 70.0));
-
-
-} 
+}

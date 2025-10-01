@@ -7,11 +7,17 @@ import '../models/variant_product_price_model.dart';
 // Update ProductDetailsRemoteDataSource
 abstract class ProductDetailsRemoteDataSource {
   Future<ProductDetailsModel> getProductDetails(String slug);
-  Future<VariantPriceModel> getVariantPrice(String slug, String color, String variants, int quantity);
+  Future<VariantPriceModel> getVariantPrice(
+    String slug,
+    String color,
+    String variants,
+    int quantity,
+  );
 }
 
 // Update ProductDetailsRemoteDataSourceImpl
-class ProductDetailsRemoteDataSourceImpl implements ProductDetailsRemoteDataSource {
+class ProductDetailsRemoteDataSourceImpl
+    implements ProductDetailsRemoteDataSource {
   final ApiProvider apiProvider;
 
   ProductDetailsRemoteDataSourceImpl(this.apiProvider);
@@ -22,7 +28,9 @@ class ProductDetailsRemoteDataSourceImpl implements ProductDetailsRemoteDataSour
       '${LaravelApiEndPoint.productDetails}/$slug/${AppStrings.userId}',
     );
 
-    if (response.data != null && response.data['data'] is List && response.data['data'].isNotEmpty) {
+    if (response.data != null &&
+        response.data['data'] is List &&
+        response.data['data'].isNotEmpty) {
       return ProductDetailsModel.fromJson(response.data['data'][0]);
     } else {
       throw Exception('Product details not found or invalid response format');
@@ -30,7 +38,12 @@ class ProductDetailsRemoteDataSourceImpl implements ProductDetailsRemoteDataSour
   }
 
   @override
-  Future<VariantPriceModel> getVariantPrice(String slug, String color, String variants, int quantity) async {
+  Future<VariantPriceModel> getVariantPrice(
+    String slug,
+    String color,
+    String variants,
+    int quantity,
+  ) async {
     final response = await apiProvider.post(
       LaravelApiEndPoint.getVariantPrice,
       queryParameters: {

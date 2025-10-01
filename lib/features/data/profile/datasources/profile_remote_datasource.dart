@@ -10,8 +10,16 @@ abstract class ProfileRemoteDataSource {
   Future<UserProfileModel> getUserProfile();
   Future<ProfileCountersModel> getProfileCounters();
   Future<UserProfileModel> getUserByAccessToken();
-  Future<ProfileUpdateResponse> updateProfile(String userId, String name, String password);
-  Future<ProfileUpdateResponse> updateProfileImage(String userId, String filename, String base64Image);
+  Future<ProfileUpdateResponse> updateProfile(
+    String userId,
+    String name,
+    String password,
+  );
+  Future<ProfileUpdateResponse> updateProfileImage(
+    String userId,
+    String filename,
+    String base64Image,
+  );
 }
 
 class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
@@ -33,7 +41,10 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
   Future<UserProfileModel> getUserByAccessToken() async {
     try {
       final data = {'access_token': AppStrings.token};
-      final response = await apiProvider.post('/get-user-by-access_token', data: data);
+      final response = await apiProvider.post(
+        '/get-user-by-access_token',
+        data: data,
+      );
       return UserProfileModel.fromJson(response.data);
     } catch (e) {
       throw Exception('Failed to get user by access token: $e');
@@ -51,15 +62,22 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
   }
 
   @override
-  Future<ProfileUpdateResponse> updateProfile(String userId, String name, String password) async {
+  Future<ProfileUpdateResponse> updateProfile(
+    String userId,
+    String name,
+    String password,
+  ) async {
     try {
       final Map<String, dynamic> data = {
         'id': userId,
         'name': name,
         'password': password,
       };
-      
-      final response = await apiProvider.post(LaravelApiEndPoint.profileUpdate, data: data);
+
+      final response = await apiProvider.post(
+        LaravelApiEndPoint.profileUpdate,
+        data: data,
+      );
       return ProfileUpdateResponse.fromJson(response.data);
     } catch (e) {
       throw Exception('Failed to update profile: $e');
@@ -67,15 +85,22 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
   }
 
   @override
-  Future<ProfileUpdateResponse> updateProfileImage(String userId, String filename, String base64Image) async {
+  Future<ProfileUpdateResponse> updateProfileImage(
+    String userId,
+    String filename,
+    String base64Image,
+  ) async {
     try {
       final Map<String, dynamic> data = {
         'id': userId,
         'filename': filename,
         'image': base64Image,
       };
-      
-      final response = await apiProvider.post(LaravelApiEndPoint.profileUpdateImage, data: data);
+
+      final response = await apiProvider.post(
+        LaravelApiEndPoint.profileUpdateImage,
+        data: data,
+      );
       return ProfileUpdateResponse.fromJson(response.data);
     } catch (e) {
       throw Exception('Failed to update profile image: $e');

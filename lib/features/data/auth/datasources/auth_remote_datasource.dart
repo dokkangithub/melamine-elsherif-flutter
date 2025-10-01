@@ -7,15 +7,20 @@ import '../../../../core/utils/results.dart';
 import '../models/auth_response_model.dart';
 
 abstract class AuthRemoteDataSource {
-  Future<Result<AuthResponseModel>> login(String email, String password, String loginBy);  Future<Response> signup(Map<String, dynamic> userData);
-  Future<AuthResponseModel> socialLogin(
-      { required String socialProvider,
-      required String name,
-        required String email,
-        required String provider,
-        String access_token = "",
-        String secret_token = "",
-      });
+  Future<Result<AuthResponseModel>> login(
+    String email,
+    String password,
+    String loginBy,
+  );
+  Future<Response> signup(Map<String, dynamic> userData);
+  Future<AuthResponseModel> socialLogin({
+    required String socialProvider,
+    required String name,
+    required String email,
+    required String provider,
+    String access_token = "",
+    String secret_token = "",
+  });
   Future<void> logout();
   Future<void> forgetPassword(String email);
   Future<void> confirmResetPassword(String email, String code, String password);
@@ -29,11 +34,19 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   AuthRemoteDataSourceImpl(this.apiProvider);
 
   @override
-  Future<Result<AuthResponseModel>> login(String email, String password, String loginBy) async {
+  Future<Result<AuthResponseModel>> login(
+    String email,
+    String password,
+    String loginBy,
+  ) async {
     try {
       final response = await apiProvider.post(
         LaravelApiEndPoint.login,
-        data: {'email_or_phone': email, 'password': password, 'login_by': loginBy},
+        data: {
+          'email_or_phone': email,
+          'password': password,
+          'login_by': loginBy,
+        },
       );
       final authResponse = AuthResponseModel.fromJson(response.data);
       if (authResponse.result) {
@@ -50,7 +63,10 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
   @override
   Future<Response> signup(Map<String, dynamic> userData) async {
-    final response = await apiProvider.post(LaravelApiEndPoint.signup, data: userData);
+    final response = await apiProvider.post(
+      LaravelApiEndPoint.signup,
+      data: userData,
+    );
     return response;
   }
 
@@ -60,17 +76,16 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     required String name,
     required String email,
     required String provider,
-        access_token = "",
-        secret_token = "",
-      }) async {
-
+    access_token = "",
+    secret_token = "",
+  }) async {
     var postBody = jsonEncode({
       "name": name,
       "email": email,
       "provider": provider,
       "social_provider": socialProvider,
       "access_token": access_token,
-      "secret_token": secret_token
+      "secret_token": secret_token,
     });
 
     print('social login post Body${postBody}');
@@ -88,12 +103,18 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
   @override
   Future<void> forgetPassword(String email) async {
-    await apiProvider.post(LaravelApiEndPoint.forgetPassword, data: {'email': email});
+    await apiProvider.post(
+      LaravelApiEndPoint.forgetPassword,
+      data: {'email': email},
+    );
   }
 
   @override
   Future<void> confirmResetPassword(
-      String email, String code, String password) async {
+    String email,
+    String code,
+    String password,
+  ) async {
     await apiProvider.post(
       LaravelApiEndPoint.resetPassword,
       data: {'email': email, 'code': code, 'password': password},
@@ -102,12 +123,17 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
   @override
   Future<void> resendCode(String email) async {
-    await apiProvider.post(LaravelApiEndPoint.resendCode, data: {'email': email});
+    await apiProvider.post(
+      LaravelApiEndPoint.resendCode,
+      data: {'email': email},
+    );
   }
 
   @override
   Future<void> confirmCode(String email, String code) async {
-    await apiProvider.post(LaravelApiEndPoint.confirmCode, data: {'email': email, 'code': code});
+    await apiProvider.post(
+      LaravelApiEndPoint.confirmCode,
+      data: {'email': email, 'code': code},
+    );
   }
-
 }

@@ -6,16 +6,12 @@ import '../../../domain/brand/entities/brand.dart';
 class BrandItem extends StatelessWidget {
   final Brand brand;
 
-  const BrandItem({
-    super.key,
-    required this.brand,
-  });
+  const BrandItem({super.key, required this.brand});
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
-      },
+      onTap: () {},
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white,

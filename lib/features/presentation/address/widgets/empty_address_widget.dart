@@ -17,16 +17,19 @@ class EmptyAddressWidget extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const CustomImage(assetPath: AppSvgs.location_icon,height: 200,width: 200),
-          const SizedBox(height: 16),
-          Text(
-            'no_addresses_found'.tr(context),
-            style: context.headlineSmall
+          const CustomImage(
+            assetPath: AppSvgs.location_icon,
+            height: 200,
+            width: 200,
           ),
+          const SizedBox(height: 16),
+          Text('no_addresses_found'.tr(context), style: context.headlineSmall),
           const SizedBox(height: 8),
           Text(
             'add_address_to_continue'.tr(context),
-            style: context.titleSmall?.copyWith(color: AppTheme.darkDividerColor)
+            style: context.titleSmall?.copyWith(
+              color: AppTheme.darkDividerColor,
+            ),
           ),
           const SizedBox(height: 24),
           CustomButton(

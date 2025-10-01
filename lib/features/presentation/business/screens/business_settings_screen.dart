@@ -24,9 +24,7 @@ class _BusinessSettingsScreenState extends State<BusinessSettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Business Settings'),
-      ),
+      appBar: AppBar(title: const Text('Business Settings')),
       body: Consumer<BusinessProvider>(
         builder: (context, provider, child) {
           if (provider.businessSettingsState == LoadingState.loading) {
@@ -66,9 +64,18 @@ class _BusinessSettingsScreenState extends State<BusinessSettingsScreen> {
       _buildSettingItem('Contact Phone', provider.contactPhone),
       _buildSettingItem('Contact Email', provider.contactEmail),
       _buildSettingItem('Base Color', provider.baseColor),
-      _buildSettingItem('Guest Checkout', provider.guestCheckoutActive ? 'Enabled' : 'Disabled'),
-      _buildSettingItem('Wallet System', provider.walletSystem ? 'Enabled' : 'Disabled'),
-      _buildSettingItem('Coupon System', provider.couponSystem ? 'Enabled' : 'Disabled'),
+      _buildSettingItem(
+        'Guest Checkout',
+        provider.guestCheckoutActive ? 'Enabled' : 'Disabled',
+      ),
+      _buildSettingItem(
+        'Wallet System',
+        provider.walletSystem ? 'Enabled' : 'Disabled',
+      ),
+      _buildSettingItem(
+        'Coupon System',
+        provider.couponSystem ? 'Enabled' : 'Disabled',
+      ),
     ];
 
     return SingleChildScrollView(
@@ -79,23 +86,19 @@ class _BusinessSettingsScreenState extends State<BusinessSettingsScreen> {
           children: [
             const Text(
               'Common Settings',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
             ...commonSettings,
             const SizedBox(height: 24),
             const Text(
               'All Settings',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
-            ...provider.businessSettings.map((setting) => _buildSettingCard(setting)),
+            ...provider.businessSettings.map(
+              (setting) => _buildSettingCard(setting),
+            ),
           ],
         ),
       ),
@@ -111,15 +114,10 @@ class _BusinessSettingsScreenState extends State<BusinessSettingsScreen> {
             flex: 2,
             child: Text(
               title,
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-              ),
+              style: const TextStyle(fontWeight: FontWeight.bold),
             ),
           ),
-          Expanded(
-            flex: 3,
-            child: Text(value),
-          ),
+          Expanded(flex: 3, child: Text(value)),
         ],
       ),
     );
@@ -127,7 +125,7 @@ class _BusinessSettingsScreenState extends State<BusinessSettingsScreen> {
 
   Widget _buildSettingCard(BusinessSetting setting) {
     String displayValue = '';
-    
+
     if (setting.value == null) {
       displayValue = 'null';
     } else if (setting.value is List) {
@@ -152,9 +150,7 @@ class _BusinessSettingsScreenState extends State<BusinessSettingsScreen> {
           children: [
             Text(
               setting.type,
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-              ),
+              style: const TextStyle(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 4),
             Text(displayValue),
@@ -163,4 +159,4 @@ class _BusinessSettingsScreenState extends State<BusinessSettingsScreen> {
       ),
     );
   }
-} 
+}

@@ -35,38 +35,31 @@ class ReviewRatingBar extends StatelessWidget {
           children: [
             readOnly
                 ? RatingBarIndicator(
-              rating: rating,
-              itemBuilder: (context, _) => const Icon(
-                Icons.star,
-                color: Colors.amber,
-              ),
-              itemCount: 5,
-              itemSize: itemSize,
-            )
+                    rating: rating,
+                    itemBuilder: (context, _) =>
+                        const Icon(Icons.star, color: Colors.amber),
+                    itemCount: 5,
+                    itemSize: itemSize,
+                  )
                 : RatingBar.builder(
-              initialRating: rating,
-              minRating: 1,
-              direction: Axis.horizontal,
-              allowHalfRating: allowHalfRating,
-              itemCount: 5,
-              itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
-              itemBuilder: (context, _) => const Icon(
-                Icons.star,
-                color: Colors.amber,
-              ),
-              onRatingUpdate: onRatingUpdate,
-              itemSize: itemSize,
-            ),
+                    initialRating: rating,
+                    minRating: 1,
+                    direction: Axis.horizontal,
+                    allowHalfRating: allowHalfRating,
+                    itemCount: 5,
+                    itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
+                    itemBuilder: (context, _) =>
+                        const Icon(Icons.star, color: Colors.amber),
+                    onRatingUpdate: onRatingUpdate,
+                    itemSize: itemSize,
+                  ),
             if (readOnly) ...[
               const SizedBox(width: 8),
               Text(
                 rating.toString(),
-                style: TextStyle(
-                  color: Colors.grey[700],
-                  fontSize: 16,
-                ),
+                style: TextStyle(color: Colors.grey[700], fontSize: 16),
               ),
-            ]
+            ],
           ],
         ),
       ],

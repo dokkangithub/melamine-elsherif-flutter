@@ -7,7 +7,11 @@ import '../models/review_model.dart';
 abstract class ReviewRemoteDataSource {
   Future<ReviewResponseModel> getProductReviews(int productId, {int page = 1});
 
-  Future<Map<String, dynamic>> submitReview(int productId, double rating, String comment);
+  Future<Map<String, dynamic>> submitReview(
+    int productId,
+    double rating,
+    String comment,
+  );
 }
 
 class ReviewRemoteDataSourceImpl implements ReviewRemoteDataSource {
@@ -17,9 +21,9 @@ class ReviewRemoteDataSourceImpl implements ReviewRemoteDataSource {
 
   @override
   Future<ReviewResponseModel> getProductReviews(
-      int productId, {
-        int page = 1,
-      }) async {
+    int productId, {
+    int page = 1,
+  }) async {
     final response = await apiProvider.get(
       '${LaravelApiEndPoint.productReviews}$productId?page=$page',
     );
@@ -32,10 +36,10 @@ class ReviewRemoteDataSourceImpl implements ReviewRemoteDataSource {
 
   @override
   Future<Map<String, dynamic>> submitReview(
-      int productId,
-      double rating,
-      String comment,
-      ) async {
+    int productId,
+    double rating,
+    String comment,
+  ) async {
     final Map<String, dynamic> body = {
       'product_id': productId,
       'user_id': AppStrings.userId,

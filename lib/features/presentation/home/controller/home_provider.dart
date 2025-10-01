@@ -31,7 +31,6 @@ import '../../../domain/product/usecases/get_related_products_use_case.dart';
 import '../../../domain/product/usecases/get_shop_products_use_case.dart';
 import '../../../domain/product/usecases/get_top_from_this_seller_products_use_case.dart';
 
-
 class HomeProvider extends ChangeNotifier {
   final GetAllProductsUseCase getAllProductsUseCase;
   final GetFeaturedProductsUseCase getFeaturedProductsUseCase;
@@ -153,14 +152,16 @@ class HomeProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-// Modify the fetchAllProducts method in HomeProvider
+  // Modify the fetchAllProducts method in HomeProvider
   Future<void> fetchAllProducts({bool refresh = false}) async {
     try {
       if (refresh) {
         allProductsPage = 1;
         hasMoreAllProducts = true;
         allProducts = [];
-        print('PAGINATION_DEBUG: Reset allProductsPage to 1, hasMoreAllProducts=true');
+        print(
+          'PAGINATION_DEBUG: Reset allProductsPage to 1, hasMoreAllProducts=true',
+        );
       }
 
       if (!hasMoreAllProducts) {
@@ -172,11 +173,18 @@ class HomeProvider extends ChangeNotifier {
       notifyListeners();
 
       print('PAGINATION_DEBUG: Fetching page $allProductsPage');
-      final response = await getAllProductsUseCase(allProductsPage, needUpdate: refresh);
+      final response = await getAllProductsUseCase(
+        allProductsPage,
+        needUpdate: refresh,
+      );
 
       // Log retrieved data
-      print('PAGINATION_DEBUG: All Products Response: ${response.data.length} items');
-      print('PAGINATION_DEBUG: Response meta - currentPage: ${response.meta.currentPage}, lastPage: ${response.meta.lastPage}, total: ${response.meta.total}');
+      print(
+        'PAGINATION_DEBUG: All Products Response: ${response.data.length} items',
+      );
+      print(
+        'PAGINATION_DEBUG: Response meta - currentPage: ${response.meta.currentPage}, lastPage: ${response.meta.lastPage}, total: ${response.meta.total}',
+      );
       print('PAGINATION_DEBUG: Response links - next: ${response.links.next}');
 
       // Filter products at data source level if possible
@@ -184,26 +192,37 @@ class HomeProvider extends ChangeNotifier {
 
       if (refresh) {
         allProducts = newProducts;
-        print('PAGINATION_DEBUG: Refreshing, setting allProducts to ${newProducts.length} items');
+        print(
+          'PAGINATION_DEBUG: Refreshing, setting allProducts to ${newProducts.length} items',
+        );
       } else {
         allProducts.addAll(newProducts);
-        print('PAGINATION_DEBUG: Adding ${newProducts.length} new items, total now: ${allProducts.length}');
+        print(
+          'PAGINATION_DEBUG: Adding ${newProducts.length} new items, total now: ${allProducts.length}',
+        );
       }
 
       // Check if we have more pages
       hasMoreAllProducts = response.meta.currentPage < response.meta.lastPage;
-      print('PAGINATION_DEBUG: Setting hasMoreAllProducts to $hasMoreAllProducts (currentPage=${response.meta.currentPage}, lastPage=${response.meta.lastPage})');
-      
+      print(
+        'PAGINATION_DEBUG: Setting hasMoreAllProducts to $hasMoreAllProducts (currentPage=${response.meta.currentPage}, lastPage=${response.meta.lastPage})',
+      );
+
       if (hasMoreAllProducts) {
         allProductsPage++;
-        print('PAGINATION_DEBUG: Incrementing allProductsPage to $allProductsPage');
+        print(
+          'PAGINATION_DEBUG: Incrementing allProductsPage to $allProductsPage',
+        );
       }
 
       allProductsState = LoadingState.loaded;
 
       // If we don't have enough published products and there are more pages, fetch more
-      if (allProducts.where((p) => p.published == 1).length < 8 && hasMoreAllProducts) {
-        print('PAGINATION_DEBUG: Not enough published products, fetching more automatically');
+      if (allProducts.where((p) => p.published == 1).length < 8 &&
+          hasMoreAllProducts) {
+        print(
+          'PAGINATION_DEBUG: Not enough published products, fetching more automatically',
+        );
         await fetchAllProducts();
       }
     } catch (e) {
@@ -229,7 +248,10 @@ class HomeProvider extends ChangeNotifier {
       featuredProductsState = LoadingState.loading;
       notifyListeners();
 
-      final response = await getFeaturedProductsUseCase(featuredProductsPage,needUpdate: refresh);
+      final response = await getFeaturedProductsUseCase(
+        featuredProductsPage,
+        needUpdate: refresh,
+      );
 
       if (refresh) {
         featuredProducts = response.data;
@@ -267,7 +289,8 @@ class HomeProvider extends ChangeNotifier {
       notifyListeners();
 
       final response = await getBestSellingProductsUseCase(
-          bestSellingProductsPage,needUpdate: refresh
+        bestSellingProductsPage,
+        needUpdate: refresh,
       );
 
       if (refresh) {
@@ -283,7 +306,7 @@ class HomeProvider extends ChangeNotifier {
       }
 
       bestSellingProductsState = LoadingState.loaded;
-      
+
       // Update widget data with best selling products
       if (bestSellingProducts.isNotEmpty) {
         await WidgetService().updateWidgetDataFromProvider(this);
@@ -310,7 +333,10 @@ class HomeProvider extends ChangeNotifier {
       newProductsState = LoadingState.loading;
       notifyListeners();
 
-      final response = await getNewAddedProductsUseCase(newProductsPage,needUpdate: refresh);
+      final response = await getNewAddedProductsUseCase(
+        newProductsPage,
+        needUpdate: refresh,
+      );
 
       if (refresh) {
         newProducts = response.data;
@@ -358,7 +384,6 @@ class HomeProvider extends ChangeNotifier {
 
       final response = await getFlashDealProductsUseCase(needUpdate: refresh);
 
-
       flashDeals = response.data;
 
       final allProducts = <Product>[];
@@ -367,16 +392,14 @@ class HomeProvider extends ChangeNotifier {
       }
       flashDealProducts = allProducts;
 
-
       flashDealProductsState = LoadingState.loaded;
       notifyListeners();
       return;
-
     } catch (e) {
       flashDealProductsState = LoadingState.error;
       flashDealProductsError = e.toString();
       debugPrint('Error fetching flash deal products: $e');
-      
+
       flashDeals = [];
       flashDealProducts = [];
     } finally {
@@ -386,10 +409,10 @@ class HomeProvider extends ChangeNotifier {
 
   // New method for Category Products
   Future<void> fetchCategoryProducts(
-      int categoryId, {
-        bool refresh = false,
-        String? name,
-      }) async {
+    int categoryId, {
+    bool refresh = false,
+    String? name,
+  }) async {
     try {
       if (refresh) {
         categoryProductsPage = 1;
@@ -403,9 +426,10 @@ class HomeProvider extends ChangeNotifier {
       notifyListeners();
 
       final response = await getCategoryProductsUseCase(
-          categoryId,
-          categoryProductsPage,
-          name: name,needUpdate: refresh
+        categoryId,
+        categoryProductsPage,
+        name: name,
+        needUpdate: refresh,
       );
 
       if (refresh) {
@@ -431,10 +455,10 @@ class HomeProvider extends ChangeNotifier {
 
   // New method for SubCategory Products
   Future<void> fetchSubCategoryProducts(
-      int subCategoryId, {
-        bool refresh = false,
-        String? name,
-      }) async {
+    int subCategoryId, {
+    bool refresh = false,
+    String? name,
+  }) async {
     try {
       if (refresh) {
         subCategoryProductsPage = 1;
@@ -448,9 +472,10 @@ class HomeProvider extends ChangeNotifier {
       notifyListeners();
 
       final response = await getSubCategoryProductsUseCase(
-          subCategoryId,
-          subCategoryProductsPage,
-          name: name,needUpdate: refresh
+        subCategoryId,
+        subCategoryProductsPage,
+        name: name,
+        needUpdate: refresh,
       );
 
       if (refresh) {
@@ -476,10 +501,10 @@ class HomeProvider extends ChangeNotifier {
 
   // New method for Brand Products
   Future<void> fetchBrandProducts(
-      int brandId, {
-        bool refresh = false,
-        String? name,
-      }) async {
+    int brandId, {
+    bool refresh = false,
+    String? name,
+  }) async {
     try {
       if (refresh) {
         brandProductsPage = 1;
@@ -493,9 +518,10 @@ class HomeProvider extends ChangeNotifier {
       notifyListeners();
 
       final response = await getBrandProductsUseCase(
-          brandId,
-          brandProductsPage,
-          name: name,needUpdate: refresh
+        brandId,
+        brandProductsPage,
+        name: name,
+        needUpdate: refresh,
       );
 
       if (refresh) {
@@ -532,7 +558,10 @@ class HomeProvider extends ChangeNotifier {
       digitalProductsState = LoadingState.loading;
       notifyListeners();
 
-      final response = await getDigitalProductsUseCase(digitalProductsPage,needUpdate: refresh);
+      final response = await getDigitalProductsUseCase(
+        digitalProductsPage,
+        needUpdate: refresh,
+      );
 
       if (refresh) {
         digitalProducts = response.data;
@@ -555,15 +584,19 @@ class HomeProvider extends ChangeNotifier {
     }
   }
 
-
-
   // New method for Related Products
-  Future<void> fetchRelatedProducts(int productId,{bool refresh = true}) async {
+  Future<void> fetchRelatedProducts(
+    int productId, {
+    bool refresh = true,
+  }) async {
     try {
       relatedProductsState = LoadingState.loading;
       notifyListeners();
 
-      final response = await getRelatedProductsUseCase(productId,needUpdate: refresh);
+      final response = await getRelatedProductsUseCase(
+        productId,
+        needUpdate: refresh,
+      );
       relatedProducts = response.data;
 
       relatedProductsState = LoadingState.loaded;
@@ -577,10 +610,10 @@ class HomeProvider extends ChangeNotifier {
 
   // New method for Shop Products
   Future<void> fetchShopProducts(
-      int shopId, {
-        bool refresh = false,
-        String? name,
-      }) async {
+    int shopId, {
+    bool refresh = false,
+    String? name,
+  }) async {
     try {
       if (refresh) {
         shopProductsPage = 1;
@@ -594,9 +627,10 @@ class HomeProvider extends ChangeNotifier {
       notifyListeners();
 
       final response = await getShopProductsUseCase(
-          shopId,
-          shopProductsPage,
-          name: name,needUpdate: refresh
+        shopId,
+        shopProductsPage,
+        name: name,
+        needUpdate: refresh,
       );
 
       if (refresh) {
@@ -620,12 +654,18 @@ class HomeProvider extends ChangeNotifier {
   }
 
   // New method for Top From This Seller Products
-  Future<void> fetchTopFromThisSellerProducts(int sellerId,{bool refresh = false}) async {
+  Future<void> fetchTopFromThisSellerProducts(
+    int sellerId, {
+    bool refresh = false,
+  }) async {
     try {
       topFromThisSellerProductsState = LoadingState.loading;
       notifyListeners();
 
-      final response = await getTopFromThisSellerProductsUseCase(sellerId,needUpdate: refresh);
+      final response = await getTopFromThisSellerProductsUseCase(
+        sellerId,
+        needUpdate: refresh,
+      );
       topFromThisSellerProducts = response.data;
 
       topFromThisSellerProductsState = LoadingState.loaded;
@@ -637,7 +677,6 @@ class HomeProvider extends ChangeNotifier {
     }
   }
 
-
   // Update the refresh method to include all refreshable sections
   Future<void> refreshHomeData() async {
     // Reset all states to loading
@@ -648,7 +687,7 @@ class HomeProvider extends ChangeNotifier {
     todaysDealProductsState = LoadingState.loading;
     flashDealProductsState = LoadingState.loading;
     notifyListeners();
-    
+
     // Refresh all data with refresh flag set to true
     await Future.wait([
       fetchAllProducts(refresh: true),
@@ -659,7 +698,7 @@ class HomeProvider extends ChangeNotifier {
       fetchFlashDealProducts(refresh: true),
       fetchDigitalProducts(refresh: true),
     ]);
-    
+
     // Notify about completed refresh
     notifyListeners();
   }
@@ -695,7 +734,7 @@ class HomeProvider extends ChangeNotifier {
   // Special method for language change - resets all cache and forces refresh
   Future<void> refreshAfterLanguageChange() async {
     debugPrint('Refreshing all home data after language change');
-    
+
     // Reset all states to loading
     allProductsState = LoadingState.loading;
     featuredProductsState = LoadingState.loading;
@@ -704,19 +743,19 @@ class HomeProvider extends ChangeNotifier {
     todaysDealProductsState = LoadingState.loading;
     flashDealProductsState = LoadingState.loading;
     notifyListeners();
-    
+
     // Reset all pages
     allProductsPage = 1;
     featuredProductsPage = 1;
     bestSellingProductsPage = 1;
     newProductsPage = 1;
-    
+
     // Reset hasMore flags
     hasMoreAllProducts = true;
     hasMoreFeaturedProducts = true;
     hasMoreBestSellingProducts = true;
     hasMoreNewProducts = true;
-    
+
     // Force refresh all data with needUpdate flag set to true
     await Future.wait([
       fetchAllProducts(refresh: true),
@@ -727,7 +766,7 @@ class HomeProvider extends ChangeNotifier {
       fetchDigitalProducts(refresh: true),
       fetchFlashDealProducts(refresh: true),
     ]);
-    
+
     notifyListeners();
   }
 }

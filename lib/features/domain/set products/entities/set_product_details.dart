@@ -4,10 +4,7 @@ class SetProductDetailsEntity {
   final bool? success;
   final SetProductDetailsData? data;
 
-  SetProductDetailsEntity({
-    this.success,
-    this.data,
-  });
+  SetProductDetailsEntity({this.success, this.data});
 }
 
 class SetProductDetailsData {
@@ -109,13 +106,7 @@ class Review {
   final String? comment;
   final String? time;
 
-  Review({
-    this.userName,
-    this.type,
-    this.rating,
-    this.comment,
-    this.time,
-  });
+  Review({this.userName, this.type, this.rating, this.comment, this.time});
 }
 
 // Calculate Price Entities
@@ -123,30 +114,21 @@ class CalculatePriceRequest {
   final int productId;
   final List<ComponentRequest> components;
 
-  CalculatePriceRequest({
-    required this.productId,
-    required this.components,
-  });
+  CalculatePriceRequest({required this.productId, required this.components});
 }
 
 class ComponentRequest {
   final int productId;
   final int quantity;
 
-  ComponentRequest({
-    required this.productId,
-    required this.quantity,
-  });
+  ComponentRequest({required this.productId, required this.quantity});
 }
 
 class CalculatePriceResponseEntity {
   final bool? success;
   final CalculatedPriceData? data;
 
-  CalculatePriceResponseEntity({
-    this.success,
-    this.data,
-  });
+  CalculatePriceResponseEntity({this.success, this.data});
 }
 
 class CalculatedPriceData {

@@ -6,10 +6,8 @@ import 'package:melamine_elsherif/features/domain/product%20details/entities/pro
 class ProductSpecificationsSummary extends StatelessWidget {
   final ProductDetails product;
 
-  const ProductSpecificationsSummary({
-    Key? key,
-    required this.product,
-  }) : super(key: key);
+  const ProductSpecificationsSummary({Key? key, required this.product})
+    : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -50,4 +48,4 @@ class ProductSpecificationsSummary extends StatelessWidget {
       ),
     );
   }
-} 
+}

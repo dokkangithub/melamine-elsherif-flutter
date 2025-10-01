@@ -15,7 +15,9 @@ class CategoryResponseModel {
     return CategoryResponseModel(
       data: json["data"] == null
           ? []
-          : List<CategoryModel>.from(json["data"]!.map((x) => CategoryModel.fromJson(x))),
+          : List<CategoryModel>.from(
+              json["data"]!.map((x) => CategoryModel.fromJson(x)),
+            ),
       success: json["success"],
       status: json["status"],
     );
@@ -77,12 +79,8 @@ class CategoryModel extends Category {
   }
 }
 
-
 class LinksModel extends Links {
-  const LinksModel({
-    required super.products,
-    required super.subCategories,
-  });
+  const LinksModel({required super.products, required super.subCategories});
 
   factory LinksModel.fromJson(Map<String, dynamic> json) {
     return LinksModel(
@@ -92,9 +90,6 @@ class LinksModel extends Links {
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'products': products,
-      'sub_categories': subCategories,
-    };
+    return {'products': products, 'sub_categories': subCategories};
   }
 }

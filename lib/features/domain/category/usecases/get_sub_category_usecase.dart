@@ -6,10 +6,13 @@ class GetSubCategoriesUseCase {
 
   GetSubCategoriesUseCase(this.categoryRepository);
 
-  Future<CategoryResponseModel> call({required String mainCategoryId, bool needRefresh = false}) async {
+  Future<CategoryResponseModel> call({
+    required String mainCategoryId,
+    bool needRefresh = false,
+  }) async {
     return await categoryRepository.getSubCategories(
-        mainCategoryId: mainCategoryId,
-        needRefresh: needRefresh
+      mainCategoryId: mainCategoryId,
+      needRefresh: needRefresh,
     );
   }
 }

@@ -7,13 +7,13 @@ import 'package:talker/talker.dart';
 import '../config/app_config.dart/app_config.dart';
 import 'api_provider.dart';
 
-// Custom language interceptor class 
+// Custom language interceptor class
 class _LanguageInterceptor extends Interceptor {
   final String languageCode;
   final Talker talker;
-  
+
   _LanguageInterceptor(this.languageCode, this.talker);
-  
+
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
     options.headers['Accept-Language'] = languageCode;
@@ -74,9 +74,7 @@ class RestApiProvider implements ApiProvider {
     }
 
     // Language Interceptor
-    _dio.interceptors.add(
-      _LanguageInterceptor(_languageCode, _talker),
-    );
+    _dio.interceptors.add(_LanguageInterceptor(_languageCode, _talker));
   }
 
   @override
@@ -211,16 +209,18 @@ class RestApiProvider implements ApiProvider {
     try {
       _talker.debug('Setting language to: $languageCode');
       _languageCode = languageCode;
-      
+
       // Update the existing Dio instance headers
       _dio.options.headers['Accept-Language'] = languageCode;
-      
+
       // Remove existing language interceptors
-      _dio.interceptors.removeWhere((interceptor) => interceptor is _LanguageInterceptor);
-      
+      _dio.interceptors.removeWhere(
+        (interceptor) => interceptor is _LanguageInterceptor,
+      );
+
       // Add a fresh language interceptor
       _dio.interceptors.add(_LanguageInterceptor(languageCode, _talker));
-      
+
       // Log the language change
       _talker.info('API language changed to: $languageCode');
     } catch (e) {
@@ -247,8 +247,9 @@ class RestApiProvider implements ApiProvider {
 
           if (statusCode == 401) {
             // Check the response body for "User not found"
-            final message =
-                responseData is Map ? responseData['message'] : null;
+            final message = responseData is Map
+                ? responseData['message']
+                : null;
             if (message == 'User not found') {
               return UserNotFoundException(message, error: error);
             }
@@ -265,10 +266,9 @@ class RestApiProvider implements ApiProvider {
               error: error,
             );
           } else {
-            final message =
-                responseData is Map
-                    ? responseData['message'] ?? 'Server error'
-                    : 'Server error';
+            final message = responseData is Map
+                ? responseData['message'] ?? 'Server error'
+                : 'Server error';
             return ServerException(
               message,
               statusCode: statusCode ?? 500,
@@ -313,7 +313,7 @@ class RestApiProvider implements ApiProvider {
       } catch (_) {
         // Ignore errors when closing
       }
-      
+
       // Create a new Dio instance
       _dio = Dio(
         BaseOptions(
@@ -328,7 +328,7 @@ class RestApiProvider implements ApiProvider {
           },
         ),
       );
-      
+
       // Add auth token interceptor
       _dio.interceptors.add(
         InterceptorsWrapper(
@@ -342,7 +342,7 @@ class RestApiProvider implements ApiProvider {
           },
         ),
       );
-      
+
       // Add logging if enabled
       if (_appConfig.enableLogging) {
         _dio.interceptors.add(
@@ -358,10 +358,10 @@ class RestApiProvider implements ApiProvider {
           ),
         );
       }
-      
+
       // Add language interceptor
       _dio.interceptors.add(_LanguageInterceptor(_languageCode, _talker));
-      
+
       _talker.info('Dio client reset successfully');
     } catch (e) {
       _talker.error('Error resetting Dio client: $e');

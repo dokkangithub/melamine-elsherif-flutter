@@ -64,7 +64,9 @@ class SetProductsProvider extends ChangeNotifier {
       setProductsState = LoadingState.loading;
       notifyListeners();
 
-      final SetProductsResponse response = await getSetProductsUseCase(page: currentPage);
+      final SetProductsResponse response = await getSetProductsUseCase(
+        page: currentPage,
+      );
 
       if (isRefresh) {
         setProducts = response.products;
@@ -93,7 +95,9 @@ class SetProductsProvider extends ChangeNotifier {
       notifyListeners();
 
       currentPage++;
-      final SetProductsResponse response = await getSetProductsUseCase(page: currentPage);
+      final SetProductsResponse response = await getSetProductsUseCase(
+        page: currentPage,
+      );
 
       setProducts.addAll(response.products);
       hasMorePages = currentPage < (lastPage ?? 1);
@@ -118,7 +122,8 @@ class SetProductsProvider extends ChangeNotifier {
       setProductDetailsError = '';
       notifyListeners();
 
-      final SetProductDetailsEntity response = await getSetProductDetailsUseCase(slug: slug);
+      final SetProductDetailsEntity response =
+          await getSetProductDetailsUseCase(slug: slug);
 
       setProductDetails = response.data;
       setProductDetailsState = LoadingState.loaded;
@@ -137,7 +142,9 @@ class SetProductsProvider extends ChangeNotifier {
       calculatePriceError = '';
       notifyListeners();
 
-      final CalculatePriceResponseEntity response = await calculatePriceUseCase(request: request);
+      final CalculatePriceResponseEntity response = await calculatePriceUseCase(
+        request: request,
+      );
 
       calculatedPrice = response.data;
       print('dddddd${calculatedPrice!.totalPrice}');
@@ -151,7 +158,10 @@ class SetProductsProvider extends ChangeNotifier {
     }
   }
 
-  Future<bool> addFullSetToCart({required int productId, required int quantity}) async {
+  Future<bool> addFullSetToCart({
+    required int productId,
+    required int quantity,
+  }) async {
     try {
       addToCartState = LoadingState.loading;
       addToCartError = '';
@@ -178,7 +188,7 @@ class SetProductsProvider extends ChangeNotifier {
   Future<bool> addCustomSetToCart({
     required int productId,
     required int quantity,
-    required List<ComponentRequest> components
+    required List<ComponentRequest> components,
   }) async {
     try {
       addToCartState = LoadingState.loading;

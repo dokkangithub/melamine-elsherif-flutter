@@ -35,7 +35,8 @@ class PaymentRepositoryImpl implements PaymentRepository {
         city: city,
         phone: phone,
         additionalInfo: additionalInfo,
-        context: context, postalCode: postalCode,
+        context: context,
+        postalCode: postalCode,
       );
       return orderResponse;
     } catch (e) {
@@ -98,7 +99,9 @@ class PaymentRepositoryImpl implements PaymentRepository {
   @override
   Future<Map<String, dynamic>> verifyOrderSuccess(String orderId) async {
     try {
-      final verificationResult = await remoteDataSource.verifyOrderSuccess(orderId);
+      final verificationResult = await remoteDataSource.verifyOrderSuccess(
+        orderId,
+      );
       return verificationResult;
     } catch (e) {
       throw Exception('Failed to verify order: $e');

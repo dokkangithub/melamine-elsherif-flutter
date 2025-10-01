@@ -33,10 +33,7 @@ class AddressItem extends StatelessWidget {
         margin: const EdgeInsets.only(bottom: 16),
         decoration: BoxDecoration(
           color: Colors.white,
-          border: Border.all(
-            color: Colors.grey.shade300,
-            width: 1,
-          ),
+          border: Border.all(color: Colors.grey.shade300, width: 1),
           borderRadius: BorderRadius.circular(0),
         ),
         child: Column(
@@ -49,7 +46,9 @@ class AddressItem extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    address.title.isNotEmpty ? address.title : 'home'.tr(context),
+                    address.title.isNotEmpty
+                        ? address.title
+                        : 'home'.tr(context),
                     style: context.headlineMedium.copyWith(
                       fontWeight: FontWeight.w600,
                     ),
@@ -69,7 +68,9 @@ class AddressItem extends StatelessWidget {
                                 width: 60,
                                 height: 30,
                                 decoration: BoxDecoration(
-                                  color: isDefault ? const Color(0xFF003333) : Colors.grey.shade300,
+                                  color: isDefault
+                                      ? const Color(0xFF003333)
+                                      : Colors.grey.shade300,
                                   border: Border.all(
                                     color: Colors.grey.shade300,
                                     width: 1,
@@ -78,7 +79,9 @@ class AddressItem extends StatelessWidget {
                                 child: AnimatedAlign(
                                   duration: const Duration(milliseconds: 200),
                                   curve: Curves.easeInOut,
-                                  alignment: isDefault ? Alignment.centerRight : Alignment.centerLeft,
+                                  alignment: isDefault
+                                      ? Alignment.centerRight
+                                      : Alignment.centerLeft,
                                   child: Container(
                                     width: 26,
                                     height: 26,
@@ -127,7 +130,7 @@ class AddressItem extends StatelessWidget {
                 ],
               ),
             ),
-            
+
             // Address details
             Padding(
               padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
@@ -145,17 +148,13 @@ class AddressItem extends StatelessWidget {
                     const SizedBox(height: 4),
                     Text(
                       '${address.cityName}, ${address.stateName}',
-                      style: context.bodyLarge.copyWith(
-                        color: Colors.black87,
-                      ),
+                      style: context.bodyLarge.copyWith(color: Colors.black87),
                     ),
                   ],
                   const SizedBox(height: 4),
                   Text(
                     address.countryName,
-                    style: context.bodyLarge.copyWith(
-                      color: Colors.black87,
-                    ),
+                    style: context.bodyLarge.copyWith(color: Colors.black87),
                   ),
                   const SizedBox(height: 8),
                   Text(
@@ -173,4 +172,4 @@ class AddressItem extends StatelessWidget {
       ),
     );
   }
-} 
+}

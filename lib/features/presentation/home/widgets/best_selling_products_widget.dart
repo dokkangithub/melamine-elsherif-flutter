@@ -41,7 +41,9 @@ class BestSellingProductsWidget extends StatelessWidget {
           );
         }
 
-        final filteredProducts = products.where((product) => product.published == 1).toList();
+        final filteredProducts = products
+            .where((product) => product.published == 1)
+            .toList();
         // Show products list
         print(filteredProducts[0].discountedPrice);
         return Column(
@@ -64,8 +66,10 @@ class BestSellingProductsWidget extends StatelessWidget {
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
                 itemCount: filteredProducts.length,
-                itemBuilder:
-                    (context, index) => ProductCard(product: filteredProducts[index],isBuyNow: true,),
+                itemBuilder: (context, index) => ProductCard(
+                  product: filteredProducts[index],
+                  isBuyNow: true,
+                ),
               ),
             ),
           ],
@@ -73,7 +77,6 @@ class BestSellingProductsWidget extends StatelessWidget {
       },
     );
   }
-
 
   Widget _buildEmptyState(BuildContext context, String message) {
     return const SizedBox.shrink();

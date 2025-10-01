@@ -104,19 +104,17 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen>
                       ),
                       const SizedBox(height: 40),
                       ChangePasswordForm(
-                            formKey: _formKey,
-                            currentPasswordController:
-                                _currentPasswordController,
-                            newPasswordController: _newPasswordController,
-                            confirmPasswordController:
-                                _confirmPasswordController,
-                            isLoading: _isLoading,
-                            onSubmit: () {
-                              if (_formKey.currentState!.validate()) {
-                                _handleChangePassword();
-                              }
-                            },
-                          ),
+                        formKey: _formKey,
+                        currentPasswordController: _currentPasswordController,
+                        newPasswordController: _newPasswordController,
+                        confirmPasswordController: _confirmPasswordController,
+                        isLoading: _isLoading,
+                        onSubmit: () {
+                          if (_formKey.currentState!.validate()) {
+                            _handleChangePassword();
+                          }
+                        },
+                      ),
                     ],
                   ),
                 ),

@@ -7,10 +7,7 @@ import '../../../../core/utils/widgets/custom_form_field.dart';
 class BrandSearch extends StatefulWidget {
   final Function(String) onSearch;
 
-  const BrandSearch({
-    super.key,
-    required this.onSearch,
-  });
+  const BrandSearch({super.key, required this.onSearch});
 
   @override
   State<BrandSearch> createState() => _BrandSearchState();

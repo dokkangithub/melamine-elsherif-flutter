@@ -5,11 +5,8 @@ class OrderCard extends StatelessWidget {
   final Order order;
   final VoidCallback onTap;
 
-  const OrderCard({
-    Key? key,
-    required this.order,
-    required this.onTap,
-  }) : super(key: key);
+  const OrderCard({Key? key, required this.order, required this.onTap})
+    : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +24,8 @@ class OrderCard extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('Order #${order.code}',
+                  Text(
+                    'Order #${order.code}',
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                   Text(
@@ -44,15 +42,21 @@ class OrderCard extends StatelessWidget {
                     child: _buildStatusChip(
                       context,
                       'Payment: ${order.paymentStatusString}',
-                      order.paymentStatus == 'paid' ? Colors.green : Colors.orange,
+                      order.paymentStatus == 'paid'
+                          ? Colors.green
+                          : Colors.orange,
                     ),
                   ),
-                  const SizedBox(width: 8.0), // Optional: adds spacing between chips
+                  const SizedBox(
+                    width: 8.0,
+                  ), // Optional: adds spacing between chips
                   Flexible(
                     child: _buildStatusChip(
                       context,
                       'Delivery: ${order.deliveryStatusString}',
-                      order.deliveryStatus == 'confirmed' ? Colors.blue : Colors.orange,
+                      order.deliveryStatus == 'confirmed'
+                          ? Colors.blue
+                          : Colors.orange,
                     ),
                   ),
                 ],

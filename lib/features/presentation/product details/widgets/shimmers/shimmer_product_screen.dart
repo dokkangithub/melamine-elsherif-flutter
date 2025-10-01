@@ -38,31 +38,22 @@ class ShimmerProductScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       // Shimmer for product title
-                      const ShimmerWidget(
-                        width: 250,
-                        height: 24,
-                      ),
+                      const ShimmerWidget(width: 250, height: 24),
                       const SizedBox(height: 8),
                       // Shimmer for price
-                      const ShimmerWidget(
-                        width: 120,
-                        height: 20,
-                      ),
+                      const ShimmerWidget(width: 120, height: 20),
                       const SizedBox(height: 16),
 
                       // Shimmer for color variants
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const ShimmerWidget(
-                            width: 120,
-                            height: 18,
-                          ),
+                          const ShimmerWidget(width: 120, height: 18),
                           const SizedBox(height: 8),
                           Row(
                             children: List.generate(
                               4,
-                                  (index) => Container(
+                              (index) => Container(
                                 margin: const EdgeInsets.only(right: 12),
                                 child: const ShimmerWidget(
                                   width: 50,
@@ -80,19 +71,14 @@ class ShimmerProductScreen extends StatelessWidget {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const ShimmerWidget(
-                            width: 150,
-                            height: 18,
-                          ),
+                          const ShimmerWidget(width: 150, height: 18),
                           const SizedBox(height: 8),
                           Wrap(
                             spacing: 8,
                             children: List.generate(
                               3,
-                                  (index) => const ShimmerWidget(
-                                width: 80,
-                                height: 36,
-                              ),
+                              (index) =>
+                                  const ShimmerWidget(width: 80, height: 36),
                             ),
                           ),
                         ],
@@ -103,10 +89,7 @@ class ShimmerProductScreen extends StatelessWidget {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const ShimmerWidget(
-                            width: 100,
-                            height: 18,
-                          ),
+                          const ShimmerWidget(width: 100, height: 18),
                           const SizedBox(height: 8),
                           const ShimmerWidget(height: 14),
                           const SizedBox(height: 4),
@@ -162,7 +145,8 @@ class ShimmerProductScreen extends StatelessWidget {
                                       ),
                                       const SizedBox(width: 12),
                                       Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: const [
                                           ShimmerWidget(width: 100, height: 16),
                                           SizedBox(height: 4),
@@ -198,12 +182,13 @@ class ShimmerProductScreen extends StatelessWidget {
                       GridView.builder(
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
-                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          childAspectRatio: 0.7,
-                          crossAxisSpacing: 10,
-                          mainAxisSpacing: 10,
-                        ),
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              childAspectRatio: 0.7,
+                              crossAxisSpacing: 10,
+                              mainAxisSpacing: 10,
+                            ),
                         itemCount: 4,
                         itemBuilder: (context, index) {
                           return Card(
@@ -215,7 +200,8 @@ class ShimmerProductScreen extends StatelessWidget {
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: const [
                                       ShimmerWidget(width: 120, height: 16),
                                       SizedBox(height: 8),

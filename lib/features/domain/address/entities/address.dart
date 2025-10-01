@@ -58,8 +58,5 @@ class ShippingCost {
   final double cost;
   final String currencySymbol;
 
-  ShippingCost({
-    required this.cost,
-    required this.currencySymbol,
-  });
+  ShippingCost({required this.cost, required this.currencySymbol});
 }

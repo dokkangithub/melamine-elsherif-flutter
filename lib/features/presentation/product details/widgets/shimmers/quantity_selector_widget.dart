@@ -26,8 +26,10 @@ class _QuantitySelectorWidgetState extends State<QuantitySelectorWidget> {
       return const ShimmerWidget(height: 40, isRow: true);
     }
 
-    String cleanedPrice =
-    widget.product.price.replaceAll(RegExp(r'[^\d.]'), '');
+    String cleanedPrice = widget.product.price.replaceAll(
+      RegExp(r'[^\d.]'),
+      '',
+    );
     double price = double.tryParse(cleanedPrice) ?? 0.0;
 
     return Row(
@@ -53,7 +55,8 @@ class _QuantitySelectorWidgetState extends State<QuantitySelectorWidget> {
             ),
           ],
         ),
-        Text('\$${(price * quantity).toStringAsFixed(2)}',
+        Text(
+          '\$${(price * quantity).toStringAsFixed(2)}',
           style: ProductTheme.titleLarge(context),
         ),
       ],

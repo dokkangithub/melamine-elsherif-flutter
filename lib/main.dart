@@ -93,11 +93,7 @@ Future<void> getAndPrintFcmToken() async {
 
     if (settings.authorizationStatus == AuthorizationStatus.authorized) {
       String? token = await messaging.getToken();
-      if (token != null) {
-        debugPrint('✅ FCM Token: $token');
-      } else {
-        debugPrint('⚠️ Failed to get FCM token');
-      }
+      debugPrint('✅ FCM Token: $token');
     } else {
       debugPrint('❌ Notifications permission not granted');
     }
@@ -111,7 +107,8 @@ Future<NotificationAction?> checkInitialNotification() async {
   try {
     debugPrint("=== CHECKING INITIAL NOTIFICATION ===");
 
-    final RemoteMessage? initialMessage = await FirebaseMessaging.instance.getInitialMessage();
+    final RemoteMessage? initialMessage = await FirebaseMessaging.instance
+        .getInitialMessage();
 
     if (initialMessage != null) {
       debugPrint("Found initial notification message:");
@@ -143,9 +140,7 @@ Future<void> initializeNotifications() async {
   try {
     debugPrint("Initializing notifications...");
 
-    final notificationRouter = NotificationRouter(
-      navigatorKey: navigatorKey,
-    );
+    final notificationRouter = NotificationRouter(navigatorKey: navigatorKey);
 
     notificationManager = NotificationManager(router: notificationRouter);
     await notificationManager.initialize();
@@ -174,7 +169,9 @@ Future<String> getStartupRoute() async {
 
       // Validate the notification action before using it
       if (_isValidNotificationAction(_pendingNotificationAction!)) {
-        final route = _getRouteFromNotificationAction(_pendingNotificationAction!);
+        final route = _getRouteFromNotificationAction(
+          _pendingNotificationAction!,
+        );
         debugPrint("Using notification route: $route");
         return route;
       } else {
@@ -187,7 +184,6 @@ Future<String> getStartupRoute() async {
     // No notification, use normal startup flow
     debugPrint("No valid notification, using splash screen");
     return AppRoutes.splash;
-
   } catch (e) {
     debugPrint("Error determining startup route: $e");
     return AppRoutes.splash;
@@ -272,7 +268,9 @@ Future<void> main() async {
 
     // Initialize Firebase
     debugPrint("Initializing Firebase...");
-    await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
 
     // Get FCM token early
     await getAndPrintFcmToken();
@@ -299,7 +297,9 @@ Future<void> main() async {
           ChangeNotifierProvider(create: (_) => sl<HomeProvider>()),
           ChangeNotifierProvider(create: (_) => sl<LayoutProvider>()),
           ChangeNotifierProvider(create: (_) => sl<ProductDetailsProvider>()),
-          ChangeNotifierProvider(create: (_) => sl<LanguageProvider>()..setLocale(locale)),
+          ChangeNotifierProvider(
+            create: (_) => sl<LanguageProvider>()..setLocale(locale),
+          ),
           ChangeNotifierProvider(create: (_) => sl<CategoryProvider>()),
           ChangeNotifierProvider(create: (_) => sl<SliderProvider>()),
           ChangeNotifierProvider(create: (_) => sl<ReviewProvider>()),
@@ -321,22 +321,24 @@ Future<void> main() async {
   } catch (e) {
     debugPrint("Error during app startup: $e");
     // You might want to show an error screen here
-    runApp(MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Icon(Icons.error, size: 64, color: Colors.red),
-              const SizedBox(height: 16),
-              const Text('Failed to start app'),
-              const SizedBox(height: 8),
-              Text('Error: $e'),
-            ],
+    runApp(
+      MaterialApp(
+        home: Scaffold(
+          body: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(Icons.error, size: 64, color: Colors.red),
+                const SizedBox(height: 16),
+                const Text('Failed to start app'),
+                const SizedBox(height: 8),
+                Text('Error: $e'),
+              ],
+            ),
           ),
         ),
       ),
-    ));
+    );
   }
 }
 
@@ -349,7 +351,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<LanguageProvider>(
       builder: (context, languageProvider, child) {
-        debugPrint('Building MyApp with locale: ${languageProvider.locale.languageCode}');
+        debugPrint(
+          'Building MyApp with locale: ${languageProvider.locale.languageCode}',
+        );
 
         return UIHelper.wrapWithStatusBarConfig(
           MaterialApp(
@@ -359,10 +363,7 @@ class MyApp extends StatelessWidget {
             theme: AppTheme.getTheme(languageProvider.locale.languageCode),
             themeMode: ThemeMode.light,
             locale: languageProvider.locale,
-            supportedLocales: const [
-              Locale('en', 'US'),
-              Locale('ar', 'EG'),
-            ],
+            supportedLocales: const [Locale('en', 'US'), Locale('ar', 'EG')],
             localizationsDelegates: const [
               AppLocalizations.delegate,
               GlobalMaterialLocalizations.delegate,
@@ -374,11 +375,15 @@ class MyApp extends StatelessWidget {
 
               for (var supportedLocale in supportedLocales) {
                 if (supportedLocale.languageCode == locale?.languageCode) {
-                  debugPrint('Resolved to supported locale: ${supportedLocale.languageCode}');
+                  debugPrint(
+                    'Resolved to supported locale: ${supportedLocale.languageCode}',
+                  );
                   return supportedLocale;
                 }
               }
-              debugPrint('No matching locale, using default: ${supportedLocales.first.languageCode}');
+              debugPrint(
+                'No matching locale, using default: ${supportedLocales.first.languageCode}',
+              );
               return supportedLocales.first;
             },
             onGenerateRoute: (settings) => AppRoutes.generateRoute(

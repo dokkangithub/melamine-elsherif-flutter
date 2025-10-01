@@ -178,7 +178,6 @@ import '../../features/domain/business/usecases/get_business_settings_usecase.da
 import '../../features/presentation/business/controller/business_provider.dart';
 import '../services/business_settings_service.dart';
 
-
 final sl = GetIt.instance;
 
 Future<void> setupDependencies() async {
@@ -186,16 +185,14 @@ Future<void> setupDependencies() async {
   sl.registerSingleton<ObjectBox>(objectBox);
   sl.registerLazySingleton<TimestampService>(() => TimestampService());
 
-  sl.registerLazySingleton<INotificationService>(
-        () => NotificationService(),
-  );
+  sl.registerLazySingleton<INotificationService>(() => NotificationService());
 
   // sl.registerLazySingleton<NotificationRouter>(
   //       () => NotificationRouter(navigatorKey: MyApp.navigatorKey),
   // );
 
   sl.registerLazySingleton<NotificationManager>(
-        () => NotificationManager(
+    () => NotificationManager(
       notificationService: sl<INotificationService>(),
       router: sl<NotificationRouter>(),
     ),
@@ -204,7 +201,9 @@ Future<void> setupDependencies() async {
   // Core
   sl.registerLazySingleton<AppConfig>(() => AppConfig());
   sl.registerLazySingleton<SecureStorage>(() => SecureStorage());
-  sl.registerLazySingleton<InternetConnectionChecker>(() => InternetConnectionChecker.createInstance());
+  sl.registerLazySingleton<InternetConnectionChecker>(
+    () => InternetConnectionChecker.createInstance(),
+  );
   sl.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(sl()));
 
   sl.registerLazySingleton<Dio>(() {
@@ -323,16 +322,19 @@ Future<void> setupDependencies() async {
   );
 
   sl.registerLazySingleton<SetProductsRemoteDataSource>(
-        () => SetProductsRemoteDataSourceImpl(sl<ApiProvider>()),
+    () => SetProductsRemoteDataSourceImpl(sl<ApiProvider>()),
   );
   sl.registerLazySingleton<SetProductsLocalDataSource>(
-    () => SetProductsLocalDataSourceImpl(objectBox: sl(), timestampService: sl()),
+    () =>
+        SetProductsLocalDataSourceImpl(objectBox: sl(), timestampService: sl()),
   );
 
   sl.registerLazySingleton<SetProductsRepository>(
-    () => SetProductsRepositoryImpl(sl<SetProductsRemoteDataSource>(), sl<SetProductsLocalDataSource>()),
+    () => SetProductsRepositoryImpl(
+      sl<SetProductsRemoteDataSource>(),
+      sl<SetProductsLocalDataSource>(),
+    ),
   );
-
 
   // Profile Data Sources
   sl.registerLazySingleton<ProfileRemoteDataSource>(
@@ -454,17 +456,17 @@ Future<void> setupDependencies() async {
   // Use Cases - set products
   sl.registerLazySingleton(() => GetSetProductsUseCase(sl()));
   GetIt.instance.registerLazySingleton<GetSetProductDetailsUseCase>(
-        () => GetSetProductDetailsUseCase(GetIt.instance<SetProductsRepository>()),
+    () => GetSetProductDetailsUseCase(GetIt.instance<SetProductsRepository>()),
   );
 
   GetIt.instance.registerLazySingleton<CalculatePriceUseCase>(
-        () => CalculatePriceUseCase(GetIt.instance<SetProductsRepository>()),
+    () => CalculatePriceUseCase(GetIt.instance<SetProductsRepository>()),
   );
   GetIt.instance.registerLazySingleton<AddFullSetToCartUseCase>(
-        () => AddFullSetToCartUseCase(GetIt.instance<SetProductsRepository>()),
+    () => AddFullSetToCartUseCase(GetIt.instance<SetProductsRepository>()),
   );
   GetIt.instance.registerLazySingleton<AddCustomSetToCartUseCase>(
-        () => AddCustomSetToCartUseCase(GetIt.instance<SetProductsRepository>()),
+    () => AddCustomSetToCartUseCase(GetIt.instance<SetProductsRepository>()),
   );
 
   // Providers
@@ -484,13 +486,14 @@ Future<void> setupDependencies() async {
   sl.registerFactory(() => SliderProvider(getSlidersUseCase: sl()));
 
   GetIt.instance.registerFactory<SetProductsProvider>(
-        () => SetProductsProvider(
+    () => SetProductsProvider(
       getSetProductsUseCase: GetIt.instance<GetSetProductsUseCase>(),
-      getSetProductDetailsUseCase: GetIt.instance<GetSetProductDetailsUseCase>(),
+      getSetProductDetailsUseCase:
+          GetIt.instance<GetSetProductDetailsUseCase>(),
       calculatePriceUseCase: GetIt.instance<CalculatePriceUseCase>(),
-          addFullSetToCartUseCase: sl<AddFullSetToCartUseCase>(),
+      addFullSetToCartUseCase: sl<AddFullSetToCartUseCase>(),
 
-            addCustomSetToCartUseCase: sl<AddCustomSetToCartUseCase>()
+      addCustomSetToCartUseCase: sl<AddCustomSetToCartUseCase>(),
     ),
   );
 
@@ -658,7 +661,9 @@ Future<void> setupDependencies() async {
 
   // Repositories
   sl.registerLazySingleton<BusinessRepository>(
-    () => BusinessRepositoryImpl(remoteDataSource: sl<BusinessRemoteDataSource>()),
+    () => BusinessRepositoryImpl(
+      remoteDataSource: sl<BusinessRemoteDataSource>(),
+    ),
   );
 
   // Use Cases
@@ -668,7 +673,9 @@ Future<void> setupDependencies() async {
 
   // Providers
   sl.registerLazySingleton<BusinessProvider>(
-    () => BusinessProvider(getBusinessSettingsUseCase: sl<GetBusinessSettingsUseCase>()),
+    () => BusinessProvider(
+      getBusinessSettingsUseCase: sl<GetBusinessSettingsUseCase>(),
+    ),
   );
 
   // Register BusinessSettingsService
@@ -676,4 +683,3 @@ Future<void> setupDependencies() async {
     () => BusinessSettingsService(),
   );
 }
-

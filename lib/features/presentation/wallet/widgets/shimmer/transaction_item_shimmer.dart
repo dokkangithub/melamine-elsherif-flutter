@@ -38,7 +38,7 @@ class TransactionItemShimmer extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 16.0),
-              
+
               // Transaction Details
               Expanded(
                 child: Column(
@@ -54,7 +54,7 @@ class TransactionItemShimmer extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 8.0),
-                    
+
                     // Date row
                     Row(
                       children: [
@@ -78,7 +78,7 @@ class TransactionItemShimmer extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(height: 8.0),
-                    
+
                     // Approval badge
                     Container(
                       width: 80,
@@ -91,7 +91,7 @@ class TransactionItemShimmer extends StatelessWidget {
                   ],
                 ),
               ),
-              
+
               // Amount
               Container(
                 width: 80,
@@ -107,4 +107,4 @@ class TransactionItemShimmer extends StatelessWidget {
       ),
     );
   }
-} 
+}

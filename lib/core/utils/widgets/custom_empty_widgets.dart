@@ -31,21 +31,21 @@ class CustomEmptyWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             // Shopping bag icon with neutral color
-            const CustomImage(assetPath: AppSvgs.no_data,height: 80),
+            const CustomImage(assetPath: AppSvgs.no_data, height: 80),
             const SizedBox(height: 32),
-            
+
             // "No Products Available" title
             Text(
               title.tr(context),
-             style: context.displayLarge?.copyWith(
-               color: Colors.black,
-               fontWeight: FontWeight.w100,
-             ),
+              style: context.displayLarge?.copyWith(
+                color: Colors.black,
+                fontWeight: FontWeight.w100,
+              ),
               textAlign: TextAlign.center,
             ),
-            
+
             const SizedBox(height: 16),
-            
+
             // Subtitle about curating collection
             Text(
               subtitle.tr(context),
@@ -55,15 +55,20 @@ class CustomEmptyWidget extends StatelessWidget {
               ),
               textAlign: TextAlign.center,
             ),
-            
+
             const SizedBox(height: 60),
-            
+
             // "Explore Our Collection" button
             CustomButton(
-              onPressed: onExplorePressed ?? () {
-                Provider.of<LayoutProvider>(context,listen: false).currentIndex=0;
-                AppRoutes.navigateTo(context, AppRoutes.mainLayoutScreen);
-              },
+              onPressed:
+                  onExplorePressed ??
+                  () {
+                    Provider.of<LayoutProvider>(
+                      context,
+                      listen: false,
+                    ).currentIndex = 0;
+                    AppRoutes.navigateTo(context, AppRoutes.mainLayoutScreen);
+                  },
               isOutlined: true,
               child: Text(
                 'explore_our_collection'.tr(context),

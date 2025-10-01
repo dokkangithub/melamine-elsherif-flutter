@@ -12,9 +12,11 @@ class FlashDealModel extends FlashDeal {
   });
 
   factory FlashDealModel.fromJson(Map<String, dynamic> json) {
-    final productsList = json['products'] != null && json['products']['data'] != null
+    final productsList =
+        json['products'] != null && json['products']['data'] != null
         ? List<ProductModel>.from(
-            json['products']['data'].map((x) => ProductModel.fromJson(x)))
+            json['products']['data'].map((x) => ProductModel.fromJson(x)),
+          )
         : <ProductModel>[];
 
     return FlashDealModel(
@@ -35,8 +37,10 @@ class FlashDealModel extends FlashDeal {
       'date': date,
       'banner': banner,
       'products': {
-        'data': products.map((product) => (product as ProductModel).toJson()).toList(),
+        'data': products
+            .map((product) => (product as ProductModel).toJson())
+            .toList(),
       },
     };
   }
-} 
+}

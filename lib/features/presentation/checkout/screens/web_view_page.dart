@@ -4,10 +4,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 class WebViewPage extends StatefulWidget {
   final String url;
 
-  const WebViewPage({
-    super.key,
-    required this.url,
-  });
+  const WebViewPage({super.key, required this.url});
 
   @override
   State<WebViewPage> createState() => _WebViewPageState();
@@ -77,14 +74,9 @@ class _WebViewPageState extends State<WebViewPage> {
       body: Stack(
         children: [
           WebViewWidget(controller: _controller),
-          if (_isLoading)
-            const Center(
-              child: CircularProgressIndicator(),
-            ),
+          if (_isLoading) const Center(child: CircularProgressIndicator()),
         ],
       ),
     );
   }
-
-
 }

@@ -16,7 +16,9 @@ class ClubPointResponse {
 
   factory ClubPointResponse.fromJson(Map<String, dynamic> json) {
     return ClubPointResponse(
-      data: (json['data'] as List).map((item) => ClubPointModel.fromJson(item)).toList(),
+      data: (json['data'] as List)
+          .map((item) => ClubPointModel.fromJson(item))
+          .toList(),
       meta: Meta.fromJson(json['meta']),
       success: json['success'] ?? false,
       status: json['status'] ?? 0,
@@ -32,12 +34,12 @@ class ClubPointModel extends ClubPoint {
     required int points,
     required DateTime convertedAt,
   }) : super(
-          id: id,
-          userId: userId,
-          orderCode: orderCode,
-          points: points,
-          convertedAt: convertedAt,
-        );
+         id: id,
+         userId: userId,
+         orderCode: orderCode,
+         points: points,
+         convertedAt: convertedAt,
+       );
 
   factory ClubPointModel.fromJson(Map<String, dynamic> json) {
     return ClubPointModel(
@@ -60,4 +62,4 @@ class ClubPointModel extends ClubPoint {
       'converted_at': convertedAt.toIso8601String(),
     };
   }
-} 
+}

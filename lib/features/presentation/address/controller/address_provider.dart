@@ -129,12 +129,19 @@ class AddressProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> updateAddressLocation(int id, double latitude, double longitude) async {
+  Future<void> updateAddressLocation(
+    int id,
+    double latitude,
+    double longitude,
+  ) async {
     try {
       await updateAddressLocationUseCase(id, latitude, longitude);
       final index = addresses.indexWhere((addr) => addr.id == id);
       if (index != -1) {
-        addresses[index] = addresses[index].copyWith(latitude: latitude, longitude: longitude);
+        addresses[index] = addresses[index].copyWith(
+          latitude: latitude,
+          longitude: longitude,
+        );
         notifyListeners();
       }
     } catch (e) {
@@ -146,7 +153,9 @@ class AddressProvider extends ChangeNotifier {
   Future<void> makeAddressDefault(int id) async {
     try {
       await makeAddressDefaultUseCase(id);
-      addresses = addresses.map((addr) => addr.copyWith(isDefault: addr.id == id)).toList();
+      addresses = addresses
+          .map((addr) => addr.copyWith(isDefault: addr.id == id))
+          .toList();
       notifyListeners();
     } catch (e) {
       addressError = e.toString();
@@ -205,32 +214,37 @@ class AddressProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> updateAddressInCart(int addressId, {BuildContext? context}) async {
+  Future<void> updateAddressInCart(
+    int addressId, {
+    BuildContext? context,
+  }) async {
     try {
       await updateAddressInCartUseCase(addressId);
-      
+
       // Find the address by ID to get state and address details for shipping update
       final address = addresses.firstWhere((addr) => addr.id == addressId);
-      
+
       // If context is provided, also update shipping type
       if (context != null) {
         // Get the PaymentProvider instance
-        final paymentProvider = Provider.of<PaymentProvider>(context, listen: false);
-        
+        final paymentProvider = Provider.of<PaymentProvider>(
+          context,
+          listen: false,
+        );
+
         // Call updateShippingTypeForGuest with the address details
         await paymentProvider.updateShippingTypeForGuest(
           stateId: address.stateId,
           address: address.address,
         );
       }
-      
+
       notifyListeners();
     } catch (e) {
       addressError = e.toString();
       notifyListeners();
     }
   }
-
 }
 
 // Extension to support copyWith

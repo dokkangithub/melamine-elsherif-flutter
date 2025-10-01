@@ -9,17 +9,24 @@ class CategoryRepositoryImpl implements CategoryRepository {
   CategoryRepositoryImpl(this.categoryRemoteDataSource);
 
   @override
-  Future<CategoryResponseModel> getCategories({String? parentId, bool needRefresh = false}) async {
+  Future<CategoryResponseModel> getCategories({
+    String? parentId,
+    bool needRefresh = false,
+  }) async {
     // Try to get from cache if refresh is not needed
     if (!needRefresh) {
-      final cachedData = await CategoryCacheManager.getCategories(parentId: parentId);
+      final cachedData = await CategoryCacheManager.getCategories(
+        parentId: parentId,
+      );
       if (cachedData != null) {
         return cachedData;
       }
     }
 
     // Fetch from API
-    final response = await categoryRemoteDataSource.getCategories(parentId: parentId);
+    final response = await categoryRemoteDataSource.getCategories(
+      parentId: parentId,
+    );
 
     // Save to cache
     await CategoryCacheManager.saveCategories(response, parentId: parentId);
@@ -28,7 +35,9 @@ class CategoryRepositoryImpl implements CategoryRepository {
   }
 
   @override
-  Future<CategoryResponseModel> getFeaturedCategories({bool needRefresh = false}) async {
+  Future<CategoryResponseModel> getFeaturedCategories({
+    bool needRefresh = false,
+  }) async {
     // Try to get from cache if refresh is not needed
     if (!needRefresh) {
       final cachedData = await CategoryCacheManager.getFeaturedCategories();
@@ -47,7 +56,9 @@ class CategoryRepositoryImpl implements CategoryRepository {
   }
 
   @override
-  Future<CategoryResponseModel> getTopCategories({bool needRefresh = false}) async {
+  Future<CategoryResponseModel> getTopCategories({
+    bool needRefresh = false,
+  }) async {
     // Try to get from cache if refresh is not needed
     if (!needRefresh) {
       final cachedData = await CategoryCacheManager.getTopCategories();
@@ -66,7 +77,9 @@ class CategoryRepositoryImpl implements CategoryRepository {
   }
 
   @override
-  Future<CategoryResponseModel> getFilterPageCategories({bool needRefresh = false}) async {
+  Future<CategoryResponseModel> getFilterPageCategories({
+    bool needRefresh = false,
+  }) async {
     // Try to get from cache if refresh is not needed
     if (!needRefresh) {
       final cachedData = await CategoryCacheManager.getFilterPageCategories();
@@ -85,17 +98,24 @@ class CategoryRepositoryImpl implements CategoryRepository {
   }
 
   @override
-  Future<CategoryResponseModel> getSubCategories({required String mainCategoryId, bool needRefresh = false}) async {
+  Future<CategoryResponseModel> getSubCategories({
+    required String mainCategoryId,
+    bool needRefresh = false,
+  }) async {
     // Try to get from cache if refresh is not needed
     if (!needRefresh) {
-      final cachedData = await CategoryCacheManager.getSubCategories(mainCategoryId);
+      final cachedData = await CategoryCacheManager.getSubCategories(
+        mainCategoryId,
+      );
       if (cachedData != null) {
         return cachedData;
       }
     }
 
     // Fetch from API
-    final response = await categoryRemoteDataSource.getSubCategories(mainCategoryId: mainCategoryId);
+    final response = await categoryRemoteDataSource.getSubCategories(
+      mainCategoryId: mainCategoryId,
+    );
 
     // Save to cache
     await CategoryCacheManager.saveSubCategories(mainCategoryId, response);

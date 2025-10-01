@@ -1,4 +1,3 @@
-
 import '../../../data/slider/model/slider_model.dart';
 
 abstract class SliderRepository {

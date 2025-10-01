@@ -43,16 +43,17 @@ class _ProductItemInRow1State extends State<ProductItemInRow1> {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        widget.product.setProduct?AppRoutes.navigateTo(
-          context,
-          AppRoutes.setProductDetailsScreen,
-          arguments: {'slug': widget.product.slug},
-        ):
-        AppRoutes.navigateTo(
-          context,
-          AppRoutes.productDetailScreen,
-          arguments: {'slug': widget.product.slug},
-        );
+        widget.product.setProduct
+            ? AppRoutes.navigateTo(
+                context,
+                AppRoutes.setProductDetailsScreen,
+                arguments: {'slug': widget.product.slug},
+              )
+            : AppRoutes.navigateTo(
+                context,
+                AppRoutes.productDetailScreen,
+                arguments: {'slug': widget.product.slug},
+              );
       },
       child: Container(
         width: MediaQuery.of(context).size.width,
@@ -93,7 +94,8 @@ class _ProductItemInRow1State extends State<ProductItemInRow1> {
                       const SizedBox(height: 8),
 
                       // Price display
-                      Text('\$${widget.product.discountedPrice}'.tr(context),
+                      Text(
+                        '\$${widget.product.discountedPrice}'.tr(context),
                         style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -103,7 +105,8 @@ class _ProductItemInRow1State extends State<ProductItemInRow1> {
 
                       // Original price (strikethrough) if present
                       if (widget.product.hasDiscount)
-                        Text('\$${widget.product.mainPrice}'.tr(context),
+                        Text(
+                          '\$${widget.product.mainPrice}'.tr(context),
                           style: TextStyle(
                             fontSize: 14,
                             color: Colors.grey.shade400,
@@ -113,35 +116,32 @@ class _ProductItemInRow1State extends State<ProductItemInRow1> {
                       const Spacer(),
                       // Add to cart button
                       GestureDetector(
-                        onTap:
-                            () =>
-                                widget.product.currentStock < 1
-                                    ? null
-                                    : AppFunctions.addProductToCart(
-                                      context: context,
-                                      productId: widget.product.id,
-                                      productName: widget.product.name,
-                                      productSlug: widget.product.slug,
-                                      hasVariation: widget.product.hasVariation,
-                                    ),
+                        onTap: () => widget.product.currentStock < 1
+                            ? null
+                            : AppFunctions.addProductToCart(
+                                context: context,
+                                productId: widget.product.id,
+                                productName: widget.product.name,
+                                productSlug: widget.product.slug,
+                                hasVariation: widget.product.hasVariation,
+                              ),
                         child: Container(
                           height: 40,
                           width: 40,
                           decoration: BoxDecoration(
-                            color:
-                                widget.product.currentStock < 1
-                                    ? Colors.grey
-                                    : Colors.blue,
+                            color: widget.product.currentStock < 1
+                                ? Colors.grey
+                                : Colors.blue,
                             borderRadius:
                                 Directionality.of(context) == TextDirection.ltr
-                                    ? BorderRadius.only(
-                                      topRight: Radius.circular(15),
-                                      bottomLeft: Radius.circular(15),
-                                    )
-                                    : BorderRadius.only(
-                                      topLeft: Radius.circular(15),
-                                      bottomRight: Radius.circular(15),
-                                    ),
+                                ? BorderRadius.only(
+                                    topRight: Radius.circular(15),
+                                    bottomLeft: Radius.circular(15),
+                                  )
+                                : BorderRadius.only(
+                                    topLeft: Radius.circular(15),
+                                    bottomRight: Radius.circular(15),
+                                  ),
                           ),
                           padding: const EdgeInsets.all(8),
                           child: const Icon(
@@ -161,14 +161,14 @@ class _ProductItemInRow1State extends State<ProductItemInRow1> {
                   child: ClipRRect(
                     borderRadius:
                         Directionality.of(context) == TextDirection.ltr
-                            ? const BorderRadius.only(
-                              topRight: Radius.circular(16),
-                              bottomRight: Radius.circular(16),
-                            )
-                            : const BorderRadius.only(
-                              topLeft: Radius.circular(16),
-                              bottomLeft: Radius.circular(16),
-                            ),
+                        ? const BorderRadius.only(
+                            topRight: Radius.circular(16),
+                            bottomRight: Radius.circular(16),
+                          )
+                        : const BorderRadius.only(
+                            topLeft: Radius.circular(16),
+                            bottomLeft: Radius.circular(16),
+                          ),
                     child: CustomImage(imageUrl: widget.product.thumbnailImage),
                   ),
                 ),
@@ -182,7 +182,9 @@ class _ProductItemInRow1State extends State<ProductItemInRow1> {
               left: Directionality.of(context) == TextDirection.rtl ? 0 : null,
               child: Consumer<WishlistProvider>(
                 builder: (context, provider, _) {
-                  final isFavorite = provider.isProductInWishlist(widget.product.slug);
+                  final isFavorite = provider.isProductInWishlist(
+                    widget.product.slug,
+                  );
 
                   return Container(
                     width: 40,
@@ -191,14 +193,14 @@ class _ProductItemInRow1State extends State<ProductItemInRow1> {
                       color: Colors.white.withValues(alpha: 0.8),
                       borderRadius:
                           Directionality.of(context) == TextDirection.ltr
-                              ? const BorderRadius.only(
-                                topRight: Radius.circular(15),
-                                bottomLeft: Radius.circular(15),
-                              )
-                              : const BorderRadius.only(
-                                topLeft: Radius.circular(15),
-                                bottomRight: Radius.circular(15),
-                              ),
+                          ? const BorderRadius.only(
+                              topRight: Radius.circular(15),
+                              bottomLeft: Radius.circular(15),
+                            )
+                          : const BorderRadius.only(
+                              topLeft: Radius.circular(15),
+                              bottomRight: Radius.circular(15),
+                            ),
                     ),
                     child: Center(
                       child: LikeButton(
@@ -211,8 +213,10 @@ class _ProductItemInRow1State extends State<ProductItemInRow1> {
                             context,
                             widget.product.slug,
                           );
-                          final nowInWishlist = Provider.of<WishlistProvider>(context, listen: false)
-                                    .isProductInWishlist(widget.product.slug);
+                          final nowInWishlist = Provider.of<WishlistProvider>(
+                            context,
+                            listen: false,
+                          ).isProductInWishlist(widget.product.slug);
                           if (!wasInWishlist && nowInWishlist) {
                             _triggerWishlistAnimation();
                           }

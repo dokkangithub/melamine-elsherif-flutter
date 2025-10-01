@@ -9,7 +9,7 @@ import '../../profile/controller/profile_provider.dart';
 import '../controller/layout_provider.dart';
 
 class DrawerWidget extends StatelessWidget {
-  final  AnimationController animationController;
+  final AnimationController animationController;
 
   const DrawerWidget({super.key, required this.animationController});
 
@@ -20,6 +20,7 @@ class DrawerWidget extends StatelessWidget {
       animationController.reverse();
     }
   }
+
   @override
   Widget build(BuildContext context) {
     final layoutProvider = Provider.of<LayoutProvider>(context);
@@ -39,31 +40,31 @@ class DrawerWidget extends StatelessWidget {
                   children: [
                     profileProvider.profileImageUrl != null
                         ? Container(
-                      width: 80,
-                      height: 80,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(color: Colors.white, width: 2),
-                        image: DecorationImage(
-                          image: NetworkImage(
-                            profileProvider.profileImageUrl!,
-                          ),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    )
+                            width: 80,
+                            height: 80,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border: Border.all(color: Colors.white, width: 2),
+                              image: DecorationImage(
+                                image: NetworkImage(
+                                  profileProvider.profileImageUrl!,
+                                ),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          )
                         : Container(
-                      width: 80,
-                      height: 80,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(color: Colors.white, width: 2),
-                        image: const DecorationImage(
-                          image: AssetImage(AppImages.appLogo),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
+                            width: 80,
+                            height: 80,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border: Border.all(color: Colors.white, width: 2),
+                              image: const DecorationImage(
+                                image: AssetImage(AppImages.appLogo),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
                     const SizedBox(height: 12),
                     Text(
                       AppStrings.userName ?? 'guest_user'.tr(context),
@@ -89,15 +90,17 @@ class DrawerWidget extends StatelessWidget {
                 },
               ),
               const SizedBox(height: 20),
-              AppStrings.token!=null? _buildMenuItem(
-                context,
-                Icons.person_outline,
-                'profile',
-                onTap: () {
-                  layoutProvider.setCurrentIndex(3);
-                  toggleDrawer();
-                },
-              ):SizedBox.shrink(),
+              AppStrings.token != null
+                  ? _buildMenuItem(
+                      context,
+                      Icons.person_outline,
+                      'profile',
+                      onTap: () {
+                        layoutProvider.setCurrentIndex(3);
+                        toggleDrawer();
+                      },
+                    )
+                  : SizedBox.shrink(),
               const SizedBox(height: 20),
 
               _buildMenuItem(
@@ -112,29 +115,29 @@ class DrawerWidget extends StatelessWidget {
 
               AppStrings.token != null
                   ? _buildMenuItem(
-                context,
-                Icons.favorite_border,
-                'my_wishlist',
-                onTap: () {
-                  layoutProvider.setCurrentIndex(2);
-                  toggleDrawer();
-                },
-              )
+                      context,
+                      Icons.favorite_border,
+                      'my_wishlist',
+                      onTap: () {
+                        layoutProvider.setCurrentIndex(2);
+                        toggleDrawer();
+                      },
+                    )
                   : SizedBox.shrink(),
               const SizedBox(height: 20),
 
               AppStrings.token != null
                   ? _buildMenuItem(
-                context,
-                Icons.local_shipping_outlined,
-                'orders',
-                onTap: () {
-                  AppRoutes.navigateTo(
-                    context,
-                    AppRoutes.allOrdersListScreen,
-                  );
-                },
-              )
+                      context,
+                      Icons.local_shipping_outlined,
+                      'orders',
+                      onTap: () {
+                        AppRoutes.navigateTo(
+                          context,
+                          AppRoutes.allOrdersListScreen,
+                        );
+                      },
+                    )
                   : SizedBox.shrink(),
 
               // Divider
@@ -145,23 +148,31 @@ class DrawerWidget extends StatelessWidget {
 
               // Sign out at the bottom
               const Spacer(),
-              AppStrings.token!=null? _buildMenuItem(
-                context,
-                Icons.logout,
-                'sign_out',
-                onTap: () async {
-                 await Provider.of<AuthProvider>(context,listen: false).logout();
-                 layoutProvider.setCurrentIndex(0);
-                 toggleDrawer();
-                },
-              ):_buildMenuItem(
-                context,
-                Icons.login,
-                'login',
-                onTap: () async {
-                  AppRoutes.navigateToAndRemoveUntil(context, AppRoutes.login);
-                },
-              ),
+              AppStrings.token != null
+                  ? _buildMenuItem(
+                      context,
+                      Icons.logout,
+                      'sign_out',
+                      onTap: () async {
+                        await Provider.of<AuthProvider>(
+                          context,
+                          listen: false,
+                        ).logout();
+                        layoutProvider.setCurrentIndex(0);
+                        toggleDrawer();
+                      },
+                    )
+                  : _buildMenuItem(
+                      context,
+                      Icons.login,
+                      'login',
+                      onTap: () async {
+                        AppRoutes.navigateToAndRemoveUntil(
+                          context,
+                          AppRoutes.login,
+                        );
+                      },
+                    ),
               const SizedBox(height: 10),
             ],
           ),
@@ -171,11 +182,11 @@ class DrawerWidget extends StatelessWidget {
   }
 
   Widget _buildMenuItem(
-      BuildContext context,
-      IconData icon,
-      String title, {
-        VoidCallback? onTap,
-      }) {
+    BuildContext context,
+    IconData icon,
+    String title, {
+    VoidCallback? onTap,
+  }) {
     return InkWell(
       onTap: onTap,
       child: Row(

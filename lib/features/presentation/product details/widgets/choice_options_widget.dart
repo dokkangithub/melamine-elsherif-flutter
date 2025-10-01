@@ -36,7 +36,8 @@ class ChoiceOptionsWidget extends StatelessWidget {
                   Wrap(
                     spacing: 8,
                     children: option.options.map((optionValue) {
-                      final isSelected = provider.selectedVariants[option.name] == optionValue;
+                      final isSelected =
+                          provider.selectedVariants[option.name] == optionValue;
 
                       return InkWell(
                         onTap: () {
@@ -48,18 +49,26 @@ class ChoiceOptionsWidget extends StatelessWidget {
                             vertical: 8,
                           ),
                           decoration: BoxDecoration(
-                            color: isSelected ? AppTheme.primaryColor : Colors.grey.shade100,
+                            color: isSelected
+                                ? AppTheme.primaryColor
+                                : Colors.grey.shade100,
                             borderRadius: BorderRadius.circular(0),
                             border: Border.all(
-                              color: isSelected ? AppTheme.primaryColor : Colors.grey.shade300,
+                              color: isSelected
+                                  ? AppTheme.primaryColor
+                                  : Colors.grey.shade300,
                               width: 1,
                             ),
                           ),
                           child: Text(
                             optionValue,
                             style: TextStyle(
-                              color: isSelected ? AppTheme.white : Colors.black87,
-                              fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                              color: isSelected
+                                  ? AppTheme.white
+                                  : Colors.black87,
+                              fontWeight: isSelected
+                                  ? FontWeight.bold
+                                  : FontWeight.normal,
                             ),
                           ),
                         ),

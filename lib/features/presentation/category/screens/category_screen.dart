@@ -18,7 +18,11 @@ class CategoryScreen extends StatefulWidget {
   final bool needRefresh;
   final bool isActive;
 
-  const CategoryScreen({super.key, this.needRefresh = false, this.isActive = true});
+  const CategoryScreen({
+    super.key,
+    this.needRefresh = false,
+    this.isActive = true,
+  });
 
   @override
   State<CategoryScreen> createState() => _CategoryScreenState();
@@ -29,7 +33,9 @@ class _CategoryScreenState extends State<CategoryScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<CategoryProvider>().getCategories(needRefresh: widget.needRefresh);
+      context.read<CategoryProvider>().getCategories(
+        needRefresh: widget.needRefresh,
+      );
     });
   }
 
@@ -61,7 +67,8 @@ class _CategoryScreenState extends State<CategoryScreen> {
             if (categoryProvider.categoriesState == LoadingState.error) {
               return ErrorStateWidget(
                 message: 'couldnt_load_categories'.tr(context),
-                onRetry: () => categoryProvider.getCategories(needRefresh: true),
+                onRetry: () =>
+                    categoryProvider.getCategories(needRefresh: true),
               );
             }
 
@@ -86,7 +93,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                         ClipRRect(
                           borderRadius: BorderRadius.circular(8),
                           child: const CustomImage(
-                            assetPath:  AppSvgs.porcelain_collection,
+                            assetPath: AppSvgs.porcelain_collection,
                             width: double.infinity,
                             height: 274,
                             fit: BoxFit.cover,
@@ -101,12 +108,18 @@ class _CategoryScreenState extends State<CategoryScreen> {
                               Text(
                                 'porcelain_collection_title'.tr(context),
                                 maxLines: 2,
-                                style: context.displayMedium!.copyWith(color: AppTheme.white,fontWeight: FontWeight.normal),
+                                style: context.displayMedium!.copyWith(
+                                  color: AppTheme.white,
+                                  fontWeight: FontWeight.normal,
+                                ),
                               ),
                               const SizedBox(height: 8),
                               Text(
                                 'porcelain_collection_subtitle'.tr(context),
-                                style: context.headlineSmall!.copyWith(color: AppTheme.white,fontWeight: FontWeight.normal),
+                                style: context.headlineSmall!.copyWith(
+                                  color: AppTheme.white,
+                                  fontWeight: FontWeight.normal,
+                                ),
                               ),
                             ],
                           ),
@@ -114,7 +127,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                       ],
                     ),
                     const SizedBox(height: 15),
-                    
+
                     // Shop by Category Header
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -133,26 +146,28 @@ class _CategoryScreenState extends State<CategoryScreen> {
                         ],
                       ),
                     ),
-                    
+
                     // Category Grid
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: GridView.builder(
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
-                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          crossAxisSpacing: 0,
-                          mainAxisSpacing: 0,
-                          childAspectRatio: 0.7,
-                        ),
-                        itemCount: categories.length >= 6 ? 6 : categories.length,
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              crossAxisSpacing: 0,
+                              mainAxisSpacing: 0,
+                              childAspectRatio: 0.7,
+                            ),
+                        itemCount: categories.length >= 6
+                            ? 6
+                            : categories.length,
                         itemBuilder: (context, index) {
                           final category = categories[index];
-                          
 
                           return _buildCategoryCard(
-                            context, 
+                            context,
                             category,
                             (category.productCount ?? 0),
                           );
@@ -173,15 +188,17 @@ class _CategoryScreenState extends State<CategoryScreen> {
     );
   }
 
-  Widget _buildCategoryCard(BuildContext context, Category category, int productCount) {
+  Widget _buildCategoryCard(
+    BuildContext context,
+    Category category,
+    int productCount,
+  ) {
     return InkWell(
       onTap: () {
         AppRoutes.navigateTo(
           context,
           AppRoutes.allCategoryProductsScreen,
-          arguments: {
-            'category': category,
-          },
+          arguments: {'category': category},
         );
       },
       child: Card(
@@ -191,14 +208,16 @@ class _CategoryScreenState extends State<CategoryScreen> {
         child: Column(
           children: [
             // Category Image
-            Expanded(child: CustomImage(imageUrl: category.icon )),
+            Expanded(child: CustomImage(imageUrl: category.icon)),
             Column(
               children: [
                 const SizedBox(height: 4),
                 Text(
                   category.name ?? '',
                   textAlign: TextAlign.center,
-                  style: context.headlineSmall!.copyWith(fontWeight: FontWeight.w600),
+                  style: context.headlineSmall!.copyWith(
+                    fontWeight: FontWeight.w600,
+                  ),
                   maxLines: 1,
                 ),
                 // const SizedBox(height: 4),
@@ -222,16 +241,20 @@ class _CategoryScreenState extends State<CategoryScreen> {
       ),
     );
   }
-// Helper method to determine text direction based on content
+
+  // Helper method to determine text direction based on content
   TextDirection _getTextDirection(String text) {
     if (text.isEmpty) return TextDirection.ltr;
 
     // Check if text contains Arabic characters
-    final arabicRegex = RegExp(r'[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF]');
+    final arabicRegex = RegExp(
+      r'[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF]',
+    );
 
     if (arabicRegex.hasMatch(text)) {
       return TextDirection.rtl;
     }
 
     return TextDirection.ltr;
-  }}
+  }
+}

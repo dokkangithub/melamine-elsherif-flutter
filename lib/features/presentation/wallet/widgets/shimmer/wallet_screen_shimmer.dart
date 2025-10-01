@@ -18,10 +18,10 @@ class WalletScreenShimmer extends StatelessWidget {
             children: [
               // Wallet Balance Shimmer
               const WalletBalanceShimmer(),
-              
+
               // Club Points Shimmer
               const ClubPointsShimmer(),
-              
+
               // Transaction History Title
               Padding(
                 padding: const EdgeInsets.fromLTRB(20.0, 24.0, 20.0, 12.0),
@@ -41,7 +41,7 @@ class WalletScreenShimmer extends StatelessWidget {
             ],
           ),
         ),
-        
+
         // Transaction List Shimmer
         SliverList(
           delegate: SliverChildBuilderDelegate(
@@ -49,12 +49,10 @@ class WalletScreenShimmer extends StatelessWidget {
             childCount: 5, // Show 5 transaction items
           ),
         ),
-        
+
         // Add some bottom padding
-        SliverToBoxAdapter(
-          child: SizedBox(height: 20),
-        ),
+        SliverToBoxAdapter(child: SizedBox(height: 20)),
       ],
     );
   }
-} 
+}

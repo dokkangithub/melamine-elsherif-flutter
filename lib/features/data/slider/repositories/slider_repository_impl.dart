@@ -34,7 +34,9 @@ class SliderRepositoryImpl implements SliderRepository {
 
   Future<SliderResponseModel?> _getCachedData() async {
     final cachedDataJson = SharedPrefs.getString(SLIDER_CACHE_KEY);
-    final cachedTimestampStr = SharedPrefs.getString(SLIDER_CACHE_TIMESTAMP_KEY);
+    final cachedTimestampStr = SharedPrefs.getString(
+      SLIDER_CACHE_TIMESTAMP_KEY,
+    );
 
     if (cachedDataJson != null && cachedTimestampStr != null) {
       final cachedTimestamp = int.parse(cachedTimestampStr);
@@ -60,7 +62,10 @@ class SliderRepositoryImpl implements SliderRepository {
     final response = await sliderRemoteDataSource.getSliders();
 
     // Cache the response
-    await SharedPrefs.setString(SLIDER_CACHE_KEY, json.encode(response.toJson()));
+    await SharedPrefs.setString(
+      SLIDER_CACHE_KEY,
+      json.encode(response.toJson()),
+    );
 
     // Cache the timestamp
     final currentTimestamp = DateTime.now().millisecondsSinceEpoch.toString();

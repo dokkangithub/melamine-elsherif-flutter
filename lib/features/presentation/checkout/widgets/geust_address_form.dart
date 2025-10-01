@@ -14,10 +14,7 @@ import '../../address/controller/address_provider.dart';
 class GuestAddressFormScreen extends StatefulWidget {
   final Address? initialAddress;
 
-  const GuestAddressFormScreen({
-    super.key,
-    this.initialAddress,
-  });
+  const GuestAddressFormScreen({super.key, this.initialAddress});
 
   @override
   State<GuestAddressFormScreen> createState() => _GuestAddressFormScreenState();
@@ -74,9 +71,9 @@ class _GuestAddressFormScreenState extends State<GuestAddressFormScreen> {
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(e.toString())),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(e.toString())));
       }
     } finally {
       if (mounted) {
@@ -144,7 +141,7 @@ class _GuestAddressFormScreenState extends State<GuestAddressFormScreen> {
         isDefault: true,
         locationAvailable: false,
       );
-      AppStrings.userName=_nameController.text;
+      AppStrings.userName = _nameController.text;
 
       Navigator.pop(context, guestAddress);
     } catch (e) {
@@ -152,9 +149,9 @@ class _GuestAddressFormScreenState extends State<GuestAddressFormScreen> {
         setState(() {
           _isLoading = false;
         });
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(e.toString())),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(e.toString())));
       }
     }
   }
@@ -223,15 +220,15 @@ class _GuestAddressFormScreenState extends State<GuestAddressFormScreen> {
                   onChanged: addressProvider.states.isEmpty
                       ? null
                       : (value) async {
-                    if (value != null) {
-                      setState(() {
-                        _selectedStateId = value;
-                        _selectedStateName = addressProvider.states
-                            .firstWhere((state) => state.id == value)
-                            .name;
-                      });
-                    }
-                  },
+                          if (value != null) {
+                            setState(() {
+                              _selectedStateId = value;
+                              _selectedStateName = addressProvider.states
+                                  .firstWhere((state) => state.id == value)
+                                  .name;
+                            });
+                          }
+                        },
                 ),
                 const SizedBox(height: 16),
 
@@ -292,13 +289,15 @@ class _GuestAddressFormScreenState extends State<GuestAddressFormScreen> {
                 _isLoading
                     ? const CustomLoadingWidget()
                     : CustomButton(
-                  onPressed: _isLoading ? null : _saveAddress,
-                  child: Text(
-                    'save_address'.tr(context),
-                    textAlign: TextAlign.center,
-                    style: context.titleMedium!.copyWith(color: AppTheme.white),
-                  ),
-                ),
+                        onPressed: _isLoading ? null : _saveAddress,
+                        child: Text(
+                          'save_address'.tr(context),
+                          textAlign: TextAlign.center,
+                          style: context.titleMedium!.copyWith(
+                            color: AppTheme.white,
+                          ),
+                        ),
+                      ),
               ],
             ),
           );

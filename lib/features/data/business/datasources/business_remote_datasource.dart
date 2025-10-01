@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:dio/dio.dart';
 import '../../../../core/utils/constants/app_endpoints.dart';
 import '../../../../core/api/rest_api_provider.dart';
@@ -30,12 +29,14 @@ class BusinessRemoteDataSourceImpl implements BusinessRemoteDataSource {
         }
         throw Exception('Failed to load business settings: ${data['message']}');
       }
-      
-      throw Exception('Failed to load business settings. Status: ${response.statusCode}');
+
+      throw Exception(
+        'Failed to load business settings. Status: ${response.statusCode}',
+      );
     } on DioException catch (e) {
       throw Exception('Network error: ${e.message}');
     } catch (e) {
       throw Exception('Error fetching business settings: $e');
     }
   }
-} 
+}

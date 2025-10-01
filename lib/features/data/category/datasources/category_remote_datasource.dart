@@ -3,11 +3,21 @@ import '../../../../core/utils/constants/app_endpoints.dart';
 import '../models/category_model.dart';
 
 abstract class CategoryRemoteDataSource {
-  Future<CategoryResponseModel> getCategories({String? parentId, bool needRefresh = false});
-  Future<CategoryResponseModel> getFeaturedCategories({bool needRefresh = false});
+  Future<CategoryResponseModel> getCategories({
+    String? parentId,
+    bool needRefresh = false,
+  });
+  Future<CategoryResponseModel> getFeaturedCategories({
+    bool needRefresh = false,
+  });
   Future<CategoryResponseModel> getTopCategories({bool needRefresh = false});
-  Future<CategoryResponseModel> getFilterPageCategories({bool needRefresh = false});
-  Future<CategoryResponseModel> getSubCategories({required String mainCategoryId, bool needRefresh = false});
+  Future<CategoryResponseModel> getFilterPageCategories({
+    bool needRefresh = false,
+  });
+  Future<CategoryResponseModel> getSubCategories({
+    required String mainCategoryId,
+    bool needRefresh = false,
+  });
 }
 
 class CategoryRemoteDataSourceImpl implements CategoryRemoteDataSource {
@@ -16,7 +26,10 @@ class CategoryRemoteDataSourceImpl implements CategoryRemoteDataSource {
   CategoryRemoteDataSourceImpl(this.apiProvider);
 
   @override
-  Future<CategoryResponseModel> getCategories({String? parentId, bool needRefresh = false}) async {
+  Future<CategoryResponseModel> getCategories({
+    String? parentId,
+    bool needRefresh = false,
+  }) async {
     final Map<String, dynamic> queryParams = {};
     if (parentId != null) {
       queryParams['parent_id'] = parentId;
@@ -30,7 +43,9 @@ class CategoryRemoteDataSourceImpl implements CategoryRemoteDataSource {
   }
 
   @override
-  Future<CategoryResponseModel> getFeaturedCategories({bool needRefresh = false}) async {
+  Future<CategoryResponseModel> getFeaturedCategories({
+    bool needRefresh = false,
+  }) async {
     final response = await apiProvider.get(
       LaravelApiEndPoint.featuredCategories,
     );
@@ -38,15 +53,17 @@ class CategoryRemoteDataSourceImpl implements CategoryRemoteDataSource {
   }
 
   @override
-  Future<CategoryResponseModel> getTopCategories({bool needRefresh = false}) async {
-    final response = await apiProvider.get(
-      LaravelApiEndPoint.topCategories,
-    );
+  Future<CategoryResponseModel> getTopCategories({
+    bool needRefresh = false,
+  }) async {
+    final response = await apiProvider.get(LaravelApiEndPoint.topCategories);
     return CategoryResponseModel.fromJson(response.data);
   }
 
   @override
-  Future<CategoryResponseModel> getFilterPageCategories({bool needRefresh = false}) async {
+  Future<CategoryResponseModel> getFilterPageCategories({
+    bool needRefresh = false,
+  }) async {
     final response = await apiProvider.get(
       LaravelApiEndPoint.filterPageCategories,
     );
@@ -54,9 +71,12 @@ class CategoryRemoteDataSourceImpl implements CategoryRemoteDataSource {
   }
 
   @override
-  Future<CategoryResponseModel> getSubCategories({required String mainCategoryId, bool needRefresh = false}) async {
+  Future<CategoryResponseModel> getSubCategories({
+    required String mainCategoryId,
+    bool needRefresh = false,
+  }) async {
     final response = await apiProvider.get(
-      LaravelApiEndPoint.subCategory+mainCategoryId,
+      LaravelApiEndPoint.subCategory + mainCategoryId,
     );
     return CategoryResponseModel.fromJson(response.data);
   }

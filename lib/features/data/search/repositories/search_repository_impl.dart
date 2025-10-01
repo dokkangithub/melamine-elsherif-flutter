@@ -15,14 +15,14 @@ class SearchRepositoryImpl implements SearchRepository {
 
   @override
   Future<ProductsResponse> getFilteredProducts(
-      int page, {
-        String? name,
-        String? sortKey,
-        String? brands,
-        String? categories,
-        double? min,
-        double? max,
-      }) async {
+    int page, {
+    String? name,
+    String? sortKey,
+    String? brands,
+    String? categories,
+    double? min,
+    double? max,
+  }) async {
     return await remoteDataSource.getFilteredProducts(
       page,
       name: name,
@@ -33,5 +33,4 @@ class SearchRepositoryImpl implements SearchRepository {
       max: max,
     );
   }
-
 }

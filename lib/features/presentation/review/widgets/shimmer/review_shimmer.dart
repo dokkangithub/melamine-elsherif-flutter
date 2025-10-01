@@ -39,17 +39,9 @@ class ReviewShimmer extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
-                      width: 120,
-                      height: 16,
-                      color: Colors.white,
-                    ),
+                    Container(width: 120, height: 16, color: Colors.white),
                     const SizedBox(height: 8),
-                    Container(
-                      width: 80,
-                      height: 12,
-                      color: Colors.white,
-                    ),
+                    Container(width: 80, height: 12, color: Colors.white),
                   ],
                 ),
               ],
@@ -57,31 +49,15 @@ class ReviewShimmer extends StatelessWidget {
             const SizedBox(height: 12),
             Row(
               children: [
-                Container(
-                  width: 100,
-                  height: 20,
-                  color: Colors.white,
-                ),
+                Container(width: 100, height: 20, color: Colors.white),
               ],
             ),
             const SizedBox(height: 12),
-            Container(
-              width: double.infinity,
-              height: 16,
-              color: Colors.white,
-            ),
+            Container(width: double.infinity, height: 16, color: Colors.white),
             const SizedBox(height: 8),
-            Container(
-              width: double.infinity,
-              height: 16,
-              color: Colors.white,
-            ),
+            Container(width: double.infinity, height: 16, color: Colors.white),
             const SizedBox(height: 8),
-            Container(
-              width: 200,
-              height: 16,
-              color: Colors.white,
-            ),
+            Container(width: 200, height: 16, color: Colors.white),
           ],
         ),
       ),

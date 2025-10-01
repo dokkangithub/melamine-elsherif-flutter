@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:marquee/marquee.dart'; // 🔄
+import 'package:marquee/marquee.dart';
 import 'package:melamine_elsherif/core/utils/helpers/ui_helper.dart';
 import 'package:melamine_elsherif/core/utils/extension/translate_extension.dart';
 import 'package:melamine_elsherif/core/utils/extension/text_theme_extension.dart';
+
+import '../../../../core/config/themes.dart/theme.dart';
 
 class TopHomeWidget extends StatelessWidget {
   const TopHomeWidget({super.key});
@@ -17,10 +19,10 @@ class TopHomeWidget extends StatelessWidget {
       'brand_message_4'.tr(context),
       'brand_message_5'.tr(context),
     ];
-    final marqueeText = messages.join('    ✦    ');
+    final marqueeText = messages.join('          ');
     return Container(
-      padding: const EdgeInsets.only(left: 16.0, top: 15.0, right: 16),
-      color: Colors.white,
+      padding: const EdgeInsets.only(left: 16.0, top: 35.0, right: 16,bottom: 10),
+      color: AppTheme.primaryColor.withOpacity(0.4),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -51,7 +53,6 @@ class TopHomeWidget extends StatelessWidget {
                 pauseAfterRound: const Duration(seconds: 1),
               ),
             ),
-
           ),
         ],
       ),

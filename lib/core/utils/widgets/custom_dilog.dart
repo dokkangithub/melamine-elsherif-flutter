@@ -21,9 +21,7 @@ class CustomDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       elevation: 0,
       backgroundColor: Colors.transparent,
       child: _buildDialogContent(context),
@@ -42,10 +40,7 @@ class CustomDialog extends StatelessWidget {
         children: [
           Text(
             title,
-            style: const TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
+            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 16),
           Text(
@@ -64,10 +59,7 @@ class CustomDialog extends StatelessWidget {
                 },
                 child: Text(
                   cancelButtonText,
-                  style: TextStyle(
-                    color: Colors.grey[600],
-                    fontSize: 16,
-                  ),
+                  style: TextStyle(color: Colors.grey[600], fontSize: 16),
                 ),
               ),
               const SizedBox(width: 8),
@@ -96,12 +88,15 @@ class CustomDialog extends StatelessWidget {
       ),
     );
   }
-  
+
   /// Shows a loading dialog
-  /// 
+  ///
   /// [context] - BuildContext for showing the dialog
   /// [message] - Optional message to display with the loading indicator
-  static void showLoading(BuildContext context, {String message = 'Loading...'}) {
+  static void showLoading(
+    BuildContext context, {
+    String message = 'Loading...',
+  }) {
     showDialog(
       context: context,
       barrierDismissible: false,

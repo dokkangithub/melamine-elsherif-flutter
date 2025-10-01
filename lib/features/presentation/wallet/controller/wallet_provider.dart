@@ -28,7 +28,7 @@ class WalletProvider extends ChangeNotifier {
       notifyListeners();
 
       walletBalance = await getWalletBalanceUseCase();
-      
+
       balanceState = LoadingState.loaded;
     } catch (e) {
       balanceState = LoadingState.error;
@@ -52,14 +52,14 @@ class WalletProvider extends ChangeNotifier {
       notifyListeners();
 
       final history = await getWalletHistoryUseCase(page: currentPage);
-      
+
       if (history.isEmpty) {
         hasMoreTransactions = false;
       } else {
         transactions.addAll(history);
         currentPage++;
       }
-      
+
       historyState = LoadingState.loaded;
     } catch (e) {
       historyState = LoadingState.error;
@@ -73,4 +73,4 @@ class WalletProvider extends ChangeNotifier {
     await fetchWalletBalance();
     await fetchWalletHistory(refresh: true);
   }
-} 
+}

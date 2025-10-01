@@ -86,7 +86,9 @@ class ProductDetailsModel {
       // Check if specifications is a Map before attempting to cast it
       if (json['specifications'] is Map) {
         final specsMap = json['specifications'] as Map<String, dynamic>;
-        specifications = specsMap.map((key, value) => MapEntry(key, value.toString()));
+        specifications = specsMap.map(
+          (key, value) => MapEntry(key, value.toString()),
+        );
       }
     }
 
@@ -102,18 +104,25 @@ class ProductDetailsModel {
       shopSlug: json['shop_slug'] ?? '',
       shopName: json['shop_name'] ?? '',
       shopLogo: json['shop_logo'] ?? '',
-      photos: (json['photos'] as List?)
-          ?.map((photo) => PhotoModel.fromJson(photo))
-          .toList() ??
+      photos:
+          (json['photos'] as List?)
+              ?.map((photo) => PhotoModel.fromJson(photo))
+              .toList() ??
           [],
       thumbnailImage: json['thumbnail_image'] ?? '',
-      tags: (json['tags'] as List?)?.map((tag) => tag.toString()).toList() ?? [],
+      tags:
+          (json['tags'] as List?)?.map((tag) => tag.toString()).toList() ?? [],
       priceHighLow: json['price_high_low'] ?? '',
-      choiceOptions: (json['choice_options'] as List?)
-          ?.map((option) => ChoiceOptionModel.fromJson(option))
-          .toList() ??
+      choiceOptions:
+          (json['choice_options'] as List?)
+              ?.map((option) => ChoiceOptionModel.fromJson(option))
+              .toList() ??
           [],
-      colors: (json['colors'] as List?)?.map((color) => color.toString()).toList() ?? [],
+      colors:
+          (json['colors'] as List?)
+              ?.map((color) => color.toString())
+              .toList() ??
+          [],
       hasVariation: json['has_variation'] ?? false,
       hasDiscount: json['has_discount'] ?? false,
       discount: json['discount'] ?? '',
@@ -183,16 +192,16 @@ class ChoiceOptionModel {
     return ChoiceOptionModel(
       name: json['name'] ?? '',
       title: json['title'] ?? '',
-      options: (json['options'] as List?)?.map((option) => option.toString()).toList() ?? [],
+      options:
+          (json['options'] as List?)
+              ?.map((option) => option.toString())
+              .toList() ??
+          [],
     );
   }
 
   ChoiceOption toEntity() {
-    return ChoiceOption(
-      name: name,
-      title: title,
-      options: options,
-    );
+    return ChoiceOption(name: name, title: title, options: options);
   }
 }
 
@@ -200,23 +209,14 @@ class PhotoModel {
   final String variant;
   final String path;
 
-  PhotoModel({
-    required this.variant,
-    required this.path,
-  });
+  PhotoModel({required this.variant, required this.path});
 
   factory PhotoModel.fromJson(Map<String, dynamic> json) {
-    return PhotoModel(
-      variant: json['variant'] ?? '',
-      path: json['path'] ?? '',
-    );
+    return PhotoModel(variant: json['variant'] ?? '', path: json['path'] ?? '');
   }
 
   Photo toEntity() {
-    return Photo(
-      variant: variant,
-      path: path,
-    );
+    return Photo(variant: variant, path: path);
   }
 }
 
@@ -243,12 +243,7 @@ class BrandModel {
   }
 
   Brand toEntity() {
-    return Brand(
-      id: id,
-      name: name,
-      slug: slug,
-      logo: logo,
-    );
+    return Brand(id: id, name: name, slug: slug, logo: logo);
   }
 }
 
@@ -265,9 +260,10 @@ class ProductResponseModel {
 
   factory ProductResponseModel.fromJson(Map<String, dynamic> json) {
     return ProductResponseModel(
-      data: (json['data'] as List?)
-          ?.map((product) => ProductDetailsModel.fromJson(product))
-          .toList() ??
+      data:
+          (json['data'] as List?)
+              ?.map((product) => ProductDetailsModel.fromJson(product))
+              .toList() ??
           [],
       success: json['success'] ?? false,
       status: json['status'] ?? 0,

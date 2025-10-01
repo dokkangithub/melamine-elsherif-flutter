@@ -23,7 +23,10 @@ class ProfileFormWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('name'.tr(context), style: const TextStyle(fontWeight: FontWeight.bold)),
+          Text(
+            'name'.tr(context),
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
           const SizedBox(height: 8),
           CustomTextFormField(
             controller: nameController,
@@ -36,7 +39,10 @@ class ProfileFormWidget extends StatelessWidget {
             },
           ),
           const SizedBox(height: 16),
-          Text('new_password'.tr(context), style: const TextStyle(fontWeight: FontWeight.bold)),
+          Text(
+            'new_password'.tr(context),
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
           const SizedBox(height: 8),
           CustomTextFormField(
             controller: passwordController,
@@ -50,14 +56,18 @@ class ProfileFormWidget extends StatelessWidget {
             },
           ),
           const SizedBox(height: 16),
-          Text('confirm_password'.tr(context), style: const TextStyle(fontWeight: FontWeight.bold)),
+          Text(
+            'confirm_password'.tr(context),
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
           const SizedBox(height: 8),
           CustomTextFormField(
             controller: confirmPasswordController,
             hint: 'reenter_password'.tr(context),
             isPassword: true,
             validator: (value) {
-              if (passwordController.text.isNotEmpty && value != passwordController.text) {
+              if (passwordController.text.isNotEmpty &&
+                  value != passwordController.text) {
                 return 'passwords_not_match'.tr(context);
               }
               return null;

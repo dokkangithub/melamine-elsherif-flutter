@@ -25,16 +25,11 @@ class CategoryCard extends StatelessWidget {
           fit: StackFit.expand,
           children: [
             // Image
-            CustomImage(
-              imageUrl: imageUrl,
-              fit: BoxFit.cover,
-            ),
-            
+            CustomImage(imageUrl: imageUrl, fit: BoxFit.cover),
+
             // Dark overlay
-            Container(
-              color: Colors.black.withValues(alpha: 0.3),
-            ),
-            
+            Container(color: Colors.black.withValues(alpha: 0.3)),
+
             // Category name
             Align(
               alignment: Alignment.center,
@@ -42,7 +37,7 @@ class CategoryCard extends StatelessWidget {
                 name.toUpperCase(),
                 style: context.headlineMedium!.copyWith(
                   color: AppTheme.white,
-                  fontWeight: FontWeight.w700
+                  fontWeight: FontWeight.w700,
                 ),
                 textAlign: TextAlign.center,
               ),

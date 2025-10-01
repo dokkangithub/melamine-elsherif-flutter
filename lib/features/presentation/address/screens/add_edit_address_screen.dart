@@ -77,10 +77,9 @@ class _AddEditAddressScreenState extends State<AddEditAddressScreen> {
     });
     try {
       final addressProvider = context.read<AddressProvider>();
-      
+
       // Always load states for Egypt (ID: 64)
       await addressProvider.fetchStatesByCountry(64);
-      
     } catch (e) {
       if (mounted) {
         CustomToast.showToast(
@@ -111,19 +110,19 @@ class _AddEditAddressScreenState extends State<AddEditAddressScreen> {
           duration: const Duration(milliseconds: 400),
           child: Text(
             widget.address == null
-              ? 'add_new_address'.tr(context)
-              : 'edit_address'.tr(context),
-            style: context.displaySmall.copyWith(
-              fontWeight: FontWeight.w500,
-            )
+                ? 'add_new_address'.tr(context)
+                : 'edit_address'.tr(context),
+            style: context.displaySmall.copyWith(fontWeight: FontWeight.w500),
           ),
         ),
       ),
       body: Consumer<AddressProvider>(
         builder: (context, addressProvider, child) {
           // Show shimmer while loading states
-          final bool isLoadingInitialData = _isLoadingStates || 
-              (addressProvider.states.isEmpty && addressProvider.addressState == LoadingState.loading);
+          final bool isLoadingInitialData =
+              _isLoadingStates ||
+              (addressProvider.states.isEmpty &&
+                  addressProvider.addressState == LoadingState.loading);
 
           return Form(
             key: _formKey,
@@ -133,41 +132,42 @@ class _AddEditAddressScreenState extends State<AddEditAddressScreen> {
                   child: SingleChildScrollView(
                     padding: const EdgeInsets.all(16),
                     child: isLoadingInitialData
-                      ? const AddressFormShimmer()
-                      : FadeInUp(
-                          duration: const Duration(milliseconds: 500),
-                          child: AddressFormFields(
-                            addressController: _addressController,
-                            phoneController: _phoneController,
-                            cityNameController: _cityNameController,
-                            selectedCountryId: _selectedCountryId, // Fixed to Egypt
-                            selectedStateId: _selectedStateId,
-                            fullNameController: _fullNameController,
-                            countries: const [
-                              {'id': 64, 'name': 'Egypt'} // Fixed to Egypt
-                            ],
-                            states: addressProvider.states
-                                .map((location) => location.toMap())
-                                .toList(),
-                            isLoading: _isLoading,
-                            onCountryChanged: (value) async {
-                              // Country is fixed to Egypt, so this is not needed
-                              // but keep it for the interface compatibility
-                              if (value != null) {
-                                setState(() {
-                                  _selectedCountryId = 64; // Always Egypt
-                                });
-                              }
-                            },
-                            onStateChanged: (value) async {
-                              if (value != null) {
-                                setState(() {
-                                  _selectedStateId = value;
-                                });
-                              }
-                            },
+                        ? const AddressFormShimmer()
+                        : FadeInUp(
+                            duration: const Duration(milliseconds: 500),
+                            child: AddressFormFields(
+                              addressController: _addressController,
+                              phoneController: _phoneController,
+                              cityNameController: _cityNameController,
+                              selectedCountryId:
+                                  _selectedCountryId, // Fixed to Egypt
+                              selectedStateId: _selectedStateId,
+                              fullNameController: _fullNameController,
+                              countries: const [
+                                {'id': 64, 'name': 'Egypt'}, // Fixed to Egypt
+                              ],
+                              states: addressProvider.states
+                                  .map((location) => location.toMap())
+                                  .toList(),
+                              isLoading: _isLoading,
+                              onCountryChanged: (value) async {
+                                // Country is fixed to Egypt, so this is not needed
+                                // but keep it for the interface compatibility
+                                if (value != null) {
+                                  setState(() {
+                                    _selectedCountryId = 64; // Always Egypt
+                                  });
+                                }
+                              },
+                              onStateChanged: (value) async {
+                                if (value != null) {
+                                  setState(() {
+                                    _selectedStateId = value;
+                                  });
+                                }
+                              },
+                            ),
                           ),
-                        ),
                   ),
                 ),
                 _buildSaveButton(),
@@ -204,9 +204,9 @@ class _AddEditAddressScreenState extends State<AddEditAddressScreen> {
             child: _isLoading
                 ? const CustomLoadingWidget()
                 : CustomButton(
-                  onPressed: _isLoading ? null : _saveAddress,
-                  backgroundColor: AppTheme.primaryColor,
-                  child: Text(
+                    onPressed: _isLoading ? null : _saveAddress,
+                    backgroundColor: AppTheme.primaryColor,
+                    child: Text(
                       'save'.tr(context),
                       textAlign: TextAlign.center,
                       style: context.headlineSmall.copyWith(
@@ -214,7 +214,7 @@ class _AddEditAddressScreenState extends State<AddEditAddressScreen> {
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-                ),
+                  ),
           ),
         ],
       ),

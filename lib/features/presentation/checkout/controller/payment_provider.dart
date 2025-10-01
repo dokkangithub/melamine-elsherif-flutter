@@ -107,11 +107,12 @@ class PaymentProvider extends ChangeNotifier {
         throw Exception('Invalid checkout method selected');
       }
 
-      orderCreationState = response.result ? LoadingState.loaded : LoadingState.error;
+      orderCreationState = response.result
+          ? LoadingState.loaded
+          : LoadingState.error;
       if (!response.result) {
         errorMessage = response.message;
       }
-
 
       return response;
     } catch (e) {
@@ -127,16 +128,12 @@ class PaymentProvider extends ChangeNotifier {
     }
   }
 
-
   Future<Map<String, dynamic>> verifyOrder(String orderId) async {
     try {
       return await verifyOrderSuccessUseCase(orderId);
     } catch (e) {
       errorMessage = e.toString();
-      return {
-        'result': false,
-        'message': e.toString(),
-      };
+      return {'result': false, 'message': e.toString()};
     }
   }
 
@@ -153,8 +150,9 @@ class PaymentProvider extends ChangeNotifier {
         address: address,
       );
 
-      shippingUpdateState = result['result'] == true ?
-      LoadingState.loaded : LoadingState.error;
+      shippingUpdateState = result['result'] == true
+          ? LoadingState.loaded
+          : LoadingState.error;
 
       if (result['result'] != true && result['message'] != null) {
         errorMessage = result['message'].toString();
@@ -164,10 +162,7 @@ class PaymentProvider extends ChangeNotifier {
     } catch (e) {
       shippingUpdateState = LoadingState.error;
       errorMessage = e.toString();
-      return {
-        'result': false,
-        'message': e.toString(),
-      };
+      return {'result': false, 'message': e.toString()};
     } finally {
       notifyListeners();
     }
@@ -178,7 +173,7 @@ class PaymentProvider extends ChangeNotifier {
 
     try {
       return paymentTypes.firstWhere(
-              (type) => type.paymentTypeKey == selectedPaymentTypeKey
+        (type) => type.paymentTypeKey == selectedPaymentTypeKey,
       );
     } catch (e) {
       return null;

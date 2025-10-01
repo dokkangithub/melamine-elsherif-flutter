@@ -1,19 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:animated_text_kit/animated_text_kit.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:melamine_elsherif/core/config/app_config.dart/app_config.dart';
-import 'package:melamine_elsherif/core/config/themes.dart/theme.dart';
 import 'package:melamine_elsherif/core/services/business_settings_service.dart';
-import 'package:melamine_elsherif/core/utils/constants/app_assets.dart';
-import 'package:melamine_elsherif/core/utils/extension/text_style_extension.dart';
-import 'package:melamine_elsherif/core/utils/extension/translate_extension.dart';
-import 'package:melamine_elsherif/core/utils/widgets/custom_cached_image.dart';
 import '../../../core/config/routes.dart/routes.dart';
 import '../../../core/di/injection_container.dart';
 import '../../../core/utils/local_storage/local_storage_keys.dart';
 import '../../../core/utils/local_storage/secure_storage.dart';
-import 'dart:math' as math;
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -22,89 +13,79 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMixin {
-  // Animation controllers
-  late AnimationController _fadeInController;
-  late Animation<double> _fadeInAnimation;
-  
-  // Loading flags
+class _SplashScreenState extends State<SplashScreen>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
   bool _isBusinessSettingsLoaded = false;
 
   @override
   void initState() {
     super.initState();
-    _setupAnimations();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1200),
+    )..repeat(reverse: true);
+
     _preloadData();
   }
 
-  void _setupAnimations() {
-    // Fade in animation controller
-    _fadeInController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 1500),
-    );
-    
-    _fadeInAnimation = CurvedAnimation(
-      parent: _fadeInController,
-      curve: Curves.easeIn,
-    );
-
-    // Start animations
-    _fadeInController.forward();
-  }
-
-  // Preload all necessary data
   Future<void> _preloadData() async {
-    // Load business settings
     try {
       final businessSettingsService = sl<BusinessSettingsService>();
       debugPrint('Splash screen: Loading business settings...');
       await businessSettingsService.init();
-      
-      // Verify we got the banner images
+
       final bannerImages = businessSettingsService.getHomeBannerImages();
-      debugPrint('Splash screen: Loaded business settings. Banner images: ${bannerImages.length}');
-      
+      debugPrint(
+        'Splash screen: Loaded business settings. Banner images: ${bannerImages.length}',
+      );
+
       setState(() {
         _isBusinessSettingsLoaded = true;
       });
     } catch (e) {
       debugPrint('Splash screen: Error loading business settings: $e');
       setState(() {
-        _isBusinessSettingsLoaded = true; // Still mark as loaded to avoid blocking the app
+        _isBusinessSettingsLoaded = true;
       });
     }
-    
-    // Check navigation after preloading and animations
+
     _checkNavigationPath();
   }
 
   Future<void> _checkNavigationPath() async {
-    // Delay to allow animations to complete
-    await Future.delayed(const Duration(seconds: 2));
-    
+    await Future.delayed(const Duration(milliseconds: 1200));
+
     if (!mounted) return;
-    
+
     final secureStorage = sl<SecureStorage>();
-    final hasCompletedOnboarding = await secureStorage.get<bool>(LocalStorageKey.hasCompletedOnboarding) ?? false;
+    final hasCompletedOnboarding =
+        await secureStorage.get<bool>(LocalStorageKey.hasCompletedOnboarding) ??
+            false;
+
+    // Stop the looping animation before navigating away
+    if (mounted) {
+      _controller.stop();
+    }
 
     if (!hasCompletedOnboarding) {
-      // First time: Navigate to onboarding
       AppRoutes.navigateToAndRemoveUntil(context, AppRoutes.onboarding);
     } else {
-      // Already logged in: Navigate to home
       AppRoutes.navigateToAndRemoveUntil(context, AppRoutes.mainLayoutScreen);
     }
   }
 
   @override
   void dispose() {
-    _fadeInController.dispose();
+    _controller.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final primary = colorScheme.primary;
+
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
@@ -113,72 +94,53 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
         backgroundColor: Colors.transparent,
         systemOverlayStyle: const SystemUiOverlayStyle(
           statusBarColor: Colors.transparent,
-          statusBarIconBrightness: Brightness.light
+          statusBarIconBrightness: Brightness.light,
         ),
       ),
-      body: Container(
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage(AppImages.splashBackground),
-            fit: BoxFit.cover,
-          ),
-        ),
-        child: FadeTransition(
-          opacity: _fadeInAnimation,
-          child: SafeArea(
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
+      body: AnimatedBuilder(
+        animation: _controller,
+        builder: (context, _) {
+          final double progress = _controller.value.clamp(0.0, 1.0);
 
-                  // Main content
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      // ALSHERIF text
-                      Text(
-                        'splash_alsherif'.tr(context),
-                        style: context.headlineLarge.copyWith(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          letterSpacing: 1.5,
-                          fontFamily: GoogleFonts.tajawal().fontFamily,
-                        ),
-                      ),
-                      const SizedBox(height: 16),
+          double logoOpacity;
+          if (progress < 0.5) {
+            final double t = (progress / 0.5).clamp(0.0, 1.0);
+            logoOpacity = Curves.easeIn.transform(t);
+          } else if (progress < 0.7) {
+            logoOpacity = 1.0;
+          } else {
+            final double t = ((progress - 0.7) / 0.3).clamp(0.0, 1.0);
+            logoOpacity = 1.0 - Curves.easeOut.transform(t);
+          }
 
-                      // MELAMINE text
-                      Text(
-                        'splash_melamine'.tr(context),
-                        style: context.headlineLarge.copyWith(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w600,
-                          letterSpacing: 1.2,
-                          fontFamily: GoogleFonts.tajawal().fontFamily,
-                        ),
-                      ),
-
-                      const SizedBox(height: 40),
-
-                      // Tagline
-                      Text(
-                        'splash_tagline'.tr(context),
-                        style: context.titleSmall.copyWith(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w500,
-                          fontFamily: GoogleFonts.tajawal().fontFamily,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-
-                      const SizedBox(height: 60),
+          return Stack(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [
+                      primary.withOpacity(0.95),
+                      primary.withOpacity(0.85),
+                      Colors.white.withOpacity(0.95),
                     ],
                   ),
-                ],
+                ),
               ),
-            ),
-          ),
-        ),
+
+              Center(
+                child: Opacity(
+                  opacity: logoOpacity,
+                  child: Image.asset(
+                    'assets/cups/splash_alsherif_logo.png',
+                    height: 150,
+                  ),
+                ),
+              ),
+            ],
+          );
+        },
       ),
     );
   }

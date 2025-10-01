@@ -29,7 +29,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-
   @override
   void dispose() {
     _nameController.dispose();
@@ -37,7 +36,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     _passwordController.dispose();
     super.dispose();
   }
-  
+
   @override
   void initState() {
     super.initState();
@@ -51,7 +50,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
     return UIHelper.wrapWithStatusBarConfig(
       Scaffold(
         extendBodyBehindAppBar: true, // Important: extend body behind app bar
-        backgroundColor: const Color(0xFFF2F2F2), // Match the light gray of the background
+        backgroundColor: const Color(
+          0xFFF2F2F2,
+        ), // Match the light gray of the background
         // Remove app bar
         body: Form(
           key: _formKey,
@@ -73,7 +74,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                 ),
               ),
-              
+
               // Content
               SafeArea(
                 child: SingleChildScrollView(
@@ -83,26 +84,29 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const SizedBox(height: 16),
-                        
+
                         // Top row with back button and language switcher
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             // Back button
                             IconButton(
-                              icon: const Icon(Icons.arrow_back_ios, color: AppTheme.primaryColor),
+                              icon: const Icon(
+                                Icons.arrow_back_ios,
+                                color: AppTheme.primaryColor,
+                              ),
                               onPressed: () => Navigator.of(context).pop(),
                               padding: EdgeInsets.zero,
                               constraints: const BoxConstraints(),
                             ),
-                            
+
                             // Language switcher
                             const LanguageSwitcher(),
                           ],
                         ),
-                        
+
                         const SizedBox(height: 40),
-                        
+
                         // Logo/Brand name
                         Center(
                           child: Text(
@@ -113,9 +117,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             ),
                           ),
                         ),
-                        
+
                         const SizedBox(height: 60),
-                        
+
                         // Create new account text
                         Center(
                           child: Text(
@@ -126,18 +130,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             ),
                           ),
                         ),
-                        
+
                         const SizedBox(height: 40),
-                        
+
                         // Name field
                         CustomTextFormField(
                           controller: _nameController,
                           hint: 'name'.tr(context),
                           isBorderAvailable: false,
                         ),
-                        
+
                         const SizedBox(height: 16),
-                        
+
                         // Email field
                         CustomTextFormField(
                           controller: _emailController,
@@ -145,9 +149,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           keyboardType: TextInputType.emailAddress,
                           isBorderAvailable: false,
                         ),
-                        
+
                         const SizedBox(height: 16),
-                        
+
                         // Password field
                         CustomTextFormField(
                           controller: _passwordController,
@@ -155,9 +159,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           isPassword: true,
                           isBorderAvailable: false,
                         ),
-                        
+
                         const SizedBox(height: 24),
-                        
+
                         // Sign up button
                         Consumer<AuthProvider>(
                           builder: (context, provider, _) {
@@ -173,15 +177,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             );
                           },
                         ),
-                        
+
                         const SizedBox(height: 24),
-                        
+
                         // Divider with "or" text
                         Row(
                           children: [
-                            Expanded(child: Divider(color: Colors.grey.shade300)),
+                            Expanded(
+                              child: Divider(color: Colors.grey.shade300),
+                            ),
                             Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 16),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                              ),
                               child: Text(
                                 'or'.tr(context),
                                 style: context.bodySmall.copyWith(
@@ -189,12 +197,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 ),
                               ),
                             ),
-                            Expanded(child: Divider(color: Colors.grey.shade300)),
+                            Expanded(
+                              child: Divider(color: Colors.grey.shade300),
+                            ),
                           ],
                         ),
-                        
+
                         const SizedBox(height: 16),
-                        
+
                         // Social login options
                         const SocialLoginWidget(isLoginScreen: false),
                       ],
@@ -227,8 +237,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
           title: 'success!'.tr(context),
           subTitleText: 'create_account_successfully'.tr(context),
           titleStyle: context.displaySmall,
-          subtitleStyle:context.titleMedium,
-          confirmBtnTextStyle: context.titleLarge.copyWith(color: AppTheme.white,fontWeight: FontWeight.w900),
+          subtitleStyle: context.titleMedium,
+          confirmBtnTextStyle: context.titleLarge.copyWith(
+            color: AppTheme.white,
+            fontWeight: FontWeight.w900,
+          ),
           confirmBtnText: 'sign_in'.tr(context),
           onConfirmBtnTap: () {
             AppRoutes.navigateTo(context, AppRoutes.login);

@@ -6,7 +6,10 @@ class GetFeaturedProductsUseCase {
 
   GetFeaturedProductsUseCase(this.productRepository);
 
-  Future<ProductsResponse> call(int page,{bool needUpdate = false}) async {
-    return await productRepository.getFeaturedProducts(page,needUpdate: needUpdate);
+  Future<ProductsResponse> call(int page, {bool needUpdate = false}) async {
+    return await productRepository.getFeaturedProducts(
+      page,
+      needUpdate: needUpdate,
+    );
   }
 }

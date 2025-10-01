@@ -78,7 +78,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         centerTitle: true,
         title: FadeIn(
           duration: const Duration(milliseconds: 500),
-          child: Text('edit_profile'.tr(context),
+          child: Text(
+            'edit_profile'.tr(context),
             style: context.headlineMedium,
           ),
         ),
@@ -87,7 +88,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           FadeIn(
             duration: const Duration(milliseconds: 500),
             child: TextButton(
-              onPressed: isUpdating ? null : () => _updateProfile(context, profileProvider),
+              onPressed: isUpdating
+                  ? null
+                  : () => _updateProfile(context, profileProvider),
               child: Text(
                 'save'.tr(context),
                 style: context.headlineSmall.copyWith(
@@ -117,7 +120,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           width: 120,
                           height: 120,
                           decoration: BoxDecoration(
-                            border: Border.all(width: 0.5,color: Colors.grey),
+                            border: Border.all(width: 0.5, color: Colors.grey),
                             shape: BoxShape.circle,
                             color: Colors.grey[200],
                             image: _selectedImage != null
@@ -126,14 +129,22 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                     fit: BoxFit.cover,
                                   )
                                 : profileProvider.profileImageUrl != null
-                                    ? DecorationImage(
-                                        image: NetworkImage(profileProvider.profileImageUrl!),
-                                        fit: BoxFit.cover,
-                                      )
-                                    : null,
+                                ? DecorationImage(
+                                    image: NetworkImage(
+                                      profileProvider.profileImageUrl!,
+                                    ),
+                                    fit: BoxFit.cover,
+                                  )
+                                : null,
                           ),
-                          child: profileProvider.profileImageUrl == null && _selectedImage == null
-                              ? const Icon(Icons.person, size: 80, color: Colors.grey)
+                          child:
+                              profileProvider.profileImageUrl == null &&
+                                  _selectedImage == null
+                              ? const Icon(
+                                  Icons.person,
+                                  size: 80,
+                                  color: Colors.grey,
+                                )
                               : null,
                         ),
                         Positioned(
@@ -150,7 +161,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                 decoration: BoxDecoration(
                                   color: Colors.black87,
                                   shape: BoxShape.circle,
-                                  border: Border.all(color: Colors.white, width: 2),
+                                  border: Border.all(
+                                    color: Colors.white,
+                                    width: 2,
+                                  ),
                                 ),
                                 child: const Icon(
                                   Icons.camera_alt,
@@ -179,7 +193,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   ),
                 ),
                 const SizedBox(height: 24),
-                
+
                 // Form Fields
                 SlideInLeft(
                   delay: const Duration(milliseconds: 200),
@@ -190,7 +204,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   ),
                 ),
                 const SizedBox(height: 16),
-                
+
                 SlideInLeft(
                   delay: const Duration(milliseconds: 300),
                   duration: const Duration(milliseconds: 500),
@@ -202,7 +216,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   ),
                 ),
                 const SizedBox(height: 16),
-                
+
                 SlideInLeft(
                   delay: const Duration(milliseconds: 500),
                   duration: const Duration(milliseconds: 500),
@@ -214,7 +228,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   ),
                 ),
                 const SizedBox(height: 16),
-                
+
                 SlideInLeft(
                   delay: const Duration(milliseconds: 600),
                   duration: const Duration(milliseconds: 500),
@@ -227,7 +241,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 ),
 
                 const SizedBox(height: 32),
-                
+
                 // Delete Account
                 FadeInUp(
                   delay: const Duration(milliseconds: 700),
@@ -238,9 +252,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     },
                     isOutlined: true,
                     fullWidth: true,
-                    child: Text('delete_account'.tr(context),
+                    child: Text(
+                      'delete_account'.tr(context),
                       textAlign: TextAlign.center,
-                      style: context.titleMedium.copyWith(color: AppTheme.primaryColor,fontWeight: FontWeight.w600),
+                      style: context.titleMedium.copyWith(
+                        color: AppTheme.primaryColor,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
                 ),
@@ -283,7 +301,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             prefixText: prefix,
             filled: true,
             fillColor: Colors.grey[100],
-            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 12,
+            ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
               borderSide: BorderSide.none,
@@ -302,8 +323,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     );
   }
 
-
-  Future<void> _updateProfile(BuildContext context, ProfileProvider profileProvider) async {
+  Future<void> _updateProfile(
+    BuildContext context,
+    ProfileProvider profileProvider,
+  ) async {
     if (!_formKey.currentState!.validate()) return;
 
     // Handle image upload if needed
@@ -329,13 +352,22 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     if (success) {
       if (_fullNameController.text != AppStrings.userName) {
         AppStrings.userName = _fullNameController.text;
-        await SecureStorage().save(LocalStorageKey.userName, _fullNameController.text);
+        await SecureStorage().save(
+          LocalStorageKey.userName,
+          _fullNameController.text,
+        );
       }
 
-      CustomToast.showToast(message: 'profile_updated_successfully'.tr(context),type: ToastType.success);
+      CustomToast.showToast(
+        message: 'profile_updated_successfully'.tr(context),
+        type: ToastType.success,
+      );
       Navigator.pop(context);
     } else {
-      CustomToast.showToast(message: 'failed_update_profile'.tr(context),type: ToastType.success);
+      CustomToast.showToast(
+        message: 'failed_update_profile'.tr(context),
+        type: ToastType.success,
+      );
     }
   }
 
@@ -360,11 +392,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         if (navigatorContext.mounted) {
           Navigator.of(navigatorContext).pushAndRemoveUntil(
             MaterialPageRoute(builder: (context) => const LoginScreen()),
-                (route) => false,
+            (route) => false,
           );
         }
       },
     );
   }
-
 }

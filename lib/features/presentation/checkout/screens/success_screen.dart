@@ -19,11 +19,13 @@ class SuccessScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    PaymentProvider paymentProvider = Provider.of<PaymentProvider>(context, listen: false);
-    
+    PaymentProvider paymentProvider = Provider.of<PaymentProvider>(
+      context,
+      listen: false,
+    );
+
     // Format the order number
     String orderNumber = "#ORD-${orderDetails.combinedOrder!.id}";
-
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -34,14 +36,21 @@ class SuccessScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               const SizedBox(height: 60),
-              
+
               // Success check icon
-              Lottie.asset(AppAnimations.successCheckout,fit: BoxFit.contain,height: 200,width: 200,repeat: false),
+              Lottie.asset(
+                AppAnimations.successCheckout,
+                fit: BoxFit.contain,
+                height: 200,
+                width: 200,
+                repeat: false,
+              ),
               const SizedBox(height: 40),
 
               // Thank you heading
               Center(
-                child: Text('thank_you'.tr(context),
+                child: Text(
+                  'thank_you'.tr(context),
                   style: context.displaySmall?.copyWith(
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
@@ -52,10 +61,9 @@ class SuccessScreen extends StatelessWidget {
 
               // Order confirmation message
               Center(
-                child: Text('your_order_has_been_successfully_placed'.tr(context),
-                  style: context.titleMedium?.copyWith(
-                    color: Colors.grey[600],
-                  ),
+                child: Text(
+                  'your_order_has_been_successfully_placed'.tr(context),
+                  style: context.titleMedium?.copyWith(color: Colors.grey[600]),
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -75,9 +83,9 @@ class SuccessScreen extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('order_number'.tr(context),
-                          style: context.titleLarge?.copyWith(
-                          ),
+                        Text(
+                          'order_number'.tr(context),
+                          style: context.titleLarge?.copyWith(),
                         ),
                         Text(
                           orderNumber,
@@ -94,9 +102,9 @@ class SuccessScreen extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('estimated_delivery'.tr(context),
-                          style: context.titleLarge?.copyWith(
-                          ),
+                        Text(
+                          'estimated_delivery'.tr(context),
+                          style: context.titleLarge?.copyWith(),
                         ),
                         Text(
                           '3-5 ${"days".tr(context)}',
@@ -110,35 +118,49 @@ class SuccessScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              
+
               const Spacer(),
-              
+
               // Track Order button
-             AppStrings.token==null?const SizedBox.shrink(): CustomButton(
-                onPressed: () {
-                  if (AppStrings.token != null) {
-                    Provider.of<LayoutProvider>(context, listen: false).currentIndex = 4;
-                    AppRoutes.navigateToAndRemoveUntil(context, AppRoutes.mainLayoutScreen);
-                  }
-                },
-                backgroundColor: AppTheme.primaryColor,
-                child: Center(
-                  child: Text(
-                    "track_order".tr(context),
-                    style: context.headlineSmall?.copyWith(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w500,
+              AppStrings.token == null
+                  ? const SizedBox.shrink()
+                  : CustomButton(
+                      onPressed: () {
+                        if (AppStrings.token != null) {
+                          Provider.of<LayoutProvider>(
+                            context,
+                            listen: false,
+                          ).currentIndex = 4;
+                          AppRoutes.navigateToAndRemoveUntil(
+                            context,
+                            AppRoutes.mainLayoutScreen,
+                          );
+                        }
+                      },
+                      backgroundColor: AppTheme.primaryColor,
+                      child: Center(
+                        child: Text(
+                          "track_order".tr(context),
+                          style: context.headlineSmall?.copyWith(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-              ),
               const SizedBox(height: 16),
 
               // Continue Shopping button
               CustomButton(
                 onPressed: () {
-                  Provider.of<LayoutProvider>(context, listen: false).currentIndex = 0;
-                  AppRoutes.navigateToAndRemoveUntil(context, AppRoutes.mainLayoutScreen);
+                  Provider.of<LayoutProvider>(
+                    context,
+                    listen: false,
+                  ).currentIndex = 0;
+                  AppRoutes.navigateToAndRemoveUntil(
+                    context,
+                    AppRoutes.mainLayoutScreen,
+                  );
                 },
                 isOutlined: true,
                 backgroundColor: AppTheme.primaryColor,
@@ -152,12 +174,11 @@ class SuccessScreen extends StatelessWidget {
                   ),
                 ),
               ),
-          const SizedBox(height: 80)
+              const SizedBox(height: 80),
             ],
           ),
         ),
       ),
     );
   }
-
 }

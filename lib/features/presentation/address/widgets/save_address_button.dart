@@ -19,13 +19,17 @@ class SaveAddressButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomButton(
-      text:
-          isEditing ? 'update_address'.tr(context) : 'add_address'.tr(context),
+      text: isEditing
+          ? 'update_address'.tr(context)
+          : 'add_address'.tr(context),
       onPressed: isLoading ? null : onPressed,
       isLoading: isLoading,
       textColor: AppTheme.white,
       padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 24),
-      textStyle: context.titleSmall!.copyWith(color: AppTheme.white,fontWeight: FontWeight.w800),
+      textStyle: context.titleSmall!.copyWith(
+        color: AppTheme.white,
+        fontWeight: FontWeight.w800,
+      ),
       borderRadius: 8.0,
     );
   }

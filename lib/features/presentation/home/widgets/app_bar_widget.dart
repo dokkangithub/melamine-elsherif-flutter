@@ -8,14 +8,10 @@ import '../../main layout/controller/layout_provider.dart';
 import '../../../presentation/cart/controller/cart_provider.dart';
 
 class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
-
-  const AppBarWidget({
-    super.key,
-  });
+  const AppBarWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
-
     return AppBar(
       backgroundColor: AppTheme.white,
       elevation: 0,
@@ -31,14 +27,11 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
             height: 100,
             fit: BoxFit.contain,
           ),
-
         ],
       ),
       actions: [
         InkWell(
-          child: const CustomImage(
-            assetPath: AppSvgs.search_icon,
-          ),
+          child: const CustomImage(assetPath: AppSvgs.search_icon),
           onTap: () {
             AppRoutes.navigateTo(context, AppRoutes.searchScreen);
           },
@@ -50,11 +43,12 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
               label: Text(cart.cartCount.toString()),
               isLabelVisible: cart.cartCount > 0,
               child: InkWell(
-                child: const CustomImage(
-                  assetPath: AppSvgs.cart_icon,
-                ),
+                child: const CustomImage(assetPath: AppSvgs.cart_icon),
                 onTap: () {
-                  Provider.of<LayoutProvider>(context, listen: false).currentIndex = 3;
+                  Provider.of<LayoutProvider>(
+                    context,
+                    listen: false,
+                  ).currentIndex = 3;
                 },
               ),
             );

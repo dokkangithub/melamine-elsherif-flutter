@@ -24,47 +24,32 @@ class ShimmerWidget extends StatelessWidget {
       highlightColor: Colors.grey[100]!,
       child: isRow
           ? Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
-            children: [
-              Container(
-                width: 40,
-                height: 40,
-                color: Colors.grey[300],
-              ),
-              const SizedBox(width: 8),
-              Container(
-                width: 40,
-                height: 20,
-                color: Colors.grey[300],
-              ),
-              const SizedBox(width: 8),
-              Container(
-                width: 40,
-                height: 40,
-                color: Colors.grey[300],
-              ),
-            ],
-          ),
-          Container(
-            width: 80,
-            height: 20,
-            color: Colors.grey[300],
-          ),
-        ],
-      )
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    Container(width: 40, height: 40, color: Colors.grey[300]),
+                    const SizedBox(width: 8),
+                    Container(width: 40, height: 20, color: Colors.grey[300]),
+                    const SizedBox(width: 8),
+                    Container(width: 40, height: 40, color: Colors.grey[300]),
+                  ],
+                ),
+                Container(width: 80, height: 20, color: Colors.grey[300]),
+              ],
+            )
           : Container(
-        width: width,
-        height: height,
-        decoration: ShapeDecoration(
-          color: Colors.grey[300],
-          shape: shape ??
-              (isCircular
-                  ? const CircleBorder()
-                  : const RoundedRectangleBorder()),
-        ),
-      ),
+              width: width,
+              height: height,
+              decoration: ShapeDecoration(
+                color: Colors.grey[300],
+                shape:
+                    shape ??
+                    (isCircular
+                        ? const CircleBorder()
+                        : const RoundedRectangleBorder()),
+              ),
+            ),
     );
   }
 }

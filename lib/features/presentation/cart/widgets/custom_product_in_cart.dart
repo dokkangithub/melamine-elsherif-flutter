@@ -39,9 +39,7 @@ class ProductItemInCart extends StatelessWidget {
             child: Row(
               children: [
                 // Product Image
-                Expanded(
-                    flex: 3,
-                    child: _productImage()),
+                Expanded(flex: 3, child: _productImage()),
                 const SizedBox(width: 8),
                 // Product Details
                 Expanded(
@@ -61,8 +59,11 @@ class ProductItemInCart extends StatelessWidget {
                       if (item.variant.isNotEmpty)
                         Padding(
                           padding: const EdgeInsets.only(top: 4.0),
-                          child: Text(item.variant,
-                            style: context.titleSmall.copyWith(color: Colors.grey[600]),
+                          child: Text(
+                            item.variant,
+                            style: context.titleSmall.copyWith(
+                              color: Colors.grey[600],
+                            ),
                           ),
                         ),
                       const Spacer(),
@@ -74,19 +75,32 @@ class ProductItemInCart extends StatelessWidget {
                           _buildQuantityButton(
                             icon: Icons.remove,
                             onPressed: () {
-                              if (item.quantity > item.lowerLimit && onQuantityChanged != null && !isUpdating) {
+                              if (item.quantity > item.lowerLimit &&
+                                  onQuantityChanged != null &&
+                                  !isUpdating) {
                                 onQuantityChanged!(item.quantity - 1);
                               }
                             },
-                            enabled: item.quantity > item.lowerLimit && !cartProvider.isSpecificOperationUpdating(item.id, true) && !cartProvider.isSpecificOperationUpdating(item.id, false),
+                            enabled:
+                                item.quantity > item.lowerLimit &&
+                                !cartProvider.isSpecificOperationUpdating(
+                                  item.id,
+                                  true,
+                                ) &&
+                                !cartProvider.isSpecificOperationUpdating(
+                                  item.id,
+                                  false,
+                                ),
                             context: context,
-                            isUpdating: cartProvider.isSpecificOperationUpdating(item.id, true),
+                            isUpdating: cartProvider
+                                .isSpecificOperationUpdating(item.id, true),
                             isDecrement: true,
                           ),
                           SizedBox(
                             width: 40,
                             child: Center(
-                              child: Text('${item.quantity}',
+                              child: Text(
+                                '${item.quantity}',
                                 style: context.headlineMedium.copyWith(
                                   fontWeight: FontWeight.w400,
                                 ),
@@ -96,13 +110,25 @@ class ProductItemInCart extends StatelessWidget {
                           _buildQuantityButton(
                             icon: Icons.add,
                             onPressed: () {
-                              if (item.quantity < item.upperLimit && onQuantityChanged != null && !isUpdating) {
+                              if (item.quantity < item.upperLimit &&
+                                  onQuantityChanged != null &&
+                                  !isUpdating) {
                                 onQuantityChanged!(item.quantity + 1);
                               }
                             },
-                            enabled: item.quantity < item.upperLimit && !cartProvider.isSpecificOperationUpdating(item.id, true) && !cartProvider.isSpecificOperationUpdating(item.id, false),
+                            enabled:
+                                item.quantity < item.upperLimit &&
+                                !cartProvider.isSpecificOperationUpdating(
+                                  item.id,
+                                  true,
+                                ) &&
+                                !cartProvider.isSpecificOperationUpdating(
+                                  item.id,
+                                  false,
+                                ),
                             context: context,
-                            isUpdating: cartProvider.isSpecificOperationUpdating(item.id, false),
+                            isUpdating: cartProvider
+                                .isSpecificOperationUpdating(item.id, false),
                             isDecrement: false,
                           ),
                         ],
@@ -118,9 +144,11 @@ class ProductItemInCart extends StatelessWidget {
                     const SizedBox(height: 8),
                     //delete item
                     InkWell(
-                      onTap: cartProvider.isItemQuantityUpdating(item.id) ? null : (){
-                        onDelete(item.id);
-                      },
+                      onTap: cartProvider.isItemQuantityUpdating(item.id)
+                          ? null
+                          : () {
+                              onDelete(item.id);
+                            },
                       child: const CustomImage(
                         assetPath: AppSvgs.delete_icon,
                         width: 20,
@@ -134,7 +162,7 @@ class ProductItemInCart extends StatelessWidget {
                       style: context.titleLarge.copyWith(
                         color: AppTheme.primaryColor,
                         fontWeight: FontWeight.w800,
-                        fontFamily:  GoogleFonts.inter().fontFamily,
+                        fontFamily: GoogleFonts.inter().fontFamily,
                       ),
                     ),
                     const SizedBox(height: 15),
@@ -176,11 +204,7 @@ class ProductItemInCart extends StatelessWidget {
                 color: AppTheme.primaryColor,
               ),
             )
-          : Icon(
-              icon,
-              size: 20,
-              color: AppTheme.black,
-            ),
+          : Icon(icon, size: 20, color: AppTheme.black),
     );
   }
 }

@@ -40,7 +40,9 @@ class CouponSection extends StatelessWidget {
         children: [
           Text(
             'discount_coupon'.tr(context),
-            style: context.headlineSmall?.copyWith(color: AppTheme.primaryColor),
+            style: context.headlineSmall?.copyWith(
+              color: AppTheme.primaryColor,
+            ),
           ),
           const SizedBox(height: 12),
           if (isInitialLoading || isLoading)
@@ -49,14 +51,16 @@ class CouponSection extends StatelessWidget {
             _buildAppliedCoupon(context)
           else
             _buildCouponInput(context),
-          if (errorMessage != null && !hasCoupon && !isLoading && !isInitialLoading)
-            ...[
-              const SizedBox(height: 8),
-              Text(
-                errorMessage!,
-                style: context.bodyMedium?.copyWith(color: AppTheme.errorColor),
-              ),
-            ],
+          if (errorMessage != null &&
+              !hasCoupon &&
+              !isLoading &&
+              !isInitialLoading) ...[
+            const SizedBox(height: 8),
+            Text(
+              errorMessage!,
+              style: context.bodyMedium?.copyWith(color: AppTheme.errorColor),
+            ),
+          ],
         ],
       ),
     );
@@ -107,30 +111,22 @@ class CouponSection extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  appliedCouponCode!,
-                  style: context.bodyLarge,
-                ),
+                Text(appliedCouponCode!, style: context.bodyLarge),
                 Text(
                   'coupon_applied'.tr(context),
-                  style: context.bodyMedium?.copyWith(color: AppTheme.lightSecondaryTextColor),
+                  style: context.bodyMedium?.copyWith(
+                    color: AppTheme.lightSecondaryTextColor,
+                  ),
                 ),
               ],
             ),
           ),
           if (isLoading)
-            const SizedBox(
-              width: 20,
-              height: 20,
-              child: CustomLoadingWidget(),
-            )
+            const SizedBox(width: 20, height: 20, child: CustomLoadingWidget())
           else
             TextButton(
               onPressed: onRemove,
-              child: Text(
-                'remove'.tr(context),
-                style: context.titleMedium,
-              ),
+              child: Text('remove'.tr(context), style: context.titleMedium),
             ),
         ],
       ),
@@ -151,7 +147,9 @@ class CouponSection extends StatelessWidget {
               controller: couponController,
               decoration: InputDecoration(
                 hintText: 'enter_coupon_code'.tr(context),
-                hintStyle: context.titleMedium?.copyWith(color: AppTheme.lightSecondaryTextColor),
+                hintStyle: context.titleMedium?.copyWith(
+                  color: AppTheme.lightSecondaryTextColor,
+                ),
                 border: InputBorder.none,
                 contentPadding: const EdgeInsets.symmetric(horizontal: 12),
               ),
@@ -166,14 +164,14 @@ class CouponSection extends StatelessWidget {
           onPressed: isLoading ? null : onApply,
           child: isLoading
               ? const SizedBox(
-            width: 20,
-            height: 20,
-            child: CustomLoadingWidget(),
-          )
+                  width: 20,
+                  height: 20,
+                  child: CustomLoadingWidget(),
+                )
               : Text(
-            'apply'.tr(context),
-            style: context.titleMedium?.copyWith(color: AppTheme.white),
-          ),
+                  'apply'.tr(context),
+                  style: context.titleMedium?.copyWith(color: AppTheme.white),
+                ),
         ),
       ],
     );

@@ -95,12 +95,16 @@ class _GalleryImagePreviewState extends State<GalleryImagePreview> {
             right: 0,
             child: Center(
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 6,
+                ),
                 decoration: BoxDecoration(
                   color: Colors.black54,
                   borderRadius: BorderRadius.circular(16),
                 ),
-                child: Text('${currentIndex + 1}/${widget.imageUrls.length}'.tr(context),
+                child: Text(
+                  '${currentIndex + 1}/${widget.imageUrls.length}'.tr(context),
                   style: const TextStyle(color: Colors.white),
                 ),
               ),

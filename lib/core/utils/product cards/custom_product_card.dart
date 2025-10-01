@@ -65,16 +65,17 @@ class _ProductCardState extends State<ProductCard> {
         splashColor: Colors.transparent,
         highlightColor: Colors.transparent,
         onTap: () {
-          widget.product.setProduct?AppRoutes.navigateTo(
-            context,
-            AppRoutes.setProductDetailsScreen,
-            arguments: {'slug': widget.product.slug},
-          ):
-          AppRoutes.navigateTo(
-            context,
-            AppRoutes.productDetailScreen,
-            arguments: {'slug': widget.product.slug},
-          );
+          widget.product.setProduct
+              ? AppRoutes.navigateTo(
+                  context,
+                  AppRoutes.setProductDetailsScreen,
+                  arguments: {'slug': widget.product.slug},
+                )
+              : AppRoutes.navigateTo(
+                  context,
+                  AppRoutes.productDetailScreen,
+                  arguments: {'slug': widget.product.slug},
+                );
         },
         child: Stack(
           alignment: Alignment.topCenter,
@@ -107,15 +108,15 @@ class _ProductCardState extends State<ProductCard> {
                         !widget.isBuyNow!
                             ? const SizedBox.shrink()
                             : Row(
-                              children: List.generate(
-                                5,
-                                (index) => const Icon(
-                                  Icons.star_outline_sharp,
-                                  color: AppTheme.accentColor,
-                                  size: 16,
+                                children: List.generate(
+                                  5,
+                                  (index) => const Icon(
+                                    Icons.star_outline_sharp,
+                                    color: AppTheme.accentColor,
+                                    size: 16,
+                                  ),
                                 ),
                               ),
-                            ),
                         // Product name
                         Text(
                           widget.product.name,
@@ -126,8 +127,8 @@ class _ProductCardState extends State<ProductCard> {
                           maxLines: 1,
                           textAlign:
                               Directionality.of(context) == TextDirection.rtl
-                                  ? TextAlign.right
-                                  : TextAlign.left,
+                              ? TextAlign.right
+                              : TextAlign.left,
                         ),
 
                         // Price and fav icon
@@ -147,23 +148,27 @@ class _ProductCardState extends State<ProductCard> {
                                     ),
                                     textAlign:
                                         Directionality.of(context) ==
-                                                TextDirection.rtl
-                                            ? TextAlign.right
-                                            : TextAlign.left,
+                                            TextDirection.rtl
+                                        ? TextAlign.right
+                                        : TextAlign.left,
                                   ),
-                                  widget.product.hasDiscount?Text(
-                                    widget.product.mainPrice,
-                                    style: context.titleMedium.copyWith(
-                                      color: AppTheme.lightSecondaryTextColor,
-                                      fontWeight: FontWeight.w400,
-                                      decoration: TextDecoration.lineThrough,
-                                    ),
-                                    textAlign:
-                                        Directionality.of(context) ==
-                                                TextDirection.rtl
-                                            ? TextAlign.right
-                                            : TextAlign.left,
-                                  ):const SizedBox.shrink(),
+                                  widget.product.hasDiscount
+                                      ? Text(
+                                          widget.product.mainPrice,
+                                          style: context.titleMedium.copyWith(
+                                            color: AppTheme
+                                                .lightSecondaryTextColor,
+                                            fontWeight: FontWeight.w400,
+                                            decoration:
+                                                TextDecoration.lineThrough,
+                                          ),
+                                          textAlign:
+                                              Directionality.of(context) ==
+                                                  TextDirection.rtl
+                                              ? TextAlign.right
+                                              : TextAlign.left,
+                                        )
+                                      : const SizedBox.shrink(),
                                 ],
                               ),
                             ),
@@ -199,66 +204,65 @@ class _ProductCardState extends State<ProductCard> {
 
                         isAddingToCart
                             ? const Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [CustomLoadingWidget()],
-                            )
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [CustomLoadingWidget()],
+                              )
                             : CustomButton(
-                          height: 40,
-                              text:
-                                  widget.product.currentStock < 1
-                                      ? 'out_of_stock'.tr(context)
-                                      : widget.isBuyNow!
-                                      ? 'buy_now'.tr(context)
-                                      : 'add_to_cart'.tr(context),
-                              textStyle: context.titleLarge.copyWith(
-                                color:
-                                    widget.isOutlinedAddToCart!
-                                        ? AppTheme.primaryColor
-                                        : AppTheme.white,
-                                fontWeight: FontWeight.w900,
-                              ),
-                              fullWidth: true,
-                              isOutlined: widget.isOutlinedAddToCart!,
-                              padding: const EdgeInsets.all(8),
-                              onPressed: () async {
-                                if(widget.product.currentStock < 1){
-                                  return;
-                                }
-                                setState(() {
-                                  isAddingToCart = true;
-                                });
-
-                                // Store the current cart count
-                                final cartProvider = Provider.of<CartProvider>(
-                                  context,
-                                  listen: false,
-                                );
-
-                                await AppFunctions.addProductToCart(
-                                  context: context,
-                                  productId: widget.product.id,
-                                  productName: widget.product.name,
-                                  productSlug: widget.product.slug,
-                                  hasVariation: widget.product.hasVariation,
-                                );
-
-                                setState(() {
-                                  isAddingToCart = false;
-                                });
-
-                                // Only navigate if it's buy now and the product was added successfully
-                                if (widget.isBuyNow! &&
-                                    cartProvider.lastAddToCartSuccess) {
-                                  if (context.mounted) {
-                                    // Use the optimized navigation that sets a flag to avoid unnecessary API calls
-                                    Provider.of<LayoutProvider>(
-                                      context,
-                                      listen: false,
-                                    ).navigateToCartFromBuyNow();
+                                height: 40,
+                                text: widget.product.currentStock < 1
+                                    ? 'out_of_stock'.tr(context)
+                                    : widget.isBuyNow!
+                                    ? 'buy_now'.tr(context)
+                                    : 'add_to_cart'.tr(context),
+                                textStyle: context.titleLarge.copyWith(
+                                  color: widget.isOutlinedAddToCart!
+                                      ? AppTheme.primaryColor
+                                      : AppTheme.white,
+                                  fontWeight: FontWeight.w900,
+                                ),
+                                fullWidth: true,
+                                isOutlined: widget.isOutlinedAddToCart!,
+                                padding: const EdgeInsets.all(8),
+                                onPressed: () async {
+                                  if (widget.product.currentStock < 1) {
+                                    return;
                                   }
-                                }
-                              },
-                            ),
+                                  setState(() {
+                                    isAddingToCart = true;
+                                  });
+
+                                  // Store the current cart count
+                                  final cartProvider =
+                                      Provider.of<CartProvider>(
+                                        context,
+                                        listen: false,
+                                      );
+
+                                  await AppFunctions.addProductToCart(
+                                    context: context,
+                                    productId: widget.product.id,
+                                    productName: widget.product.name,
+                                    productSlug: widget.product.slug,
+                                    hasVariation: widget.product.hasVariation,
+                                  );
+
+                                  setState(() {
+                                    isAddingToCart = false;
+                                  });
+
+                                  // Only navigate if it's buy now and the product was added successfully
+                                  if (widget.isBuyNow! &&
+                                      cartProvider.lastAddToCartSuccess) {
+                                    if (context.mounted) {
+                                      // Use the optimized navigation that sets a flag to avoid unnecessary API calls
+                                      Provider.of<LayoutProvider>(
+                                        context,
+                                        listen: false,
+                                      ).navigateToCartFromBuyNow();
+                                    }
+                                  }
+                                },
+                              ),
                       ],
                     ),
                   ],

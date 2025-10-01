@@ -13,9 +13,7 @@ class SliderRemoteDataSourceImpl implements SliderRemoteDataSource {
 
   @override
   Future<SliderResponseModel> getSliders() async {
-    final response = await apiProvider.get(
-      LaravelApiEndPoint.sliders,
-    );
+    final response = await apiProvider.get(LaravelApiEndPoint.sliders);
     return SliderResponseModel.fromJson(response.data);
   }
 }

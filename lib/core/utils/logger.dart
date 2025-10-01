@@ -27,7 +27,12 @@ class Logger {
   }
 
   /// Log an error message
-  static void e(String tag, String message, [dynamic error, StackTrace? stackTrace]) {
+  static void e(
+    String tag,
+    String message, [
+    dynamic error,
+    StackTrace? stackTrace,
+  ]) {
     if (_appConfig.enableLogging) {
       debugPrint('ERROR: [$tag] $message');
       if (error != null) {

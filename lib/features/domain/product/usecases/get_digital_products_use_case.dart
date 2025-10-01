@@ -6,7 +6,10 @@ class GetDigitalProductsUseCase {
 
   GetDigitalProductsUseCase(this.productRepository);
 
-  Future<ProductsResponse> call(int page,{bool needUpdate = false}) async {
-    return await productRepository.getDigitalProducts(page,needUpdate: needUpdate);
+  Future<ProductsResponse> call(int page, {bool needUpdate = false}) async {
+    return await productRepository.getDigitalProducts(
+      page,
+      needUpdate: needUpdate,
+    );
   }
 }

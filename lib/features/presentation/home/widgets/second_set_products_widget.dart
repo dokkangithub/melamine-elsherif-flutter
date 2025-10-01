@@ -28,7 +28,9 @@ class SecondSetProductsWidget extends StatelessWidget {
           return _buildEmptyState();
         }
 
-        final filteredProducts = products.where((product) => product.published == true).toList();
+        final filteredProducts = products
+            .where((product) => product.published == true)
+            .toList();
 
         // Get next 10 products (from index 10 to 19) for the center section
         final nextTenProducts = filteredProducts.skip(10).take(10).toList();
@@ -55,11 +57,10 @@ class SecondSetProductsWidget extends StatelessWidget {
                   padding: const EdgeInsets.only(left: 16.0),
                   scrollDirection: Axis.horizontal,
                   itemCount: nextTenProducts.length,
-                  itemBuilder: (context, index) =>
-                      SetProductCard(
-                        setProduct: nextTenProducts[index],
-                        width: 250,
-                      ),
+                  itemBuilder: (context, index) => SetProductCard(
+                    setProduct: nextTenProducts[index],
+                    width: 250,
+                  ),
                 ),
               ),
             ],

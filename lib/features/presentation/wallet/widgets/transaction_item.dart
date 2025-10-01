@@ -7,16 +7,14 @@ import '../../../domain/wallet/entities/wallet_transaction.dart';
 class TransactionItem extends StatelessWidget {
   final WalletTransaction transaction;
 
-  const TransactionItem({
-    Key? key,
-    required this.transaction,
-  }) : super(key: key);
+  const TransactionItem({Key? key, required this.transaction})
+    : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final isPositive = _isPositiveAmount();
     final iconData = _getTransactionIcon();
-    
+
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       decoration: BoxDecoration(
@@ -39,7 +37,7 @@ class TransactionItem extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(10.0),
               decoration: BoxDecoration(
-                color: isPositive 
+                color: isPositive
                     ? AppTheme.primaryColor.withValues(alpha: 0.15)
                     : Colors.grey.withValues(alpha: 0.15),
                 borderRadius: BorderRadius.circular(0.0),
@@ -51,7 +49,7 @@ class TransactionItem extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 16.0),
-            
+
             // Transaction Details
             Expanded(
               child: Column(
@@ -88,15 +86,22 @@ class TransactionItem extends StatelessWidget {
                   if (transaction.approvalString != 'N/A') ...[
                     const SizedBox(height: 4.0),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 2.0),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8.0,
+                        vertical: 2.0,
+                      ),
                       decoration: BoxDecoration(
-                        color: isPositive ? AppTheme.primaryColor.withValues(alpha: 0.1) : Colors.orange.withValues(alpha: 0.1),
+                        color: isPositive
+                            ? AppTheme.primaryColor.withValues(alpha: 0.1)
+                            : Colors.orange.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(0.0),
                       ),
                       child: Text(
                         transaction.approvalString,
                         style: context.bodySmall.copyWith(
-                          color: isPositive ? Colors.green[700] : Colors.orange[700],
+                          color: isPositive
+                              ? Colors.green[700]
+                              : Colors.orange[700],
                           fontSize: 12,
                           fontWeight: FontWeight.w500,
                         ),
@@ -106,7 +111,7 @@ class TransactionItem extends StatelessWidget {
                 ],
               ),
             ),
-            
+
             // Amount
             Text(
               transaction.amount,
@@ -137,4 +142,4 @@ class TransactionItem extends StatelessWidget {
   bool _isPositiveAmount() {
     return !transaction.amount.contains('-');
   }
-} 
+}

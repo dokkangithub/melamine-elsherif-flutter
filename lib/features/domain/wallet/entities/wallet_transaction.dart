@@ -15,4 +15,4 @@ class WalletTransaction extends Equatable {
 
   @override
   List<Object?> get props => [amount, paymentMethod, approvalString, date];
-} 
+}

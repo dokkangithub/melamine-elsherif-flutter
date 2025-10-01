@@ -9,4 +9,4 @@ class GetWalletBalanceUseCase {
   Future<WalletBalance> call() {
     return repository.getWalletBalance();
   }
-} 
+}

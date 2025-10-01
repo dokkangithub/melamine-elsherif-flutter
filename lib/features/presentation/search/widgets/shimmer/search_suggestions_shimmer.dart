@@ -28,14 +28,21 @@ class SearchSuggestionsShimmer extends StatelessWidget {
             Wrap(
               spacing: 8.0,
               runSpacing: 8.0,
-              children: List.generate(8, (index) { // Generate a few placeholder chips
-                final double chipWidth = (index % 3 == 0) ? 100.0 : (index % 3 == 1) ? 120.0 : 80.0;
+              children: List.generate(8, (index) {
+                // Generate a few placeholder chips
+                final double chipWidth = (index % 3 == 0)
+                    ? 100.0
+                    : (index % 3 == 1)
+                    ? 120.0
+                    : 80.0;
                 return Container(
                   height: 32.0, // Approximate height of a Chip
                   width: chipWidth,
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(0.0), // Match Chip border radius
+                    borderRadius: BorderRadius.circular(
+                      0.0,
+                    ), // Match Chip border radius
                   ),
                 );
               }).toList(),
@@ -45,4 +52,4 @@ class SearchSuggestionsShimmer extends StatelessWidget {
       ),
     );
   }
-} 
+}

@@ -40,22 +40,16 @@ class ReviewResponseModel {
   final List<ReviewModel> reviews;
   final int total;
 
-  ReviewResponseModel({
-    required this.reviews,
-    required this.total,
-  });
+  ReviewResponseModel({required this.reviews, required this.total});
 
   factory ReviewResponseModel.fromJson(Map<String, dynamic> json) {
     return ReviewResponseModel(
-      reviews: (json['data'] as List?)
-          ?.map((e) => ReviewModel.fromJson(e))
-          .toList() ??
+      reviews:
+          (json['data'] as List?)
+              ?.map((e) => ReviewModel.fromJson(e))
+              .toList() ??
           [],
       total: json['meta']?['total'] ?? 0,
     );
   }
 }
-
-
-
-

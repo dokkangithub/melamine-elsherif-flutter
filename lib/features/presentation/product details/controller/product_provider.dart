@@ -130,7 +130,8 @@ class ProductDetailsProvider extends ChangeNotifier {
 
   // Find the index of photo that matches variant
   int findVariantPhotoIndex() {
-    if (selectedProduct == null || variantPrice == null) return currentPhotoIndex;
+    if (selectedProduct == null || variantPrice == null)
+      return currentPhotoIndex;
 
     final variant = variantPrice!.data.variant;
     if (variant.isEmpty) return currentPhotoIndex;
@@ -182,11 +183,11 @@ class ProductDetailsProvider extends ChangeNotifier {
   }
 
   Future<void> fetchVariantPrice(
-      String slug,
-      String color,
-      String variants,
-      int quantity,
-      ) async {
+    String slug,
+    String color,
+    String variants,
+    int quantity,
+  ) async {
     try {
       variantPriceState = LoadingState.loading;
       notifyListeners();

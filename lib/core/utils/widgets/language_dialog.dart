@@ -114,10 +114,9 @@ class _LanguageSelectionDialogState extends State<LanguageSelectionDialog>
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
         decoration: BoxDecoration(
-          color:
-              isSelected
-                  ? AppTheme.primaryColor.withValues(alpha: 0.3)
-                  : Colors.transparent,
+          color: isSelected
+              ? AppTheme.primaryColor.withValues(alpha: 0.3)
+              : Colors.transparent,
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
             color: isSelected ? AppTheme.primaryColor : Colors.grey[300]!,

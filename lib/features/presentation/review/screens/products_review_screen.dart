@@ -150,7 +150,7 @@ class _AllReviewsScreenState extends State<AllReviewsScreen> {
       controller: _scrollController,
       padding: const EdgeInsets.all(16),
       itemCount:
-      reviewProvider.reviews.length +
+          reviewProvider.reviews.length +
           (reviewProvider.isLoadingMore ? 1 : 0),
       itemBuilder: (context, index) {
         if (index == reviewProvider.reviews.length) {
@@ -181,9 +181,7 @@ class _AllReviewsScreenState extends State<AllReviewsScreen> {
     showDialog(
       context: context,
       builder: (context) => Dialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         child: Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
@@ -216,17 +214,17 @@ class _AllReviewsScreenState extends State<AllReviewsScreen> {
                     },
                     child: Text(
                       'cancel'.tr(context),
-                      style: TextStyle(
-                        color: Colors.grey[600],
-                        fontSize: 16,
-                      ),
+                      style: TextStyle(color: Colors.grey[600], fontSize: 16),
                     ),
                   ),
                   const SizedBox(width: 8),
                   ElevatedButton(
                     onPressed: () {
                       Navigator.of(context).pop();
-                      AppRoutes.navigateToAndRemoveUntil(context, AppRoutes.login);
+                      AppRoutes.navigateToAndRemoveUntil(
+                        context,
+                        AppRoutes.login,
+                      );
                     },
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(
@@ -250,7 +248,6 @@ class _AllReviewsScreenState extends State<AllReviewsScreen> {
       ),
     );
   }
-
 
   void _showAddReviewDialog() {
     showDialog(

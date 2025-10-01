@@ -17,7 +17,11 @@ class ProductRepositoryImpl implements ProductRepository {
   });
 
   @override
-  Future<ProductsResponse> getAllProducts(int page, {String? name, bool needUpdate = false}) async {
+  Future<ProductsResponse> getAllProducts(
+    int page, {
+    String? name,
+    bool needUpdate = false,
+  }) async {
     // If searching by name or needUpdate is true, always go to remote
     if ((name != null && name.isNotEmpty) || needUpdate) {
       final response = await remoteDataSource.getAllProducts(page, name: name);
@@ -29,10 +33,16 @@ class ProductRepositoryImpl implements ProductRepository {
     }
 
     // Check if cache is valid
-    final isCacheValid = await localDataSource.isCollectionCacheValid('all_products', page);
+    final isCacheValid = await localDataSource.isCollectionCacheValid(
+      'all_products',
+      page,
+    );
 
     if (isCacheValid) {
-      final cachedData = await localDataSource.getCollectionFromCache('all_products', page);
+      final cachedData = await localDataSource.getCollectionFromCache(
+        'all_products',
+        page,
+      );
       if (cachedData != null) {
         return cachedData;
       }
@@ -45,7 +55,10 @@ class ProductRepositoryImpl implements ProductRepository {
   }
 
   @override
-  Future<ProductsResponse> getFeaturedProducts(int page, {bool needUpdate = false}) async {
+  Future<ProductsResponse> getFeaturedProducts(
+    int page, {
+    bool needUpdate = false,
+  }) async {
     // If needUpdate is true, always go to remote
     if (needUpdate) {
       final response = await remoteDataSource.getFeaturedProducts(page);
@@ -54,10 +67,16 @@ class ProductRepositoryImpl implements ProductRepository {
     }
 
     // Check if cache is valid
-    final isCacheValid = await localDataSource.isCollectionCacheValid('featured_products', page);
+    final isCacheValid = await localDataSource.isCollectionCacheValid(
+      'featured_products',
+      page,
+    );
 
     if (isCacheValid) {
-      final cachedData = await localDataSource.getCollectionFromCache('featured_products', page);
+      final cachedData = await localDataSource.getCollectionFromCache(
+        'featured_products',
+        page,
+      );
       if (cachedData != null) {
         return cachedData;
       }
@@ -65,24 +84,41 @@ class ProductRepositoryImpl implements ProductRepository {
 
     // Get data from remote and cache it
     final remoteResponse = await remoteDataSource.getFeaturedProducts(page);
-    await localDataSource.saveCollection('featured_products', page, remoteResponse);
+    await localDataSource.saveCollection(
+      'featured_products',
+      page,
+      remoteResponse,
+    );
     return remoteResponse;
   }
 
   @override
-  Future<ProductsResponse> getBestSellingProducts(int page, {bool needUpdate = false}) async {
+  Future<ProductsResponse> getBestSellingProducts(
+    int page, {
+    bool needUpdate = false,
+  }) async {
     // If needUpdate is true, always go to remote
     if (needUpdate) {
       final response = await remoteDataSource.getBestSellingProducts(page);
-      await localDataSource.saveCollection('best_selling_products', page, response);
+      await localDataSource.saveCollection(
+        'best_selling_products',
+        page,
+        response,
+      );
       return response;
     }
 
     // Check if cache is valid
-    final isCacheValid = await localDataSource.isCollectionCacheValid('best_selling_products', page);
+    final isCacheValid = await localDataSource.isCollectionCacheValid(
+      'best_selling_products',
+      page,
+    );
 
     if (isCacheValid) {
-      final cachedData = await localDataSource.getCollectionFromCache('best_selling_products', page);
+      final cachedData = await localDataSource.getCollectionFromCache(
+        'best_selling_products',
+        page,
+      );
       if (cachedData != null) {
         return cachedData;
       }
@@ -90,24 +126,41 @@ class ProductRepositoryImpl implements ProductRepository {
 
     // Get data from remote and cache it
     final remoteResponse = await remoteDataSource.getBestSellingProducts(page);
-    await localDataSource.saveCollection('best_selling_products', page, remoteResponse);
+    await localDataSource.saveCollection(
+      'best_selling_products',
+      page,
+      remoteResponse,
+    );
     return remoteResponse;
   }
 
   @override
-  Future<ProductsResponse> getNewAddedProducts(int page, {bool needUpdate = false}) async {
+  Future<ProductsResponse> getNewAddedProducts(
+    int page, {
+    bool needUpdate = false,
+  }) async {
     // If needUpdate is true, always go to remote
     if (needUpdate) {
       final response = await remoteDataSource.getNewAddedProducts(page);
-      await localDataSource.saveCollection('new_added_products', page, response);
+      await localDataSource.saveCollection(
+        'new_added_products',
+        page,
+        response,
+      );
       return response;
     }
 
     // Check if cache is valid
-    final isCacheValid = await localDataSource.isCollectionCacheValid('new_added_products', page);
+    final isCacheValid = await localDataSource.isCollectionCacheValid(
+      'new_added_products',
+      page,
+    );
 
     if (isCacheValid) {
-      final cachedData = await localDataSource.getCollectionFromCache('new_added_products', page);
+      final cachedData = await localDataSource.getCollectionFromCache(
+        'new_added_products',
+        page,
+      );
       if (cachedData != null) {
         return cachedData;
       }
@@ -115,12 +168,18 @@ class ProductRepositoryImpl implements ProductRepository {
 
     // Get data from remote and cache it
     final remoteResponse = await remoteDataSource.getNewAddedProducts(page);
-    await localDataSource.saveCollection('new_added_products', page, remoteResponse);
+    await localDataSource.saveCollection(
+      'new_added_products',
+      page,
+      remoteResponse,
+    );
     return remoteResponse;
   }
 
   @override
-  Future<ProductsResponse> getTodaysDealProducts({bool needUpdate = false}) async {
+  Future<ProductsResponse> getTodaysDealProducts({
+    bool needUpdate = false,
+  }) async {
     // If needUpdate is true, always go to remote
     if (needUpdate) {
       final response = await remoteDataSource.getTodaysDealProducts();
@@ -129,10 +188,16 @@ class ProductRepositoryImpl implements ProductRepository {
     }
 
     // Check if cache is valid
-    final isCacheValid = await localDataSource.isCollectionCacheValid('todays_deal_products', 1);
+    final isCacheValid = await localDataSource.isCollectionCacheValid(
+      'todays_deal_products',
+      1,
+    );
 
     if (isCacheValid) {
-      final cachedData = await localDataSource.getCollectionFromCache('todays_deal_products', 1);
+      final cachedData = await localDataSource.getCollectionFromCache(
+        'todays_deal_products',
+        1,
+      );
       if (cachedData != null) {
         return cachedData;
       }
@@ -140,24 +205,40 @@ class ProductRepositoryImpl implements ProductRepository {
 
     // Get data from remote and cache it
     final remoteResponse = await remoteDataSource.getTodaysDealProducts();
-    await localDataSource.saveCollection('todays_deal_products', 1, remoteResponse);
+    await localDataSource.saveCollection(
+      'todays_deal_products',
+      1,
+      remoteResponse,
+    );
     return remoteResponse;
   }
 
   @override
-  Future<FlashDealResponseModel> getFlashDealProducts({bool needUpdate = false}) async {
+  Future<FlashDealResponseModel> getFlashDealProducts({
+    bool needUpdate = false,
+  }) async {
     // If needUpdate is true, always go to remote
     if (needUpdate) {
       final response = await remoteDataSource.getFlashDealProducts();
-      await localDataSource.saveFlashDealCollection('flash_deal_products', 1, response);
+      await localDataSource.saveFlashDealCollection(
+        'flash_deal_products',
+        1,
+        response,
+      );
       return response;
     }
 
     // Check if cache is valid
-    final isCacheValid = await localDataSource.isCollectionCacheValid('flash_deal_products', 1);
+    final isCacheValid = await localDataSource.isCollectionCacheValid(
+      'flash_deal_products',
+      1,
+    );
 
     if (isCacheValid) {
-      final cachedData = await localDataSource.getFlashDealsFromCache('flash_deal_products', 1);
+      final cachedData = await localDataSource.getFlashDealsFromCache(
+        'flash_deal_products',
+        1,
+      );
       if (cachedData != null) {
         return cachedData;
       }
@@ -165,27 +246,50 @@ class ProductRepositoryImpl implements ProductRepository {
 
     // Get data from remote and cache it
     final remoteResponse = await remoteDataSource.getFlashDealProducts();
-    await localDataSource.saveFlashDealCollection('flash_deal_products', 1, remoteResponse);
+    await localDataSource.saveFlashDealCollection(
+      'flash_deal_products',
+      1,
+      remoteResponse,
+    );
     return remoteResponse;
   }
 
   @override
-  Future<ProductsResponse> getCategoryProducts(int id, int page, {String? name, bool needUpdate = false}) async {
+  Future<ProductsResponse> getCategoryProducts(
+    int id,
+    int page, {
+    String? name,
+    bool needUpdate = false,
+  }) async {
     // If searching by name or needUpdate is true, always go to remote
     if ((name != null && name.isNotEmpty) || needUpdate) {
-      final response = await remoteDataSource.getCategoryProducts(id, page, name: name);
+      final response = await remoteDataSource.getCategoryProducts(
+        id,
+        page,
+        name: name,
+      );
       if (needUpdate && (name == null || name.isEmpty)) {
         // Update cache when not searching by name
-        await localDataSource.saveCollection('category_${id}_products', page, response);
+        await localDataSource.saveCollection(
+          'category_${id}_products',
+          page,
+          response,
+        );
       }
       return response;
     }
 
     // Check if cache is valid
-    final isCacheValid = await localDataSource.isCollectionCacheValid('category_${id}_products', page);
+    final isCacheValid = await localDataSource.isCollectionCacheValid(
+      'category_${id}_products',
+      page,
+    );
 
     if (isCacheValid) {
-      final cachedData = await localDataSource.getCollectionFromCache('category_${id}_products', page);
+      final cachedData = await localDataSource.getCollectionFromCache(
+        'category_${id}_products',
+        page,
+      );
       if (cachedData != null) {
         return cachedData;
       }
@@ -193,55 +297,104 @@ class ProductRepositoryImpl implements ProductRepository {
 
     // Get data from remote and cache it
     final remoteResponse = await remoteDataSource.getCategoryProducts(id, page);
-    await localDataSource.saveCollection('category_${id}_products', page, remoteResponse);
+    await localDataSource.saveCollection(
+      'category_${id}_products',
+      page,
+      remoteResponse,
+    );
     return remoteResponse;
   }
 
   @override
-  Future<ProductsResponse> getSubCategoryProducts(int id, int page, {String? name, bool needUpdate = false}) async {
+  Future<ProductsResponse> getSubCategoryProducts(
+    int id,
+    int page, {
+    String? name,
+    bool needUpdate = false,
+  }) async {
     // If searching by name or needUpdate is true, always go to remote
     if ((name != null && name.isNotEmpty) || needUpdate) {
-      final response = await remoteDataSource.getSubCategoryProducts(id, page, name: name);
+      final response = await remoteDataSource.getSubCategoryProducts(
+        id,
+        page,
+        name: name,
+      );
       if (needUpdate && (name == null || name.isEmpty)) {
         // Update cache when not searching by name
-        await localDataSource.saveCollection('subcategory_${id}_products', page, response);
+        await localDataSource.saveCollection(
+          'subcategory_${id}_products',
+          page,
+          response,
+        );
       }
       return response;
     }
 
     // Check if cache is valid
-    final isCacheValid = await localDataSource.isCollectionCacheValid('subcategory_${id}_products', page);
+    final isCacheValid = await localDataSource.isCollectionCacheValid(
+      'subcategory_${id}_products',
+      page,
+    );
 
     if (isCacheValid) {
-      final cachedData = await localDataSource.getCollectionFromCache('subcategory_${id}_products', page);
+      final cachedData = await localDataSource.getCollectionFromCache(
+        'subcategory_${id}_products',
+        page,
+      );
       if (cachedData != null) {
         return cachedData;
       }
     }
 
     // Get data from remote and cache it
-    final remoteResponse = await remoteDataSource.getSubCategoryProducts(id, page);
-    await localDataSource.saveCollection('subcategory_${id}_products', page, remoteResponse);
+    final remoteResponse = await remoteDataSource.getSubCategoryProducts(
+      id,
+      page,
+    );
+    await localDataSource.saveCollection(
+      'subcategory_${id}_products',
+      page,
+      remoteResponse,
+    );
     return remoteResponse;
   }
 
   @override
-  Future<ProductsResponse> getShopProducts(int id, int page, {String? name, bool needUpdate = false}) async {
+  Future<ProductsResponse> getShopProducts(
+    int id,
+    int page, {
+    String? name,
+    bool needUpdate = false,
+  }) async {
     // If searching by name or needUpdate is true, always go to remote
     if ((name != null && name.isNotEmpty) || needUpdate) {
-      final response = await remoteDataSource.getShopProducts(id, page, name: name);
+      final response = await remoteDataSource.getShopProducts(
+        id,
+        page,
+        name: name,
+      );
       if (needUpdate && (name == null || name.isEmpty)) {
         // Update cache when not searching by name
-        await localDataSource.saveCollection('shop_${id}_products', page, response);
+        await localDataSource.saveCollection(
+          'shop_${id}_products',
+          page,
+          response,
+        );
       }
       return response;
     }
 
     // Check if cache is valid
-    final isCacheValid = await localDataSource.isCollectionCacheValid('shop_${id}_products', page);
+    final isCacheValid = await localDataSource.isCollectionCacheValid(
+      'shop_${id}_products',
+      page,
+    );
 
     if (isCacheValid) {
-      final cachedData = await localDataSource.getCollectionFromCache('shop_${id}_products', page);
+      final cachedData = await localDataSource.getCollectionFromCache(
+        'shop_${id}_products',
+        page,
+      );
       if (cachedData != null) {
         return cachedData;
       }
@@ -249,27 +402,50 @@ class ProductRepositoryImpl implements ProductRepository {
 
     // Get data from remote and cache it
     final remoteResponse = await remoteDataSource.getShopProducts(id, page);
-    await localDataSource.saveCollection('shop_${id}_products', page, remoteResponse);
+    await localDataSource.saveCollection(
+      'shop_${id}_products',
+      page,
+      remoteResponse,
+    );
     return remoteResponse;
   }
 
   @override
-  Future<ProductsResponse> getBrandProducts(int id, int page, {String? name, bool needUpdate = false}) async {
+  Future<ProductsResponse> getBrandProducts(
+    int id,
+    int page, {
+    String? name,
+    bool needUpdate = false,
+  }) async {
     // If searching by name or needUpdate is true, always go to remote
     if ((name != null && name.isNotEmpty) || needUpdate) {
-      final response = await remoteDataSource.getBrandProducts(id, page, name: name);
+      final response = await remoteDataSource.getBrandProducts(
+        id,
+        page,
+        name: name,
+      );
       if (needUpdate && (name == null || name.isEmpty)) {
         // Update cache when not searching by name
-        await localDataSource.saveCollection('brand_${id}_products', page, response);
+        await localDataSource.saveCollection(
+          'brand_${id}_products',
+          page,
+          response,
+        );
       }
       return response;
     }
 
     // Check if cache is valid
-    final isCacheValid = await localDataSource.isCollectionCacheValid('brand_${id}_products', page);
+    final isCacheValid = await localDataSource.isCollectionCacheValid(
+      'brand_${id}_products',
+      page,
+    );
 
     if (isCacheValid) {
-      final cachedData = await localDataSource.getCollectionFromCache('brand_${id}_products', page);
+      final cachedData = await localDataSource.getCollectionFromCache(
+        'brand_${id}_products',
+        page,
+      );
       if (cachedData != null) {
         return cachedData;
       }
@@ -277,12 +453,19 @@ class ProductRepositoryImpl implements ProductRepository {
 
     // Get data from remote and cache it
     final remoteResponse = await remoteDataSource.getBrandProducts(id, page);
-    await localDataSource.saveCollection('brand_${id}_products', page, remoteResponse);
+    await localDataSource.saveCollection(
+      'brand_${id}_products',
+      page,
+      remoteResponse,
+    );
     return remoteResponse;
   }
 
   @override
-  Future<ProductsResponse> getDigitalProducts(int page, {bool needUpdate = false}) async {
+  Future<ProductsResponse> getDigitalProducts(
+    int page, {
+    bool needUpdate = false,
+  }) async {
     // If needUpdate is true, always go to remote
     if (needUpdate) {
       final response = await remoteDataSource.getDigitalProducts(page);
@@ -291,10 +474,16 @@ class ProductRepositoryImpl implements ProductRepository {
     }
 
     // Check if cache is valid
-    final isCacheValid = await localDataSource.isCollectionCacheValid('digital_products', page);
+    final isCacheValid = await localDataSource.isCollectionCacheValid(
+      'digital_products',
+      page,
+    );
 
     if (isCacheValid) {
-      final cachedData = await localDataSource.getCollectionFromCache('digital_products', page);
+      final cachedData = await localDataSource.getCollectionFromCache(
+        'digital_products',
+        page,
+      );
       if (cachedData != null) {
         return cachedData;
       }
@@ -302,7 +491,11 @@ class ProductRepositoryImpl implements ProductRepository {
 
     // Get data from remote and cache it
     final remoteResponse = await remoteDataSource.getDigitalProducts(page);
-    await localDataSource.saveCollection('digital_products', page, remoteResponse);
+    await localDataSource.saveCollection(
+      'digital_products',
+      page,
+      remoteResponse,
+    );
     return remoteResponse;
   }
 
@@ -313,19 +506,32 @@ class ProductRepositoryImpl implements ProductRepository {
   }
 
   @override
-  Future<ProductsResponse> getRelatedProducts(int id, {bool needUpdate = false}) async {
+  Future<ProductsResponse> getRelatedProducts(
+    int id, {
+    bool needUpdate = false,
+  }) async {
     // If needUpdate is true, always go to remote
     if (needUpdate) {
       final response = await remoteDataSource.getRelatedProducts(id);
-      await localDataSource.saveCollection('related_${id}_products', 1, response);
+      await localDataSource.saveCollection(
+        'related_${id}_products',
+        1,
+        response,
+      );
       return response;
     }
 
     // Check if cache is valid
-    final isCacheValid = await localDataSource.isCollectionCacheValid('related_${id}_products', 1);
+    final isCacheValid = await localDataSource.isCollectionCacheValid(
+      'related_${id}_products',
+      1,
+    );
 
     if (isCacheValid) {
-      final cachedData = await localDataSource.getCollectionFromCache('related_${id}_products', 1);
+      final cachedData = await localDataSource.getCollectionFromCache(
+        'related_${id}_products',
+        1,
+      );
       if (cachedData != null) {
         return cachedData;
       }
@@ -333,32 +539,55 @@ class ProductRepositoryImpl implements ProductRepository {
 
     // Get data from remote and cache it
     final remoteResponse = await remoteDataSource.getRelatedProducts(id);
-    await localDataSource.saveCollection('related_${id}_products', 1, remoteResponse);
+    await localDataSource.saveCollection(
+      'related_${id}_products',
+      1,
+      remoteResponse,
+    );
     return remoteResponse;
   }
 
   @override
-  Future<ProductsResponse> getTopFromThisSellerProducts(int id, {bool needUpdate = false}) async {
+  Future<ProductsResponse> getTopFromThisSellerProducts(
+    int id, {
+    bool needUpdate = false,
+  }) async {
     // If needUpdate is true, always go to remote
     if (needUpdate) {
       final response = await remoteDataSource.getTopFromThisSellerProducts(id);
-      await localDataSource.saveCollection('top_seller_${id}_products', 1, response);
+      await localDataSource.saveCollection(
+        'top_seller_${id}_products',
+        1,
+        response,
+      );
       return response;
     }
 
     // Check if cache is valid
-    final isCacheValid = await localDataSource.isCollectionCacheValid('top_seller_${id}_products', 1);
+    final isCacheValid = await localDataSource.isCollectionCacheValid(
+      'top_seller_${id}_products',
+      1,
+    );
 
     if (isCacheValid) {
-      final cachedData = await localDataSource.getCollectionFromCache('top_seller_${id}_products', 1);
+      final cachedData = await localDataSource.getCollectionFromCache(
+        'top_seller_${id}_products',
+        1,
+      );
       if (cachedData != null) {
         return cachedData;
       }
     }
 
     // Get data from remote and cache it
-    final remoteResponse = await remoteDataSource.getTopFromThisSellerProducts(id);
-    await localDataSource.saveCollection('top_seller_${id}_products', 1, remoteResponse);
+    final remoteResponse = await remoteDataSource.getTopFromThisSellerProducts(
+      id,
+    );
+    await localDataSource.saveCollection(
+      'top_seller_${id}_products',
+      1,
+      remoteResponse,
+    );
     return remoteResponse;
   }
 }

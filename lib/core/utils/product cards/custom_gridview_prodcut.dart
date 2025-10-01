@@ -49,16 +49,17 @@ class _ProductGridCardState extends State<ProductGridCard> {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        widget.product.setProduct?AppRoutes.navigateTo(
-          context,
-          AppRoutes.setProductDetailsScreen,
-          arguments: {'slug': widget.product.slug},
-        ):
-        AppRoutes.navigateTo(
-          context,
-          AppRoutes.productDetailScreen,
-          arguments: {'slug': widget.product.slug},
-        );
+        widget.product.setProduct
+            ? AppRoutes.navigateTo(
+                context,
+                AppRoutes.setProductDetailsScreen,
+                arguments: {'slug': widget.product.slug},
+              )
+            : AppRoutes.navigateTo(
+                context,
+                AppRoutes.productDetailScreen,
+                arguments: {'slug': widget.product.slug},
+              );
       },
       child: Stack(
         alignment: Alignment.topCenter,
@@ -106,15 +107,30 @@ class _ProductGridCardState extends State<ProductGridCard> {
                             // Product name
                             Text(
                               widget.product.name,
-                              style: context.titleSmall!.copyWith(fontWeight: FontWeight.w600,color: AppTheme.black),
+                              style: context.titleSmall!.copyWith(
+                                fontWeight: FontWeight.w600,
+                                color: AppTheme.black,
+                              ),
                               maxLines: 1,
-                              textAlign: Directionality.of(context) == TextDirection.rtl ? TextAlign.right : TextAlign.left,
+                              textAlign:
+                                  Directionality.of(context) ==
+                                      TextDirection.rtl
+                                  ? TextAlign.right
+                                  : TextAlign.left,
                             ),
                             const SizedBox(height: 6),
                             // Price
-                            Text(widget.product.discountedPrice, 
-                                 style: context.titleSmall!.copyWith(fontWeight: FontWeight.w600,color: AppTheme.primaryColor),
-                                 textAlign: Directionality.of(context) == TextDirection.rtl ? TextAlign.right : TextAlign.left,
+                            Text(
+                              widget.product.discountedPrice,
+                              style: context.titleSmall!.copyWith(
+                                fontWeight: FontWeight.w600,
+                                color: AppTheme.primaryColor,
+                              ),
+                              textAlign:
+                                  Directionality.of(context) ==
+                                      TextDirection.rtl
+                                  ? TextAlign.right
+                                  : TextAlign.left,
                             ),
                           ],
                         ),
@@ -123,10 +139,12 @@ class _ProductGridCardState extends State<ProductGridCard> {
                   ),
                   Positioned(
                     top: 0,
-                    right:
-                    Directionality.of(context) == TextDirection.ltr ? 0 : null,
-                    left:
-                    Directionality.of(context) == TextDirection.rtl ? 0 : null,
+                    right: Directionality.of(context) == TextDirection.ltr
+                        ? 0
+                        : null,
+                    left: Directionality.of(context) == TextDirection.rtl
+                        ? 0
+                        : null,
                     child: Consumer<WishlistProvider>(
                       builder: (context, provider, _) {
                         final isInWishlist = provider.isProductInWishlist(
@@ -136,7 +154,9 @@ class _ProductGridCardState extends State<ProductGridCard> {
                         return Card(
                           elevation: 2,
                           margin: EdgeInsets.zero,
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(50),
+                          ),
                           child: Padding(
                             padding: const EdgeInsets.all(1.0),
                             child: LikeButton(
@@ -149,8 +169,11 @@ class _ProductGridCardState extends State<ProductGridCard> {
                                   context,
                                   widget.product.slug,
                                 );
-                                final nowInWishlist = Provider.of<WishlistProvider>(context, listen: false)
-                                    .isProductInWishlist(widget.product.slug);
+                                final nowInWishlist =
+                                    Provider.of<WishlistProvider>(
+                                      context,
+                                      listen: false,
+                                    ).isProductInWishlist(widget.product.slug);
                                 if (!wasInWishlist && nowInWishlist) {
                                   _triggerWishlistAnimation();
                                 }
@@ -163,50 +186,50 @@ class _ProductGridCardState extends State<ProductGridCard> {
                   ),
                   Positioned(
                     bottom: widget.availableAddToCart ? 0 : 2,
-                    right:
-                        Directionality.of(context) == TextDirection.ltr
-                            ? (widget.availableAddToCart ? 0 : 2)
-                            : null,
-                    left:
-                        Directionality.of(context) == TextDirection.rtl
-                            ? (widget.availableAddToCart ? 0 : 2)
-                            : null,
+                    right: Directionality.of(context) == TextDirection.ltr
+                        ? (widget.availableAddToCart ? 0 : 2)
+                        : null,
+                    left: Directionality.of(context) == TextDirection.rtl
+                        ? (widget.availableAddToCart ? 0 : 2)
+                        : null,
                     child: InkWell(
                       onTap: () {
                         widget.availableAddToCart
                             ? widget.product.currentStock < 1
-                                ? null
-                                : AppFunctions.addProductToCart(
-                                  context: context,
-                                  productId: widget.product.id,
-                                  productName: widget.product.name,
-                                  productSlug: widget.product.slug,
-                                  hasVariation: widget.product.hasVariation,
-                                )
+                                  ? null
+                                  : AppFunctions.addProductToCart(
+                                      context: context,
+                                      productId: widget.product.id,
+                                      productName: widget.product.name,
+                                      productSlug: widget.product.slug,
+                                      hasVariation: widget.product.hasVariation,
+                                    )
                             : null;
                       },
                       child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 4,
+                          vertical: 2,
+                        ),
                         decoration: BoxDecoration(
-                          color:
-                              !widget.availableAddToCart
-                                  ? AppTheme.primaryColor.withValues(alpha: 0.1)
-                                  : Colors.transparent,
+                          color: !widget.availableAddToCart
+                              ? AppTheme.primaryColor.withValues(alpha: 0.1)
+                              : Colors.transparent,
                           borderRadius: BorderRadius.circular(30),
                         ),
-                        child:
-                            !widget.availableAddToCart
-                                ? Text(
-                                  'new'.tr(context),
-                                  style: context.bodySmall?.copyWith(
-                                    color:
-                                        !widget.availableAddToCart
-                                            ? AppTheme.primaryColor
-                                            : AppTheme.primaryColor,
-                                    fontWeight: FontWeight.w900,
-                                  ),
-                                )
-                                : const CustomImage(assetPath: AppSvgs.active_cart_icon),
+                        child: !widget.availableAddToCart
+                            ? Text(
+                                'new'.tr(context),
+                                style: context.bodySmall?.copyWith(
+                                  color: !widget.availableAddToCart
+                                      ? AppTheme.primaryColor
+                                      : AppTheme.primaryColor,
+                                  fontWeight: FontWeight.w900,
+                                ),
+                              )
+                            : const CustomImage(
+                                assetPath: AppSvgs.active_cart_icon,
+                              ),
                       ),
                     ),
                   ),

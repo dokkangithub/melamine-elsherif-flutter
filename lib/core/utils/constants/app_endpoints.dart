@@ -46,7 +46,8 @@ class LaravelApiEndPoint {
   static const String getHomeDeliveryAddress = '/get-home-delivery-address';
   static const String userShippingCreate = '/user/shipping/create';
   static const String userShippingUpdate = '/user/shipping/update';
-  static const String userShippingUpdateLocation = '/user/shipping/update-location';
+  static const String userShippingUpdateLocation =
+      '/user/shipping/update-location';
   static const String userShippingMakeDefault = '/user/shipping/make_default';
   static const String userShippingDelete = '/user/shipping/delete';
   static const String citiesByState = '/cities-by-state';
@@ -54,7 +55,8 @@ class LaravelApiEndPoint {
   static const String countries = '/countries';
   static const String shippingCost = '/shipping_cost';
   static const String updateAddressInCart = '/update-address-in-cart';
-  static const String updateShippingTypeInCart = '/update-shipping-type-in-cart';
+  static const String updateShippingTypeInCart =
+      '/update-shipping-type-in-cart';
   static const String filterBrands = '/filter/brands';
   static const String brands = '/brands';
   static const String profileCounter = '/profile/counters';

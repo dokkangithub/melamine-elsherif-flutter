@@ -37,20 +37,17 @@ class _AddressListScreenState extends State<AddressListScreen> {
   // Handle setting an address as default and update shipping
   Future<void> _handleSetDefault(int addressId) async {
     final addressProvider = context.read<AddressProvider>();
-    
+
     try {
       // First make the address default
       await addressProvider.makeAddressDefault(addressId);
-      
+
       // Then update address in cart and shipping
-      await addressProvider.updateAddressInCart(
-        addressId,
-        context: context,
-      );
-      
+      await addressProvider.updateAddressInCart(addressId, context: context);
+
       // Update cart summary to reflect shipping changes
       await context.read<CartProvider>().fetchCartSummary();
-      
+
       // Show a confirmation message
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -87,10 +84,8 @@ class _AddressListScreenState extends State<AddressListScreen> {
         title: FadeIn(
           duration: const Duration(milliseconds: 400),
           child: Text(
-            'my_addresses'.tr(context), 
-            style: context.displaySmall.copyWith(
-              fontWeight: FontWeight.w600,
-            )
+            'my_addresses'.tr(context),
+            style: context.displaySmall.copyWith(fontWeight: FontWeight.w600),
           ),
         ),
       ),
@@ -108,9 +103,14 @@ class _AddressListScreenState extends State<AddressListScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Icon(Icons.error_outline, size: 64, color: Colors.red),
+                    const Icon(
+                      Icons.error_outline,
+                      size: 64,
+                      color: Colors.red,
+                    ),
                     const SizedBox(height: 16),
-                    Text('Error: ${addressProvider.addressError}',
+                    Text(
+                      'Error: ${addressProvider.addressError}',
                       style: const TextStyle(color: Colors.red),
                       textAlign: TextAlign.center,
                     ),
@@ -150,11 +150,12 @@ class _AddressListScreenState extends State<AddressListScreen> {
                       address: address,
                       isDefault: address.isDefault,
                       onEdit: () => _navigateToEditAddress(context, address.id),
-                      onDelete: () => _showDeleteConfirmation(context, address.id),
+                      onDelete: () =>
+                          _showDeleteConfirmation(context, address.id),
                       onSetDefault: () => _handleSetDefault(address.id),
-                      onSelect: widget.isSelectable 
-                        ? () => Navigator.pop(context, address)
-                        : null,
+                      onSelect: widget.isSelectable
+                          ? () => Navigator.pop(context, address)
+                          : null,
                     );
                   },
                 ),

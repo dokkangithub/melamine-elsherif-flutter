@@ -51,7 +51,7 @@ class WalletBalanceCard extends StatelessWidget {
               ),
             ),
           ),
-          
+
           // Content
           Padding(
             padding: const EdgeInsets.all(24.0),
@@ -94,7 +94,10 @@ class WalletBalanceCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 24.0),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12.0,
+                    vertical: 8.0,
+                  ),
                   decoration: BoxDecoration(
                     color: Colors.white.withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(20.0),
@@ -126,4 +129,4 @@ class WalletBalanceCard extends StatelessWidget {
       ),
     );
   }
-} 
+}

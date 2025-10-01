@@ -33,7 +33,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     _controller.dispose();
     super.dispose();
   }
-  
+
   @override
   void initState() {
     super.initState();
@@ -43,7 +43,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
   void _handleResetPassword() async {
     if (!_formKey.currentState!.validate()) return;
-    
+
     setState(() => _isLoading = true);
 
     // Simulate network delay
@@ -90,7 +90,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 ),
               ),
             ),
-            
+
             // Content
             SafeArea(
               child: SingleChildScrollView(
@@ -104,7 +104,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         const SizedBox(height: 16),
-                        
+
                         // Top row with back button and language switcher
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -113,20 +113,23 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                             FadeInLeft(
                               duration: const Duration(milliseconds: 500),
                               child: IconButton(
-                                icon: const Icon(Icons.arrow_back_ios, color: AppTheme.primaryColor),
+                                icon: const Icon(
+                                  Icons.arrow_back_ios,
+                                  color: AppTheme.primaryColor,
+                                ),
                                 onPressed: () => Navigator.of(context).pop(),
                                 padding: EdgeInsets.zero,
                                 constraints: const BoxConstraints(),
                               ),
                             ),
-                            
+
                             // Language switcher
                             const LanguageSwitcher(),
                           ],
                         ),
 
                         const SizedBox(height: 30),
-                        
+
                         // Logo - Using brand name text instead of image to match other screens
                         FadeInDown(
                           duration: const Duration(milliseconds: 600),
@@ -161,8 +164,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                           delay: const Duration(milliseconds: 200),
                           child: Text(
                             _isSendingEmail
-                              ? 'forgot_password_email_desc'.tr(context)
-                              : 'forgot_password_phone_desc'.tr(context),
+                                ? 'forgot_password_email_desc'.tr(context)
+                                : 'forgot_password_phone_desc'.tr(context),
                             style: context.titleSmall.copyWith(
                               color: Colors.grey[600],
                             ),
@@ -178,7 +181,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                           child: TextFormField(
                             controller: _controller,
                             decoration: InputDecoration(
-                              hintText: _isSendingEmail ? 'enter_your_email'.tr(context) : 'enter_your_phone_number'.tr(context),
+                              hintText: _isSendingEmail
+                                  ? 'enter_your_email'.tr(context)
+                                  : 'enter_your_phone_number'.tr(context),
                               hintStyle: TextStyle(
                                 fontSize: 14,
                                 color: Colors.grey[500],
@@ -197,15 +202,21 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                 borderRadius: BorderRadius.circular(8),
                                 borderSide: BorderSide.none,
                               ),
-                              contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                              contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 16,
+                              ),
                               hintTextDirection: Directionality.of(context),
                               alignLabelWithHint: true,
                             ),
                             keyboardType: _isSendingEmail
-                              ? TextInputType.emailAddress
-                              : TextInputType.phone,
+                                ? TextInputType.emailAddress
+                                : TextInputType.phone,
                             textDirection: Directionality.of(context),
-                            textAlign: Directionality.of(context) == TextDirection.rtl ? TextAlign.right : TextAlign.left,
+                            textAlign:
+                                Directionality.of(context) == TextDirection.rtl
+                                ? TextAlign.right
+                                : TextAlign.left,
                             style: const TextStyle(
                               fontSize: 14,
                               color: Colors.black,
@@ -213,8 +224,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                             validator: (value) {
                               if (value == null || value.isEmpty) {
                                 return _isSendingEmail
-                                  ? 'please_enter_email'.tr(context)
-                                  : 'please_enter_phone'.tr(context);
+                                    ? 'please_enter_email'.tr(context)
+                                    : 'please_enter_phone'.tr(context);
                               }
                               if (_isSendingEmail && !value.contains('@')) {
                                 return 'please_enter_valid_email'.tr(context);
@@ -255,13 +266,15 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                           duration: const Duration(milliseconds: 800),
                           delay: const Duration(milliseconds: 500),
                           child: _isLoading
-                            ? const Center(child: CustomLoadingWidget())
-                            : CustomButton(
-                                onPressed: _handleResetPassword,
-                                backgroundColor: AppTheme.primaryColor,
-                                text: _isSendingEmail ? 'send_reset_link'.tr(context) : 'send_otp'.tr(context),
-                                fullWidth: true,
-                              ),
+                              ? const Center(child: CustomLoadingWidget())
+                              : CustomButton(
+                                  onPressed: _handleResetPassword,
+                                  backgroundColor: AppTheme.primaryColor,
+                                  text: _isSendingEmail
+                                      ? 'send_reset_link'.tr(context)
+                                      : 'send_otp'.tr(context),
+                                  fullWidth: true,
+                                ),
                         ),
 
                         const SizedBox(height: 24),
@@ -273,14 +286,18 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text('remember_your_password'.tr(context),
-                                style: context.titleMedium.copyWith(color: Colors.grey[700]),
+                              Text(
+                                'remember_your_password'.tr(context),
+                                style: context.titleMedium.copyWith(
+                                  color: Colors.grey[700],
+                                ),
                               ),
                               GestureDetector(
                                 onTap: () {
                                   Navigator.of(context).pop();
                                 },
-                                child: Text('login'.tr(context),
+                                child: Text(
+                                  'login'.tr(context),
                                   style: context.titleMedium.copyWith(
                                     color: AppTheme.primaryColor,
                                     fontWeight: FontWeight.bold,

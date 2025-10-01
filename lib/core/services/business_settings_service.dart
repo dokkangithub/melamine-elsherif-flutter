@@ -6,7 +6,8 @@ import '../di/injection_container.dart';
 ///
 /// This is a singleton service that wraps the BusinessProvider.
 class BusinessSettingsService {
-  static final BusinessSettingsService _instance = BusinessSettingsService._internal();
+  static final BusinessSettingsService _instance =
+      BusinessSettingsService._internal();
   late final BusinessProvider _businessProvider;
   bool _initialized = false;
 
@@ -60,7 +61,7 @@ class BusinessSettingsService {
   Map<String, dynamic> getMap(String settingType) {
     return _businessProvider.getSetting(settingType).getMapValue();
   }
-  
+
   /// Get the home banner images specifically
   List<String> getHomeBannerImages() {
     try {
@@ -83,4 +84,4 @@ class BusinessSettingsService {
   bool get guestCheckoutActive => _businessProvider.guestCheckoutActive;
   bool get walletSystem => _businessProvider.walletSystem;
   bool get couponSystem => _businessProvider.couponSystem;
-} 
+}

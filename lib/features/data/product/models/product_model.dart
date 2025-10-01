@@ -35,14 +35,18 @@ class ProductModel extends entity.Product {
       mainCategoryName: json['main_category_name'] ?? '',
       categories: json['categories'] is List
           ? List<CategoryModel>.from(
-        json['categories'].map((x) => CategoryModel.fromJson(x)),
-      )
+              json['categories'].map((x) => CategoryModel.fromJson(x)),
+            )
           : [],
-      thumbnailImage: json['thumbnail_image'] ?? json['image']??'',
+      thumbnailImage: json['thumbnail_image'] ?? json['image'] ?? '',
       hasDiscount: json['has_discount'] ?? false,
       discount: json['discount'] ?? '',
       mainPrice: json['main_price'] ?? '',
-      discountedPrice: json['stroked_price'] ?? json['discounted_price'] ?? json['price'] ??'',
+      discountedPrice:
+          json['stroked_price'] ??
+          json['discounted_price'] ??
+          json['price'] ??
+          '',
       published: json['published'] ?? 1,
       hasVariation: json['has_variation'] ?? false,
       stockQuantity: json['stock_quantity'] ?? 0,
@@ -50,8 +54,8 @@ class ProductModel extends entity.Product {
       stock: json['stock'] == null
           ? []
           : List<StockModel>.from(
-        json['stock'].map((x) => StockModel.fromJson(x)),
-      ),
+              json['stock'].map((x) => StockModel.fromJson(x)),
+            ),
       rating: json['rating'] ?? 0,
       ratingCount: json['rating_count'] ?? 0,
       sales: json['sales'] ?? 0,
@@ -68,7 +72,9 @@ class ProductModel extends entity.Product {
       'name': name,
       'main_category_id': mainCategoryId,
       'main_category_name': mainCategoryName,
-      'categories': categories.map((x) => (x as CategoryModel).toJson()).toList(),
+      'categories': categories
+          .map((x) => (x as CategoryModel).toJson())
+          .toList(),
       'thumbnail_image': thumbnailImage,
       'has_discount': hasDiscount,
       'discount': discount,
@@ -88,23 +94,14 @@ class ProductModel extends entity.Product {
 }
 
 class CategoryModel extends entity.Category {
-  const CategoryModel({
-    required super.id,
-    required super.name,
-  });
+  const CategoryModel({required super.id, required super.name});
 
   factory CategoryModel.fromJson(Map<String, dynamic> json) {
-    return CategoryModel(
-      id: json['id'] ?? 0,
-      name: json['name'] ?? '',
-    );
+    return CategoryModel(id: json['id'] ?? 0, name: json['name'] ?? '');
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'name': name,
-    };
+    return {'id': id, 'name': name};
   }
 }
 
@@ -151,20 +148,13 @@ class StockModel extends entity.ProductStock {
 }
 
 class ProductLinksModel extends entity.ProductLinks {
-  const ProductLinksModel({
-    required super.details,
-  });
+  const ProductLinksModel({required super.details});
 
   factory ProductLinksModel.fromJson(Map<String, dynamic> json) {
-    return ProductLinksModel(
-      details: json['details'] ?? '',
-    );
+    return ProductLinksModel(details: json['details'] ?? '');
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'details': details,
-    };
+    return {'details': details};
   }
 }
-

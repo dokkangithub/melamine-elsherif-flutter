@@ -4,10 +4,7 @@ class VariantPriceModel {
   final bool result;
   final VariantPriceDataModel data;
 
-  VariantPriceModel({
-    required this.result,
-    required this.data,
-  });
+  VariantPriceModel({required this.result, required this.data});
 
   factory VariantPriceModel.fromJson(Map<String, dynamic> json) {
     return VariantPriceModel(
@@ -17,17 +14,9 @@ class VariantPriceModel {
   }
 
   VariantPrice toEntity() {
-    return VariantPrice(
-      result: result,
-      data: data.toEntity(),
-    );
+    return VariantPrice(result: result, data: data.toEntity());
   }
 }
-
-
-
-
-
 
 class VariantPriceDataModel {
   final String price;
@@ -79,5 +68,4 @@ class VariantPriceDataModel {
       image: image,
     );
   }
-
 }

@@ -16,11 +16,9 @@ import '../controller/auth_provider.dart';
 
 class SocialLoginWidget extends StatelessWidget {
   final bool isLoginScreen;
-  
-  const SocialLoginWidget({
-    Key? key,
-    required this.isLoginScreen,
-  }) : super(key: key);
+
+  const SocialLoginWidget({Key? key, required this.isLoginScreen})
+    : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -36,9 +34,9 @@ class SocialLoginWidget extends StatelessWidget {
             onPressedGoogleLogin(context);
           },
         ),
-        
+
         const SizedBox(width: 16),
-        
+
         // Apple login button
         _buildSocialButton(
           context,
@@ -71,17 +69,13 @@ class SocialLoginWidget extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              CustomImage(
-                assetPath: icon,
-                width: 24,
-                height: 24,
-              ),
+              CustomImage(assetPath: icon, width: 24, height: 24),
               const SizedBox(width: 8),
               Text(
                 label,
-                style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                  fontWeight: FontWeight.w600,
-                ),
+                style: Theme.of(
+                  context,
+                ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w600),
               ),
             ],
           ),
@@ -89,7 +83,6 @@ class SocialLoginWidget extends StatelessWidget {
       ),
     );
   }
-
 
   Future<void> onPressedGoogleLogin(context) async {
     try {
@@ -104,22 +97,23 @@ class SocialLoginWidget extends StatelessWidget {
       }
 
       GoogleSignInAuthentication googleSignInAuthentication =
-      await googleUser.authentication;
+          await googleUser.authentication;
       String? accessToken = googleSignInAuthentication.accessToken;
 
-      var loginResponse = await Provider.of<AuthProvider>(
-        context,
-        listen: false,
-      ).completeSocialLogin(
-        provider: "google",
-        socialProvider: "google",
-        name: googleUser.displayName ?? "",
-        email: googleUser.email,
-        secret_token: googleUser.id,
-        access_token: accessToken,
-      );
+      var loginResponse =
+          await Provider.of<AuthProvider>(
+            context,
+            listen: false,
+          ).completeSocialLogin(
+            provider: "google",
+            socialProvider: "google",
+            name: googleUser.displayName ?? "",
+            email: googleUser.email,
+            secret_token: googleUser.id,
+            access_token: accessToken,
+          );
       if (loginResponse == true) {
-        Provider.of<LayoutProvider>(context,listen: false).currentIndex=0;
+        Provider.of<LayoutProvider>(context, listen: false).currentIndex = 0;
         AppRoutes.navigateTo(context, AppRoutes.mainLayoutScreen);
         CustomToast.showToast(
           message: 'login_successfully'.tr(context),
@@ -129,24 +123,23 @@ class SocialLoginWidget extends StatelessWidget {
 
       // Disconnect after completion
       await googleSignIn.disconnect();
-
-
     } on Exception catch (e) {
-
-
       // Show error message to user
       CustomToast.showToast(
-          message: 'Failed to sign in with Google: ${e.toString()}',
-          type: ToastType.success
+        message: 'Failed to sign in with Google: ${e.toString()}',
+        type: ToastType.success,
       );
     }
   }
 
-
   String _generateNonce([int length = 32]) {
-    const charset = '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._';
+    const charset =
+        '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._';
     final random = Random.secure();
-    return List.generate(length, (_) => charset[random.nextInt(charset.length)]).join();
+    return List.generate(
+      length,
+      (_) => charset[random.nextInt(charset.length)],
+    ).join();
   }
 
   String _sha256ofString(String input) {
@@ -170,30 +163,30 @@ class SocialLoginWidget extends StatelessWidget {
 
       final name = [
         appleCredential.givenName,
-        appleCredential.familyName
+        appleCredential.familyName,
       ].where((e) => e != null && e.isNotEmpty).join(" ");
 
-      final loginResponse = await Provider.of<AuthProvider>(
-        context,
-        listen: false,
-      ).completeSocialLogin(
-        provider: "apple",
-        socialProvider: "apple",
-        name: name,
-        email: appleCredential.email ?? "",
-        secret_token: appleCredential.userIdentifier,
-        access_token: appleCredential.identityToken,
-      );
+      final loginResponse =
+          await Provider.of<AuthProvider>(
+            context,
+            listen: false,
+          ).completeSocialLogin(
+            provider: "apple",
+            socialProvider: "apple",
+            name: name,
+            email: appleCredential.email ?? "",
+            secret_token: appleCredential.userIdentifier,
+            access_token: appleCredential.identityToken,
+          );
 
       if (loginResponse == true) {
-        Provider.of<LayoutProvider>(context,listen: false).currentIndex=0;
+        Provider.of<LayoutProvider>(context, listen: false).currentIndex = 0;
         AppRoutes.navigateTo(context, AppRoutes.mainLayoutScreen);
         CustomToast.showToast(
           message: 'login_successfully'.tr(context),
           type: ToastType.success,
         );
       }
-
     } catch (e) {
       CustomToast.showToast(
         message: 'Failed to sign in with Apple: ${e.toString()}',
@@ -201,6 +194,4 @@ class SocialLoginWidget extends StatelessWidget {
       );
     }
   }
-
-
 }

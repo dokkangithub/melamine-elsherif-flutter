@@ -21,7 +21,7 @@ class ProductsGridShimmer extends StatelessWidget {
             // Alternate heights for visual variety
             final bool isEven = index % 2 == 0;
             final double height = isEven ? 250 : 270;
-            
+
             return Container(
               height: height,
               margin: const EdgeInsets.all(4),
@@ -48,7 +48,7 @@ class ProductsGridShimmer extends StatelessWidget {
                       borderRadius: BorderRadius.zero,
                     ),
                   ),
-                  
+
                   // Product details placeholder
                   Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -63,18 +63,10 @@ class ProductsGridShimmer extends StatelessWidget {
                         ),
                         const SizedBox(height: 4),
                         // Second line of product name
-                        Container(
-                          width: 100,
-                          height: 12,
-                          color: Colors.white,
-                        ),
+                        Container(width: 100, height: 12, color: Colors.white),
                         const SizedBox(height: 8),
                         // Price
-                        Container(
-                          width: 80,
-                          height: 14,
-                          color: Colors.white,
-                        ),
+                        Container(width: 80, height: 14, color: Colors.white),
                       ],
                     ),
                   ),

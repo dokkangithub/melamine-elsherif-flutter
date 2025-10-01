@@ -7,10 +7,8 @@ import 'package:melamine_elsherif/features/domain/product%20details/entities/pro
 class SpecificationsWidget extends StatelessWidget {
   final ProductDetails product;
 
-  const SpecificationsWidget({
-    Key? key,
-    required this.product,
-  }) : super(key: key);
+  const SpecificationsWidget({Key? key, required this.product})
+    : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -46,10 +44,7 @@ class SpecificationsWidget extends StatelessWidget {
                 0: FlexColumnWidth(1.2),
                 1: FlexColumnWidth(1.8),
               },
-              border: TableBorder.all(
-                color: Colors.grey.shade200,
-                width: 1,
-              ),
+              border: TableBorder.all(color: Colors.grey.shade200, width: 1),
               children: [
                 for (var entry in product.specifications!.entries)
                   TableRow(
@@ -83,4 +78,4 @@ class SpecificationsWidget extends StatelessWidget {
       ],
     );
   }
-} 
+}

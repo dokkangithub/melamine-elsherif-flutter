@@ -9,7 +9,8 @@ class CartAnimationOverlay extends StatefulWidget {
   State<CartAnimationOverlay> createState() => _CartAnimationOverlayState();
 }
 
-class _CartAnimationOverlayState extends State<CartAnimationOverlay> with SingleTickerProviderStateMixin {
+class _CartAnimationOverlayState extends State<CartAnimationOverlay>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<Offset> _slideAnimation;
 
@@ -20,14 +21,11 @@ class _CartAnimationOverlayState extends State<CartAnimationOverlay> with Single
       duration: const Duration(milliseconds: 3500),
       vsync: this,
     );
-    
+
     _slideAnimation = Tween<Offset>(
       begin: const Offset(-1.0, 0),
       end: const Offset(1.5, 0),
-    ).animate(CurvedAnimation(
-      parent: _controller,
-      curve: Curves.easeInOut,
-    ));
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
 
     // Start animations
     _controller.forward().then((_) {
@@ -72,4 +70,4 @@ void showCartAddedAnimation(BuildContext context) {
       return const CartAnimationOverlay();
     },
   );
-} 
+}

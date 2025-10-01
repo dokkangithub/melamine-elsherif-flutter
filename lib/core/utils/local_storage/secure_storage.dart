@@ -50,10 +50,7 @@ class SecureStorage {
   Future<void> clearStorage() async {
     await _storage.deleteAll();
   }
-
-
 }
-
 
 ///How to use
 // Retrieve a string

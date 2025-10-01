@@ -34,14 +34,14 @@ class ClubPointProvider extends ChangeNotifier {
       notifyListeners();
 
       final points = await getClubPointsUseCase(page: currentPage);
-      
+
       if (points.isEmpty) {
         hasMoreClubPoints = false;
       } else {
         clubPoints.addAll(points);
         currentPage++;
       }
-      
+
       clubPointsState = LoadingState.loaded;
     } catch (e) {
       clubPointsState = LoadingState.error;
@@ -57,12 +57,12 @@ class ClubPointProvider extends ChangeNotifier {
       notifyListeners();
 
       final success = await convertToWalletUseCase();
-      
+
       if (success) {
         // Refresh club points after successful conversion
         await fetchClubPoints(refresh: true);
       }
-      
+
       convertState = LoadingState.loaded;
     } catch (e) {
       convertState = LoadingState.error;
@@ -83,6 +83,6 @@ class ClubPointProvider extends ChangeNotifier {
         print('Error parsing club points: ${point.points}');
       }
     }
-    return total.toStringAsFixed(0);  // Return without decimal places
+    return total.toStringAsFixed(0); // Return without decimal places
   }
-} 
+}

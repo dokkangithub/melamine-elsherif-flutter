@@ -1,7 +1,1 @@
-enum ProductType {
-  all,
-  bestSelling,
-  featured,
-  newArrival,
-  flashDeal,
-}
+enum ProductType { all, bestSelling, featured, newArrival, flashDeal }

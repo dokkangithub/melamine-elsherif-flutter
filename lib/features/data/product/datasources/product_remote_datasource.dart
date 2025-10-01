@@ -5,7 +5,6 @@ import '../models/product_model.dart';
 import '../models/product_response_model.dart';
 
 abstract class ProductRemoteDataSource {
-
   Future<ProductResponseModel> getAllProducts(int page, {String? name});
 
   Future<ProductResponseModel> getFeaturedProducts(int page);
@@ -25,10 +24,10 @@ abstract class ProductRemoteDataSource {
   });
 
   Future<ProductResponseModel> getSubCategoryProducts(
-      int id,
-      int page, {
-        String? name,
-      });
+    int id,
+    int page, {
+    String? name,
+  });
 
   Future<ProductResponseModel> getShopProducts(
     int id,
@@ -42,7 +41,6 @@ abstract class ProductRemoteDataSource {
     String? name,
   });
 
-
   Future<ProductResponseModel> getDigitalProducts(int page);
 
   Future<ProductModel> getDigitalProductDetails(int id);
@@ -50,7 +48,6 @@ abstract class ProductRemoteDataSource {
   Future<ProductResponseModel> getRelatedProducts(int id);
 
   Future<ProductResponseModel> getTopFromThisSellerProducts(int id);
-
 }
 
 class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
@@ -124,10 +121,10 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
 
   @override
   Future<ProductResponseModel> getSubCategoryProducts(
-      int id,
-      int page, {
-        String? name,
-      }) async {
+    int id,
+    int page, {
+    String? name,
+  }) async {
     String url = '${LaravelApiEndPoint.subCategoryProducts}$id?page=$page';
     if (name != null && name.isNotEmpty) {
       url += '&name=$name';
@@ -164,8 +161,6 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
     return ProductResponseModel.fromJson(response.data);
   }
 
-
-
   @override
   Future<ProductResponseModel> getDigitalProducts(int page) async {
     final response = await apiProvider.get(
@@ -173,7 +168,6 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
     );
     return ProductResponseModel.fromJson(response.data);
   }
-
 
   @override
   Future<ProductModel> getDigitalProductDetails(int id) async {
@@ -198,5 +192,4 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
     );
     return ProductResponseModel.fromJson(response.data);
   }
-
 }

@@ -77,4 +77,4 @@ class _SnappableCartItemState extends State<SnappableCartItem>
       ),
     );
   }
-} 
+}

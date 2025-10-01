@@ -9,9 +9,18 @@ import '../models/set_product_details_model.dart';
 abstract class SetProductsRemoteDataSource {
   Future<SetProductsModel> getSetProducts({int page = 1});
   Future<SetProductDetailsModel> getSetProductDetails({required String slug});
-  Future<CalculatePriceResponseModel> calculatePrice({required CalculatePriceRequestModel request});
-  Future<Map<String, dynamic>> addFullSetToCart({required int productId, required int quantity});
-  Future<Map<String, dynamic>> addCustomSetToCart({required int productId, required int quantity, required List<ComponentRequestModel> components});
+  Future<CalculatePriceResponseModel> calculatePrice({
+    required CalculatePriceRequestModel request,
+  });
+  Future<Map<String, dynamic>> addFullSetToCart({
+    required int productId,
+    required int quantity,
+  });
+  Future<Map<String, dynamic>> addCustomSetToCart({
+    required int productId,
+    required int quantity,
+    required List<ComponentRequestModel> components,
+  });
 }
 
 class SetProductsRemoteDataSourceImpl implements SetProductsRemoteDataSource {
@@ -40,7 +49,9 @@ class SetProductsRemoteDataSourceImpl implements SetProductsRemoteDataSource {
   }
 
   @override
-  Future<SetProductDetailsModel> getSetProductDetails({required String slug}) async {
+  Future<SetProductDetailsModel> getSetProductDetails({
+    required String slug,
+  }) async {
     final response = await apiProvider.get(
       '${LaravelApiEndPoint.setProducts}/$slug/details',
     );
@@ -52,7 +63,9 @@ class SetProductsRemoteDataSourceImpl implements SetProductsRemoteDataSource {
   }
 
   @override
-  Future<CalculatePriceResponseModel> calculatePrice({required CalculatePriceRequestModel request}) async {
+  Future<CalculatePriceResponseModel> calculatePrice({
+    required CalculatePriceRequestModel request,
+  }) async {
     final response = await apiProvider.post(
       '${LaravelApiEndPoint.setProducts}/calculate-price',
       data: request.toJson(),
@@ -65,15 +78,14 @@ class SetProductsRemoteDataSourceImpl implements SetProductsRemoteDataSource {
   }
 
   @override
-  Future<Map<String, dynamic>> addFullSetToCart({required int productId, required int quantity}) async {
+  Future<Map<String, dynamic>> addFullSetToCart({
+    required int productId,
+    required int quantity,
+  }) async {
     final userParams = await _getUserParams();
     final response = await apiProvider.post(
       '/cart/add-full-set',
-      data: {
-        'product_id': productId,
-        'quantity': quantity,
-        ...userParams,
-      },
+      data: {'product_id': productId, 'quantity': quantity, ...userParams},
     );
 
     // Check for temp_user_id and save it if provided
@@ -93,7 +105,7 @@ class SetProductsRemoteDataSourceImpl implements SetProductsRemoteDataSource {
   Future<Map<String, dynamic>> addCustomSetToCart({
     required int productId,
     required int quantity,
-    required List<ComponentRequestModel> components
+    required List<ComponentRequestModel> components,
   }) async {
     final userParams = await _getUserParams();
     final response = await apiProvider.post(

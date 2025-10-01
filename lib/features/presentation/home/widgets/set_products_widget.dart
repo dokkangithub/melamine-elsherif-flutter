@@ -28,7 +28,9 @@ class SetProductsWidget extends StatelessWidget {
           return _buildEmptyState();
         }
 
-        final filteredProducts = products.where((product) => product.published == true).toList();
+        final filteredProducts = products
+            .where((product) => product.published == true)
+            .toList();
 
         // Get first 10 products for the top section
         final firstTenProducts = filteredProducts.take(10).toList();
@@ -55,11 +57,10 @@ class SetProductsWidget extends StatelessWidget {
                   padding: const EdgeInsets.only(left: 16.0),
                   scrollDirection: Axis.horizontal,
                   itemCount: firstTenProducts.length,
-                  itemBuilder: (context, index) =>
-                      SetProductCard(
-                        setProduct: firstTenProducts[index],
-                        width: 250,
-                      ),
+                  itemBuilder: (context, index) => SetProductCard(
+                    setProduct: firstTenProducts[index],
+                    width: 250,
+                  ),
                 ),
               ),
             ],

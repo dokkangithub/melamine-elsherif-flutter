@@ -9,7 +9,7 @@ class AddCustomSetToCartUseCase {
   Future<Map<String, dynamic>> call({
     required int productId,
     required int quantity,
-    required List<ComponentRequest> components
+    required List<ComponentRequest> components,
   }) async {
     return await repository.addCustomSetToCart(
       productId: productId,

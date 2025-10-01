@@ -23,12 +23,7 @@ class BrandModel {
   }
 
   Brand toEntity() {
-    return Brand(
-      id: id,
-      name: name,
-      slug: slug,
-      logo: logo,
-    );
+    return Brand(id: id, name: name, slug: slug, logo: logo);
   }
 }
 
@@ -45,9 +40,11 @@ class BrandResponseModel {
 
   factory BrandResponseModel.fromJson(Map<String, dynamic> json) {
     return BrandResponseModel(
-      brands: (json['data'] as List?)
-          ?.map((item) => BrandModel.fromJson(item))
-          .toList() ?? [],
+      brands:
+          (json['data'] as List?)
+              ?.map((item) => BrandModel.fromJson(item))
+              .toList() ??
+          [],
       currentPage: json['current_page'] ?? 1,
       totalPages: json['last_page'] ?? 1,
     );

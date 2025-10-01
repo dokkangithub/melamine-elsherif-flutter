@@ -38,10 +38,7 @@ class CombinedOrder {
   final int id;
   final List<Order>? orders;
 
-  CombinedOrder({
-    required this.id,
-    this.orders,
-  });
+  CombinedOrder({required this.id, this.orders});
 }
 
 class Order {
@@ -54,6 +51,6 @@ class Order {
     required this.id,
     required this.code,
     required this.paymentStatus,
-    required this.paymentType
+    required this.paymentType,
   });
 }

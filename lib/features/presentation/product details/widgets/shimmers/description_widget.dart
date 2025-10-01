@@ -24,32 +24,36 @@ class DescriptionWidget extends StatelessWidget {
       children: [
         isLoading
             ? ShimmerWidget(width: 100, height: 20)
-            : Text('description'.tr(context), style: ProductTheme.titleMedium(context)),
+            : Text(
+                'description'.tr(context),
+                style: ProductTheme.titleMedium(context),
+              ),
         const SizedBox(height: 8),
         isLoading
             ? Column(
-          children: [
-            ShimmerWidget(height: 14),
-            const SizedBox(height: 8),
-            ShimmerWidget(height: 14),
-            const SizedBox(height: 8),
-            ShimmerWidget(height: 14),
-          ],
-        )
+                children: [
+                  ShimmerWidget(height: 14),
+                  const SizedBox(height: 8),
+                  ShimmerWidget(height: 14),
+                  const SizedBox(height: 8),
+                  ShimmerWidget(height: 14),
+                ],
+              )
             : product.description.isNotEmpty
             ? Html(
-          data: product.description,
-          style: {
-            '*': Style(
-              fontSize: FontSize(14.0),
-              lineHeight: LineHeight(1.6),
-              color: Colors.black54,
-            ),
-          },
-        )
-            :  Text('no_description_available'.tr(context),
-          style: TextStyle(color: Colors.grey, fontSize: 14),
-        ),
+                data: product.description,
+                style: {
+                  '*': Style(
+                    fontSize: FontSize(14.0),
+                    lineHeight: LineHeight(1.6),
+                    color: Colors.black54,
+                  ),
+                },
+              )
+            : Text(
+                'no_description_available'.tr(context),
+                style: TextStyle(color: Colors.grey, fontSize: 14),
+              ),
       ],
     );
   }

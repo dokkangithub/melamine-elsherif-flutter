@@ -6,7 +6,17 @@ class GetShopProductsUseCase {
 
   GetShopProductsUseCase(this.productRepository);
 
-  Future<ProductsResponse> call(int id, int page, {String? name, bool needUpdate = false}) async {
-    return await productRepository.getShopProducts(id, page, name: name,needUpdate: needUpdate);
+  Future<ProductsResponse> call(
+    int id,
+    int page, {
+    String? name,
+    bool needUpdate = false,
+  }) async {
+    return await productRepository.getShopProducts(
+      id,
+      page,
+      name: name,
+      needUpdate: needUpdate,
+    );
   }
 }

@@ -25,26 +25,26 @@ class ProfileProvider extends ChangeNotifier {
     required GetProfileCountersUseCase getProfileCountersUseCase,
     required UpdateProfileUseCase updateProfileUseCase,
     required UpdateProfileImageUseCase updateProfileImageUseCase,
-  })  : _getUserProfileUseCase = getUserProfileUseCase,
-        _getUserByAccessTokenUseCase = getUserByAccessTokenUseCase,
-        _getProfileCountersUseCase = getProfileCountersUseCase,
-        _updateProfileUseCase = updateProfileUseCase,
-        _updateProfileImageUseCase = updateProfileImageUseCase;
+  }) : _getUserProfileUseCase = getUserProfileUseCase,
+       _getUserByAccessTokenUseCase = getUserByAccessTokenUseCase,
+       _getProfileCountersUseCase = getProfileCountersUseCase,
+       _updateProfileUseCase = updateProfileUseCase,
+       _updateProfileImageUseCase = updateProfileImageUseCase;
 
   // Profile state management
   LoadingState profileState = LoadingState.initial;
   UserProfile? userProfile;
   String profileError = '';
-  
+
   // Profile counters state management
   LoadingState countersState = LoadingState.initial;
   ProfileCountersModel? profileCounters;
   String countersError = '';
-  
+
   // Profile update state management
   LoadingState updateState = LoadingState.initial;
   String updateError = '';
-  
+
   // Profile image
   String? profileImageUrl;
 
@@ -74,10 +74,10 @@ class ProfileProvider extends ChangeNotifier {
 
   Future<void> getProfileCounters() async {
     if (AppStrings.token == null) return;
-    
+
     countersState = LoadingState.loading;
     notifyListeners();
-    
+
     try {
       profileCounters = await _getProfileCountersUseCase();
       countersState = LoadingState.loaded;
@@ -91,17 +91,17 @@ class ProfileProvider extends ChangeNotifier {
 
   Future<bool> updateProfile(String name, String password) async {
     if (AppStrings.userId == null) return false;
-    
+
     updateState = LoadingState.loading;
     notifyListeners();
-    
+
     try {
       final response = await _updateProfileUseCase(
         AppStrings.userId!,
         name,
         password,
       );
-      
+
       updateState = LoadingState.loaded;
       notifyListeners();
       return response.result;
@@ -115,26 +115,26 @@ class ProfileProvider extends ChangeNotifier {
 
   Future<bool> updateProfileImage(File imageFile) async {
     if (AppStrings.userId == null) return false;
-    
+
     updateState = LoadingState.loading;
     notifyListeners();
-    
+
     try {
       // Convert image to base64
       final bytes = await imageFile.readAsBytes();
       final base64Image = base64Encode(bytes);
       final filename = imageFile.path.split('/').last;
-      
+
       final response = await _updateProfileImageUseCase(
         AppStrings.userId!,
         filename,
         base64Image,
       );
-      
+
       if (response.result && response.path != null) {
         profileImageUrl = response.path;
       }
-      
+
       updateState = LoadingState.loaded;
       notifyListeners();
       return response.result;

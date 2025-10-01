@@ -8,10 +8,7 @@ import '../../../domain/review/entities/review.dart';
 class ReviewCard extends StatelessWidget {
   final Review review;
 
-  const ReviewCard({
-    super.key,
-    required this.review,
-  });
+  const ReviewCard({super.key, required this.review});
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +51,9 @@ class ReviewCard extends StatelessWidget {
             ),
             Text(
               review.time,
-              style: context.bodySmall!.copyWith(color: AppTheme.darkDividerColor),
+              style: context.bodySmall!.copyWith(
+                color: AppTheme.darkDividerColor,
+              ),
             ),
           ],
         ),
@@ -67,10 +66,8 @@ class ReviewCard extends StatelessWidget {
       children: [
         RatingBarIndicator(
           rating: review.rating,
-          itemBuilder: (context, _) => const Icon(
-            Icons.star,
-            color: AppTheme.accentColor,
-          ),
+          itemBuilder: (context, _) =>
+              const Icon(Icons.star, color: AppTheme.accentColor),
           itemCount: 5,
           itemSize: 20.0,
         ),

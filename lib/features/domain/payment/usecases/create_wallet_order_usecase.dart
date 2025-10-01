@@ -26,4 +26,4 @@ class CreateWalletOrderUseCase {
       context: context,
     );
   }
-} 
+}

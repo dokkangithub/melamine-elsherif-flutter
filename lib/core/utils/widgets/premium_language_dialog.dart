@@ -55,7 +55,7 @@ class _CustomLanguageDialogState extends State<_CustomLanguageDialog> {
           // Header with icon and title
           Row(
             children: [
-               Text(
+              Text(
                 '文',
                 style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                   fontWeight: FontWeight.bold,
@@ -78,10 +78,9 @@ class _CustomLanguageDialogState extends State<_CustomLanguageDialog> {
           // Description text
           Text(
             'change_lang_subtitle'.tr(context),
-            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-              color: Colors.black54,
-              height: 1.5,
-            ),
+            style: Theme.of(
+              context,
+            ).textTheme.bodyLarge?.copyWith(color: Colors.black54, height: 1.5),
           ),
 
           const SizedBox(height: 32),
@@ -90,7 +89,6 @@ class _CustomLanguageDialogState extends State<_CustomLanguageDialog> {
           _buildLanguageOption('English', 'en'),
           const SizedBox(height: 20),
           _buildLanguageOption('العربية', 'ar'),
-
 
           const SizedBox(height: 40),
 
@@ -143,26 +141,24 @@ class _CustomLanguageDialogState extends State<_CustomLanguageDialog> {
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               border: Border.all(
-                color: isSelected ? const Color(0xFFCB997E) : Colors.grey.shade300,
+                color: isSelected
+                    ? const Color(0xFFCB997E)
+                    : Colors.grey.shade300,
                 width: isSelected ? 0 : 1,
               ),
               color: isSelected ? Colors.transparent : Colors.transparent,
             ),
             child: isSelected
                 ? Container(
-              margin: const EdgeInsets.all(2),
-              decoration: const BoxDecoration(
-                shape: BoxShape.circle,
-                color: Color(0xFFCB997E),
-              ),
-              child: const Center(
-                child: Icon(
-                  Icons.check,
-                  size: 16,
-                  color: Colors.white,
-                ),
-              ),
-            )
+                    margin: const EdgeInsets.all(2),
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Color(0xFFCB997E),
+                    ),
+                    child: const Center(
+                      child: Icon(Icons.check, size: 16, color: Colors.white),
+                    ),
+                  )
                 : null,
           ),
           const SizedBox(width: 16),
@@ -185,7 +181,9 @@ class _CustomLanguageDialogState extends State<_CustomLanguageDialog> {
 
     if (_selectedLanguage != currentLanguageCode) {
       // Check if the selected language is one of the supported languages
-      final supportedLanguages = provider.languages.map((lang) => lang.languageCode).toList();
+      final supportedLanguages = provider.languages
+          .map((lang) => lang.languageCode)
+          .toList();
 
       if (!supportedLanguages.contains(_selectedLanguage)) {
         // Show a message for unsupported languages
@@ -201,11 +199,14 @@ class _CustomLanguageDialogState extends State<_CustomLanguageDialog> {
 
       // Get the country code from the provider's language models
       final languageModel = provider.languages.firstWhere(
-            (lang) => lang.languageCode == _selectedLanguage,
+        (lang) => lang.languageCode == _selectedLanguage,
       );
 
       // Change language using the provider's method
-      provider.changeLanguage(_selectedLanguage, languageModel.countryCode ?? 'US');
+      provider.changeLanguage(
+        _selectedLanguage,
+        languageModel.countryCode ?? 'US',
+      );
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('language_changed_successfully'.tr(context))),

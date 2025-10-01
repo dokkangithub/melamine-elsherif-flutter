@@ -24,7 +24,8 @@ class Meta {
       currentPage: json['current_page'] ?? 0,
       from: json['from'],
       lastPage: json['last_page'] ?? 0,
-      links: (json['links'] as List?)
+      links:
+          (json['links'] as List?)
               ?.map((link) => Link.fromJson(link))
               .toList() ??
           [],
@@ -41,11 +42,7 @@ class Link {
   final String label;
   final bool active;
 
-  Link({
-    required this.url,
-    required this.label,
-    required this.active,
-  });
+  Link({required this.url, required this.label, required this.active});
 
   factory Link.fromJson(Map<String, dynamic> json) {
     return Link(
@@ -54,4 +51,4 @@ class Link {
       active: json['active'] ?? false,
     );
   }
-} 
+}

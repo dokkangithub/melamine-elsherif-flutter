@@ -4,16 +4,10 @@ class Slider extends Equatable {
   final String? photo;
   final String? url;
 
-  const Slider({
-    required this.photo,
-    required this.url,
-  });
+  const Slider({required this.photo, required this.url});
 
   @override
-  List<Object?> get props => [
-    photo,
-    url,
-  ];
+  List<Object?> get props => [photo, url];
 }
 
 class SliderResponse extends Equatable {
@@ -28,9 +22,5 @@ class SliderResponse extends Equatable {
   });
 
   @override
-  List<Object?> get props => [
-    data,
-    success,
-    status,
-  ];
+  List<Object?> get props => [data, success, status];
 }

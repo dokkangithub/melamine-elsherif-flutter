@@ -7,14 +7,14 @@ class GetFilteredProductsUseCase {
   GetFilteredProductsUseCase(this.searchRepository);
 
   Future<ProductsResponse> call(
-      int page, {
-        String? name,
-        String? sortKey,
-        String? brands,
-        String? categories,
-        double? min,
-        double? max,
-      }) async {
+    int page, {
+    String? name,
+    String? sortKey,
+    String? brands,
+    String? categories,
+    double? min,
+    double? max,
+  }) async {
     return await searchRepository.getFilteredProducts(
       page,
       name: name,

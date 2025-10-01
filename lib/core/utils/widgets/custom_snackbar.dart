@@ -9,7 +9,7 @@ class CustomSnackbar {
     Duration duration = const Duration(seconds: 3),
   }) {
     final theme = Theme.of(context);
-    
+
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(
@@ -19,13 +19,9 @@ class CustomSnackbar {
             fontWeight: FontWeight.bold,
           ),
         ),
-        backgroundColor: isError 
-          ? AppTheme.errorColor
-          : AppTheme.successColor,
+        backgroundColor: isError ? AppTheme.errorColor : AppTheme.successColor,
         behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         margin: const EdgeInsets.all(16),
         duration: duration,
         animation: CurvedAnimation(

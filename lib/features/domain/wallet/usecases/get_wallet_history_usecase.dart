@@ -9,4 +9,4 @@ class GetWalletHistoryUseCase {
   Future<List<WalletTransaction>> call({int page = 1}) {
     return repository.getWalletHistory(page: page);
   }
-} 
+}

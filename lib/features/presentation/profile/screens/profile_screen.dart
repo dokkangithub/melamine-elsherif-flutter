@@ -185,7 +185,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-
   // Guest user header that exactly matches the image
   Widget _buildGuestUserHeader(BuildContext context) {
     return Column(
@@ -194,10 +193,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         // Language switcher (EN | AR) on top right
         const Row(
           mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            LanguageSwitcher(),
-            SizedBox(width: 20),
-          ],
+          children: [LanguageSwitcher(), SizedBox(width: 20)],
         ),
 
         // Welcome text section
@@ -217,7 +213,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
               const SizedBox(height: 16),
               Text(
-                'discover_elegance_and_durability_designed_for_modern_living'.tr(context),
+                'discover_elegance_and_durability_designed_for_modern_living'
+                    .tr(context),
                 textAlign: TextAlign.center,
                 style: context.headlineSmall.copyWith(
                   color: Colors.black54,
@@ -265,7 +262,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               textAlign: TextAlign.center,
               style: context.headlineSmall.copyWith(
                 fontWeight: FontWeight.w600,
-                color: AppTheme.primaryColor
+                color: AppTheme.primaryColor,
               ),
             ),
           ),
@@ -278,9 +275,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           child: Text(
             'access_your_orders_wishlist_and_personalized_offers'.tr(context),
             textAlign: TextAlign.center,
-            style: context.bodyLarge.copyWith(
-              color: Colors.black54,
-            ),
+            style: context.bodyLarge.copyWith(color: Colors.black54),
           ),
         ),
       ],
@@ -288,7 +283,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   // Logged in user header that matches the image
-  Widget _buildLoggedInUserHeader(BuildContext context, ProfileProvider profileProvider) {
+  Widget _buildLoggedInUserHeader(
+    BuildContext context,
+    ProfileProvider profileProvider,
+  ) {
     return Container(
       color: Colors.white,
       child: Stack(
@@ -306,9 +304,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           Positioned.fill(
             child: BackdropFilter(
               filter: ImageFilter.blur(sigmaX: 1.0, sigmaY: 1.0),
-              child: Container(
-                color: Colors.white.withValues(alpha: 0.7),
-              ),
+              child: Container(color: Colors.white.withValues(alpha: 0.7)),
             ),
           ),
 
@@ -319,7 +315,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-
                 const SizedBox(height: 30),
 
                 // User image and info
@@ -420,11 +415,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
             title: 'help_support'.tr(context),
             icon: Icons.chevron_right,
             onTap: () async {
-              final Uri url = Uri.parse('https://melaminefront.dokkan.design/pages/contact-us');
+              final Uri url = Uri.parse(
+                'https://melaminefront.dokkan.design/pages/contact-us',
+              );
               if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
                 if (context.mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('could_not_launch_website'.tr(context)))
+                    SnackBar(
+                      content: Text('could_not_launch_website'.tr(context)),
+                    ),
                   );
                 }
               }
@@ -437,11 +436,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
             title: 'about_us'.tr(context),
             icon: Icons.chevron_right,
             onTap: () async {
-              final Uri url = Uri.parse('https://melaminefront.dokkan.design/pages/about-us');
+              final Uri url = Uri.parse(
+                'https://melaminefront.dokkan.design/pages/about-us',
+              );
               if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
                 if (context.mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('could_not_launch_website'.tr(context)))
+                    SnackBar(
+                      content: Text('could_not_launch_website'.tr(context)),
+                    ),
                   );
                 }
               }
@@ -493,11 +496,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     color: Colors.black,
                   ),
                 ),
-                Icon(
-                  icon,
-                  color: Colors.black87,
-                  size: 24,
-                ),
+                Icon(icon, color: Colors.black87, size: 24),
               ],
             ),
           ),
@@ -506,7 +505,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ],
     );
   }
-
 
   // Sign out button - extracted from original code
   Widget _buildSignOutButton(BuildContext context) {
@@ -539,7 +537,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-
   void _showLogoutConfirmation(BuildContext context) {
     final navigatorContext = context;
 
@@ -566,7 +563,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-
   Future<void> _launchYouTube() async {
     final Uri url = Uri.parse('https://www.youtube.com/watch?v=aQSHPRcZdrA');
     if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
@@ -579,7 +575,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Future<void> _openFacebook() async {
-    final Uri url = Uri.parse('https://www.facebook.com/alsherifmelamine/about/');
+    final Uri url = Uri.parse(
+      'https://www.facebook.com/alsherifmelamine/about/',
+    );
     if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -619,35 +617,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
       spacing: 28,
       children: [
         _buildSocialIcon(
-          icon: AppSvgs.whatsapp,  // Using chat icon for WhatsApp since Icons.whatsapp doesn't exist
+          icon: AppSvgs
+              .whatsapp, // Using chat icon for WhatsApp since Icons.whatsapp doesn't exist
           onTap: _openWhatsApp,
         ),
-        _buildSocialIcon(
-          icon: AppSvgs.call,
-          onTap: _makePhoneCall,
-        ),
-        _buildSocialIcon(
-          icon: AppSvgs.facebook,
-          onTap: _openFacebook,
-        ),
-        _buildSocialIcon(
-          icon: AppSvgs.youtube,
-          onTap: _launchYouTube,
-        ),
+        _buildSocialIcon(icon: AppSvgs.call, onTap: _makePhoneCall),
+        _buildSocialIcon(icon: AppSvgs.facebook, onTap: _openFacebook),
+        _buildSocialIcon(icon: AppSvgs.youtube, onTap: _launchYouTube),
       ],
     );
   }
 
   // Individual social icon
-  Widget _buildSocialIcon({
-    required String icon,
-    required VoidCallback onTap,
-  }) {
+  Widget _buildSocialIcon({required String icon, required VoidCallback onTap}) {
     return InkWell(
       onTap: onTap,
-      child: CustomImage(
-       assetPath:  icon,
-      ),
+      child: CustomImage(assetPath: icon),
     );
   }
 
@@ -670,9 +655,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
   // Build user dashboard items (orders, wallet, address, saved items)
   Widget _buildUserDashboard(BuildContext context) {
     // Get profileProvider once to avoid multiple calls
-    final profileProvider = Provider.of<ProfileProvider>(context, listen: false);
+    final profileProvider = Provider.of<ProfileProvider>(
+      context,
+      listen: false,
+    );
     final profileCounters = profileProvider.profileCounters;
-    
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
       child: Column(
@@ -686,10 +674,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ? '${profileCounters!.orderCount} ${'active_orders'.tr(context)}'
                 : "active_orders".tr(context),
             onTap: () {
-              AppRoutes.navigateTo(
-                context,
-                AppRoutes.allOrdersListScreen,
-              );
+              AppRoutes.navigateTo(context, AppRoutes.allOrdersListScreen);
             },
           ),
 
@@ -702,10 +687,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             title: 'my_wallet'.tr(context),
             subtitle: '',
             onTap: () {
-              AppRoutes.navigateTo(
-                context,
-                AppRoutes.walletScreen,
-              );
+              AppRoutes.navigateTo(context, AppRoutes.walletScreen);
             },
           ),
 
@@ -718,10 +700,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             title: 'shipping_address'.tr(context),
             subtitle: ''.tr(context),
             onTap: () {
-              AppRoutes.navigateTo(
-                context,
-                AppRoutes.addressListScreen,
-              );
+              AppRoutes.navigateTo(context, AppRoutes.addressListScreen);
             },
           ),
 
@@ -736,7 +715,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ? '${profileCounters!.wishlistItemCount} ${'items'.tr(context)}'
                 : 'items'.tr(context),
             onTap: () {
-              Provider.of<LayoutProvider>(context,listen: false).currentIndex=2;
+              Provider.of<LayoutProvider>(context, listen: false).currentIndex =
+                  2;
             },
           ),
         ],
@@ -781,9 +761,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 const SizedBox(height: 4),
                 Text(
                   subtitle,
-                  style: context.bodyMedium.copyWith(
-                    color: Colors.black54,
-                  ),
+                  style: context.bodyMedium.copyWith(color: Colors.black54),
                 ),
               ],
             ),
@@ -834,11 +812,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
           icon: AppSvgs.profile_help,
           title: 'help_support'.tr(context),
           onTap: () async {
-            final Uri url = Uri.parse('https://melaminefront.dokkan.design/pages/contact-us');
+            final Uri url = Uri.parse(
+              'https://melaminefront.dokkan.design/pages/contact-us',
+            );
             if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
               if (context.mounted) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('could_not_launch_website'.tr(context)))
+                  SnackBar(
+                    content: Text('could_not_launch_website'.tr(context)),
+                  ),
                 );
               }
             }
@@ -851,11 +833,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
           icon: AppSvgs.profile_about_us,
           title: 'about_us'.tr(context),
           onTap: () async {
-            final Uri url = Uri.parse('https://melaminefront.dokkan.design/pages/about-us');
+            final Uri url = Uri.parse(
+              'https://melaminefront.dokkan.design/pages/about-us',
+            );
             if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
               if (context.mounted) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('could_not_launch_website'.tr(context)))
+                  SnackBar(
+                    content: Text('could_not_launch_website'.tr(context)),
+                  ),
                 );
               }
             }
@@ -872,7 +858,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
             if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
               if (context.mounted) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('could_not_launch_website'.tr(context)))
+                  SnackBar(
+                    content: Text('could_not_launch_website'.tr(context)),
+                  ),
                 );
               }
             }
@@ -1039,5 +1027,4 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
     );
   }
-
 }

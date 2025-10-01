@@ -32,7 +32,7 @@ class AppTheme {
   // Helper method to get the appropriate font family based on language
   static String getFontFamily(String? languageCode) {
     // Use Tajawal for Arabic, otherwise use Jost
-    return (languageCode == 'ar') 
+    return (languageCode == 'ar')
         ? GoogleFonts.notoKufiArabic().fontFamily!
         : GoogleFonts.jost().fontFamily!;
   }
@@ -40,7 +40,7 @@ class AppTheme {
   // Get text theme based on language
   static TextTheme getTextTheme(String? languageCode) {
     final bool isArabic = languageCode == 'ar';
-    
+
     return TextTheme(
       displayLarge: (isArabic ? GoogleFonts.notoKufiArabic : GoogleFonts.jost)(
         color: black,
@@ -62,11 +62,12 @@ class AppTheme {
         fontSize: 22,
         fontWeight: FontWeight.w500,
       ),
-      headlineMedium: (isArabic ? GoogleFonts.notoKufiArabic : GoogleFonts.jost)(
-        color: black,
-        fontSize: 18,
-        fontWeight: FontWeight.w400,
-      ),
+      headlineMedium:
+          (isArabic ? GoogleFonts.notoKufiArabic : GoogleFonts.jost)(
+            color: black,
+            fontSize: 18,
+            fontWeight: FontWeight.w400,
+          ),
       headlineSmall: (isArabic ? GoogleFonts.notoKufiArabic : GoogleFonts.jost)(
         color: black,
         fontSize: 16,
@@ -114,7 +115,7 @@ class AppTheme {
   static ThemeData getTheme(String? languageCode) {
     final bool isArabic = languageCode == 'ar';
     final String fontFamily = getFontFamily(languageCode);
-    
+
     return ThemeData(
       brightness: Brightness.light,
       primaryColor: primaryColor,
@@ -145,7 +146,7 @@ class AppTheme {
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           textStyle: (isArabic ? GoogleFonts.notoKufiArabic : GoogleFonts.jost)(
-            fontSize: 16, 
+            fontSize: 16,
             fontWeight: FontWeight.w500,
           ),
         ),
@@ -158,7 +159,7 @@ class AppTheme {
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           textStyle: (isArabic ? GoogleFonts.notoKufiArabic : GoogleFonts.jost)(
-            fontSize: 16, 
+            fontSize: 16,
             fontWeight: FontWeight.w500,
           ),
         ),
@@ -169,7 +170,7 @@ class AppTheme {
           foregroundColor: primaryColor,
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           textStyle: (isArabic ? GoogleFonts.notoKufiArabic : GoogleFonts.jost)(
-            fontSize: 16, 
+            fontSize: 16,
             fontWeight: FontWeight.w500,
           ),
         ),
@@ -179,7 +180,10 @@ class AppTheme {
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: Colors.white,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 16,
+        ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
           borderSide: const BorderSide(color: lightDividerColor),
@@ -201,15 +205,15 @@ class AppTheme {
           borderSide: const BorderSide(color: errorColor, width: 2),
         ),
         labelStyle: (isArabic ? GoogleFonts.notoKufiArabic : GoogleFonts.jost)(
-          color: lightSecondaryTextColor, 
+          color: lightSecondaryTextColor,
           fontSize: 16,
         ),
         hintStyle: (isArabic ? GoogleFonts.notoKufiArabic : GoogleFonts.jost)(
-          color: lightSecondaryTextColor, 
+          color: lightSecondaryTextColor,
           fontSize: 16,
         ),
         errorStyle: (isArabic ? GoogleFonts.notoKufiArabic : GoogleFonts.jost)(
-          color: errorColor, 
+          color: errorColor,
           fontSize: 12,
         ),
       ),
@@ -227,11 +231,12 @@ class AppTheme {
         color: primaryColor,
         elevation: 0,
         centerTitle: true,
-        titleTextStyle: (isArabic ? GoogleFonts.notoKufiArabic : GoogleFonts.jost)(
-          color: Colors.white,
-          fontSize: 20,
-          fontWeight: FontWeight.w600,
-        ),
+        titleTextStyle:
+            (isArabic ? GoogleFonts.notoKufiArabic : GoogleFonts.jost)(
+              color: Colors.white,
+              fontSize: 20,
+              fontWeight: FontWeight.w600,
+            ),
         iconTheme: const IconThemeData(color: Colors.white),
       ),
 
@@ -240,14 +245,12 @@ class AppTheme {
         backgroundColor: lightCardColor,
         selectedItemColor: primaryColor,
         unselectedItemColor: lightSecondaryTextColor,
-        selectedLabelStyle: (isArabic ? GoogleFonts.notoKufiArabic : GoogleFonts.jost)(
-          fontSize: 12, 
-          fontWeight: FontWeight.w500,
-        ),
-        unselectedLabelStyle: (isArabic ? GoogleFonts.notoKufiArabic : GoogleFonts.jost)(
-          fontSize: 12, 
-          fontWeight: FontWeight.w500,
-        ),
+        selectedLabelStyle: (isArabic
+            ? GoogleFonts.notoKufiArabic
+            : GoogleFonts.jost)(fontSize: 12, fontWeight: FontWeight.w500),
+        unselectedLabelStyle: (isArabic
+            ? GoogleFonts.notoKufiArabic
+            : GoogleFonts.jost)(fontSize: 12, fontWeight: FontWeight.w500),
         elevation: 8,
       ),
 
@@ -284,4 +287,3 @@ class AppTheme {
   // Light theme (default to English)
   static final ThemeData lightTheme = getTheme('en');
 }
-

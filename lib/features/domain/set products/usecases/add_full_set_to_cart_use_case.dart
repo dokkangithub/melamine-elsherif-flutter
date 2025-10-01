@@ -5,7 +5,10 @@ class AddFullSetToCartUseCase {
 
   AddFullSetToCartUseCase(this.repository);
 
-  Future<Map<String, dynamic>> call({required int productId, required int quantity}) async {
+  Future<Map<String, dynamic>> call({
+    required int productId,
+    required int quantity,
+  }) async {
     return await repository.addFullSetToCart(
       productId: productId,
       quantity: quantity,

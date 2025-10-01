@@ -17,7 +17,7 @@ class NotificationManager {
     INotificationService? notificationService,
     required NotificationRouter router,
   }) : _notificationService = notificationService ?? NotificationService(),
-        _router = router;
+       _router = router;
 
   /// Initialize the notification manager
   Future<void> initialize() async {
@@ -25,7 +25,7 @@ class NotificationManager {
 
     // Listen to message taps and handle routing
     _messageTapSubscription = _notificationService.onMessageTap.listen(
-          (payload) => _router.handleNotificationAction(payload),
+      (payload) => _router.handleNotificationAction(payload),
     );
   }
 
@@ -40,7 +40,8 @@ class NotificationManager {
       _notificationService.onForegroundMessage;
 
   /// Request notification permissions
-  Future<bool> requestPermissions() => _notificationService.requestPermissions();
+  Future<bool> requestPermissions() =>
+      _notificationService.requestPermissions();
 
   /// Subscribe to topic
   Future<void> subscribeToTopic(String topic) =>

@@ -79,9 +79,7 @@ class AuthProvider extends ChangeNotifier {
       final apiProvider = GetIt.instance<ApiProvider>();
 
       // Prepare request data
-      final requestData = {
-        'device_token': fcmToken,
-      };
+      final requestData = {'device_token': fcmToken};
 
       debugPrint("📤 Sending device token update request");
       debugPrint("Request data: $requestData");
@@ -121,11 +119,11 @@ class AuthProvider extends ChangeNotifier {
   }
 
   Future<bool> login(
-      String email,
-      String password,
-      String loginBy,
-      BuildContext context,
-      ) async {
+    String email,
+    String password,
+    String loginBy,
+    BuildContext context,
+  ) async {
     _setLoading(true);
     bool isSuccess = false;
     try {
@@ -171,7 +169,7 @@ class AuthProvider extends ChangeNotifier {
       }
     } on UserNotFoundException catch (e) {
       _setRequestMessage(e.message);
-    } on UnauthorizedException catch (e) {
+    } on UnauthorizedException {
       _setRequestMessage('invalid_credentials'.tr(context));
     } catch (e) {
       _setRequestMessage(e.toString());
@@ -181,9 +179,9 @@ class AuthProvider extends ChangeNotifier {
   }
 
   Future<bool> signup(
-      Map<String, dynamic> userData,
-      BuildContext context,
-      ) async {
+    Map<String, dynamic> userData,
+    BuildContext context,
+  ) async {
     _setLoading(true);
     bool isSuccess = false;
     try {
@@ -348,10 +346,10 @@ class AuthProvider extends ChangeNotifier {
   }
 
   Future<void> confirmResetPassword(
-      String email,
-      String code,
-      String password,
-      ) async {
+    String email,
+    String code,
+    String password,
+  ) async {
     _setLoading(true);
     try {
       await confirmResetPasswordUseCase(email, code, password);

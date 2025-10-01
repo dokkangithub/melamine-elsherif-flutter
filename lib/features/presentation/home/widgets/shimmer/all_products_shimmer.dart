@@ -27,17 +27,16 @@ class AllProductsShimmer extends StatelessWidget {
             mainAxisSpacing: 16,
           ),
           itemCount: 4,
-          itemBuilder:
-              (context, index) => Shimmer.fromColors(
-                baseColor: Colors.grey[300]!,
-                highlightColor: Colors.grey[100]!,
-                child: Container(
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.zero,
-                  ),
-                ),
+          itemBuilder: (context, index) => Shimmer.fromColors(
+            baseColor: Colors.grey[300]!,
+            highlightColor: Colors.grey[100]!,
+            child: Container(
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.zero,
               ),
+            ),
+          ),
         ),
       ],
     );

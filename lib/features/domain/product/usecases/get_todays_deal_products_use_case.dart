@@ -7,6 +7,8 @@ class GetTodaysDealProductsUseCase {
   GetTodaysDealProductsUseCase(this.productRepository);
 
   Future<ProductsResponse> call({bool needUpdate = false}) async {
-    return await productRepository.getTodaysDealProducts(needUpdate: needUpdate);
+    return await productRepository.getTodaysDealProducts(
+      needUpdate: needUpdate,
+    );
   }
 }

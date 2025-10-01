@@ -18,9 +18,10 @@ class RelatedProductsWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-           Padding(
+          Padding(
             padding: EdgeInsets.only(bottom: 12.0),
-            child: Text('related_products'.tr(context),
+            child: Text(
+              'related_products'.tr(context),
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
           ),
@@ -28,30 +29,29 @@ class RelatedProductsWidget extends StatelessWidget {
             const ShimmerWidget(height: 200)
           else if (provider.relatedProductsState == LoadingState.error)
             Center(
-              child: Text('Error: ${provider.relatedProductsError}',
+              child: Text(
+                'Error: ${provider.relatedProductsError}',
                 style: const TextStyle(color: ProductTheme.errorColor),
               ),
             )
           else if (provider.relatedProducts.isEmpty)
-               Center(child: Text('no_related_products_available'.tr(context)))
-            else
-              GridView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  childAspectRatio: 0.7,
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
-                ),
-                itemCount: provider.relatedProducts.length,
-                itemBuilder: (context, index) {
-                  final product = provider.relatedProducts[index];
-                  return ProductGridCard(
-                      product: product
-                  );
-                },
+            Center(child: Text('no_related_products_available'.tr(context)))
+          else
+            GridView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                childAspectRatio: 0.7,
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 10,
               ),
+              itemCount: provider.relatedProducts.length,
+              itemBuilder: (context, index) {
+                final product = provider.relatedProducts[index];
+                return ProductGridCard(product: product);
+              },
+            ),
         ],
       ),
     );

@@ -21,15 +21,15 @@ class AppLocalizations {
       String jsonString = await rootBundle.loadString(
         'assets/i18n/${locale.languageCode}.json',
       );
-      
+
       // Debug print to check if the file is loaded
       debugPrint('Loaded translation file for ${locale.languageCode}');
-      
+
       Map<String, dynamic> jsonMap = json.decode(jsonString);
       _localizedStrings = jsonMap.map(
         (key, value) => MapEntry(key, value.toString()),
       );
-      
+
       // Debug print to check if translations were loaded properly
       debugPrint('Loaded ${_localizedStrings.length} translations');
     } catch (e) {
@@ -42,7 +42,9 @@ class AppLocalizations {
     final translation = _localizedStrings[key];
     if (translation == null) {
       // Debug print when a key is missing
-      debugPrint('Missing translation key: $key for locale: ${locale.languageCode}');
+      debugPrint(
+        'Missing translation key: $key for locale: ${locale.languageCode}',
+      );
       return key;
     }
     return translation;

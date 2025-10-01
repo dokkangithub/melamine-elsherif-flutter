@@ -18,10 +18,7 @@ import '../widgets/set_product_details_shimmer.dart';
 class SetProductDetailsScreen extends StatefulWidget {
   final String slug;
 
-  const SetProductDetailsScreen({
-    super.key,
-    required this.slug,
-  });
+  const SetProductDetailsScreen({super.key, required this.slug});
 
   @override
   _SetProductDetailsScreenState createState() =>
@@ -128,7 +125,9 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
         } else {
           // Clear calculated price when switching to full set
           final provider = Provider.of<SetProductsProvider>(
-              context, listen: false);
+            context,
+            listen: false,
+          );
           provider.clearCalculatedPrice();
         }
       });
@@ -205,9 +204,9 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
         return Scaffold(
           backgroundColor: Colors.white,
           body: _buildBody(provider),
-          bottomNavigationBar: provider.setProductDetailsState ==
-              LoadingState.loaded &&
-              provider.setProductDetails != null
+          bottomNavigationBar:
+              provider.setProductDetailsState == LoadingState.loaded &&
+                  provider.setProductDetails != null
               ? _buildBottomBar(context, provider)
               : null,
         );
@@ -216,10 +215,7 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
   }
 
   Widget _buildProductHeader(SetProductDetailsData product) {
-    final screenHeight = MediaQuery
-        .of(context)
-        .size
-        .height;
+    final screenHeight = MediaQuery.of(context).size.height;
     final imageHeight = screenHeight / 2.3;
 
     return Column(
@@ -234,10 +230,7 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
               fit: BoxFit.cover,
             ),
             Positioned(
-              top: MediaQuery
-                  .of(context)
-                  .padding
-                  .top + 8,
+              top: MediaQuery.of(context).padding.top + 8,
               left: 16,
               child: Container(
                 decoration: BoxDecoration(
@@ -266,13 +259,9 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Text(
             product.name ?? '',
-            style: Theme
-                .of(context)
-                .textTheme
-                .headlineSmall!
-                .copyWith(
-              fontWeight: FontWeight.bold,
-            ),
+            style: Theme.of(
+              context,
+            ).textTheme.headlineSmall!.copyWith(fontWeight: FontWeight.bold),
           ),
         ),
         const SizedBox(height: 8),
@@ -297,7 +286,7 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
                 displayPrice = priceProvider.calculatedPrice != null
                     ? '${priceProvider.calculatedPrice!.totalPrice} EGP'
                     : (product.discountedPrice ??
-                    '${product.minimumCustomPrice ?? 0} EGP');
+                          '${product.minimumCustomPrice ?? 0} EGP');
                 originalPrice = null;
               }
 
@@ -310,34 +299,28 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
                       children: [
                         if (isLoading)
                           const SizedBox(
-                              width: 24,
-                              height: 24,
-                              child: CustomLoadingWidget()
+                            width: 24,
+                            height: 24,
+                            child: CustomLoadingWidget(),
                           )
                         else
                           Text(
                             displayPrice,
-                            style: Theme
-                                .of(context)
-                                .textTheme
-                                .headlineMedium!
+                            style: Theme.of(context).textTheme.headlineMedium!
                                 .copyWith(
-                              color: AppTheme.primaryColor,
-                              fontWeight: FontWeight.w900,
-                            ),
+                                  color: AppTheme.primaryColor,
+                                  fontWeight: FontWeight.w900,
+                                ),
                           ),
                         const SizedBox(width: 12),
                         if (!isLoading && originalPrice != null)
                           Text(
                             originalPrice,
-                            style: Theme
-                                .of(context)
-                                .textTheme
-                                .titleLarge!
+                            style: Theme.of(context).textTheme.titleLarge!
                                 .copyWith(
-                              color: AppTheme.darkDividerColor,
-                              decoration: TextDecoration.lineThrough,
-                            ),
+                                  color: AppTheme.darkDividerColor,
+                                  decoration: TextDecoration.lineThrough,
+                                ),
                           ),
                       ],
                     ),
@@ -378,9 +361,7 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
     }
 
     if (provider.setProductDetails == null) {
-      return Center(
-        child: Text('no_data_found'.tr(context)),
-      );
+      return Center(child: Text('no_data_found'.tr(context)));
     }
 
     return FadeInUp(
@@ -402,7 +383,9 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
                   const SizedBox(height: 24),
                   _buildComponentsList(provider.setProductDetails!, provider),
                   const SizedBox(height: 24),
-                  _buildCareInstructionsSection(provider.setProductDetails!), // Add this line
+                  _buildCareInstructionsSection(
+                    provider.setProductDetails!,
+                  ), // Add this line
                   const SizedBox(height: 24),
                   _buildSelectedComponentsSummary(provider.setProductDetails!),
                   const SizedBox(height: 24),
@@ -434,13 +417,9 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
               children: [
                 Text(
                   'description'.tr(context),
-                  style: Theme
-                      .of(context)
-                      .textTheme
-                      .titleLarge!
-                      .copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleLarge!.copyWith(fontWeight: FontWeight.bold),
                 ),
                 AnimatedRotation(
                   turns: isDescriptionExpanded ? 0.5 : 0,
@@ -469,11 +448,9 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
                     fontSize: FontSize(16.0),
                     lineHeight: const LineHeight(1.5),
                     color: AppTheme.darkDividerColor,
-                    fontFamily: Theme
-                        .of(context)
-                        .textTheme
-                        .bodyLarge!
-                        .fontFamily,
+                    fontFamily: Theme.of(
+                      context,
+                    ).textTheme.bodyLarge!.fontFamily,
                   ),
                   "p": Style(
                     margin: Margins.only(bottom: 12.0),
@@ -495,7 +472,8 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(0),
         border: Border.all(
-            color: AppTheme.darkDividerColor.withValues(alpha: 0.3)),
+          color: AppTheme.darkDividerColor.withValues(alpha: 0.3),
+        ),
       ),
       child: Row(
         children: [
@@ -515,11 +493,7 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
                 child: Text(
                   'full_set'.tr(context),
                   textAlign: TextAlign.center,
-                  style: Theme
-                      .of(context)
-                      .textTheme
-                      .titleMedium!
-                      .copyWith(
+                  style: Theme.of(context).textTheme.titleMedium!.copyWith(
                     color: isFullSet ? Colors.white : AppTheme.primaryColor,
                     fontWeight: FontWeight.bold,
                   ),
@@ -534,8 +508,9 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
                 duration: const Duration(milliseconds: 300),
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 decoration: BoxDecoration(
-                  color: !isFullSet ? AppTheme.primaryColor : Colors
-                      .transparent,
+                  color: !isFullSet
+                      ? AppTheme.primaryColor
+                      : Colors.transparent,
                   borderRadius: const BorderRadius.only(
                     topRight: Radius.circular(0),
                     bottomRight: Radius.circular(0),
@@ -544,11 +519,7 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
                 child: Text(
                   'custom_set'.tr(context),
                   textAlign: TextAlign.center,
-                  style: Theme
-                      .of(context)
-                      .textTheme
-                      .titleMedium!
-                      .copyWith(
+                  style: Theme.of(context).textTheme.titleMedium!.copyWith(
                     color: !isFullSet ? Colors.white : AppTheme.primaryColor,
                     fontWeight: FontWeight.bold,
                   ),
@@ -561,8 +532,10 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
     );
   }
 
-  Widget _buildComponentsList(SetProductDetailsData product,
-      SetProductsProvider provider) {
+  Widget _buildComponentsList(
+    SetProductDetailsData product,
+    SetProductsProvider provider,
+  ) {
     if (product.components.isEmpty) {
       return const SizedBox.shrink();
     }
@@ -572,13 +545,9 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
       children: [
         Text(
           'components'.tr(context),
-          style: Theme
-              .of(context)
-              .textTheme
-              .titleLarge!
-              .copyWith(
-            fontWeight: FontWeight.bold,
-          ),
+          style: Theme.of(
+            context,
+          ).textTheme.titleLarge!.copyWith(fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 16),
         ListView.builder(
@@ -594,8 +563,10 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
     );
   }
 
-  Widget _buildComponentCard(Component component,
-      SetProductsProvider provider) {
+  Widget _buildComponentCard(
+    Component component,
+    SetProductsProvider provider,
+  ) {
     final int currentQuantity = isFullSet
         ? (component.initialQuantity ?? 1)
         : (selectedQuantities[component.id] ?? 0);
@@ -637,57 +608,63 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
                             children: [
                               Text(
                                 component.name ?? '',
-                                style: Theme
-                                    .of(context)
-                                    .textTheme
-                                    .titleMedium!
+                                style: Theme.of(context).textTheme.titleMedium!
                                     .copyWith(
-                                  fontWeight: FontWeight.w600,
-                                  color: isEnabled ? null : Colors.grey,
-                                ),
+                                      fontWeight: FontWeight.w600,
+                                      color: isEnabled ? null : Colors.grey,
+                                    ),
                               ),
                               const SizedBox(height: 4),
                               if (component.isRequired == true)
                                 Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 8,
-                                      vertical: 2),
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 8,
+                                    vertical: 2,
+                                  ),
                                   decoration: BoxDecoration(
                                     color: AppTheme.primaryColor.withValues(
-                                        alpha: 0.1),
+                                      alpha: 0.1,
+                                    ),
                                     borderRadius: BorderRadius.circular(0),
                                   ),
                                   child: Text(
                                     'required'.tr(context),
-                                    style: Theme
-                                        .of(context)
+                                    style: Theme.of(context)
                                         .textTheme
                                         .bodySmall!
                                         .copyWith(
-                                      color: AppTheme.primaryColor,
-                                      fontWeight: FontWeight.w500,
-                                    ),
+                                          color: AppTheme.primaryColor,
+                                          fontWeight: FontWeight.w500,
+                                        ),
                                   ),
                                 ),
                               const SizedBox(height: 8),
                               Text(
                                 component.discountedPrice ?? '',
-                                style: Theme
-                                    .of(context)
-                                    .textTheme
-                                    .titleMedium!
+                                style: Theme.of(context).textTheme.titleMedium!
                                     .copyWith(
-                                  color: isEnabled ? AppTheme.primaryColor : Colors
-                                      .grey,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                                      color: isEnabled
+                                          ? AppTheme.primaryColor
+                                          : Colors.grey,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                               ),
                             ],
                           ),
                           const SizedBox(height: 16),
                           isFullSet
-                              ? _buildFullSetQuantityInfo(currentQuantity, context)
+                              ? _buildFullSetQuantityInfo(
+                                  currentQuantity,
+                                  context,
+                                )
                               : _buildCustomSetQuantityControls(
-                              component, currentQuantity, minQty, maxQty, provider, context),
+                                  component,
+                                  currentQuantity,
+                                  minQty,
+                                  maxQty,
+                                  provider,
+                                  context,
+                                ),
                         ],
                       ),
                     ),
@@ -707,11 +684,7 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
       children: [
         Text(
           'quantity'.tr(context),
-          style: Theme
-              .of(context)
-              .textTheme
-              .titleMedium!
-              .copyWith(
+          style: Theme.of(context).textTheme.titleMedium!.copyWith(
             fontWeight: FontWeight.w500,
             color: Colors.grey,
           ),
@@ -727,11 +700,7 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
           ),
           child: Text(
             '${quantity}x',
-            style: Theme
-                .of(context)
-                .textTheme
-                .titleMedium!
-                .copyWith(
+            style: Theme.of(context).textTheme.titleMedium!.copyWith(
               fontWeight: FontWeight.bold,
               color: AppTheme.primaryColor,
             ),
@@ -742,31 +711,25 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
   }
 
   Widget _buildCustomSetQuantityControls(
-      Component component,
-      int currentQuantity,
-      int minQty,
-      int maxQty,
-      SetProductsProvider provider,
-      BuildContext context,
-      ) {
+    Component component,
+    int currentQuantity,
+    int minQty,
+    int maxQty,
+    SetProductsProvider provider,
+    BuildContext context,
+  ) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
           'quantity'.tr(context),
-          style: Theme
-              .of(context)
-              .textTheme
-              .titleMedium!
-              .copyWith(
-            fontWeight: FontWeight.w700,
-          ),
+          style: Theme.of(
+            context,
+          ).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w700),
         ),
         Container(
           decoration: BoxDecoration(
-            border: Border.all(
-              color: AppTheme.darkDividerColor,
-            ),
+            border: Border.all(color: AppTheme.darkDividerColor),
             borderRadius: BorderRadius.zero,
           ),
           child: Row(
@@ -775,11 +738,12 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
               InkWell(
                 onTap: currentQuantity > minQty
                     ? () {
-                  setState(() {
-                    selectedQuantities[component.id!] = currentQuantity - 1;
-                  });
-                  _calculatePrice(provider);
-                }
+                        setState(() {
+                          selectedQuantities[component.id!] =
+                              currentQuantity - 1;
+                        });
+                        _calculatePrice(provider);
+                      }
                     : null,
                 child: Container(
                   color: Colors.transparent,
@@ -793,20 +757,17 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
               ),
               Container(
                 padding: const EdgeInsets.symmetric(
-                    horizontal: 16, vertical: 8),
+                  horizontal: 16,
+                  vertical: 8,
+                ),
                 decoration: const BoxDecoration(
                   border: Border.symmetric(
-                    vertical: BorderSide(
-                        width: 0.5, color: Colors.grey),
+                    vertical: BorderSide(width: 0.5, color: Colors.grey),
                   ),
                 ),
                 child: Text(
                   currentQuantity.toString(),
-                  style: Theme
-                      .of(context)
-                      .textTheme
-                      .titleMedium!
-                      .copyWith(
+                  style: Theme.of(context).textTheme.titleMedium!.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -814,11 +775,12 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
               InkWell(
                 onTap: currentQuantity < maxQty
                     ? () {
-                  setState(() {
-                    selectedQuantities[component.id!] = currentQuantity + 1;
-                  });
-                  _calculatePrice(provider);
-                }
+                        setState(() {
+                          selectedQuantities[component.id!] =
+                              currentQuantity + 1;
+                        });
+                        _calculatePrice(provider);
+                      }
                     : null,
                 child: Container(
                   color: Colors.transparent,
@@ -868,9 +830,9 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
               children: [
                 Text(
                   titleKey.tr(context),
-                  style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleLarge!.copyWith(fontWeight: FontWeight.bold),
                 ),
                 AnimatedRotation(
                   turns: isSummaryExpanded ? 0.5 : 0,
@@ -892,7 +854,9 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
               padding: const EdgeInsets.only(top: 8),
               child: Card(
                 elevation: 2,
-                shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.zero,
+                ),
                 child: Padding(
                   padding: const EdgeInsets.all(16),
                   child: Column(
@@ -924,10 +888,11 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
                             if (!isFullSet)
                               Text(
                                 '${(component.calculablePrice ?? 0) * quantity} EGP',
-                                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                                  color: AppTheme.primaryColor,
-                                  fontWeight: FontWeight.w600,
-                                ),
+                                style: Theme.of(context).textTheme.bodyMedium!
+                                    .copyWith(
+                                      color: AppTheme.primaryColor,
+                                      fontWeight: FontWeight.w600,
+                                    ),
                               ),
                           ],
                         ),
@@ -955,13 +920,9 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
           children: [
             Text(
               'reviews'.tr(context),
-              style: Theme
-                  .of(context)
-                  .textTheme
-                  .titleLarge!
-                  .copyWith(
-                fontWeight: FontWeight.bold,
-              ),
+              style: Theme.of(
+                context,
+              ).textTheme.titleLarge!.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(width: 8),
             Container(
@@ -972,11 +933,7 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
               ),
               child: Text(
                 '${product.reviewCount ?? product.reviews.length}',
-                style: Theme
-                    .of(context)
-                    .textTheme
-                    .bodySmall!
-                    .copyWith(
+                style: Theme.of(context).textTheme.bodySmall!.copyWith(
                   color: AppTheme.primaryColor,
                   fontWeight: FontWeight.w600,
                 ),
@@ -993,7 +950,8 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
             final review = product.reviews[index];
             return Card(
               shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.zero),
+                borderRadius: BorderRadius.zero,
+              ),
               margin: const EdgeInsets.only(bottom: 12),
               child: Padding(
                 padding: const EdgeInsets.all(16),
@@ -1004,7 +962,8 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
                       children: [
                         CircleAvatar(
                           backgroundColor: AppTheme.primaryColor.withOpacity(
-                              0.1),
+                            0.1,
+                          ),
                           child: Text(
                             (review.userName ?? 'U')
                                 .substring(0, 1)
@@ -1022,35 +981,31 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
                             children: [
                               Text(
                                 review.userName ?? 'Anonymous',
-                                style: Theme
-                                    .of(context)
-                                    .textTheme
-                                    .titleMedium!
-                                    .copyWith(
-                                  fontWeight: FontWeight.w600,
-                                ),
+                                style: Theme.of(context).textTheme.titleMedium!
+                                    .copyWith(fontWeight: FontWeight.w600),
                               ),
                               Row(
                                 children: [
-                                  ...List.generate(5, (i) =>
-                                      Icon(
-                                        i < (review.rating ?? 0)
-                                            ? Icons.star
-                                            : Icons.star_border,
-                                        color: AppTheme.accentColor,
-                                        size: 16,
-                                      )),
+                                  ...List.generate(
+                                    5,
+                                    (i) => Icon(
+                                      i < (review.rating ?? 0)
+                                          ? Icons.star
+                                          : Icons.star_border,
+                                      color: AppTheme.accentColor,
+                                      size: 16,
+                                    ),
+                                  ),
                                   const SizedBox(width: 8),
                                   Text(
                                     review.time ?? '',
-                                    style: Theme
-                                        .of(context)
+                                    style: Theme.of(context)
                                         .textTheme
                                         .bodyMedium!
                                         .copyWith(
-                                      fontWeight: FontWeight.w400,
-                                      color: Colors.grey,
-                                    ),
+                                          fontWeight: FontWeight.w400,
+                                          color: Colors.grey,
+                                        ),
                                   ),
                                 ],
                               ),
@@ -1064,10 +1019,7 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
                       const SizedBox(height: 12),
                       Text(
                         review.comment!,
-                        style: Theme
-                            .of(context)
-                            .textTheme
-                            .bodyMedium,
+                        style: Theme.of(context).textTheme.bodyMedium,
                       ),
                     ],
                   ],
@@ -1089,7 +1041,7 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
         if (isFullSet) {
           displayPrice = provider.setProductDetails!.hasDiscount == true
               ? provider.setProductDetails!.discountedPrice ??
-              '${provider.setProductDetails!.fullSetPrice} EGP'
+                    '${provider.setProductDetails!.fullSetPrice} EGP'
               : '${provider.setProductDetails!.fullSetPrice} EGP';
         } else {
           isLoading = priceProvider.calculatePriceState == LoadingState.loading;
@@ -1117,9 +1069,9 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
                 const Expanded(
                   flex: 1,
                   child: SizedBox(
-                      width: 20,
-                      height: 20,
-                      child: CustomLoadingWidget()
+                    width: 20,
+                    height: 20,
+                    child: CustomLoadingWidget(),
                   ),
                 )
               else
@@ -1127,11 +1079,7 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
                   flex: 1,
                   child: Text(
                     displayPrice,
-                    style: Theme
-                        .of(context)
-                        .textTheme
-                        .headlineSmall!
-                        .copyWith(
+                    style: Theme.of(context).textTheme.headlineSmall!.copyWith(
                       color: AppTheme.primaryColor,
                       fontWeight: FontWeight.bold,
                     ),
@@ -1139,7 +1087,7 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
                 ),
               const SizedBox(width: 16),
               Expanded(
-                flex:3,
+                flex: 3,
                 child: CustomButton(
                   onPressed: provider.addToCartState == LoadingState.loading
                       ? null
@@ -1147,17 +1095,16 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
                   child: provider.addToCartState == LoadingState.loading
                       ? const CustomLoadingWidget()
                       : Text(
-                    isFullSet ? 'add_full_set'.tr(context) : 'add_custom_set'.tr(context),
-                    textAlign: TextAlign.center,
-                    style: Theme
-                        .of(context)
-                        .textTheme
-                        .headlineSmall!
-                        .copyWith(
-                      color: AppTheme.white,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                          isFullSet
+                              ? 'add_full_set'.tr(context)
+                              : 'add_custom_set'.tr(context),
+                          textAlign: TextAlign.center,
+                          style: Theme.of(context).textTheme.headlineSmall!
+                              .copyWith(
+                                color: AppTheme.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                        ),
                 ),
               ),
             ],
@@ -1175,10 +1122,7 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
       for (final component in provider.setProductDetails!.components) {
         final quantity = selectedQuantities[component.id] ?? 0;
         components.add(
-          ComponentRequest(
-            productId: component.id!,
-            quantity: quantity,
-          ),
+          ComponentRequest(productId: component.id!, quantity: quantity),
         );
       }
 
@@ -1313,10 +1257,7 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
       decoration: BoxDecoration(
         color: Colors.grey.withValues(alpha: 0.02),
         borderRadius: BorderRadius.circular(0),
-        border: Border.all(
-          color: Colors.grey.withValues(alpha: 0.1),
-          width: 1,
-        ),
+        border: Border.all(color: Colors.grey.withValues(alpha: 0.1), width: 1),
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -1348,7 +1289,6 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
               overflow: TextOverflow.ellipsis,
             ),
           ),
-
         ],
       ),
     );

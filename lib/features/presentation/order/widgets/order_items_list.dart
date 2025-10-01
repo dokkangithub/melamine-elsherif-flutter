@@ -5,10 +5,7 @@ import '../../../domain/order/entities/order_item.dart';
 class OrderItemsList extends StatelessWidget {
   final List<OrderItem> orderItems;
 
-  const OrderItemsList({
-    super.key,
-    required this.orderItems,
-  });
+  const OrderItemsList({super.key, required this.orderItems});
 
   @override
   Widget build(BuildContext context) {
@@ -36,9 +33,7 @@ class OrderItemsList extends StatelessWidget {
                     color: Colors.grey.shade200,
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: const Center(
-                    child: Icon(Icons.shopping_bag_outlined),
-                  ),
+                  child: const Center(child: Icon(Icons.shopping_bag_outlined)),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
@@ -47,13 +42,12 @@ class OrderItemsList extends StatelessWidget {
                     children: [
                       Text(
                         item.productName,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
+                        style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
                       if (item.variation.isNotEmpty) ...[
                         const SizedBox(height: 4),
-                        Text('Variation: ${item.variation}'.tr(context),
+                        Text(
+                          'Variation: ${item.variation}'.tr(context),
                           style: TextStyle(
                             color: Colors.grey.shade600,
                             fontSize: 12,
@@ -71,10 +65,9 @@ class OrderItemsList extends StatelessWidget {
                               color: Theme.of(context).primaryColor,
                             ),
                           ),
-                          Text('Qty: ${item.quantity}'.tr(context),
-                            style: const TextStyle(
-                              fontWeight: FontWeight.w500,
-                            ),
+                          Text(
+                            'Qty: ${item.quantity}'.tr(context),
+                            style: const TextStyle(fontWeight: FontWeight.w500),
                           ),
                         ],
                       ),

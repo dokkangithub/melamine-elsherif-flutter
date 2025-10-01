@@ -21,17 +21,9 @@ class ProfileHeaderShimmer extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 8),
-            Container(
-              width: 150,
-              height: 20,
-              color: Colors.white,
-            ),
+            Container(width: 150, height: 20, color: Colors.white),
             const SizedBox(height: 8),
-            Container(
-              width: 200,
-              height: 15,
-              color: Colors.white,
-            ),
+            Container(width: 200, height: 15, color: Colors.white),
             const SizedBox(height: 8),
             Container(
               width: 120,

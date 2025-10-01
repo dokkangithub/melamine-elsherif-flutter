@@ -1,4 +1,3 @@
-
 class InputValidator {
   // Email validation
   // static bool isValidEmail(String email) {
@@ -69,4 +68,3 @@ class InputValidator {
     }
   }
 }
-

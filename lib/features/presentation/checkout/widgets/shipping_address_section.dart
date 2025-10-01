@@ -39,11 +39,11 @@ class _ShippingAddressSectionState extends State<ShippingAddressSection> {
   @override
   void didUpdateWidget(ShippingAddressSection oldWidget) {
     super.didUpdateWidget(oldWidget);
-    
+
     // If addresses loaded for the first time, select default
-    if (oldWidget.addresses.isEmpty && 
-        widget.addresses.isNotEmpty && 
-        !_initialSelectionDone && 
+    if (oldWidget.addresses.isEmpty &&
+        widget.addresses.isNotEmpty &&
+        !_initialSelectionDone &&
         widget.selectedAddress == null) {
       _selectDefaultAddress();
     }
@@ -54,16 +54,16 @@ class _ShippingAddressSectionState extends State<ShippingAddressSection> {
         .where((address) => address.isDefault)
         .firstOrNull;
 
-    if (defaultAddress != null && 
+    if (defaultAddress != null &&
         widget.selectedAddress?.id != defaultAddress.id &&
         !widget.isLoading) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         widget.onAddressSelected(defaultAddress);
         _initialSelectionDone = true;
       });
-    } else if (widget.addresses.isNotEmpty && 
-              widget.selectedAddress == null && 
-              !widget.isLoading) {
+    } else if (widget.addresses.isNotEmpty &&
+        widget.selectedAddress == null &&
+        !widget.isLoading) {
       // If no default address, select the first one
       WidgetsBinding.instance.addPostFrameCallback((_) {
         widget.onAddressSelected(widget.addresses.first);
@@ -75,9 +75,11 @@ class _ShippingAddressSectionState extends State<ShippingAddressSection> {
   @override
   Widget build(BuildContext context) {
     final isGuest = AppStrings.token == null;
-    
+
     // Only auto-select default address on first load, not after user selection
-    if (!_initialSelectionDone && widget.addresses.isNotEmpty && widget.selectedAddress == null) {
+    if (!_initialSelectionDone &&
+        widget.addresses.isNotEmpty &&
+        widget.selectedAddress == null) {
       _selectDefaultAddress();
     }
 
@@ -90,9 +92,14 @@ class _ShippingAddressSectionState extends State<ShippingAddressSection> {
         children: [
           Row(
             children: [
-              Icon(Icons.location_on_outlined, color: Colors.grey[600], size: 20),
+              Icon(
+                Icons.location_on_outlined,
+                color: Colors.grey[600],
+                size: 20,
+              ),
               const SizedBox(width: 8),
-              Text('shipping_address'.tr(context),
+              Text(
+                'shipping_address'.tr(context),
                 style: context.titleLarge?.copyWith(
                   fontWeight: FontWeight.w600,
                 ),
@@ -102,8 +109,8 @@ class _ShippingAddressSectionState extends State<ShippingAddressSection> {
           const SizedBox(height: 16),
           if (widget.isLoading)
             _buildShimmerEffect(context)
-          else if ((isGuest && widget.selectedAddress == null) || 
-                   (widget.addresses.isEmpty && !isGuest))
+          else if ((isGuest && widget.selectedAddress == null) ||
+              (widget.addresses.isEmpty && !isGuest))
             _buildAddAddressPrompt(context, isGuest)
           else
             _buildSelectedAddress(context, isGuest),
@@ -132,11 +139,7 @@ class _ShippingAddressSectionState extends State<ShippingAddressSection> {
     return Center(
       child: Column(
         children: [
-          const Icon(
-            Icons.location_on_outlined,
-            size: 48,
-            color: Colors.grey,
-          ),
+          const Icon(Icons.location_on_outlined, size: 48, color: Colors.grey),
           const SizedBox(height: 16),
           Text(
             'enter_shipping_address'.tr(context),
@@ -158,7 +161,7 @@ class _ShippingAddressSectionState extends State<ShippingAddressSection> {
   Widget _buildSelectedAddress(BuildContext context, bool isGuest) {
     // For both guest and logged-in users, only show the selected/default address
     final displayAddress = widget.selectedAddress;
-    
+
     if (displayAddress == null) {
       return _buildAddAddressPrompt(context, isGuest);
     }

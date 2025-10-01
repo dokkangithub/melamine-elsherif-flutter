@@ -9,4 +9,4 @@ class GetClubPointsUseCase {
   Future<List<ClubPoint>> call({int page = 1}) {
     return repository.getClubPoints(page: page);
   }
-} 
+}

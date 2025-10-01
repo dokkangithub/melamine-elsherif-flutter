@@ -2,10 +2,7 @@ class VariantPrice {
   final bool result;
   final VariantPriceData data;
 
-  VariantPrice({
-    required this.result,
-    required this.data,
-  });
+  VariantPrice({required this.result, required this.data});
 }
 
 class VariantPriceData {

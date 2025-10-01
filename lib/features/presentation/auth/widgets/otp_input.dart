@@ -37,8 +37,9 @@ class OTPInput extends StatelessWidget {
               borderRadius: BorderRadius.circular(12),
               fieldHeight: isTablet ? 64 : 56,
               fieldWidth: isTablet ? 64 : 56,
-              activeFillColor:
-                  hasError ? Colors.red.shade100 : theme.colorScheme.surface,
+              activeFillColor: hasError
+                  ? Colors.red.shade100
+                  : theme.colorScheme.surface,
               inactiveFillColor: theme.colorScheme.surface,
               selectedFillColor: theme.colorScheme.surface,
               activeColor: hasError ? Colors.red : theme.primaryColor,

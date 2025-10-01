@@ -52,11 +52,12 @@ class _BrandScreenState extends State<BrandScreen> {
         toolbarHeight: 56.0,
       ),
       body: RefreshIndicator(
-        onRefresh: () => Provider.of<BrandProvider>(context, listen: false)
-            .fetchBrands(),
+        onRefresh: () =>
+            Provider.of<BrandProvider>(context, listen: false).fetchBrands(),
         child: Consumer<BrandProvider>(
           builder: (context, provider, _) {
-            final isLoading = provider.brandState == LoadingState.loading &&
+            final isLoading =
+                provider.brandState == LoadingState.loading &&
                 provider.brands.isEmpty;
             final hasError = provider.brandState == LoadingState.error;
 
@@ -78,10 +79,10 @@ class _BrandScreenState extends State<BrandScreen> {
                     child: isLoading
                         ? const BrandSearchShimmer()
                         : BrandSearch(
-                      onSearch: (query) {
-                        provider.fetchBrands(name: query);
-                      },
-                    ),
+                            onSearch: (query) {
+                              provider.fetchBrands(name: query);
+                            },
+                          ),
                   ),
                 ),
                 SliverPadding(
@@ -89,10 +90,11 @@ class _BrandScreenState extends State<BrandScreen> {
                   sliver: isLoading
                       ? const BrandGridShimmer()
                       : BrandGrid(
-                    brands: provider.brands,
-                    isLoadingMore: provider.brandState == LoadingState.loading &&
-                        provider.brands.isNotEmpty,
-                  ),
+                          brands: provider.brands,
+                          isLoadingMore:
+                              provider.brandState == LoadingState.loading &&
+                              provider.brands.isNotEmpty,
+                        ),
                 ),
               ],
             );

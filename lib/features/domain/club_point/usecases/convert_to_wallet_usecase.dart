@@ -8,4 +8,4 @@ class ConvertToWalletUseCase {
   Future<bool> call() {
     return repository.convertToWallet();
   }
-} 
+}

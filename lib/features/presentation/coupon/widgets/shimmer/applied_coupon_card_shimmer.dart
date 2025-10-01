@@ -29,30 +29,17 @@ class AppliedCouponCardShimmer extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(width: 8),
-                  Expanded(
-                    child: Container(
-                      height: 18,
-                      color: Colors.white,
-                    ),
-                  ),
+                  Expanded(child: Container(height: 18, color: Colors.white)),
                 ],
               ),
 
               // Code label
               const SizedBox(height: 8),
-              Container(
-                width: 150,
-                height: 16,
-                color: Colors.white,
-              ),
+              Container(width: 150, height: 16, color: Colors.white),
 
               // Discount label
               const SizedBox(height: 4),
-              Container(
-                width: 120,
-                height: 16,
-                color: Colors.white,
-              ),
+              Container(width: 120, height: 16, color: Colors.white),
 
               // Remove button
               const SizedBox(height: 12),

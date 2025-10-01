@@ -33,8 +33,11 @@ class CustomDropdown<T> extends StatefulWidget {
     this.searchHint = 'Search...',
     this.emptyResultWidget,
     this.onSearch,
-  }) : assert(items != null || asyncItems != null, 'Either items or asyncItems must be provided'),
-        super(key: key);
+  }) : assert(
+         items != null || asyncItems != null,
+         'Either items or asyncItems must be provided',
+       ),
+       super(key: key);
 
   @override
   State<CustomDropdown<T>> createState() => _CustomDropdownState<T>();
@@ -75,7 +78,8 @@ class _CustomDropdownState<T> extends State<CustomDropdown<T>> {
         _isLoading = widget.isLoading;
       });
     }
-    if (oldWidget.items != widget.items || oldWidget.asyncItems != widget.asyncItems) {
+    if (oldWidget.items != widget.items ||
+        oldWidget.asyncItems != widget.asyncItems) {
       _loadItems();
     }
   }
@@ -160,12 +164,17 @@ class _CustomDropdownState<T> extends State<CustomDropdown<T>> {
                         hintText: widget.searchHint,
                         prefixIcon: const Icon(Icons.search),
                         border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(widget.borderRadius),
+                          borderRadius: BorderRadius.circular(
+                            widget.borderRadius,
+                          ),
                           borderSide: BorderSide.none,
                         ),
                         filled: true,
                         fillColor: Colors.white,
-                        contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 0,
+                        ),
                       ),
                       onChanged: (value) {
                         setState(() {
@@ -196,7 +205,10 @@ class _CustomDropdownState<T> extends State<CustomDropdown<T>> {
                             _focusNode.unfocus();
                           },
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16.0,
+                              vertical: 8.0,
+                            ),
                             child: item.child,
                           ),
                         );
@@ -206,7 +218,9 @@ class _CustomDropdownState<T> extends State<CustomDropdown<T>> {
                   if (_getFilteredItems().isEmpty)
                     Padding(
                       padding: const EdgeInsets.all(16.0),
-                      child: widget.emptyResultWidget ?? Text('No results found'.tr(context)),
+                      child:
+                          widget.emptyResultWidget ??
+                          Text('No results found'.tr(context)),
                     ),
                 ],
               ),
@@ -291,14 +305,17 @@ class _CustomDropdownState<T> extends State<CustomDropdown<T>> {
         ),
         filled: true,
         fillColor: Colors.grey.shade100,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 20,
+          vertical: 12,
+        ),
       ),
       icon: _isLoading
           ? const SizedBox(
-        height: 20,
-        width: 20,
-        child: CircularProgressIndicator(strokeWidth: 2.0),
-      )
+              height: 20,
+              width: 20,
+              child: CircularProgressIndicator(strokeWidth: 2.0),
+            )
           : const Icon(Icons.arrow_drop_down),
       dropdownColor: Colors.grey.shade100,
       borderRadius: BorderRadius.circular(widget.borderRadius),
@@ -310,7 +327,7 @@ class _CustomDropdownState<T> extends State<CustomDropdown<T>> {
     String displayText = '';
     if (widget.value != null) {
       final selectedItem = _items?.firstWhere(
-            (item) => item.value == widget.value,
+        (item) => item.value == widget.value,
         orElse: () => DropdownMenuItem<T>(
           value: widget.value,
           child: Text(widget.value.toString()),
@@ -353,16 +370,19 @@ class _CustomDropdownState<T> extends State<CustomDropdown<T>> {
           ),
           filled: true,
           fillColor: Colors.grey.shade100,
-          contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 20,
+            vertical: 12,
+          ),
           suffixIcon: _isLoading
               ? const SizedBox(
-            height: 20,
-            width: 20,
-            child: Padding(
-              padding: EdgeInsets.all(10.0),
-              child: CircularProgressIndicator(strokeWidth: 2.0),
-            ),
-          )
+                  height: 20,
+                  width: 20,
+                  child: Padding(
+                    padding: EdgeInsets.all(10.0),
+                    child: CircularProgressIndicator(strokeWidth: 2.0),
+                  ),
+                )
               : const Icon(Icons.arrow_drop_down),
         ),
         isEmpty: widget.value == null,

@@ -1,4 +1,3 @@
-
 import '../../../../core/api/api_provider.dart';
 import '../../../../core/utils/constants/app_endpoints.dart';
 import '../../../../core/utils/constants/app_strings.dart';
@@ -15,8 +14,6 @@ class CouponRemoteDataSourceImpl implements CouponRemoteDataSource {
   final SecureStorage secureStorage;
 
   CouponRemoteDataSourceImpl(this.apiProvider, this.secureStorage);
-
-
 
   @override
   Future<CouponModel> applyCoupon(String couponCode) async {
@@ -37,9 +34,7 @@ class CouponRemoteDataSourceImpl implements CouponRemoteDataSource {
   Future<CouponModel> removeCoupon() async {
     final response = await apiProvider.post(
       LaravelApiEndPoint.couponRemove,
-      data: {
-        'user_id': AppStrings.userId.toString(),
-      },
+      data: {'user_id': AppStrings.userId.toString()},
     );
     if (response.data != null) {
       return CouponModel.fromJson(response.data);

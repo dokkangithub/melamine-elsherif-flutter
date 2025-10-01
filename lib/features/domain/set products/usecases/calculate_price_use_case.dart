@@ -6,7 +6,9 @@ class CalculatePriceUseCase {
 
   CalculatePriceUseCase(this.repository);
 
-  Future<CalculatePriceResponseEntity> call({required CalculatePriceRequest request}) async {
+  Future<CalculatePriceResponseEntity> call({
+    required CalculatePriceRequest request,
+  }) async {
     return await repository.calculatePrice(request: request);
   }
 }

@@ -30,7 +30,7 @@ class EmptyWishlistWidget extends StatelessWidget {
             height: double.infinity,
           ),
         ),
-        
+
         // Content overlay
         Container(
           width: double.infinity,
@@ -40,7 +40,7 @@ class EmptyWishlistWidget extends StatelessWidget {
             children: [
               // Top space - approximately 40% of screen height
               SizedBox(height: screenHeight * 0.35),
-              
+
               // Text content
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 32.0),
@@ -77,10 +77,10 @@ class EmptyWishlistWidget extends StatelessWidget {
                   ],
                 ),
               ),
-              
+
               // Expandable space before button
               const Spacer(),
-              
+
               // Button at bottom
               Padding(
                 padding: const EdgeInsets.all(24.0),
@@ -91,7 +91,10 @@ class EmptyWishlistWidget extends StatelessWidget {
                     height: 52,
                     child: ElevatedButton(
                       onPressed: () {
-                        Provider.of<LayoutProvider>(context, listen: false).currentIndex = 0;
+                        Provider.of<LayoutProvider>(
+                          context,
+                          listen: false,
+                        ).currentIndex = 0;
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppTheme.primaryColor,

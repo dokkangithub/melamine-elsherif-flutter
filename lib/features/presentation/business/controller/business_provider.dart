@@ -32,17 +32,29 @@ class BusinessProvider extends ChangeNotifier {
   bool? _couponSystem;
 
   // Getters for frequently accessed settings
-  String get contactPhone => _contactPhone ?? getSetting('contact_phone').getStringValue();
-  String get contactEmail => _contactEmail ?? getSetting('contact_email').getStringValue();
-  String get facebookLink => _facebookLink ?? getSetting('facebook_link').getStringValue();
-  String get youtubeLink => _youtubeLink ?? getSetting('youtube_link').getStringValue();
-  String get baseColor => _baseColor ?? getSetting('base_color').getStringValue();
-  String get websiteName => _websiteName ?? getSetting('website_name').getStringValue();
-  String get headerLogo => _headerLogo ?? getSetting('header_logo').getStringValue();
-  String get footerLogo => _footerLogo ?? getSetting('footer_logo').getStringValue();
-  bool get guestCheckoutActive => _guestCheckoutActive ?? getSetting('guest_checkout_active').getBoolValue();
-  bool get walletSystem => _walletSystem ?? getSetting('wallet_system').getBoolValue();
-  bool get couponSystem => _couponSystem ?? getSetting('coupon_system').getBoolValue();
+  String get contactPhone =>
+      _contactPhone ?? getSetting('contact_phone').getStringValue();
+  String get contactEmail =>
+      _contactEmail ?? getSetting('contact_email').getStringValue();
+  String get facebookLink =>
+      _facebookLink ?? getSetting('facebook_link').getStringValue();
+  String get youtubeLink =>
+      _youtubeLink ?? getSetting('youtube_link').getStringValue();
+  String get baseColor =>
+      _baseColor ?? getSetting('base_color').getStringValue();
+  String get websiteName =>
+      _websiteName ?? getSetting('website_name').getStringValue();
+  String get headerLogo =>
+      _headerLogo ?? getSetting('header_logo').getStringValue();
+  String get footerLogo =>
+      _footerLogo ?? getSetting('footer_logo').getStringValue();
+  bool get guestCheckoutActive =>
+      _guestCheckoutActive ??
+      getSetting('guest_checkout_active').getBoolValue();
+  bool get walletSystem =>
+      _walletSystem ?? getSetting('wallet_system').getBoolValue();
+  bool get couponSystem =>
+      _couponSystem ?? getSetting('coupon_system').getBoolValue();
 
   // Method to fetch business settings
   Future<void> fetchBusinessSettings() async {
@@ -51,10 +63,10 @@ class BusinessProvider extends ChangeNotifier {
       notifyListeners();
 
       _businessSettings = await getBusinessSettingsUseCase();
-      
+
       // Cache frequently accessed settings
       _updateCache();
-      
+
       _businessSettingsState = LoadingState.loaded;
     } catch (e) {
       _businessSettingsState = LoadingState.error;
@@ -101,7 +113,9 @@ class BusinessProvider extends ChangeNotifier {
           if (setting.value is List) {
             return List<String>.from(setting.value);
           } else {
-            print('Home slider images value is not a list: ${setting.value.runtimeType} - ${setting.value}');
+            print(
+              'Home slider images value is not a list: ${setting.value.runtimeType} - ${setting.value}',
+            );
           }
         }
       }
@@ -110,4 +124,4 @@ class BusinessProvider extends ChangeNotifier {
     }
     return [];
   }
-} 
+}

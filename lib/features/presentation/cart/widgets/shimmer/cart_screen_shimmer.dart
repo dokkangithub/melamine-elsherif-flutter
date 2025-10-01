@@ -11,7 +11,6 @@ class CartScreenShimmer extends StatelessWidget {
     return const Scaffold(
       body: Column(
         children: [
-
           // Cart items list shimmer
           CartItemsListShimmer(),
           // Cost summary shimmer

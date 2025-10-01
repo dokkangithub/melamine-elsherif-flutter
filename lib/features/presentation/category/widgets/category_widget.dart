@@ -15,7 +15,7 @@ class CategoryWidget extends StatefulWidget {
   final bool triggerAnimation;
 
   const CategoryWidget({
-    super.key, 
+    super.key,
     required this.categories,
     this.triggerAnimation = true,
   });
@@ -24,17 +24,20 @@ class CategoryWidget extends StatefulWidget {
   State<CategoryWidget> createState() => _CategoryWidgetState();
 }
 
-class _CategoryWidgetState extends State<CategoryWidget> with SingleTickerProviderStateMixin {
+class _CategoryWidgetState extends State<CategoryWidget>
+    with SingleTickerProviderStateMixin {
   bool _shouldAnimate = false;
 
   @override
   void initState() {
     super.initState();
     _shouldAnimate = widget.triggerAnimation;
-    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      statusBarColor: Colors.white,
-      statusBarIconBrightness: Brightness.dark,
-    ));
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        statusBarColor: Colors.white,
+        statusBarIconBrightness: Brightness.dark,
+      ),
+    );
   }
 
   @override
@@ -59,33 +62,39 @@ class _CategoryWidgetState extends State<CategoryWidget> with SingleTickerProvid
         backgroundColor: Colors.white,
         scrolledUnderElevation: 0,
         elevation: 0,
-        title: _shouldAnimate 
-          ? FadeIn(
-              duration: const Duration(milliseconds: 500),
-              child: Text('categories'.tr(context),
-                style: context.headlineSmall!.copyWith(fontWeight: FontWeight.w700)
-              ),
-            )
-          : Text('categories'.tr(context),
-              style: context.headlineSmall!.copyWith(fontWeight: FontWeight.w700)
-            ),
-        actions: [
-          _shouldAnimate 
-            ? FadeInRight(
+        title: _shouldAnimate
+            ? FadeIn(
                 duration: const Duration(milliseconds: 500),
-                child: IconButton(
+                child: Text(
+                  'categories'.tr(context),
+                  style: context.headlineSmall!.copyWith(
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              )
+            : Text(
+                'categories'.tr(context),
+                style: context.headlineSmall!.copyWith(
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+        actions: [
+          _shouldAnimate
+              ? FadeInRight(
+                  duration: const Duration(milliseconds: 500),
+                  child: IconButton(
+                    icon: const Icon(Icons.search, color: Colors.black),
+                    onPressed: () {
+                      AppRoutes.navigateTo(context, AppRoutes.searchScreen);
+                    },
+                  ),
+                )
+              : IconButton(
                   icon: const Icon(Icons.search, color: Colors.black),
                   onPressed: () {
                     AppRoutes.navigateTo(context, AppRoutes.searchScreen);
                   },
                 ),
-              )
-            : IconButton(
-                icon: const Icon(Icons.search, color: Colors.black),
-                onPressed: () {
-                  AppRoutes.navigateTo(context, AppRoutes.searchScreen);
-                },
-              ),
         ],
       ),
       body: Column(
@@ -101,21 +110,24 @@ class _CategoryWidgetState extends State<CategoryWidget> with SingleTickerProvid
                   GridView.builder(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 8,
-                      mainAxisSpacing: 8,
-                      childAspectRatio: 1,
-                    ),
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 8,
+                          mainAxisSpacing: 8,
+                          childAspectRatio: 1,
+                        ),
                     itemCount: widget.categories.length,
                     itemBuilder: (context, index) {
                       final category = widget.categories[index];
                       return _shouldAnimate
-                        ? FadeInUp(
-                            duration: Duration(milliseconds: 400 + (index * 100)),
-                            child: _buildCategoryCard(context, category),
-                          )
-                        : _buildCategoryCard(context, category);
+                          ? FadeInUp(
+                              duration: Duration(
+                                milliseconds: 400 + (index * 100),
+                              ),
+                              child: _buildCategoryCard(context, category),
+                            )
+                          : _buildCategoryCard(context, category);
                     },
                   ),
                 ],
@@ -126,23 +138,19 @@ class _CategoryWidgetState extends State<CategoryWidget> with SingleTickerProvid
       ),
     );
   }
-  
+
   Widget _buildCategoryCard(BuildContext context, Category category) {
     return InkWell(
       onTap: () {
         AppRoutes.navigateTo(
           context,
           AppRoutes.allCategoryProductsScreen,
-          arguments: {
-            'category': category,
-          },
+          arguments: {'category': category},
         );
       },
       child: Container(
         padding: EdgeInsets.zero,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(0),
-        ),
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(0)),
         child: Stack(
           children: [
             // Image
@@ -182,7 +190,7 @@ class _CategoryWidgetState extends State<CategoryWidget> with SingleTickerProvid
                     category.name?.toUpperCase() ?? '',
                     style: context.titleMedium!.copyWith(
                       color: AppTheme.white,
-                      fontWeight: FontWeight.w700
+                      fontWeight: FontWeight.w700,
                     ),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,

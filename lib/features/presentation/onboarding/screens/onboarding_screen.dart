@@ -67,7 +67,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   Future<void> _completeOnboarding() async {
     // Mark onboarding as completed in secure storage
-    await sl<SecureStorage>().save(LocalStorageKey.hasCompletedOnboarding, true);
+    await sl<SecureStorage>().save(
+      LocalStorageKey.hasCompletedOnboarding,
+      true,
+    );
     if (mounted) {
       AppRoutes.navigateToAndRemoveUntil(context, AppRoutes.mainLayoutScreen);
     }
@@ -103,7 +106,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               );
             },
           ),
-          
+
           // Bottom navigation with dots and next/get started button
           Positioned(
             bottom: 40,
@@ -126,9 +129,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 const SizedBox(height: 60),
                 // Next/Get Started button
                 Padding(
-                  padding: EdgeInsets.only(left: MediaQuery.sizeOf(context).width/2),
+                  padding: EdgeInsets.only(
+                    left: MediaQuery.sizeOf(context).width / 2,
+                  ),
                   child: CustomButton(
-                    text: _currentPage == onboardingData.length - 1 
+                    text: _currentPage == onboardingData.length - 1
                         ? 'onboarding_get_started'.tr(context)
                         : 'onboarding_next'.tr(context),
                     onPressed: _onNextPressed,
@@ -142,7 +147,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               ],
             ),
           ),
-
         ],
       ),
     );
@@ -157,10 +161,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   ) {
     return Container(
       decoration: BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage(image),
-          fit: BoxFit.cover,
-        ),
+        image: DecorationImage(image: AssetImage(image), fit: BoxFit.cover),
       ),
       child: Container(
         decoration: BoxDecoration(

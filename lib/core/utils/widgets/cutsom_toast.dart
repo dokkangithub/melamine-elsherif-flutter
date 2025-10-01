@@ -23,7 +23,7 @@ class CustomToast {
         icon = Icons.warning;
         break;
       case ToastType.info:
-      backgroundColor = Colors.blue;
+        backgroundColor = Colors.blue;
         icon = Icons.info;
         break;
     }

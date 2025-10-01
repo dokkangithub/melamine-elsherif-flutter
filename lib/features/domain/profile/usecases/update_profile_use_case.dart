@@ -6,7 +6,11 @@ class UpdateProfileUseCase {
 
   UpdateProfileUseCase(this._repository);
 
-  Future<ProfileUpdateResponse> call(String userId, String name, String password) async {
+  Future<ProfileUpdateResponse> call(
+    String userId,
+    String name,
+    String password,
+  ) async {
     return await _repository.updateProfile(userId, name, password);
   }
 }

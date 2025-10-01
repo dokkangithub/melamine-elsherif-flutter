@@ -29,7 +29,10 @@ abstract class AddressRemoteDataSource {
   Future<void> makeAddressDefault(int id);
   Future<void> deleteAddress(int id);
   Future<List<LocationModel>> getCitiesByState(int stateId, {String name = ''});
-  Future<List<LocationModel>> getStatesByCountry(int countryId, {String name = ''});
+  Future<List<LocationModel>> getStatesByCountry(
+    int countryId, {
+    String name = '',
+  });
   Future<List<LocationModel>> getCountries({String name = ''});
   Future<ShippingCostModel> getShippingCost(String shippingType);
   Future<void> updateAddressInCart(int addressId);
@@ -80,7 +83,7 @@ class AddressRemoteDataSourceImpl implements AddressRemoteDataSource {
       'state_id': stateId.toString(),
       'phone': phone,
     };
-    
+
     // Use city_name instead of city_id if provided
     if (cityName != null && cityName.isNotEmpty) {
       data['city_name'] = cityName;
@@ -110,17 +113,18 @@ class AddressRemoteDataSourceImpl implements AddressRemoteDataSource {
 
       // Temporary address model with provided data
       return AddressModel(
-        id: 0,  // Temporary ID
+        id: 0, // Temporary ID
         address: address,
         countryId: countryId,
         stateId: stateId,
         cityId: cityId,
-        countryName: '',  // We don't have this info
-        stateName: '',    // We don't have this info
-        cityName: cityName ?? '',  // Use provided cityName if available
+        countryName: '', // We don't have this info
+        stateName: '', // We don't have this info
+        cityName: cityName ?? '', // Use provided cityName if available
         phone: phone,
         isDefault: false,
-        locationAvailable: false, postalCode: '',
+        locationAvailable: false,
+        postalCode: '',
       );
     }
     throw Exception('Failed to add address');
@@ -144,14 +148,14 @@ class AddressRemoteDataSourceImpl implements AddressRemoteDataSource {
       'state_id': stateId.toString(),
       'phone': phone,
     };
-    
+
     // Use city_name instead of city_id if provided
     if (cityName != null && cityName.isNotEmpty) {
       data['city_name'] = cityName;
     } else {
       data['city_id'] = cityId.toString();
     }
-    
+
     if (title != null) {
       data['title'] = title;
     }
@@ -167,7 +171,7 @@ class AddressRemoteDataSourceImpl implements AddressRemoteDataSource {
         final addresses = await getAddresses();
         // Find the updated address
         final updatedAddress = addresses.firstWhere(
-              (addr) => addr.id == id,
+          (addr) => addr.id == id,
           orElse: () => throw Exception('Updated address not found'),
         );
         return updatedAddress;
@@ -182,19 +186,24 @@ class AddressRemoteDataSourceImpl implements AddressRemoteDataSource {
         countryId: countryId,
         stateId: stateId,
         cityId: cityId,
-        countryName: '',  // We don't have this info
-        stateName: '',    // We don't have this info
-        cityName: cityName ?? '',  // Use provided cityName if available
+        countryName: '', // We don't have this info
+        stateName: '', // We don't have this info
+        cityName: cityName ?? '', // Use provided cityName if available
         phone: phone,
         isDefault: false, // We don't know
-        locationAvailable: false, postalCode: '', // We don't know
+        locationAvailable: false,
+        postalCode: '', // We don't know
       );
     }
     throw Exception('Failed to update address');
   }
 
   @override
-  Future<void> updateAddressLocation(int id, double latitude, double longitude) async {
+  Future<void> updateAddressLocation(
+    int id,
+    double latitude,
+    double longitude,
+  ) async {
     await apiProvider.post(
       LaravelApiEndPoint.userShippingUpdateLocation,
       data: {
@@ -215,13 +224,14 @@ class AddressRemoteDataSourceImpl implements AddressRemoteDataSource {
 
   @override
   Future<void> deleteAddress(int id) async {
-    await apiProvider.get(
-      '${LaravelApiEndPoint.userShippingDelete}/$id',
-    );
+    await apiProvider.get('${LaravelApiEndPoint.userShippingDelete}/$id');
   }
 
   @override
-  Future<List<LocationModel>> getCitiesByState(int stateId, {String name = ''}) async {
+  Future<List<LocationModel>> getCitiesByState(
+    int stateId, {
+    String name = '',
+  }) async {
     final response = await apiProvider.get(
       '${LaravelApiEndPoint.citiesByState}/$stateId?name=$name',
     );
@@ -234,7 +244,10 @@ class AddressRemoteDataSourceImpl implements AddressRemoteDataSource {
   }
 
   @override
-  Future<List<LocationModel>> getStatesByCountry(int countryId, {String name = ''}) async {
+  Future<List<LocationModel>> getStatesByCountry(
+    int countryId, {
+    String name = '',
+  }) async {
     final response = await apiProvider.get(
       '${LaravelApiEndPoint.statesByCountry}/$countryId?name=$name',
     );
@@ -275,10 +288,7 @@ class AddressRemoteDataSourceImpl implements AddressRemoteDataSource {
   Future<void> updateAddressInCart(int addressId) async {
     await apiProvider.post(
       LaravelApiEndPoint.updateAddressInCart,
-      data: {
-        'user_id': AppStrings.userId,
-        'address_id': addressId,
-      },
+      data: {'user_id': AppStrings.userId, 'address_id': addressId},
     );
   }
 }

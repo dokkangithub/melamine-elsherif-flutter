@@ -9,11 +9,7 @@ class SetProductCard extends StatelessWidget {
   final SetProduct setProduct;
   final double width;
 
-  const SetProductCard({
-    super.key,
-    required this.setProduct,
-    this.width = 250,
-  });
+  const SetProductCard({super.key, required this.setProduct, this.width = 250});
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +50,10 @@ class SetProductCard extends StatelessWidget {
             // Price
             Text(
               setProduct.discountedPrice!,
-              style: context.titleLarge!.copyWith(fontWeight: FontWeight.w600,color: AppTheme.primaryColor),
+              style: context.titleLarge!.copyWith(
+                fontWeight: FontWeight.w600,
+                color: AppTheme.primaryColor,
+              ),
             ),
           ],
         ),

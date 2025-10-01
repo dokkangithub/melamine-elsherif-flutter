@@ -15,7 +15,8 @@ class MainLayoutScreen extends StatefulWidget {
   State<MainLayoutScreen> createState() => MainLayoutScreenState();
 }
 
-class MainLayoutScreenState extends State<MainLayoutScreen> with SingleTickerProviderStateMixin {
+class MainLayoutScreenState extends State<MainLayoutScreen>
+    with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
   late PageController _pageController;
   final double _maxSlideAmount = 0.8;
@@ -126,13 +127,15 @@ class MainLayoutScreenState extends State<MainLayoutScreen> with SingleTickerPro
     }
 
     _isNavigating = true;
-    _pageController.animateToPage(
-      index,
-      duration: _pageAnimationDuration,
-      curve: _pageAnimationCurve,
-    ).then((_) {
-      _isNavigating = false;
-    });
+    _pageController
+        .animateToPage(
+          index,
+          duration: _pageAnimationDuration,
+          curve: _pageAnimationCurve,
+        )
+        .then((_) {
+          _isNavigating = false;
+        });
   }
 
   @override
@@ -144,7 +147,8 @@ class MainLayoutScreenState extends State<MainLayoutScreen> with SingleTickerPro
         return AnimatedBuilder(
           animation: _animationController,
           builder: (context, child) {
-            final slideAmount = screenWidth * _maxSlideAmount * _animationController.value;
+            final slideAmount =
+                screenWidth * _maxSlideAmount * _animationController.value;
             final contentScale = 1.0 - (0.2 * _animationController.value);
             final cornerRadius = 24.0 * _animationController.value;
 
@@ -162,7 +166,9 @@ class MainLayoutScreenState extends State<MainLayoutScreen> with SingleTickerPro
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(cornerRadius),
                     child: GestureDetector(
-                      onTap: _animationController.isCompleted ? () => toggleDrawer() : null,
+                      onTap: _animationController.isCompleted
+                          ? () => toggleDrawer()
+                          : null,
                       child: _buildMainContent(context, provider),
                     ),
                   ),
@@ -177,29 +183,24 @@ class MainLayoutScreenState extends State<MainLayoutScreen> with SingleTickerPro
 
   Widget _buildMainContent(BuildContext context, LayoutProvider provider) {
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(0),
-        child: AppBar(
-          backgroundColor: AppTheme.white,
-          elevation: 0,
-          systemOverlayStyle: const SystemUiOverlayStyle(
-            statusBarColor: AppTheme.white,
-            statusBarIconBrightness: Brightness.dark,
-            statusBarBrightness: Brightness.dark,
-          ),
-        ),
-      ),
       backgroundColor: Colors.white,
-      body: _enableSwipe
-          ? PageView(
-        controller: _pageController,
-        onPageChanged: _onPageChanged,
-        physics: const ClampingScrollPhysics(),
-        children: provider.mainScreens,
-      )
-          : IndexedStack(
-        index: provider.currentIndex,
-        children: provider.mainScreens,
+      body: AnnotatedRegion<SystemUiOverlayStyle>(
+        value: const SystemUiOverlayStyle(
+          statusBarColor: Colors.transparent,
+          statusBarIconBrightness: Brightness.dark,
+          statusBarBrightness: Brightness.dark,
+        ),
+        child: _enableSwipe
+            ? PageView(
+                controller: _pageController,
+                onPageChanged: _onPageChanged,
+                physics: const ClampingScrollPhysics(),
+                children: provider.mainScreens,
+              )
+            : IndexedStack(
+                index: provider.currentIndex,
+                children: provider.mainScreens,
+              ),
       ),
       bottomNavigationBar: const BottomNavBarWidget(),
     );

@@ -6,7 +6,10 @@ class GetTopFromThisSellerProductsUseCase {
 
   GetTopFromThisSellerProductsUseCase(this.productRepository);
 
-  Future<ProductsResponse> call(int id,{bool needUpdate = false}) async {
-    return await productRepository.getTopFromThisSellerProducts(id,needUpdate: needUpdate);
+  Future<ProductsResponse> call(int id, {bool needUpdate = false}) async {
+    return await productRepository.getTopFromThisSellerProducts(
+      id,
+      needUpdate: needUpdate,
+    );
   }
 }

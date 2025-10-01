@@ -16,4 +16,4 @@ class BusinessRepositoryImpl implements BusinessRepository {
       throw Exception('Failed to fetch business settings: $e');
     }
   }
-} 
+}

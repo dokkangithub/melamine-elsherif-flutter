@@ -38,20 +38,33 @@ class SecondHomeImageWidget extends StatelessWidget {
                 // Elegant text overlay
                 Positioned.fill(
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 16,
+                    ),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(
-                          'welcome_to_excellence'.tr(context), // Replace with your text or use .tr() for translation
-                          style: context.displayLarge!.copyWith(color: AppTheme.white,fontWeight: FontWeight.w400),
+                          'welcome_to_excellence'.tr(
+                            context,
+                          ), // Replace with your text or use .tr() for translation
+                          style: context.displayLarge!.copyWith(
+                            color: AppTheme.white,
+                            fontWeight: FontWeight.w400,
+                          ),
                           textAlign: TextAlign.center,
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          'discover_premium_quality_and_service'.tr(context), // Replace with your subtitle
-                          style: context.headlineMedium!.copyWith(color: AppTheme.white.withValues(alpha: 0.5),fontWeight: FontWeight.w500),
+                          'discover_premium_quality_and_service'.tr(
+                            context,
+                          ), // Replace with your subtitle
+                          style: context.headlineMedium!.copyWith(
+                            color: AppTheme.white.withValues(alpha: 0.5),
+                            fontWeight: FontWeight.w500,
+                          ),
                           textAlign: TextAlign.center,
                         ),
                       ],

@@ -18,23 +18,23 @@ class DescriptionWidget extends StatelessWidget {
       children: [
         product.description.isNotEmpty
             ? Text(
-              'key_feature'.tr(context),
-              style: context.headlineSmall!.copyWith(
-                fontWeight: FontWeight.w800,
-              ),
-            )
+                'key_feature'.tr(context),
+                style: context.headlineSmall!.copyWith(
+                  fontWeight: FontWeight.w800,
+                ),
+              )
             : const SizedBox.shrink(),
         product.description.isNotEmpty
             ? Html(
-              data: product.description,
-              style: {
-                '*': Style(
-                  fontSize: FontSize(14.0),
-                  lineHeight: const LineHeight(1.6),
-                  color: Colors.black54,
-                ),
-              },
-            )
+                data: product.description,
+                style: {
+                  '*': Style(
+                    fontSize: FontSize(14.0),
+                    lineHeight: const LineHeight(1.6),
+                    color: Colors.black54,
+                  ),
+                },
+              )
             : const SizedBox.shrink(),
       ],
     );

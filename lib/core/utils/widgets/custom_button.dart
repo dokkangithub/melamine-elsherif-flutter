@@ -31,7 +31,7 @@ class CustomButton extends StatelessWidget {
     this.backgroundColor,
     this.textColor,
     this.splashColor,
-    this.borderColor=AppTheme.primaryColor,
+    this.borderColor = AppTheme.primaryColor,
     this.padding,
     this.elevation,
     this.onPressed,
@@ -44,7 +44,10 @@ class CustomButton extends StatelessWidget {
     this.fullWidth = false,
     this.gradientColors,
     this.height,
-  }) : assert(text != null || child != null, 'Either text or child must be provided');
+  }) : assert(
+         text != null || child != null,
+         'Either text or child must be provided',
+       );
 
   @override
   Widget build(BuildContext context) {
@@ -54,10 +57,12 @@ class CustomButton extends StatelessWidget {
         : textColor ?? AppTheme.white;
 
     // Default gradient colors if not provided
-    final colors = gradientColors ?? [
-       AppTheme.primaryColor, // Darker reddish color
-      AppTheme.secondaryColor, // Lighter pinkish color
-    ];
+    final colors =
+        gradientColors ??
+        [
+          AppTheme.primaryColor, // Darker reddish color
+          AppTheme.secondaryColor, // Lighter pinkish color
+        ];
 
     // Return original button style if not gradient
     return Material(
@@ -69,29 +74,27 @@ class CustomButton extends StatelessWidget {
       ),
       child: InkWell(
         onTap: isLoading ? null : onPressed,
-        splashColor: splashColor ?? AppTheme.primaryColor.withValues(alpha: 0.3),
+        splashColor:
+            splashColor ?? AppTheme.primaryColor.withValues(alpha: 0.3),
         borderRadius: BorderRadius.circular(borderRadius ?? 10.0),
         child: Container(
           width: fullWidth ? double.infinity : null,
-          height: height??50,
-          padding: padding ?? const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+          height: height ?? 50,
+          padding:
+              padding ??
+              const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
           decoration: BoxDecoration(
             gradient: isOutlined
                 ? null
                 : LinearGradient(
-                    colors: [
-                      buttonColor,
-                      buttonColor.withValues(alpha: 0.8),
-                    ],
+                    colors: [buttonColor, buttonColor.withValues(alpha: 0.8)],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
             borderRadius: BorderRadius.circular(borderRadius ?? 0.0),
           ),
           child: isLoading
-              ? const Center(
-                  child: CustomLoadingWidget(),
-                )
+              ? const Center(child: CustomLoadingWidget())
               : _buildContent(context, effectiveTextColor),
         ),
       ),
@@ -104,20 +107,19 @@ class CustomButton extends StatelessWidget {
     }
 
     return Row(
-      mainAxisSize: fullWidth ? MainAxisSize.max : MainAxisSize.min, // Adjust mainAxisSize based on fullWidth
+      mainAxisSize: fullWidth
+          ? MainAxisSize.max
+          : MainAxisSize.min, // Adjust mainAxisSize based on fullWidth
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         if (icon != null) ...[
-          CustomImage(
-            assetPath: icon!,
-            width: 28,
-            height: 28,
-          ),
+          CustomImage(assetPath: icon!, width: 28, height: 28),
           const SizedBox(width: 8),
         ],
         Text(
           text!,
-          style: textStyle ??
+          style:
+              textStyle ??
               context.titleSmall.copyWith(
                 color: textColor,
                 fontWeight: FontWeight.w600,

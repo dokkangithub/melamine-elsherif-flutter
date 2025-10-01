@@ -6,10 +6,7 @@ import 'shimmer_widget.dart';
 class AddressListShimmer extends StatelessWidget {
   final int itemCount;
 
-  const AddressListShimmer({
-    super.key,
-    this.itemCount = 2,
-  });
+  const AddressListShimmer({super.key, this.itemCount = 2});
 
   @override
   Widget build(BuildContext context) {
@@ -27,13 +24,11 @@ class AddressListShimmer extends StatelessWidget {
                 gradient: LinearGradient(
                   colors: [
                     AppTheme.primaryColor.withValues(alpha: 0.05),
-                    AppTheme.primaryColor.withValues(alpha: 0.05)
+                    AppTheme.primaryColor.withValues(alpha: 0.05),
                   ],
                 ),
               ),
-              child: const ShimmerWidget.rectangular(
-                height: 50,
-              ),
+              child: const ShimmerWidget.rectangular(height: 50),
             ),
           ),
           const SizedBox(height: 16),

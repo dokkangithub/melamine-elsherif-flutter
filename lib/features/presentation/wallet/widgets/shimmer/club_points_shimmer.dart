@@ -55,7 +55,7 @@ class ClubPointsShimmer extends StatelessWidget {
                       ),
                     ],
                   ),
-                  
+
                   // Points value
                   Container(
                     width: 80,
@@ -67,9 +67,9 @@ class ClubPointsShimmer extends StatelessWidget {
                   ),
                 ],
               ),
-              
+
               const SizedBox(height: 20.0),
-              
+
               // Button
               Container(
                 width: double.infinity,
@@ -85,4 +85,4 @@ class ClubPointsShimmer extends StatelessWidget {
       ),
     );
   }
-} 
+}

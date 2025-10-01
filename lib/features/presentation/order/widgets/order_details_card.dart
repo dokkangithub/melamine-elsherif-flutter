@@ -6,10 +6,8 @@ import '../../../domain/order/entities/order_details.dart';
 class OrderDetailsCard extends StatelessWidget {
   final OrderDetails orderDetails;
 
-  const OrderDetailsCard({
-    Key? key,
-    required this.orderDetails,
-  }) : super(key: key);
+  const OrderDetailsCard({Key? key, required this.orderDetails})
+    : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +18,8 @@ class OrderDetailsCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Order #${orderDetails.code}',
+            Text(
+              'Order #${orderDetails.code}',
               style: Theme.of(context).textTheme.titleLarge,
             ),
             const SizedBox(height: 10),
@@ -51,7 +50,8 @@ class OrderDetailsCard extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('status'.tr(context),
+        Text(
+          'status'.tr(context),
           style: Theme.of(context).textTheme.titleMedium,
         ),
         const SizedBox(height: 10),
@@ -62,7 +62,9 @@ class OrderDetailsCard extends StatelessWidget {
               child: _buildStatusChip(
                 context,
                 'Payment: ${orderDetails.paymentStatusString}',
-                orderDetails.paymentStatus == 'paid' ? Colors.green : Colors.orange,
+                orderDetails.paymentStatus == 'paid'
+                    ? Colors.green
+                    : Colors.orange,
               ),
             ),
             const SizedBox(width: 8.0), // Optional: adds spacing between chips
@@ -70,18 +72,16 @@ class OrderDetailsCard extends StatelessWidget {
               child: _buildStatusChip(
                 context,
                 'Delivery: ${orderDetails.deliveryStatusString}',
-                orderDetails.deliveryStatus == 'confirmed' ? Colors.blue : Colors.orange,
+                orderDetails.deliveryStatus == 'confirmed'
+                    ? Colors.blue
+                    : Colors.orange,
               ),
             ),
           ],
         ),
         if (orderDetails.cancelRequest) ...[
           const SizedBox(height: 10),
-          _buildStatusChip(
-            context,
-            'Cancel Request: Pending',
-            Colors.red,
-          ),
+          _buildStatusChip(context, 'Cancel Request: Pending', Colors.red),
         ],
       ],
     );
@@ -91,7 +91,8 @@ class OrderDetailsCard extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Payment Details'.tr(context),
+        Text(
+          'Payment Details'.tr(context),
           style: Theme.of(context).textTheme.titleMedium,
         ),
         const SizedBox(height: 10),
@@ -101,11 +102,7 @@ class OrderDetailsCard extends StatelessWidget {
         _buildPriceRow('Tax', orderDetails.tax),
         _buildPriceRow('Coupon Discount', orderDetails.couponDiscount),
         const Divider(),
-        _buildPriceRow(
-          'Total',
-          orderDetails.grandTotal,
-          isBold: true,
-        ),
+        _buildPriceRow('Total', orderDetails.grandTotal, isBold: true),
       ],
     );
   }
@@ -137,7 +134,8 @@ class OrderDetailsCard extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Shipping Address'.tr(context),
+        Text(
+          'Shipping Address'.tr(context),
           style: Theme.of(context).textTheme.titleMedium,
         ),
         const SizedBox(height: 10),
@@ -145,8 +143,14 @@ class OrderDetailsCard extends StatelessWidget {
         if (orderDetails.shippingAddress.email != null)
           Text(orderDetails.shippingAddress.email!),
         Text(orderDetails.shippingAddress.address),
-        Text('${orderDetails.shippingAddress.city}, ${orderDetails.shippingAddress.state}'.tr(context)),
-        Text('${orderDetails.shippingAddress.country} ${orderDetails.shippingAddress.postalCode}'.tr(context)),
+        Text(
+          '${orderDetails.shippingAddress.city}, ${orderDetails.shippingAddress.state}'
+              .tr(context),
+        ),
+        Text(
+          '${orderDetails.shippingAddress.country} ${orderDetails.shippingAddress.postalCode}'
+              .tr(context),
+        ),
         Text('Phone: ${orderDetails.shippingAddress.phone}'.tr(context)),
       ],
     );

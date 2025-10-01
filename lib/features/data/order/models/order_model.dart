@@ -63,7 +63,8 @@ class OrderModel {
 
 class OrderResponse {
   final List<OrderModel> data;
-  final Map<String, dynamic> links; // Changed from Map<String, String> to Map<String, dynamic>
+  final Map<String, dynamic>
+  links; // Changed from Map<String, String> to Map<String, dynamic>
   final Map<String, dynamic> meta;
   final bool success;
   final int status;
@@ -78,9 +79,10 @@ class OrderResponse {
 
   factory OrderResponse.fromJson(Map<String, dynamic> json) {
     return OrderResponse(
-      data: (json['data'] as List?)
-          ?.map((order) => OrderModel.fromJson(order))
-          .toList() ??
+      data:
+          (json['data'] as List?)
+              ?.map((order) => OrderModel.fromJson(order))
+              .toList() ??
           [],
       // Fix: Safe handling for links, allowing null values
       links: json['links'] as Map<String, dynamic>? ?? {},

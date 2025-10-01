@@ -52,17 +52,16 @@ class _ReviewsSectionWidgetState extends State<ReviewsSectionWidget> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => AllReviewsScreen(
-                            productId: widget.productId,
-                          ),
+                          builder: (context) =>
+                              AllReviewsScreen(productId: widget.productId),
                         ),
                       );
                     },
                     child: Text(
                       'see_all_reviews'.tr(context),
                       style: context.bodyLarge!.copyWith(
-                          color: AppTheme.primaryColor,
-                          fontWeight: FontWeight.w700
+                        color: AppTheme.primaryColor,
+                        fontWeight: FontWeight.w700,
                       ),
                     ),
                   ),
@@ -92,13 +91,15 @@ class _ReviewsSectionWidgetState extends State<ReviewsSectionWidget> {
                     CarouselSlider(
                       options: CarouselOptions(
                         height: 210,
-                        aspectRatio: 16/9,
+                        aspectRatio: 16 / 9,
                         viewportFraction: 0.85,
                         enlargeCenterPage: true,
                         enableInfiniteScroll: true,
                         autoPlay: reviewProvider.reviews.length > 1,
                         autoPlayInterval: const Duration(seconds: 3),
-                        autoPlayAnimationDuration: const Duration(milliseconds: 800),
+                        autoPlayAnimationDuration: const Duration(
+                          milliseconds: 800,
+                        ),
                         autoPlayCurve: Curves.fastOutSlowIn,
                         onPageChanged: (index, reason) {
                           setState(() {
@@ -112,7 +113,9 @@ class _ReviewsSectionWidgetState extends State<ReviewsSectionWidget> {
                           builder: (BuildContext context) {
                             return Container(
                               width: MediaQuery.of(context).size.width,
-                              margin: const EdgeInsets.symmetric(horizontal: 5.0),
+                              margin: const EdgeInsets.symmetric(
+                                horizontal: 5.0,
+                              ),
                               child: ReviewCard(review: review),
                             );
                           },
@@ -126,7 +129,7 @@ class _ReviewsSectionWidgetState extends State<ReviewsSectionWidget> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: List.generate(
                           reviewProvider.reviews.length,
-                              (index) => Container(
+                          (index) => Container(
                             width: 8.0,
                             height: 8.0,
                             margin: const EdgeInsets.symmetric(horizontal: 4.0),
@@ -142,9 +145,7 @@ class _ReviewsSectionWidgetState extends State<ReviewsSectionWidget> {
                     const SizedBox(height: 16),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        _buildWriteReviewButton(),
-                      ],
+                      children: [_buildWriteReviewButton()],
                     ),
                   ],
                 ),
@@ -175,9 +176,7 @@ class _ReviewsSectionWidgetState extends State<ReviewsSectionWidget> {
     showDialog(
       context: context,
       builder: (context) => Dialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         child: Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
@@ -210,17 +209,17 @@ class _ReviewsSectionWidgetState extends State<ReviewsSectionWidget> {
                     },
                     child: Text(
                       'cancel'.tr(context),
-                      style: TextStyle(
-                        color: Colors.grey[600],
-                        fontSize: 16,
-                      ),
+                      style: TextStyle(color: Colors.grey[600], fontSize: 16),
                     ),
                   ),
                   const SizedBox(width: 8),
                   ElevatedButton(
                     onPressed: () {
                       Navigator.of(context).pop();
-                      AppRoutes.navigateToAndRemoveUntil(context, AppRoutes.login);
+                      AppRoutes.navigateToAndRemoveUntil(
+                        context,
+                        AppRoutes.login,
+                      );
                     },
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(
@@ -251,5 +250,4 @@ class _ReviewsSectionWidgetState extends State<ReviewsSectionWidget> {
       builder: (context) => AddReviewDialog(productId: widget.productId),
     );
   }
-
 }

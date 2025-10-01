@@ -16,7 +16,8 @@ class FlashDealResponseModel {
       data: json['data'] == null
           ? []
           : List<FlashDealModel>.from(
-              json['data'].map((x) => FlashDealModel.fromJson(x))),
+              json['data'].map((x) => FlashDealModel.fromJson(x)),
+            ),
       success: json['success'] ?? false,
       status: json['status'] ?? 0,
     );
@@ -29,4 +30,4 @@ class FlashDealResponseModel {
       'status': status,
     };
   }
-} 
+}

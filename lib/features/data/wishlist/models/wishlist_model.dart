@@ -4,10 +4,7 @@ class WishlistItemModel {
   final int id;
   final ProductModel product;
 
-  WishlistItemModel({
-    required this.id,
-    required this.product,
-  });
+  WishlistItemModel({required this.id, required this.product});
 
   factory WishlistItemModel.fromJson(Map<String, dynamic> json) {
     return WishlistItemModel(

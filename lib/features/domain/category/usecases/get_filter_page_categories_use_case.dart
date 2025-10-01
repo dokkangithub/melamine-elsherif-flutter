@@ -7,6 +7,8 @@ class GetFilterPageCategoriesUseCase {
   GetFilterPageCategoriesUseCase(this.categoryRepository);
 
   Future<CategoryResponseModel> call({bool needRefresh = false}) async {
-    return await categoryRepository.getFilterPageCategories(needRefresh: needRefresh);
+    return await categoryRepository.getFilterPageCategories(
+      needRefresh: needRefresh,
+    );
   }
 }

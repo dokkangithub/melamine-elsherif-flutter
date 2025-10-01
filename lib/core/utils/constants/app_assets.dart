@@ -10,8 +10,10 @@ class AppImages {
   static const String home_banner = '$imagesPath/home_banner.png';
   static const String plates_image = '$imagesPath/plates_image.png';
   static const String second_home_image = '$imagesPath/second_home_image.png';
-  static const String second_home_banner_gif = '$imagesPath/second_home_banner.gif';
-  static const String summers_deals_image = '$imagesPath/summers_deals_image.png';
+  static const String second_home_banner_gif =
+      '$imagesPath/second_home_banner.gif';
+  static const String summers_deals_image =
+      '$imagesPath/summers_deals_image.png';
   static const String linearAppLogo = '$imagesPath/linear_app_logo.png';
   static const String wallet_icon = '$imagesPath/wallet.png';
   static const String splashBackground = '$imagesPath/splash_background.png';
@@ -34,12 +36,11 @@ class AppImages {
 class AppAnimations {
   static const String animationPath = 'assets/animation';
 
-  static const String wishlistAnimation ='$animationPath/wishlist_animation.json';
-  static const String successfullyCart ='$animationPath/successfully_cart.json';
-  static const String successCheckout ='$animationPath/success_checkout.json';
-
-
-
+  static const String wishlistAnimation =
+      '$animationPath/wishlist_animation.json';
+  static const String successfullyCart =
+      '$animationPath/successfully_cart.json';
+  static const String successCheckout = '$animationPath/success_checkout.json';
 }
 
 class AppSvgs {
@@ -49,14 +50,17 @@ class AppSvgs {
   static const String EyeOff = '$svgPath/EyeOff.svg';
   static const String emptyCart = '$svgPath/emptyCart.svg';
   static const String empty_cart = '$svgPath/empty_cart.svg';
-  static const String above_second_home_image = '$svgPath/above_second_home_image.svg';
+  static const String above_second_home_image =
+      '$svgPath/above_second_home_image.svg';
   static const String category_star = '$svgPath/category_star.svg';
-  static const String porcelain_collection = '$svgPath/porcelain_collection.svg';
+  static const String porcelain_collection =
+      '$svgPath/porcelain_collection.svg';
   static const String category_1 = '$svgPath/category_1.svg';
   static const String category_2 = '$svgPath/category_2.svg';
   static const String category_3 = '$svgPath/category_3.svg';
   static const String category_4 = '$svgPath/category_4.svg';
-  static const String category_search_icon = '$svgPath/category_search_icon.svg';
+  static const String category_search_icon =
+      '$svgPath/category_search_icon.svg';
   static const String category_card_1 = '$svgPath/category_card_1.svg';
   static const String category_card_2 = '$svgPath/category_card_2.svg';
   static const String category_card_3 = '$svgPath/category_card_3.svg';
@@ -82,9 +86,11 @@ class AppSvgs {
   static const String wishlist_icon = '$svgPath/wishlist.svg';
   static const String profile_icon = '$svgPath/profile.svg';
   static const String active_home_icon = '$svgPath/active_home_icon.svg';
-  static const String active_category_icon = '$svgPath/active_category_icon.svg';
+  static const String active_category_icon =
+      '$svgPath/active_category_icon.svg';
   static const String active_cart_icon = '$svgPath/active_cart_icon.svg';
-  static const String active_wishlist_icon = '$svgPath/active_wishlist_icon.svg';
+  static const String active_wishlist_icon =
+      '$svgPath/active_wishlist_icon.svg';
   static const String active_profile_icon = '$svgPath/active_profile_icon.svg';
   static const String profile_bag = '$svgPath/profile_bag.svg';
   static const String profile_star = '$svgPath/profile_star.svg';
@@ -96,7 +102,8 @@ class AppSvgs {
   static const String profile_person = '$svgPath/profile_person.svg';
   static const String profile_privacy = '$svgPath/profile_privacy.svg';
   static const String profile_language = '$svgPath/profile_language.svg';
-  static const String profile_notifications = '$svgPath/profile_notifications.svg';
+  static const String profile_notifications =
+      '$svgPath/profile_notifications.svg';
   static const String profile_help = '$svgPath/profile_help.svg';
   static const String profile_back = '$svgPath/profile_back.svg';
   static const String back = '$svgPath/back.svg';
@@ -110,29 +117,24 @@ class AppSvgs {
   static const String color_edit_profile = '$svgPath/colored_edit_icon.svg';
   static const String profile_cover = '$svgPath/profile_cover.svg';
 
-
-
-
   // Social media icons
   static const String google = '$svgPath/google.svg';
   static const String facebook = '$svgPath/facebook.svg';
   static const String apple = '$svgPath/apple.svg';
-  
+
   // Onboarding icons
   static const String on2_1 = '$svgPath/on2_1.svg';
   static const String on2_2 = '$svgPath/on2_2.svg';
   static const String on2_3 = '$svgPath/on2_3.svg';
-  
+
   // New onboarding icons
   static const String onboardingDot = '$svgPath/onboarding_dot.svg';
-  static const String onboardingDotActive = '$svgPath/onboarding_dot_active.svg';
+  static const String onboardingDotActive =
+      '$svgPath/onboarding_dot_active.svg';
 }
 
 class AppIcons {
   static const String iconPath = 'assets/icons';
 
   static const String filter = '$iconPath/filter.png';
-
-
-
 }

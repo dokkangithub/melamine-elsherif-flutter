@@ -43,8 +43,8 @@ class WishlistProvider extends ChangeNotifier {
     try {
       // Only show loading state if explicitly requested and initial load is not done
       if (showLoading && !_initialLoadComplete) {
-      wishlistState = LoadingState.loading;
-      notifyListeners();
+        wishlistState = LoadingState.loading;
+        notifyListeners();
       }
 
       final items = await getWishlistUseCase();
@@ -57,7 +57,7 @@ class WishlistProvider extends ChangeNotifier {
     } catch (e) {
       // Only update state to error if we were showing loading
       if (showLoading && !_initialLoadComplete) {
-      wishlistState = LoadingState.error;
+        wishlistState = LoadingState.error;
       }
       wishlistError = e.toString();
     } finally {
@@ -112,7 +112,7 @@ class WishlistProvider extends ChangeNotifier {
       id: 0, // Temp ID will be replaced when syncing with backend
       slug: slug,
       name: "Loading...", // Will be updated after sync
-      price: "0",  // Changed from int to String
+      price: "0", // Changed from int to String
       thumbnailImage: "",
       hasVariation: false,
       productId: 0,
@@ -120,13 +120,13 @@ class WishlistProvider extends ChangeNotifier {
       rating: 0,
       ratingCount: 0,
     );
-    
+
     // Add to local list first for immediate UI update
     wishlistItems.add(tempItem);
     _wishlistSlugs.add(slug);
     wishlistStatus[slug] = true;
     notifyListeners();
-    
+
     try {
       // Perform API call in background
       final result = await addToWishlistUseCase(slug);
@@ -139,7 +139,7 @@ class WishlistProvider extends ChangeNotifier {
       wishlistItems.removeWhere((item) => item.slug == slug);
       _wishlistSlugs.remove(slug);
       wishlistStatus[slug] = false;
-      
+
       wishlistError = e.toString();
       notifyListeners();
     }
@@ -150,10 +150,10 @@ class WishlistProvider extends ChangeNotifier {
     wishlistItems.removeWhere((item) => item.slug == slug);
     _wishlistSlugs.remove(slug);
     wishlistStatus[slug] = false;
-    
+
     // Notify immediately for responsive UI
     notifyListeners();
-    
+
     try {
       // Perform API call in background
       final result = await removeFromWishlistUseCase(slug);
@@ -175,10 +175,10 @@ class WishlistProvider extends ChangeNotifier {
 
     // Clear local list immediately
     wishlistItems.clear();
-      wishlistStatus.clear();
-      _wishlistSlugs.clear();
+    wishlistStatus.clear();
+    _wishlistSlugs.clear();
     notifyListeners();
-    
+
     try {
       // Process each item on the server side
       for (var item in backupItems) {

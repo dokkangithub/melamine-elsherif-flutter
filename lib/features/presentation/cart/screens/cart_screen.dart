@@ -21,11 +21,11 @@ import '../widgets/shimmer/cart_screen_shimmer.dart';
 class CartScreen extends StatefulWidget {
   final bool skipDataRefresh;
   final bool isActive;
-  
+
   const CartScreen({
-    super.key, 
+    super.key,
     this.skipDataRefresh = false,
-    this.isActive = false
+    this.isActive = false,
   });
 
   /// Factory constructor for direct navigation from Buy Now
@@ -33,10 +33,10 @@ class CartScreen extends StatefulWidget {
   static Widget forBuyNow(BuildContext context) {
     // Get the cart provider and check if we already have cart data
     final cartProvider = Provider.of<CartProvider>(context, listen: false);
-    
+
     // If we already have cart items, skip the reload
     final skipDataRefresh = cartProvider.cartItems.isNotEmpty;
-    
+
     return CartScreen(skipDataRefresh: skipDataRefresh);
   }
 
@@ -54,11 +54,12 @@ class _CartScreenState extends State<CartScreen> {
   void initState() {
     super.initState();
     _shouldAnimate = widget.isActive;
-    
+
     // Check if we should skip data loading (either through the direct prop or from LayoutProvider)
     final layoutProvider = Provider.of<LayoutProvider>(context, listen: false);
-    final shouldSkipRefresh = widget.skipDataRefresh || layoutProvider.skipCartDataReload;
-    
+    final shouldSkipRefresh =
+        widget.skipDataRefresh || layoutProvider.skipCartDataReload;
+
     // Only fetch data if we're not skipping data refresh
     if (!shouldSkipRefresh) {
       Future.microtask(() {
@@ -69,7 +70,7 @@ class _CartScreenState extends State<CartScreen> {
       });
     }
   }
-  
+
   @override
   void didUpdateWidget(CartScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
@@ -85,7 +86,6 @@ class _CartScreenState extends State<CartScreen> {
     _promoCodeController.dispose();
     super.dispose();
   }
-
 
   Future<void> _applyCoupon(CouponProvider couponProvider) async {
     final couponCode = _promoCodeController.text.trim();
@@ -138,9 +138,9 @@ class _CartScreenState extends State<CartScreen> {
       await context.read<CartProvider>().fetchCartSummary();
 
       if (mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar( SnackBar(content: Text('coupon_removed_successfully'.tr(context))));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('coupon_removed_successfully'.tr(context))),
+        );
       }
     } catch (e) {
       if (mounted) {
@@ -162,7 +162,7 @@ class _CartScreenState extends State<CartScreen> {
     setState(() {
       _itemsBeingDeleted.add(itemId);
     });
-    
+
     // Perform actual deletion
     context.read<CartProvider>().deleteCartItem(itemId).then((_) {
       if (mounted) {
@@ -186,7 +186,9 @@ class _CartScreenState extends State<CartScreen> {
               scrolledUnderElevation: 0,
               title: Text(
                 'my_cart'.tr(context),
-                style: context.displaySmall!.copyWith(fontWeight: FontWeight.w500),
+                style: context.displaySmall!.copyWith(
+                  fontWeight: FontWeight.w500,
+                ),
               ),
               centerTitle: true,
             ),
@@ -197,11 +199,11 @@ class _CartScreenState extends State<CartScreen> {
         // Display empty cart if needed
         if (cartProvider.cartItems.isEmpty) {
           return _shouldAnimate
-            ? FadeIn(
-                duration: const Duration(milliseconds: 600),
-                child: const EmptyCartWidget(),
-              )
-            : const EmptyCartWidget();
+              ? FadeIn(
+                  duration: const Duration(milliseconds: 600),
+                  child: const EmptyCartWidget(),
+                )
+              : const EmptyCartWidget();
         }
 
         // Display cart with items
@@ -212,15 +214,21 @@ class _CartScreenState extends State<CartScreen> {
             elevation: 0,
             scrolledUnderElevation: 0,
             title: _shouldAnimate
-              ? FadeIn(
-                  duration: const Duration(milliseconds: 400),
-                  child: Text('my_cart'.tr(context),
-                    style: context.displaySmall!.copyWith(fontWeight: FontWeight.bold),
+                ? FadeIn(
+                    duration: const Duration(milliseconds: 400),
+                    child: Text(
+                      'my_cart'.tr(context),
+                      style: context.displaySmall!.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  )
+                : Text(
+                    'my_cart'.tr(context),
+                    style: context.displaySmall!.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                )
-              : Text('my_cart'.tr(context),
-                style: context.displaySmall!.copyWith(fontWeight: FontWeight.bold),
-              ),
             centerTitle: true,
           ),
           body: Column(
@@ -242,16 +250,30 @@ class _CartScreenState extends State<CartScreen> {
                     final visibleItems = cartProvider.cartItems
                         .where((item) => !_itemsBeingDeleted.contains(item.id))
                         .toList();
-                    
+
                     final CartItem item = visibleItems[index];
-                    
+
                     // Use a unique key for each cart item based on its ID
                     return _shouldAnimate
-                      ? FadeInUp(
-                          key: ValueKey('cart_animation_${item.id}'),
-                          delay: Duration(milliseconds: 50 * index),
-                          duration: const Duration(milliseconds: 400),
-                          child: SnappableCartItem(
+                        ? FadeInUp(
+                            key: ValueKey('cart_animation_${item.id}'),
+                            delay: Duration(milliseconds: 50 * index),
+                            duration: const Duration(milliseconds: 400),
+                            child: SnappableCartItem(
+                              key: ValueKey('cart_item_${item.id}'),
+                              item: item,
+                              index: index,
+                              onQuantityChanged: (int quantity) {
+                                _updateQuantity(
+                                  cartProvider,
+                                  item.id,
+                                  quantity,
+                                );
+                              },
+                              onDelete: _handleItemDelete,
+                            ),
+                          )
+                        : SnappableCartItem(
                             key: ValueKey('cart_item_${item.id}'),
                             item: item,
                             index: index,
@@ -259,29 +281,19 @@ class _CartScreenState extends State<CartScreen> {
                               _updateQuantity(cartProvider, item.id, quantity);
                             },
                             onDelete: _handleItemDelete,
-                          ),
-                        )
-                      : SnappableCartItem(
-                          key: ValueKey('cart_item_${item.id}'),
-                          item: item,
-                          index: index,
-                          onQuantityChanged: (int quantity) {
-                            _updateQuantity(cartProvider, item.id, quantity);
-                          },
-                          onDelete: _handleItemDelete,
-                        );
+                          );
                   },
                 ),
               ),
 
               // Bottom sections - animate only once
               _shouldAnimate
-                ? FadeInUp(
-                    delay: const Duration(milliseconds: 300),
-                    duration: const Duration(milliseconds: 500),
-                    child: _buildCartSummary(context, cartProvider),
-                  )
-                : _buildCartSummary(context, cartProvider),
+                  ? FadeInUp(
+                      delay: const Duration(milliseconds: 300),
+                      duration: const Duration(milliseconds: 500),
+                      child: _buildCartSummary(context, cartProvider),
+                    )
+                  : _buildCartSummary(context, cartProvider),
             ],
           ),
         );
@@ -292,17 +304,22 @@ class _CartScreenState extends State<CartScreen> {
   void _updateQuantity(CartProvider cartProvider, int itemId, int newQuantity) {
     // Get current item to determine if this is an increment or decrement
     final CartItem? currentItem = cartProvider.cartItems.firstWhere(
-      (item) => item.id == itemId, 
+      (item) => item.id == itemId,
       orElse: () => null as CartItem,
     );
-    final bool isDecrement = currentItem != null && newQuantity < currentItem.quantity;
-    
+    final bool isDecrement =
+        currentItem != null && newQuantity < currentItem.quantity;
+
     // Create a list of all cart IDs
     final cartIds = itemId.toString(); // Only update this specific item
     final quantitiesStr = newQuantity.toString(); // New quantity
 
     // Update cart quantities with operation type
-    cartProvider.updateCartQuantities(cartIds, quantitiesStr, isDecrement: isDecrement);
+    cartProvider.updateCartQuantities(
+      cartIds,
+      quantitiesStr,
+      isDecrement: isDecrement,
+    );
   }
 
   Widget _buildCartSummary(BuildContext context, CartProvider cartProvider) {
@@ -351,10 +368,7 @@ class _CartScreenState extends State<CartScreen> {
                 cartProvider.cartSummary?.couponCode;
 
             return Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 8,
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -365,26 +379,17 @@ class _CartScreenState extends State<CartScreen> {
                       decoration: BoxDecoration(
                         color: Colors.green.shade50,
                         borderRadius: BorderRadius.circular(8),
-                        border: Border.all(
-                          color: Colors.green.shade200,
-                        ),
+                        border: Border.all(color: Colors.green.shade200),
                       ),
                       child: Row(
                         children: [
-                          const Icon(
-                            Icons.check_circle,
-                            color: Colors.green,
-                          ),
+                          const Icon(Icons.check_circle, color: Colors.green),
                           const SizedBox(width: 8),
                           Expanded(
                             child: Column(
-                              crossAxisAlignment:
-                                  CrossAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  couponCode,
-                                  style: context.titleMedium,
-                                ),
+                                Text(couponCode, style: context.titleMedium),
                                 Text(
                                   'coupon_applied'.tr(context),
                                   style: context.titleSmall,
@@ -393,11 +398,9 @@ class _CartScreenState extends State<CartScreen> {
                             ),
                           ),
                           TextButton(
-                            onPressed:
-                                _isApplyingCoupon
-                                    ? null
-                                    : () =>
-                                        _removeCoupon(couponProvider),
+                            onPressed: _isApplyingCoupon
+                                ? null
+                                : () => _removeCoupon(couponProvider),
                             style: TextButton.styleFrom(
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 8,
@@ -427,23 +430,18 @@ class _CartScreenState extends State<CartScreen> {
                         ),
                         const SizedBox(width: 10),
                         TextButton(
-                          onPressed:
-                              _isApplyingCoupon
-                                  ? null
-                                  : () =>
-                                      _applyCoupon(couponProvider),
-                          child:
-                              _isApplyingCoupon
-                                  ? const CustomLoadingWidget()
-                                  : Text(
-                                    'apply'.tr(context),
-                                    style: context.titleMedium!
-                                        .copyWith(
-                                          color:
-                                              AppTheme.primaryColor,
-                                          fontWeight: FontWeight.w800,
-                                        ),
+                          onPressed: _isApplyingCoupon
+                              ? null
+                              : () => _applyCoupon(couponProvider),
+                          child: _isApplyingCoupon
+                              ? const CustomLoadingWidget()
+                              : Text(
+                                  'apply'.tr(context),
+                                  style: context.titleMedium!.copyWith(
+                                    color: AppTheme.primaryColor,
+                                    fontWeight: FontWeight.w800,
                                   ),
+                                ),
                         ),
                       ],
                     ),
@@ -455,18 +453,12 @@ class _CartScreenState extends State<CartScreen> {
 
         // Checkout Button
         Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 18,
-            vertical: 8,
-          ),
+          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
           child: CustomButton(
             text: 'proceed_to_checkout'.tr(context),
             fullWidth: true,
             onPressed: () {
-              AppRoutes.navigateTo(
-                context,
-                AppRoutes.newCheckoutScreen,
-              );
+              AppRoutes.navigateTo(context, AppRoutes.newCheckoutScreen);
             },
           ),
         ),
@@ -477,11 +469,7 @@ class _CartScreenState extends State<CartScreen> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(
-                Icons.lock_outline,
-                size: 14,
-                color: Colors.grey[600],
-              ),
+              Icon(Icons.lock_outline, size: 14, color: Colors.grey[600]),
               const SizedBox(width: 6),
               Text('secure_checkout'.tr(context), style: context.bodySmall),
             ],
@@ -508,12 +496,11 @@ class _CartScreenState extends State<CartScreen> {
             style: context.titleMedium!.copyWith(
               color: textColor ?? AppTheme.black,
               fontWeight: isBold ? FontWeight.w800 : FontWeight.w500,
-              fontFamily:  GoogleFonts.inter().fontFamily,
+              fontFamily: GoogleFonts.inter().fontFamily,
             ),
           ),
         ],
       ),
     );
   }
-
 }

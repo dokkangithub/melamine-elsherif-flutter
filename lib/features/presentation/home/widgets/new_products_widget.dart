@@ -64,8 +64,10 @@ class NewProductsWidget extends StatelessWidget {
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
                 itemCount: products.length,
-                itemBuilder:
-                    (context, index) => ProductCard(product: products[index],isOutlinedAddToCart: true),
+                itemBuilder: (context, index) => ProductCard(
+                  product: products[index],
+                  isOutlinedAddToCart: true,
+                ),
               ),
             ),
           ],
@@ -73,7 +75,6 @@ class NewProductsWidget extends StatelessWidget {
       },
     );
   }
-
 
   Widget _buildEmptyState(BuildContext context, String message) {
     return const SizedBox.shrink();

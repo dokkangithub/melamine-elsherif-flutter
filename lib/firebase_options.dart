@@ -63,9 +63,10 @@ class DefaultFirebaseOptions {
     messagingSenderId: '113857629873',
     projectId: 'melamine-elsherif',
     storageBucket: 'melamine-elsherif.firebasestorage.app',
-    androidClientId: '113857629873-fv0hcu3koscqj0q7qj5lojnidv4e1jkd.apps.googleusercontent.com',
-    iosClientId: '113857629873-05nis5urrinr76qbmh65blrjun5p9iei.apps.googleusercontent.com',
+    androidClientId:
+        '113857629873-fv0hcu3koscqj0q7qj5lojnidv4e1jkd.apps.googleusercontent.com',
+    iosClientId:
+        '113857629873-05nis5urrinr76qbmh65blrjun5p9iei.apps.googleusercontent.com',
     iosBundleId: 'com.melamine.elsherif',
   );
-
 }

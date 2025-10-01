@@ -29,11 +29,16 @@ class CustomProductCardForAllProducts extends StatelessWidget {
       if (i < fullStars) {
         stars.add(const Icon(Icons.star, color: starColor, size: starSize));
       } else if (i == fullStars && remainder >= 0.25) {
-        stars.add(const Icon(Icons.star_half, color: starColor, size: starSize));
+        stars.add(
+          const Icon(Icons.star_half, color: starColor, size: starSize),
+        );
       } else {
-        stars.add(const Icon(Icons.star_border, color: starColor, size: starSize));
+        stars.add(
+          const Icon(Icons.star_border, color: starColor, size: starSize),
+        );
       }
-      if (i < 4) stars.add(const SizedBox(width: 1.0)); // Reduced spacing between stars
+      if (i < 4)
+        stars.add(const SizedBox(width: 1.0)); // Reduced spacing between stars
     }
     return Row(mainAxisSize: MainAxisSize.min, children: stars);
   }
@@ -45,19 +50,20 @@ class CustomProductCardForAllProducts extends StatelessWidget {
 
     return InkWell(
       onTap: () {
-        product.setProduct?AppRoutes.navigateTo(
-          context,
-          AppRoutes.setProductDetailsScreen,
-          arguments: {'slug': product.slug},
-        ):
-        AppRoutes.navigateTo(
-          context,
-          AppRoutes.productDetailScreen,
-          arguments: {'slug': product.slug},
-        );
+        product.setProduct
+            ? AppRoutes.navigateTo(
+                context,
+                AppRoutes.setProductDetailsScreen,
+                arguments: {'slug': product.slug},
+              )
+            : AppRoutes.navigateTo(
+                context,
+                AppRoutes.productDetailScreen,
+                arguments: {'slug': product.slug},
+              );
       },
       child: Container(
-        width: context.responsive(170), 
+        width: context.responsive(170),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(0),
@@ -81,10 +87,13 @@ class CustomProductCardForAllProducts extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 2.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min, // Important for Column within Column
+                mainAxisSize:
+                    MainAxisSize.min, // Important for Column within Column
                 children: [
                   Align(
-                    alignment: currentTextDirection == TextDirection.rtl ? Alignment.centerRight : Alignment.centerLeft,
+                    alignment: currentTextDirection == TextDirection.rtl
+                        ? Alignment.centerRight
+                        : Alignment.centerLeft,
                     child: Text(
                       product.name,
                       style: context.titleLarge?.copyWith(
@@ -94,7 +103,9 @@ class CustomProductCardForAllProducts extends StatelessWidget {
                       ),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
-                      textAlign: currentTextDirection == TextDirection.rtl ? TextAlign.right : TextAlign.left,
+                      textAlign: currentTextDirection == TextDirection.rtl
+                          ? TextAlign.right
+                          : TextAlign.left,
                       textDirection: currentTextDirection,
                     ),
                   ),
@@ -105,7 +116,9 @@ class CustomProductCardForAllProducts extends StatelessWidget {
                   const SizedBox(height: 2),
 
                   Align(
-                    alignment: currentTextDirection == TextDirection.rtl ? Alignment.centerRight : Alignment.centerLeft,
+                    alignment: currentTextDirection == TextDirection.rtl
+                        ? Alignment.centerRight
+                        : Alignment.centerLeft,
                     child: Row(
                       spacing: 4,
                       children: [
@@ -115,19 +128,26 @@ class CustomProductCardForAllProducts extends StatelessWidget {
                             fontWeight: FontWeight.w900,
                             color: AppTheme.primaryColor,
                           ),
-                          textAlign: currentTextDirection == TextDirection.rtl ? TextAlign.right : TextAlign.left,
+                          textAlign: currentTextDirection == TextDirection.rtl
+                              ? TextAlign.right
+                              : TextAlign.left,
                           textDirection: currentTextDirection,
                         ),
-                        product.hasDiscount? Text(
-                          product.mainPrice,
-                          style: context.titleSmall?.copyWith(
-                            fontWeight: FontWeight.w400,
-                            color: AppTheme.darkDividerColor,
-                            decoration: TextDecoration.lineThrough
-                          ),
-                          textAlign: currentTextDirection == TextDirection.rtl ? TextAlign.right : TextAlign.left,
-                          textDirection: currentTextDirection,
-                        ):const SizedBox.shrink(),
+                        product.hasDiscount
+                            ? Text(
+                                product.mainPrice,
+                                style: context.titleSmall?.copyWith(
+                                  fontWeight: FontWeight.w400,
+                                  color: AppTheme.darkDividerColor,
+                                  decoration: TextDecoration.lineThrough,
+                                ),
+                                textAlign:
+                                    currentTextDirection == TextDirection.rtl
+                                    ? TextAlign.right
+                                    : TextAlign.left,
+                                textDirection: currentTextDirection,
+                              )
+                            : const SizedBox.shrink(),
                       ],
                     ),
                   ),
@@ -139,4 +159,4 @@ class CustomProductCardForAllProducts extends StatelessWidget {
       ),
     );
   }
-} 
+}

@@ -1,5 +1,3 @@
-
-
 import 'package:melamine_elsherif/features/data/auth/models/user_model.dart';
 
 class AuthResponseModel {

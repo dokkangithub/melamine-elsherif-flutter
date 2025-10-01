@@ -10,4 +10,4 @@ extension ColorExtension on Color {
       alpha ?? this.opacity,
     );
   }
-} 
+}

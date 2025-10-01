@@ -12,23 +12,24 @@ final sl = GetIt.instance;
 
 Future<void> initWalletDependencies() async {
   // Provider
-  sl.registerFactory(() => WalletProvider(
-        getWalletBalanceUseCase: sl(),
-        getWalletHistoryUseCase: sl(),
-      ));
+  sl.registerFactory(
+    () => WalletProvider(
+      getWalletBalanceUseCase: sl(),
+      getWalletHistoryUseCase: sl(),
+    ),
+  );
 
   // Use cases
   sl.registerLazySingleton(() => GetWalletBalanceUseCase(sl()));
   sl.registerLazySingleton(() => GetWalletHistoryUseCase(sl()));
 
   // Repository
-  sl.registerLazySingleton<WalletRepository>(() => WalletRepositoryImpl(
-        dataSource: sl(),
-        networkInfo: sl(),
-      ));
+  sl.registerLazySingleton<WalletRepository>(
+    () => WalletRepositoryImpl(dataSource: sl(), networkInfo: sl()),
+  );
 
   // Data sources
-  sl.registerLazySingleton<WalletDataSource>(() => WalletDataSourceImpl(
-        sl<ApiProvider>(),
-      ));
-} 
+  sl.registerLazySingleton<WalletDataSource>(
+    () => WalletDataSourceImpl(sl<ApiProvider>()),
+  );
+}

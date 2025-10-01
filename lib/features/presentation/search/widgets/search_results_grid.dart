@@ -25,7 +25,6 @@ class SearchResultsGrid extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<SearchProvider>(
       builder: (context, searchProvider, child) {
-
         if (searchProvider.filteredProductsState == LoadingState.loading &&
             searchProvider.filteredProducts.isEmpty) {
           return const Center(child: CustomLoadingWidget());
@@ -41,11 +40,10 @@ class SearchResultsGrid extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 ElevatedButton(
-                  onPressed:
-                      () => searchProvider.fetchFilteredProducts(
-                        refresh: true,
-                        name: searchQuery,
-                      ),
+                  onPressed: () => searchProvider.fetchFilteredProducts(
+                    refresh: true,
+                    name: searchQuery,
+                  ),
                   child: Text('retry'.tr(context)),
                 ),
               ],
@@ -71,7 +69,9 @@ class SearchResultsGrid extends StatelessWidget {
             ),
           );
         }
-        final filteredProducts = searchProvider.filteredProducts.where((product) => product.published == 1).toList();
+        final filteredProducts = searchProvider.filteredProducts
+            .where((product) => product.published == 1)
+            .toList();
 
         return Padding(
           padding: const EdgeInsets.all(8.0),
@@ -81,7 +81,12 @@ class SearchResultsGrid extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   const SizedBox(width: 8),
-                  Text('search_products'.tr(context),style: context.titleLarge!.copyWith(fontWeight: FontWeight.w700)),
+                  Text(
+                    'search_products'.tr(context),
+                    style: context.titleLarge!.copyWith(
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
                 ],
               ),
               const SizedBox(height: 10),
@@ -91,7 +96,8 @@ class SearchResultsGrid extends StatelessWidget {
                     if (scrollInfo.metrics.pixels ==
                             scrollInfo.metrics.maxScrollExtent &&
                         searchProvider.hasMoreFilteredProducts &&
-                        searchProvider.filteredProductsState != LoadingState.loading) {
+                        searchProvider.filteredProductsState !=
+                            LoadingState.loading) {
                       searchProvider.fetchFilteredProducts(name: searchQuery);
                     }
                     return true;
@@ -99,12 +105,13 @@ class SearchResultsGrid extends StatelessWidget {
                   child: GridView.builder(
                     controller: scrollController,
                     padding: const EdgeInsets.all(8),
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      childAspectRatio: 0.7,
-                      crossAxisSpacing: 10,
-                      mainAxisSpacing: 10,
-                    ),
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          childAspectRatio: 0.7,
+                          crossAxisSpacing: 10,
+                          mainAxisSpacing: 10,
+                        ),
                     itemCount: filteredProducts.length,
                     itemBuilder: (context, index) {
                       final product = filteredProducts[index];
@@ -114,15 +121,18 @@ class SearchResultsGrid extends StatelessWidget {
                 ),
               ),
               // Show loading text at bottom when loading more products
-              if (searchProvider.filteredProductsState == LoadingState.loading && 
+              if (searchProvider.filteredProductsState ==
+                      LoadingState.loading &&
                   searchProvider.filteredProducts.isNotEmpty)
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 16.0),
                   child: Text(
                     'loading_more_products'.tr(context),
-                    style: context.titleSmall?.copyWith(color: AppTheme.primaryColor),
+                    style: context.titleSmall?.copyWith(
+                      color: AppTheme.primaryColor,
+                    ),
+                  ),
                 ),
-              ),
             ],
           ),
         );

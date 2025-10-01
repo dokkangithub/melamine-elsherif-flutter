@@ -22,16 +22,14 @@ class ProfileMenuItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bool isRtl = Directionality.of(context) == TextDirection.rtl;
-    
+
     return InkWell(
       onTap: onTap,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
         child: Row(
           children: [
-            CustomImage(
-              assetPath: icon,
-            ),
+            CustomImage(assetPath: icon),
             const SizedBox(width: 16),
             Expanded(
               child: Text(
@@ -53,4 +51,4 @@ class ProfileMenuItem extends StatelessWidget {
       ),
     );
   }
-} 
+}

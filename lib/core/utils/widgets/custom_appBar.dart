@@ -4,7 +4,6 @@ import 'package:melamine_elsherif/core/utils/extension/text_theme_extension.dart
 
 import '../../config/themes.dart/theme.dart';
 
-
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool isDark;
   final String? title;
@@ -14,7 +13,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Color? statusBarColor;
   final Brightness? statusBarIcons;
 
-  const CustomAppBar({super.key,
+  const CustomAppBar({
+    super.key,
     this.isDark = false,
     this.title,
     this.leading,
@@ -27,7 +27,14 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: title != null ? Text(title!,style: context.headlineSmall!.copyWith(fontWeight: FontWeight.w700)) : null,
+      title: title != null
+          ? Text(
+              title!,
+              style: context.headlineSmall!.copyWith(
+                fontWeight: FontWeight.w700,
+              ),
+            )
+          : null,
       leading: leading,
       actions: actions,
       backgroundColor: isDark ? Colors.black : AppTheme.white,
@@ -37,8 +44,10 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           : 0.0,
       scrolledUnderElevation: 0,
       systemOverlayStyle: SystemUiOverlayStyle(
-        statusBarColor: statusBarColor ?? (isDark ? Colors.black : AppTheme.white),
-        statusBarIconBrightness: statusBarIcons ?? (isDark ? Brightness.light : Brightness.dark),
+        statusBarColor:
+            statusBarColor ?? (isDark ? Colors.black : AppTheme.white),
+        statusBarIconBrightness:
+            statusBarIcons ?? (isDark ? Brightness.light : Brightness.dark),
       ),
     );
   }

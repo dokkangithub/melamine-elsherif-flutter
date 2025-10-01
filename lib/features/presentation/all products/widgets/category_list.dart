@@ -25,13 +25,16 @@ class CategoryList extends StatelessWidget {
     if (categoryProvider.filterPageCategoriesState == LoadingState.error) {
       return SizedBox(
         height: 50,
-        child: Center(child: Text('Error: ${categoryProvider.errorMessage}'.tr(context))),
+        child: Center(
+          child: Text('Error: ${categoryProvider.errorMessage}'.tr(context)),
+        ),
       );
     }
 
-    final categories = categoryProvider.filterPageCategoriesResponse?.data
-        .map((c) => {'name': c.name, 'id': c.id})
-        .toList() ??
+    final categories =
+        categoryProvider.filterPageCategoriesResponse?.data
+            .map((c) => {'name': c.name, 'id': c.id})
+            .toList() ??
         [];
 
     return Container(
@@ -68,7 +71,9 @@ class CategoryList extends StatelessWidget {
                       category['name'] as String,
                       style: TextStyle(
                         color: isSelected ? Colors.white : Colors.black87,
-                        fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                        fontWeight: isSelected
+                            ? FontWeight.bold
+                            : FontWeight.normal,
                       ),
                     ),
                   ),

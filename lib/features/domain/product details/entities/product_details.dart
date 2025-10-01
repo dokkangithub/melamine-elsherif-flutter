@@ -70,10 +70,7 @@ class Photo {
   final String variant;
   final String path;
 
-  Photo({
-    required this.variant,
-    required this.path,
-  });
+  Photo({required this.variant, required this.path});
 }
 
 class Brand {

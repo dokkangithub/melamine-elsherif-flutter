@@ -4,10 +4,7 @@ class ShippingUpdateResponseModel {
   final bool result;
   final String message;
 
-  ShippingUpdateResponseModel({
-    required this.result,
-    required this.message,
-  });
+  ShippingUpdateResponseModel({required this.result, required this.message});
 
   factory ShippingUpdateResponseModel.fromJson(Map<String, dynamic> json) {
     return ShippingUpdateResponseModel(
@@ -17,16 +14,10 @@ class ShippingUpdateResponseModel {
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'result': result,
-      'message': message,
-    };
+    return {'result': result, 'message': message};
   }
-  
+
   ShippingUpdateResponse toEntity() {
-    return ShippingUpdateResponse(
-      result: result,
-      message: message,
-    );
+    return ShippingUpdateResponse(result: result, message: message);
   }
 }

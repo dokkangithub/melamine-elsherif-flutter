@@ -77,10 +77,7 @@ class Category extends Equatable {
   final int id;
   final String name;
 
-  const Category({
-    required this.id,
-    required this.name,
-  });
+  const Category({required this.id, required this.name});
 
   @override
   List<Object?> get props => [id, name];
@@ -126,9 +123,7 @@ class ProductStock extends Equatable {
 class ProductLinks extends Equatable {
   final String details;
 
-  const ProductLinks({
-    required this.details,
-  });
+  const ProductLinks({required this.details});
 
   @override
   List<Object?> get props => [details];
@@ -150,13 +145,7 @@ class ProductsResponse extends Equatable {
   });
 
   @override
-  List<Object?> get props => [
-    data,
-    links,
-    meta,
-    success,
-    status,
-  ];
+  List<Object?> get props => [data, links, meta, success, status];
 }
 
 class ProductResponseLinks extends Equatable {
@@ -215,11 +204,7 @@ class Link extends Equatable {
   final String label;
   final bool active;
 
-  const Link({
-    required this.url,
-    required this.label,
-    required this.active,
-  });
+  const Link({required this.url, required this.label, required this.active});
 
   @override
   List<Object?> get props => [url, label, active];

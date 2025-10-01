@@ -60,7 +60,11 @@ class AddressRepositoryImpl implements AddressRepository {
   }
 
   @override
-  Future<void> updateAddressLocation(int id, double latitude, double longitude) async {
+  Future<void> updateAddressLocation(
+    int id,
+    double latitude,
+    double longitude,
+  ) async {
     await remoteDataSource.updateAddressLocation(id, latitude, longitude);
   }
 
@@ -75,14 +79,23 @@ class AddressRepositoryImpl implements AddressRepository {
   }
 
   @override
-  Future<List<Location>> getCitiesByState(int stateId, {String name = ''}) async {
+  Future<List<Location>> getCitiesByState(
+    int stateId, {
+    String name = '',
+  }) async {
     final models = await remoteDataSource.getCitiesByState(stateId, name: name);
     return models.map((model) => model.toEntity()).toList();
   }
 
   @override
-  Future<List<Location>> getStatesByCountry(int countryId, {String name = ''}) async {
-    final models = await remoteDataSource.getStatesByCountry(countryId, name: name);
+  Future<List<Location>> getStatesByCountry(
+    int countryId, {
+    String name = '',
+  }) async {
+    final models = await remoteDataSource.getStatesByCountry(
+      countryId,
+      name: name,
+    );
     return models.map((model) => model.toEntity()).toList();
   }
 
@@ -102,6 +115,4 @@ class AddressRepositoryImpl implements AddressRepository {
   Future<void> updateAddressInCart(int addressId) async {
     await remoteDataSource.updateAddressInCart(addressId);
   }
-
-
 }

@@ -34,7 +34,8 @@ class AllProductsByTypeScreen extends StatefulWidget {
   });
 
   @override
-  _AllProductsByTypeScreenState createState() => _AllProductsByTypeScreenState();
+  _AllProductsByTypeScreenState createState() =>
+      _AllProductsByTypeScreenState();
 }
 
 class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
@@ -55,12 +56,16 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
     super.initState();
     _scrollController.addListener(_scrollListener);
     _selectedProductType = widget.productType;
-    
-    print("PAGINATION_DEBUG: Initializing screen with product type: ${_productTypeNames[_selectedProductType]}");
+
+    print(
+      "PAGINATION_DEBUG: Initializing screen with product type: ${_productTypeNames[_selectedProductType]}",
+    );
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final homeProvider = Provider.of<HomeProvider>(context, listen: false);
-      print("PAGINATION_DEBUG: Initial fetch for ${_productTypeNames[_selectedProductType]}");
+      print(
+        "PAGINATION_DEBUG: Initial fetch for ${_productTypeNames[_selectedProductType]}",
+      );
       setState(() => _isLoading = true);
       _fetchProducts(homeProvider, refresh: true).then((_) {
         if (mounted) {
@@ -78,35 +83,41 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
   }
 
   void _scrollListener() {
-    if (!_isLoading && 
-        _scrollController.position.pixels >= 
-        _scrollController.position.maxScrollExtent * 0.7) {
-      print("PAGINATION_DEBUG: Scroll threshold reached (70%), loading more products");
+    if (!_isLoading &&
+        _scrollController.position.pixels >=
+            _scrollController.position.maxScrollExtent * 0.7) {
+      print(
+        "PAGINATION_DEBUG: Scroll threshold reached (70%), loading more products",
+      );
       _loadMoreProducts();
     }
   }
 
   Future<void> _loadMoreProducts() async {
     final provider = Provider.of<HomeProvider>(context, listen: false);
-    
+
     if (_isLoading) {
       print("PAGINATION_DEBUG: Already loading, skipping request");
       return;
     }
-    
+
     if (!_hasMoreProducts(provider)) {
-      print("PAGINATION_DEBUG: No more products to load for ${_productTypeNames[_selectedProductType]}");
+      print(
+        "PAGINATION_DEBUG: No more products to load for ${_productTypeNames[_selectedProductType]}",
+      );
       return;
     }
-    
-    print("PAGINATION_DEBUG: Loading more ${_productTypeNames[_selectedProductType]} products");
-    
+
+    print(
+      "PAGINATION_DEBUG: Loading more ${_productTypeNames[_selectedProductType]} products",
+    );
+
     // Set loading state and rebuild UI immediately
     setState(() => _isLoading = true);
-    
+
     // Use a microtask to ensure the UI updates before the potentially heavy operation
     await Future.microtask(() => null);
-    
+
     try {
       await _fetchProducts(provider, refresh: false);
       print("PAGINATION_DEBUG: Successfully loaded more products");
@@ -123,8 +134,10 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
     HomeProvider provider, {
     bool refresh = false,
   }) async {
-    print("PAGINATION_DEBUG: Fetching products for ${_productTypeNames[_selectedProductType]}, refresh: $refresh");
-    
+    print(
+      "PAGINATION_DEBUG: Fetching products for ${_productTypeNames[_selectedProductType]}, refresh: $refresh",
+    );
+
     try {
       switch (_selectedProductType) {
         case ProductType.all:
@@ -143,20 +156,28 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
           await provider.fetchFlashDealProducts(refresh: refresh);
           break;
       }
-      
+
       // Check if we still have more products after this fetch
       if (mounted) {
-        print("PAGINATION_DEBUG: After fetching, hasMoreProducts: ${_hasMoreProducts(provider)}");
-        
+        print(
+          "PAGINATION_DEBUG: After fetching, hasMoreProducts: ${_hasMoreProducts(provider)}",
+        );
+
         // Check if we have enough published products for all product types
         List<Product> products = _getProducts(provider);
-        List<Product> publishedProducts = products.where((product) => product.published == 1).toList();
-        
-        print("PAGINATION_DEBUG: Total products: ${products.length}, Published products: ${publishedProducts.length}");
-        
+        List<Product> publishedProducts = products
+            .where((product) => product.published == 1)
+            .toList();
+
+        print(
+          "PAGINATION_DEBUG: Total products: ${products.length}, Published products: ${publishedProducts.length}",
+        );
+
         // If we have very few published products but there are more pages, automatically load more
         if (publishedProducts.length < 4 && _hasMoreProducts(provider)) {
-          print("PAGINATION_DEBUG: Not enough published products, loading more automatically");
+          print(
+            "PAGINATION_DEBUG: Not enough published products, loading more automatically",
+          );
           // Add a small delay to avoid UI freezes
           await Future.delayed(const Duration(milliseconds: 300));
           await _fetchProducts(provider, refresh: false);
@@ -169,7 +190,7 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
 
   bool _hasMoreProducts(HomeProvider provider) {
     bool hasMore = false;
-    
+
     switch (_selectedProductType) {
       case ProductType.all:
         hasMore = provider.hasMoreAllProducts;
@@ -187,8 +208,10 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
         hasMore = false; // No pagination for flash deal
         break;
     }
-    
-    print("PAGINATION_DEBUG: hasMoreProducts for ${_productTypeNames[_selectedProductType]}: $hasMore");
+
+    print(
+      "PAGINATION_DEBUG: hasMoreProducts for ${_productTypeNames[_selectedProductType]}: $hasMore",
+    );
     return hasMore;
   }
 
@@ -244,7 +267,7 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
         final products = _getProducts(homeProvider);
         final state = _getLoadingState(homeProvider);
         final error = _getErrorMessage(homeProvider);
-        
+
         return Scaffold(
           backgroundColor: Colors.white,
           appBar: _buildAppBar(context),
@@ -252,7 +275,7 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
             children: [
               // Category tabs
               _buildCategoryTabs(homeProvider),
-              
+
               // Products grid
               Expanded(
                 child: FadeInUp(
@@ -275,7 +298,7 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
   AppBar _buildAppBar(BuildContext context) {
     // Check if the current locale is RTL
     final bool isRTL = Directionality.of(context) == TextDirection.rtl;
-    
+
     return AppBar(
       backgroundColor: Colors.white,
       elevation: 0,
@@ -285,9 +308,7 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
       ),
       centerTitle: true,
       // Use custom back button with proper RTL support
-      leading: CustomBackButton(
-        respectDirection: isRTL,
-      ),
+      leading: CustomBackButton(respectDirection: isRTL),
       actions: [
         IconButton(
           icon: const Icon(Icons.search, color: Colors.black),
@@ -304,9 +325,7 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
     return Container(
       height: 50,
       decoration: const BoxDecoration(
-        border: Border(
-          bottom: BorderSide(color: Colors.black12, width: 1),
-        ),
+        border: Border(bottom: BorderSide(color: Colors.black12, width: 1)),
       ),
       child: FadeInDown(
         duration: const Duration(milliseconds: 500),
@@ -314,8 +333,14 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
           scrollDirection: Axis.horizontal,
           children: [
             _buildCategoryTab('all'.tr(context), ProductType.all),
-            _buildCategoryTab('best_sellers'.tr(context), ProductType.bestSelling),
-            _buildCategoryTab('new_arrivals'.tr(context), ProductType.newArrival),
+            _buildCategoryTab(
+              'best_sellers'.tr(context),
+              ProductType.bestSelling,
+            ),
+            _buildCategoryTab(
+              'new_arrivals'.tr(context),
+              ProductType.newArrival,
+            ),
             _buildCategoryTab('featured'.tr(context), ProductType.featured),
             _buildCategoryTab('deals'.tr(context), ProductType.flashDeal),
           ],
@@ -323,19 +348,21 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
       ),
     );
   }
-  
+
   Widget _buildCategoryTab(String title, ProductType type) {
     final bool isSelected = _selectedProductType == type;
-    
+
     return GestureDetector(
       onTap: () {
         if (_selectedProductType != type) {
-          print("PAGINATION_DEBUG: Switching tab from ${_productTypeNames[_selectedProductType]} to ${_productTypeNames[type]}");
+          print(
+            "PAGINATION_DEBUG: Switching tab from ${_productTypeNames[_selectedProductType]} to ${_productTypeNames[type]}",
+          );
           setState(() {
             _selectedProductType = type;
             _isLoading = false; // Reset loading state
           });
-          
+
           // Scroll to top when changing tabs
           if (_scrollController.hasClients) {
             _scrollController.animateTo(
@@ -344,8 +371,11 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
               curve: Curves.easeOut,
             );
           }
-          
-          _fetchProducts(Provider.of<HomeProvider>(context, listen: false), refresh: true);
+
+          _fetchProducts(
+            Provider.of<HomeProvider>(context, listen: false),
+            refresh: true,
+          );
         }
       },
       child: Container(
@@ -362,9 +392,11 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
         child: Text(
           title,
           style: context.titleSmall!.copyWith(
-            color: isSelected ? AppTheme.primaryColor : AppTheme.darkDividerColor,
+            color: isSelected
+                ? AppTheme.primaryColor
+                : AppTheme.darkDividerColor,
             fontWeight: isSelected ? FontWeight.w900 : FontWeight.w500,
-          )
+          ),
         ),
       ),
     );
@@ -376,8 +408,10 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
     String error,
     HomeProvider homeProvider,
   ) {
-    print("PAGINATION_DEBUG: Building grid - LoadingState: $state, Products count: ${products.length}, isLoading: $_isLoading");
-    
+    print(
+      "PAGINATION_DEBUG: Building grid - LoadingState: $state, Products count: ${products.length}, isLoading: $_isLoading",
+    );
+
     if (state == LoadingState.loading && products.isEmpty) {
       return const Center(child: ProductsGridShimmer());
     }
@@ -405,22 +439,29 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
     }
 
     // Filter out all products where published is 0 for all product types
-    List<Product> filteredProducts = products.where((product) => product.published == 1).toList();
-    
-    print("PAGINATION_DEBUG: Filtered products count: ${filteredProducts.length}");
+    List<Product> filteredProducts = products
+        .where((product) => product.published == 1)
+        .toList();
+
+    print(
+      "PAGINATION_DEBUG: Filtered products count: ${filteredProducts.length}",
+    );
 
     // If we've filtered out all products but there are more to load, try loading more
-    if (filteredProducts.isEmpty && products.isNotEmpty && _hasMoreProducts(homeProvider)) {
-      print("PAGINATION_DEBUG: All products were filtered out, trying to load more");
+    if (filteredProducts.isEmpty &&
+        products.isNotEmpty &&
+        _hasMoreProducts(homeProvider)) {
+      print(
+        "PAGINATION_DEBUG: All products were filtered out, trying to load more",
+      );
       _loadMoreProducts();
       return const Center(child: ProductsGridShimmer());
     }
-    
+
     // If we've filtered out all products and there are no more to load, show empty state
     if (filteredProducts.isEmpty) {
       return const Center(child: CustomEmptyWidget());
     }
-
 
     return Column(
       children: [
@@ -437,7 +478,7 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
 
               // Alternate item heights for visual variety
               final bool isEven = index % 2 == 0;
-              
+
               return _buildProductCard(context, product, isEven);
             },
           ),
@@ -463,10 +504,10 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
       ],
     );
   }
-  
+
   Widget _buildProductCard(BuildContext context, Product product, bool isEven) {
     final bool isRTL = Directionality.of(context) == TextDirection.rtl;
-    
+
     return InkWell(
       onTap: () {
         AppRoutes.navigateTo(
@@ -508,10 +549,15 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
                   left: isRTL ? 8 : null,
                   child: Consumer<WishlistProvider>(
                     builder: (context, wishlistProvider, _) {
-                      final isInWishlist = wishlistProvider.isProductInWishlist(product.slug);
+                      final isInWishlist = wishlistProvider.isProductInWishlist(
+                        product.slug,
+                      );
                       return GestureDetector(
                         onTap: () {
-                          AppFunctions.toggleWishlistStatus(context, product.slug);
+                          AppFunctions.toggleWishlistStatus(
+                            context,
+                            product.slug,
+                          );
                         },
                         child: Container(
                           padding: const EdgeInsets.all(4),
@@ -520,7 +566,9 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
                             color: Colors.white,
                           ),
                           child: Icon(
-                            isInWishlist ? Icons.favorite : Icons.favorite_border,
+                            isInWishlist
+                                ? Icons.favorite
+                                : Icons.favorite_border,
                             color: AppTheme.primaryColor,
                             size: 20,
                           ),
@@ -531,7 +579,7 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
                 ),
               ],
             ),
-            
+
             // Product details
             Padding(
               padding: const EdgeInsets.all(8.0),
@@ -540,7 +588,10 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
                 children: [
                   Text(
                     product.name,
-                    style: context.titleMedium!.copyWith(color: AppTheme.darkDividerColor, fontWeight: FontWeight.w600),
+                    style: context.titleMedium!.copyWith(
+                      color: AppTheme.darkDividerColor,
+                      fontWeight: FontWeight.w600,
+                    ),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     textAlign: isRTL ? TextAlign.right : TextAlign.left,
@@ -548,17 +599,28 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
                   const SizedBox(height: 4),
                   Row(
                     // In RTL mode, we need to reverse the order of the price elements
-                    textDirection: isRTL ? TextDirection.rtl : TextDirection.ltr,
+                    textDirection: isRTL
+                        ? TextDirection.rtl
+                        : TextDirection.ltr,
                     children: [
                       Text(
                         product.discountedPrice,
-                        style: context.titleLarge!.copyWith(color: AppTheme.primaryColor, fontWeight: FontWeight.w900),
+                        style: context.titleLarge!.copyWith(
+                          color: AppTheme.primaryColor,
+                          fontWeight: FontWeight.w900,
+                        ),
                       ),
                       const SizedBox(width: 6),
-                      product.hasDiscount ? Text(
-                        product.mainPrice,
-                        style: context.titleMedium!.copyWith(color: AppTheme.darkDividerColor, fontWeight: FontWeight.w400, decoration: TextDecoration.lineThrough),
-                      ) : const SizedBox.shrink(),
+                      product.hasDiscount
+                          ? Text(
+                              product.mainPrice,
+                              style: context.titleMedium!.copyWith(
+                                color: AppTheme.darkDividerColor,
+                                fontWeight: FontWeight.w400,
+                                decoration: TextDecoration.lineThrough,
+                              ),
+                            )
+                          : const SizedBox.shrink(),
                     ],
                   ),
                 ],

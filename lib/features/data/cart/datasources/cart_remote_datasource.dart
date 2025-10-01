@@ -18,10 +18,14 @@ abstract class CartRemoteDataSource {
 
   Future<void> updateCartQuantities(String cartIds, String quantities);
 
-  Future<Map<String, dynamic>> addToCart(int productId, String variant, int quantity, String color);
+  Future<Map<String, dynamic>> addToCart(
+    int productId,
+    String variant,
+    int quantity,
+    String color,
+  );
 
   Future<CartSummaryModel> getCartSummary();
-
 }
 
 class CartRemoteDataSourceImpl implements CartRemoteDataSource {
@@ -37,7 +41,6 @@ class CartRemoteDataSourceImpl implements CartRemoteDataSource {
       if (AppStrings.userId != null) 'user_id': AppStrings.userId.toString(),
     };
   }
-
 
   @override
   Future<List<CartItemModel>> getCartItems() async {
@@ -117,18 +120,18 @@ class CartRemoteDataSourceImpl implements CartRemoteDataSource {
 
   @override
   Future<Map<String, dynamic>> addToCart(
-      int productId,
-      String variant,
-      int quantity,
-      String color
-      ) async {
+    int productId,
+    String variant,
+    int quantity,
+    String color,
+  ) async {
     final userParams = await _getUserParams();
     final response = await apiProvider.post(
       LaravelApiEndPoint.cartAdd,
       data: {
         'id': productId.toString(),
         'variant': variant,
-        'color' : color,
+        'color': color,
         'quantity': quantity.toString(),
         ...userParams,
       },
@@ -145,5 +148,4 @@ class CartRemoteDataSourceImpl implements CartRemoteDataSource {
     // Return the full response data
     return response.data;
   }
-
 }

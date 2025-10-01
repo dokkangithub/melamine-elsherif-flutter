@@ -34,4 +34,4 @@ class WalletDataSourceImpl implements WalletDataSource {
       throw Exception('Failed to load wallet history: $e');
     }
   }
-} 
+}
