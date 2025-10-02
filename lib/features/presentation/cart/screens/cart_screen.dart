@@ -21,11 +21,13 @@ import '../widgets/shimmer/cart_screen_shimmer.dart';
 class CartScreen extends StatefulWidget {
   final bool skipDataRefresh;
   final bool isActive;
+  final bool showBackButton;
 
   const CartScreen({
     super.key,
     this.skipDataRefresh = false,
     this.isActive = false,
+    this.showBackButton = false,
   });
 
   /// Factory constructor for direct navigation from Buy Now
@@ -37,7 +39,16 @@ class CartScreen extends StatefulWidget {
     // If we already have cart items, skip the reload
     final skipDataRefresh = cartProvider.cartItems.isNotEmpty;
 
-    return CartScreen(skipDataRefresh: skipDataRefresh);
+    return CartScreen(
+      skipDataRefresh: skipDataRefresh,
+      showBackButton: true,
+    );
+  }
+
+  /// Factory constructor for navigation from product details
+  /// that shows back button
+  static Widget fromProductDetails(BuildContext context) {
+    return CartScreen(showBackButton: true);
   }
 
   @override
@@ -180,120 +191,214 @@ class _CartScreenState extends State<CartScreen> {
         // Display loading shimmer if needed
         if (cartProvider.cartState == LoadingState.loading) {
           return Scaffold(
-            appBar: AppBar(
-              backgroundColor: Colors.white,
-              elevation: 0,
-              scrolledUnderElevation: 0,
-              title: Text(
-                'my_cart'.tr(context),
-                style: context.displaySmall!.copyWith(
-                  fontWeight: FontWeight.w500,
+            backgroundColor: Colors.white,
+            body: Stack(
+              children: [
+                Column(
+                  children: [
+                    // Custom AppBar
+                    Container(
+                      padding: EdgeInsets.only(
+                        top: MediaQuery.of(context).padding.top + 8,
+                        bottom: 8,
+                      ),
+                      child: Text(
+                        'my_cart'.tr(context),
+                        style: context.displaySmall!.copyWith(
+                          fontWeight: FontWeight.w500,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    const Expanded(child: CartScreenShimmer()),
+                  ],
                 ),
-              ),
-              centerTitle: true,
+                // Back Button
+                if (widget.showBackButton)
+                  Positioned(
+                    top: MediaQuery.of(context).padding.top + 8,
+                    left: 16,
+                    child: Container(
+                      width: 35,
+                      height: 35,
+                      decoration: BoxDecoration(
+                        color: AppTheme.primaryColor.withValues(alpha: 0.8),
+                      ),
+                      child: IconButton(
+                        onPressed: () => Navigator.of(context).pop(),
+                        icon: const Center(
+                          child: Icon(
+                            Icons.arrow_back_ios_new,
+                            color: Colors.white,
+                            size: 20,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
             ),
-            body: const CartScreenShimmer(),
           );
         }
 
         // Display empty cart if needed
         if (cartProvider.cartItems.isEmpty) {
-          return _shouldAnimate
-              ? FadeIn(
-                  duration: const Duration(milliseconds: 600),
-                  child: const EmptyCartWidget(),
-                )
-              : const EmptyCartWidget();
+          return Scaffold(
+            backgroundColor: Colors.white,
+            body: Stack(
+              children: [
+                _shouldAnimate
+                    ? FadeIn(
+                        duration: const Duration(milliseconds: 600),
+                        child: const EmptyCartWidget(),
+                      )
+                    : const EmptyCartWidget(),
+                // Back Button
+                if (widget.showBackButton)
+                  Positioned(
+                    top: MediaQuery.of(context).padding.top + 8,
+                    left: 16,
+                    child: Container(
+                      width: 35,
+                      height: 35,
+                      decoration: BoxDecoration(
+                        color: AppTheme.primaryColor.withValues(alpha: 0.8),
+                      ),
+                      child: IconButton(
+                        onPressed: () => Navigator.of(context).pop(),
+                        icon: const Center(
+                          child: Icon(
+                            Icons.arrow_back_ios_new,
+                            color: Colors.white,
+                            size: 20,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          );
         }
 
         // Display cart with items
         return Scaffold(
           backgroundColor: Colors.white,
-          appBar: AppBar(
-            backgroundColor: Colors.white,
-            elevation: 0,
-            scrolledUnderElevation: 0,
-            title: _shouldAnimate
-                ? FadeIn(
-                    duration: const Duration(milliseconds: 400),
-                    child: Text(
-                      'my_cart'.tr(context),
-                      style: context.displaySmall!.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  )
-                : Text(
-                    'my_cart'.tr(context),
-                    style: context.displaySmall!.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-            centerTitle: true,
-          ),
-          body: Column(
+          body: Stack(
             children: [
-              // Cart items in an expandable list
-              Expanded(
-                child: ListView.separated(
-                  key: const PageStorageKey('cart_items_list'),
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  separatorBuilder: (context, index) => Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                    child: Divider(color: Colors.grey[300]),
-                  ),
-                  itemCount: cartProvider.cartItems
-                      .where((item) => !_itemsBeingDeleted.contains(item.id))
-                      .length,
-                  itemBuilder: (context, index) {
-                    // Filter out items that are currently being deleted for visual display
-                    final visibleItems = cartProvider.cartItems
-                        .where((item) => !_itemsBeingDeleted.contains(item.id))
-                        .toList();
-
-                    final CartItem item = visibleItems[index];
-
-                    // Use a unique key for each cart item based on its ID
-                    return _shouldAnimate
-                        ? FadeInUp(
-                            key: ValueKey('cart_animation_${item.id}'),
-                            delay: Duration(milliseconds: 50 * index),
+              Column(
+                children: [
+                  // Custom AppBar
+                  Container(
+                    padding: EdgeInsets.only(
+                      top: MediaQuery.of(context).padding.top + 8,
+                      bottom: 8,
+                    ),
+                    child: _shouldAnimate
+                        ? FadeIn(
                             duration: const Duration(milliseconds: 400),
-                            child: SnappableCartItem(
-                              key: ValueKey('cart_item_${item.id}'),
-                              item: item,
-                              index: index,
-                              onQuantityChanged: (int quantity) {
-                                _updateQuantity(
-                                  cartProvider,
-                                  item.id,
-                                  quantity,
-                                );
-                              },
-                              onDelete: _handleItemDelete,
+                            child: Text(
+                              'my_cart'.tr(context),
+                              style: context.displaySmall!.copyWith(
+                                fontWeight: FontWeight.bold,
+                              ),
+                              textAlign: TextAlign.center,
                             ),
                           )
-                        : SnappableCartItem(
-                            key: ValueKey('cart_item_${item.id}'),
-                            item: item,
-                            index: index,
-                            onQuantityChanged: (int quantity) {
-                              _updateQuantity(cartProvider, item.id, quantity);
-                            },
-                            onDelete: _handleItemDelete,
-                          );
-                  },
-                ),
-              ),
+                        : Text(
+                            'my_cart'.tr(context),
+                            style: context.displaySmall!.copyWith(
+                              fontWeight: FontWeight.bold,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                  ),
+                  // Cart items in an expandable list
+                  Expanded(
+                    child: ListView.separated(
+                      key: const PageStorageKey('cart_items_list'),
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      separatorBuilder: (context, index) => Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                        child: Divider(color: Colors.grey[300]),
+                      ),
+                      itemCount: cartProvider.cartItems
+                          .where((item) => !_itemsBeingDeleted.contains(item.id))
+                          .length,
+                      itemBuilder: (context, index) {
+                        // Filter out items that are currently being deleted for visual display
+                        final visibleItems = cartProvider.cartItems
+                            .where((item) => !_itemsBeingDeleted.contains(item.id))
+                            .toList();
 
-              // Bottom sections - animate only once
-              _shouldAnimate
-                  ? FadeInUp(
-                      delay: const Duration(milliseconds: 300),
-                      duration: const Duration(milliseconds: 500),
-                      child: _buildCartSummary(context, cartProvider),
-                    )
-                  : _buildCartSummary(context, cartProvider),
+                        final CartItem item = visibleItems[index];
+
+                        // Use a unique key for each cart item based on its ID
+                        return _shouldAnimate
+                            ? FadeInUp(
+                                key: ValueKey('cart_animation_${item.id}'),
+                                delay: Duration(milliseconds: 50 * index),
+                                duration: const Duration(milliseconds: 400),
+                                child: SnappableCartItem(
+                                  key: ValueKey('cart_item_${item.id}'),
+                                  item: item,
+                                  index: index,
+                                  onQuantityChanged: (int quantity) {
+                                    _updateQuantity(
+                                      cartProvider,
+                                      item.id,
+                                      quantity,
+                                    );
+                                  },
+                                  onDelete: _handleItemDelete,
+                                ),
+                              )
+                            : SnappableCartItem(
+                                key: ValueKey('cart_item_${item.id}'),
+                                item: item,
+                                index: index,
+                                onQuantityChanged: (int quantity) {
+                                  _updateQuantity(cartProvider, item.id, quantity);
+                                },
+                                onDelete: _handleItemDelete,
+                              );
+                      },
+                    ),
+                  ),
+
+                  // Bottom sections - animate only once
+                  _shouldAnimate
+                      ? FadeInUp(
+                          delay: const Duration(milliseconds: 300),
+                          duration: const Duration(milliseconds: 500),
+                          child: _buildCartSummary(context, cartProvider),
+                        )
+                      : _buildCartSummary(context, cartProvider),
+                ],
+              ),
+              // Back Button
+              if (widget.showBackButton)
+                Positioned(
+                  top: MediaQuery.of(context).padding.top + 8,
+                  left: 16,
+                  child: Container(
+                    width: 35,
+                    height: 35,
+                    decoration: BoxDecoration(
+                      color: AppTheme.primaryColor.withValues(alpha: 0.8),
+                    ),
+                    child: IconButton(
+                      onPressed: () => Navigator.of(context).pop(),
+                      icon: const Center(
+                        child: Icon(
+                          Icons.arrow_back_ios_new,
+                          color: Colors.white,
+                          size: 20,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
             ],
           ),
         );
@@ -303,10 +408,14 @@ class _CartScreenState extends State<CartScreen> {
 
   void _updateQuantity(CartProvider cartProvider, int itemId, int newQuantity) {
     // Get current item to determine if this is an increment or decrement
-    final CartItem? currentItem = cartProvider.cartItems.firstWhere(
-      (item) => item.id == itemId,
-      orElse: () => null as CartItem,
-    );
+    CartItem? currentItem;
+    try {
+      currentItem = cartProvider.cartItems.firstWhere(
+        (item) => item.id == itemId,
+      );
+    } catch (e) {
+      currentItem = null;
+    }
     final bool isDecrement =
         currentItem != null && newQuantity < currentItem.quantity;
 
@@ -350,7 +459,7 @@ class _CartScreenState extends State<CartScreen> {
                 ),
               _buildSummaryRow(
                 'total'.tr(context),
-                '${cartProvider.cartSummary!.total.toStringAsFixed(2) ?? '0.00'} ${cartProvider.cartSummary?.currencySymbol ?? ''}',
+                '${cartProvider.cartSummary?.total.toStringAsFixed(2) ?? '0.00'} ${cartProvider.cartSummary?.currencySymbol ?? ''}',
                 isBold: true,
               ),
             ],

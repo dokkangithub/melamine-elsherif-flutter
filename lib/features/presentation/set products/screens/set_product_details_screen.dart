@@ -1,19 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:melamine_elsherif/core/config/themes.dart/theme.dart';
 import 'package:melamine_elsherif/core/utils/extension/translate_extension.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_button.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_cached_image.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_loading.dart';
 import 'package:provider/provider.dart';
+import '../../cart/controller/cart_provider.dart';
+import '../../cart/screens/cart_screen.dart';
 import '../../../../../core/utils/enums/loading_state.dart';
-import '../../../../../core/utils/widgets/custom_back_button.dart';
 import '../../../../../features/domain/set products/entities/set_product_details.dart';
+import '../../../../../features/domain/set products/entities/set_products.dart';
 import '../../../../core/utils/constants/app_assets.dart';
 import '../../../../core/utils/helpers.dart';
 import '../controller/set_product_provider.dart';
 import '../widgets/set_product_details_shimmer.dart';
+import '../../home/widgets/set_product_card.dart';
 
 class SetProductDetailsScreen extends StatefulWidget {
   final String slug;
@@ -28,14 +32,12 @@ class SetProductDetailsScreen extends StatefulWidget {
 class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
     with TickerProviderStateMixin {
   Map<int, int> selectedQuantities = {};
-  bool isDescriptionExpanded = false;
   bool isSummaryExpanded = false;
   bool isFullSet = true;
   late AnimationController _descriptionController;
   late AnimationController _summaryController;
   late AnimationController _priceAnimationController;
-  late Animation<double> _descriptionAnimation;
-  late Animation<double> _summaryAnimation;
+  // Removed unused animations to clean up lints
   late Animation<double> _priceAnimation;
 
   @override
@@ -53,14 +55,6 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
       duration: const Duration(milliseconds: 400),
       vsync: this,
     );
-    _descriptionAnimation = CurvedAnimation(
-      parent: _descriptionController,
-      curve: Curves.easeInOut,
-    );
-    _summaryAnimation = CurvedAnimation(
-      parent: _summaryController,
-      curve: Curves.easeInOut,
-    );
     _priceAnimation = CurvedAnimation(
       parent: _priceAnimationController,
       curve: Curves.easeInOut,
@@ -76,7 +70,6 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
 
   void _resetScreenState() {
     selectedQuantities.clear();
-    isDescriptionExpanded = false;
     isSummaryExpanded = false;
     isFullSet = true;
   }
@@ -93,16 +86,6 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
     super.dispose();
   }
 
-  void _toggleDescription() {
-    setState(() {
-      isDescriptionExpanded = !isDescriptionExpanded;
-      if (isDescriptionExpanded) {
-        _descriptionController.forward();
-      } else {
-        _descriptionController.reverse();
-      }
-    });
-  }
 
   void _toggleSummary() {
     setState(() {
@@ -150,16 +133,7 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
     }
   }
 
-  void _resetQuantitiesToInitial() {
-    final provider = Provider.of<SetProductsProvider>(context, listen: false);
-    if (provider.setProductDetails != null) {
-      selectedQuantities.clear();
-      for (final component in provider.setProductDetails!.components) {
-        selectedQuantities[component.id!] = component.initialQuantity ?? 1;
-      }
-      provider.clearCalculatedPrice();
-    }
-  }
+  // Removed unused _resetQuantitiesToInitial to clean up lints
 
   Future<void> _handleAddToCart(SetProductsProvider provider) async {
     if (provider.setProductDetails == null) return;
@@ -233,25 +207,85 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
               top: MediaQuery.of(context).padding.top + 8,
               left: 16,
               child: Container(
+               width: 35,
+               height: 35,
                 decoration: BoxDecoration(
                   color: AppTheme.primaryColor.withValues(alpha: 0.8),
-                  borderRadius: BorderRadius.circular(50),
                 ),
                 child: IconButton(
                   onPressed: () => Navigator.of(context).pop(),
-                  icon: const Icon(
-                    Icons.arrow_back_ios_new,
-                    color: Colors.white,
-                    size: 24,
+                  icon: Center(
+                    child: const Icon(
+                      Icons.arrow_forward_ios,
+                      color: Colors.white,
+                      size: 20,
+                    ),
                   ),
-                  padding: const EdgeInsets.all(4),
-                  constraints: const BoxConstraints(
-                    minWidth: 40,
-                    minHeight: 40,
-                  ),
+                 // padding: const EdgeInsets.all(4),
+                  // constraints: const BoxConstraints(
+                  //   minWidth: 15,
+                  //   minHeight: 20,
+                  // ),
                 ),
               ),
             ),
+            Positioned(
+              top: MediaQuery.of(context).padding.top + 8,
+              right: 16,
+              child: Consumer<CartProvider>(
+                builder: (context, cartProvider, child) {
+                  return Stack(
+                    children: [
+                      Container(
+                        width: 35,
+                        height: 35,
+                        decoration: BoxDecoration(
+                          color: AppTheme.primaryColor.withValues(alpha: 0.8),
+                        ),
+                        child: IconButton(
+                          onPressed: () {
+                            // Navigate to cart screen with back button
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => CartScreen.fromProductDetails(context),
+                              ),
+                            );
+                          },
+                          icon: Center(
+                            child: SvgPicture.asset(
+                              'assets/icons/cart.svg',
+                              color: AppTheme.white,
+                            ),
+                          ),
+                        ),
+                      ),
+
+
+                      if (cartProvider.cartCount > 0)
+                        Positioned(
+                          top: 0,
+                          left: 25, bottom:20,
+                          child: Center(
+                            child: Text(
+                              '${cartProvider.cartCount}',
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ),
+                    ],
+                  );
+                },
+              ),
+            ),
+
+
+
           ],
         ),
         const SizedBox(height: 16),
@@ -274,19 +308,25 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
               bool isLoading = false;
 
               if (isFullSet) {
-                displayPrice = product.hasDiscount == true
-                    ? product.discountedPrice ?? '${product.fullSetPrice} EGP'
-                    : '${product.fullSetPrice} EGP';
-                originalPrice = product.hasDiscount == true
-                    ? '${product.fullSetPrice} EGP'
+                final originalPriceValue = product.fullSetPrice ?? 0;
+                final simulatedOriginalPrice = _simulateOriginalPrice(originalPriceValue);
+                final hasDiscount = product.discountedPrice != null && 
+                product.discountedPrice != '${product.fullSetPrice} ' &&
+                product.fullSetPrice != null;
+                
+                displayPrice = hasDiscount
+                    ? product.discountedPrice ?? '${product.fullSetPrice} '
+                    : '${product.fullSetPrice} ';
+                originalPrice = hasDiscount
+                    ? '$simulatedOriginalPrice '
                     : null;
               } else {
                 isLoading =
                     priceProvider.calculatePriceState == LoadingState.loading;
                 displayPrice = priceProvider.calculatedPrice != null
-                    ? '${priceProvider.calculatedPrice!.totalPrice} EGP'
+                    ? '${priceProvider.calculatedPrice!.totalPrice}'
                     : (product.discountedPrice ??
-                          '${product.minimumCustomPrice ?? 0} EGP');
+                          '${product.minimumCustomPrice ?? 0} ');
                 originalPrice = null;
               }
 
@@ -383,6 +423,8 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
                   const SizedBox(height: 24),
                   _buildComponentsList(provider.setProductDetails!, provider),
                   const SizedBox(height: 24),
+                  _buildRelatedProductsSection(provider.setProductDetails!),
+                  const SizedBox(height: 24),
                   _buildCareInstructionsSection(
                     provider.setProductDetails!,
                   ), // Add this line
@@ -408,60 +450,33 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        InkWell(
-          onTap: _toggleDescription,
-          child: Container(
-            padding: const EdgeInsets.symmetric(vertical: 12),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'description'.tr(context),
-                  style: Theme.of(
-                    context,
-                  ).textTheme.titleLarge!.copyWith(fontWeight: FontWeight.bold),
-                ),
-                AnimatedRotation(
-                  turns: isDescriptionExpanded ? 0.5 : 0,
-                  duration: const Duration(milliseconds: 300),
-                  child: const Icon(Icons.keyboard_arrow_down),
-                ),
-              ],
-            ),
-          ),
+        Text(
+          'description'.tr(context),
+          style: Theme.of(
+            context,
+          ).textTheme.titleLarge!.copyWith(fontWeight: FontWeight.bold),
         ),
-        AnimatedContainer(
-          duration: const Duration(milliseconds: 300),
-          curve: Curves.easeInOut,
-          height: isDescriptionExpanded ? null : 0,
-          child: AnimatedOpacity(
-            duration: const Duration(milliseconds: 300),
-            opacity: isDescriptionExpanded ? 1.0 : 0.0,
-            child: Container(
-              padding: const EdgeInsets.only(top: 8),
-              child: Html(
-                data: product.description!,
-                style: {
-                  "body": Style(
-                    margin: Margins.zero,
-                    padding: HtmlPaddings.zero,
-                    fontSize: FontSize(16.0),
-                    lineHeight: const LineHeight(1.5),
-                    color: AppTheme.darkDividerColor,
-                    fontFamily: Theme.of(
-                      context,
-                    ).textTheme.bodyLarge!.fontFamily,
-                  ),
-                  "p": Style(
-                    margin: Margins.only(bottom: 12.0),
-                    fontSize: FontSize(16.0),
-                    lineHeight: const LineHeight(1.5),
-                    color: AppTheme.darkDividerColor,
-                  ),
-                },
-              ),
+        const SizedBox(height: 12),
+        Html(
+          data: product.description!,
+          style: {
+            "body": Style(
+              margin: Margins.zero,
+              padding: HtmlPaddings.zero,
+              fontSize: FontSize(16.0),
+              lineHeight: const LineHeight(1.5),
+              color: AppTheme.darkDividerColor,
+              fontFamily: Theme.of(
+                context,
+              ).textTheme.bodyLarge!.fontFamily,
             ),
-          ),
+            "p": Style(
+              margin: Margins.only(bottom: 12.0),
+              fontSize: FontSize(16.0),
+              lineHeight: const LineHeight(1.5),
+              color: AppTheme.darkDividerColor,
+            ),
+          },
         ),
       ],
     );
@@ -577,7 +592,7 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
 
     return AnimatedOpacity(
       duration: const Duration(milliseconds: 300),
-      opacity: isEnabled ? 1.0 : 0.6,
+      opacity: isEnabled ? 1.0 :  1,
       child: SizedBox(
         height: 160,
         width: double.infinity,
@@ -623,7 +638,7 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
                                   ),
                                   decoration: BoxDecoration(
                                     color: AppTheme.primaryColor.withValues(
-                                      alpha: 0.1,
+                                      alpha: 0.8,
                                     ),
                                     borderRadius: BorderRadius.circular(0),
                                   ),
@@ -941,7 +956,6 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
             ),
           ],
         ),
-        const SizedBox(height: 16),
         ListView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
@@ -1039,10 +1053,14 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
         bool isLoading = false;
 
         if (isFullSet) {
-          displayPrice = provider.setProductDetails!.hasDiscount == true
-              ? provider.setProductDetails!.discountedPrice ??
-                    '${provider.setProductDetails!.fullSetPrice} EGP'
-              : '${provider.setProductDetails!.fullSetPrice} EGP';
+          // Check if there's a discount
+          final hasDiscount = provider.setProductDetails!.discountedPrice != null && 
+                             provider.setProductDetails!.discountedPrice != '${provider.setProductDetails!.fullSetPrice} ' &&
+                             provider.setProductDetails!.fullSetPrice != null;
+          
+          displayPrice = hasDiscount
+              ? provider.setProductDetails!.discountedPrice ?? '${provider.setProductDetails!.fullSetPrice} '
+              : '${provider.setProductDetails!.fullSetPrice} ';
         } else {
           isLoading = priceProvider.calculatePriceState == LoadingState.loading;
           displayPrice = priceProvider.calculatedPrice != null
@@ -1135,6 +1153,87 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
     }
   }
 
+  /// Simulates discount by adding 10% to original price for testing purposes
+  int _simulateOriginalPrice(int currentPrice) {
+    return (currentPrice * 1.1).round();
+  }
+
+  Widget _buildRelatedProductsSection(SetProductDetailsData product) {
+    // TODO: Replace with actual related products data from API based on category
+    // Creating diverse related products with different images and unique slugs
+    final List<SetProduct> relatedProducts = [
+      SetProduct(
+        id: 1,
+        name: 'مجموعة أطباق ميلامين فاخرة',
+        discountedPrice: '450 ',
+        thumbnailImage: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=300&h=300&fit=crop&crop=center',
+        slug: 'luxury-melamine-plates-set',
+      ),
+      SetProduct(
+        id: 2,
+        name: 'طقم أكواب ميلامين متعدد الألوان',
+        discountedPrice: '320 ',
+        thumbnailImage: 'https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=300&h=300&fit=crop&crop=center',
+        slug: 'colorful-melamine-cups-set',
+      ),
+      SetProduct(
+        id: 3,
+        name: 'مجموعة صحون ميلامين للعائلة',
+        discountedPrice: '680 ',
+        thumbnailImage: 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=300&h=300&fit=crop&crop=center',
+        slug: 'family-melamine-dishes-set',
+      ),
+      SetProduct(
+        id: 4,
+        name: 'طقم كؤوس ميلامين عصري',
+        discountedPrice: '280 ',
+        thumbnailImage: 'https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=300&h=300&fit=crop&crop=center',
+        slug: 'modern-melamine-cups-set',
+      ),
+      SetProduct(
+        id: 5,
+        name: 'مجموعة أطباق ميلامين كلاسيكية',
+        discountedPrice: '520 ',
+        thumbnailImage: 'https://images.unsplash.com/photo-1583394838336-acd977736f90?w=300&h=300&fit=crop&crop=center',
+        slug: 'classic-melamine-plates-set',
+      ),
+      SetProduct(
+        id: 6,
+        name: 'طقم كؤوس ميلامين أنيقة',
+        discountedPrice: '380 ',
+        thumbnailImage: 'https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=300&h=300&fit=crop&crop=center',
+        slug: 'elegant-melamine-cups-set',
+      ),
+    ];
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'related_products'.tr(context),
+          style: Theme.of(context).textTheme.titleLarge!.copyWith(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(height: 16),
+        SizedBox(
+          height: 300,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: relatedProducts.length,
+            itemBuilder: (context, index) {
+              final relatedProduct = relatedProducts[index];
+              return SetProductCard(
+                setProduct: relatedProduct,
+                width: 200,
+              );
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
   Widget _buildCareInstructionsSection(SetProductDetailsData product) {
     final List<Map<String, String>> careInstructions = [
       {
@@ -1170,13 +1269,11 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
     ];
 
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 0),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(0),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withValues(alpha: 0.1),
+            color: Colors.grey.withValues(alpha: 0.2),
             spreadRadius: 1,
             blurRadius: 6,
             offset: const Offset(0, 2),
@@ -1186,7 +1283,6 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Header
           Container(
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
@@ -1196,7 +1292,6 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
             child: Row(
               children: [
                 Container(
-                  padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
                     color: Colors.transparent,
                     borderRadius: BorderRadius.circular(0),
@@ -1219,17 +1314,16 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
             ),
           ),
 
-          // Care Instructions Grid
           Padding(
-            padding: const EdgeInsets.all(8),
+            padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
             child: GridView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
+                crossAxisCount: 3,
                 crossAxisSpacing: 12,
-                mainAxisSpacing: 16,
-                childAspectRatio: 0.9, // More height for larger content
+                mainAxisSpacing: 18,
+                childAspectRatio: 1.2, // More height for larger content
               ),
               itemCount: careInstructions.length,
               itemBuilder: (context, index) {
@@ -1253,12 +1347,12 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
     required String description,
   }) {
     return Container(
-      padding: const EdgeInsets.all(8),
-      decoration: BoxDecoration(
-        color: Colors.grey.withValues(alpha: 0.02),
-        borderRadius: BorderRadius.circular(0),
-        border: Border.all(color: Colors.grey.withValues(alpha: 0.1), width: 1),
-      ),
+      // padding: const EdgeInsets.all(8),
+      // decoration: BoxDecoration(
+      //   color: Colors.grey.withValues(alpha: 0.02),
+      //   borderRadius: BorderRadius.circular(0),
+      //   border: Border.all(color: Colors.grey.withValues(alpha: 0.1), width: 1),
+      // ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
