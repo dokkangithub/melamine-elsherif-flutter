@@ -7,6 +7,7 @@ abstract class SetProductsRepository {
     bool needUpdate = false,
   });
   Future<SetProductDetailsEntity> getSetProductDetails({required String slug});
+  Future<SetProductsResponse> getRelatedSetProducts({required int productId});
   Future<CalculatePriceResponseEntity> calculatePrice({
     required CalculatePriceRequest request,
   });

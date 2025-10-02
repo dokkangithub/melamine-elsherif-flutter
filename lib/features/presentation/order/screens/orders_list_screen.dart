@@ -361,7 +361,7 @@ class _OrdersListScreenState extends State<OrdersListScreen>
                     ),
                     const SizedBox(width: 8),
                     Icon(
-                      Icons.arrow_forward_ios,
+                      Icons.arrow_back_ios_new_outlined,
                       size: 14,
                       color: status.color,
                     ),

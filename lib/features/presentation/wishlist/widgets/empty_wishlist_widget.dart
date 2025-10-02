@@ -95,6 +95,7 @@ class EmptyWishlistWidget extends StatelessWidget {
                           context,
                           listen: false,
                         ).currentIndex = 0;
+                        Navigator.pop(context);
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppTheme.primaryColor,

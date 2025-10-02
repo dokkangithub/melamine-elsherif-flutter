@@ -63,6 +63,14 @@ class SetProductsRepositoryImpl implements SetProductsRepository {
   }
 
   @override
+  Future<SetProductsResponse> getRelatedSetProducts({
+    required int productId,
+  }) async {
+    final model = await remoteDataSource.getRelatedSetProducts(productId: productId);
+    return model.toEntity();
+  }
+
+  @override
   Future<CalculatePriceResponseEntity> calculatePrice({
     required CalculatePriceRequest request,
   }) async {

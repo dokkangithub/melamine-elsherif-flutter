@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import '../../../../core/config/themes.dart/theme.dart';
-import '../../../../core/utils/constants/app_strings.dart';
 import '../controller/layout_provider.dart';
-import '../../home/widgets/app_bar_widget.dart';
 import '../widgets/bottom_nav_bar_widget.dart';
 import '../widgets/drawer_widget.dart';
 
@@ -65,10 +62,7 @@ class MainLayoutScreenState extends State<MainLayoutScreen>
     final provider = Provider.of<LayoutProvider>(context, listen: false);
     final targetIndex = provider.currentIndex;
 
-    // Skip wishlist if user is not authenticated
-    if (targetIndex == 2 && AppStrings.token == null) {
-      return; // Don't navigate to wishlist
-    }
+    // No wishlist tab anymore; no auth guard needed here
 
     if (_pageController.hasClients &&
         _pageController.page?.round() != targetIndex) {
@@ -80,34 +74,8 @@ class MainLayoutScreenState extends State<MainLayoutScreen>
     if (_isNavigating) return; // Prevent conflicts during navigation
 
     final provider = Provider.of<LayoutProvider>(context, listen: false);
-    final currentIndex = provider.currentIndex;
 
-    // Skip wishlist if user is not authenticated
-    if (index == 2 && AppStrings.token == null) {
-      _isNavigating = true;
-
-      // Determine swipe direction and target index
-      int targetIndex;
-      if (currentIndex < 2) {
-        // Swiping forward (right to left), go to cart (index 3)
-        targetIndex = 3;
-      } else {
-        // Swiping backward (left to right), go to category (index 1)
-        targetIndex = 1;
-      }
-
-      // Update provider first, then navigate
-      provider.setCurrentIndex(targetIndex);
-
-      // Navigate to target page without animation to avoid visual glitch
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (_pageController.hasClients) {
-          _pageController.jumpToPage(targetIndex);
-          _isNavigating = false;
-        }
-      });
-      return;
-    }
+    // No wishlist tab anymore; straight navigation
 
     // Add haptic feedback on page change
     HapticFeedback.lightImpact();
@@ -121,10 +89,7 @@ class MainLayoutScreenState extends State<MainLayoutScreen>
   void _navigateToPage(int index) {
     if (!_pageController.hasClients || _isNavigating) return;
 
-    // Skip wishlist if user is not authenticated
-    if (index == 2 && AppStrings.token == null) {
-      return;
-    }
+    // No wishlist tab anymore; no auth guard needed here
 
     _isNavigating = true;
     _pageController

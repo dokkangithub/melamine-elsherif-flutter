@@ -67,7 +67,7 @@ class OrderCard extends StatelessWidget {
                 children: [
                   Text('Total: ${order.grandTotal}'),
                   Icon(
-                    Icons.arrow_forward_ios,
+                    Icons.arrow_back_ios_new_outlined,
                     size: 16,
                     color: Theme.of(context).colorScheme.primary,
                   ),

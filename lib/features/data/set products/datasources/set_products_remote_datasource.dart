@@ -9,6 +9,7 @@ import '../models/set_product_details_model.dart';
 abstract class SetProductsRemoteDataSource {
   Future<SetProductsModel> getSetProducts({int page = 1});
   Future<SetProductDetailsModel> getSetProductDetails({required String slug});
+  Future<SetProductsModel> getRelatedSetProducts({required int productId});
   Future<CalculatePriceResponseModel> calculatePrice({
     required CalculatePriceRequestModel request,
   });
@@ -60,6 +61,124 @@ class SetProductsRemoteDataSourceImpl implements SetProductsRemoteDataSource {
       return SetProductDetailsModel.fromJson(response.data);
     }
     throw Exception('Invalid set product details response');
+  }
+
+  @override
+  Future<SetProductsModel> getRelatedSetProducts({
+    required int productId,
+  }) async {
+    // First try to get related set products
+    try {
+      final response = await apiProvider.get(
+        '${LaravelApiEndPoint.setProductsRelated}$productId',
+      );
+
+    if (response.data != null) {
+      print('Related products API response type: ${response.data.runtimeType}');
+      print('Related products API response: $response.data');
+      
+      // Handle the case where API returns a list directly
+      if (response.data is List) {
+        print('API returned a list, wrapping it...');
+        // Wrap the list in the expected structure
+        final wrappedData = {
+          "success": true,
+          "data": {
+            "data": response.data,
+            "current_page": 1,
+            "last_page": 1,
+            "total": (response.data as List).length,
+            "per_page": (response.data as List).length,
+            "next_page_url": null,
+            "prev_page_url": null,
+          }
+        };
+        print('Wrapped data: $wrappedData');
+        return SetProductsModel.fromJson(wrappedData);
+      } else if (response.data is Map<String, dynamic>) {
+        print('API returned an object, checking structure...');
+        final responseData = response.data as Map<String, dynamic>;
+        
+        // Check if the response has the expected nested structure
+        if (responseData.containsKey('data') && 
+            responseData['data'] is Map<String, dynamic> &&
+            (responseData['data'] as Map<String, dynamic>).containsKey('data')) {
+          print('API has nested data structure, using it directly...');
+          try {
+            return SetProductsModel.fromJson(responseData);
+          } catch (e) {
+            print('Error parsing nested data: $e');
+            throw Exception('Failed to parse nested API response: $e');
+          }
+        } else if (responseData.containsKey('data') && responseData['data'] is List) {
+          print('API has flat structure with data array, wrapping it...');
+          // Wrap the flat structure in the expected format
+          final dataList = responseData['data'] as List;
+          final wrappedData = {
+            "success": responseData["success"] ?? true,
+            "data": {
+              "data": dataList,
+              "current_page": 1,
+              "last_page": 1,
+              "total": dataList.length,
+              "per_page": dataList.length,
+              "next_page_url": null,
+              "prev_page_url": null,
+            }
+          };
+          print('Wrapped data: $wrappedData');
+          try {
+            return SetProductsModel.fromJson(wrappedData);
+          } catch (e) {
+            print('Error parsing wrapped data: $e');
+            throw Exception('Failed to parse API response: $e');
+          }
+        } else {
+          print('API has unexpected structure, wrapping it...');
+          // Wrap the entire response in the expected format
+          final wrappedData = {
+            "success": responseData["success"] ?? true,
+            "data": {
+              "data": responseData,
+              "current_page": 1,
+              "last_page": 1,
+              "total": 1,
+              "per_page": 1,
+              "next_page_url": null,
+              "prev_page_url": null,
+            }
+          };
+          print('Wrapped data: $wrappedData');
+          try {
+            return SetProductsModel.fromJson(wrappedData);
+          } catch (e) {
+            print('Error parsing unexpected structure: $e');
+            throw Exception('Failed to parse unexpected API response: $e');
+          }
+        }
+      } else {
+        print('Unexpected response type, throwing error...');
+        throw Exception('Unexpected API response format');
+      }
+    }
+    throw Exception('Invalid related set products response');
+    } catch (e) {
+      print('Error getting related set products: $e');
+      // Fallback: get general set products instead
+      print('Falling back to general set products...');
+      try {
+        final fallbackResponse = await apiProvider.get(
+          '${LaravelApiEndPoint.setProducts}?page=1&limit=6',
+        );
+        
+        if (fallbackResponse.data != null) {
+          return SetProductsModel.fromJson(fallbackResponse.data);
+        }
+      } catch (fallbackError) {
+        print('Fallback also failed: $fallbackError');
+      }
+      throw Exception('Failed to get related or fallback set products');
+    }
   }
 
   @override

@@ -22,6 +22,8 @@ class SetProductDetailsData {
   final int? minimumCustomPrice;
   final String? thumbnailImage;
   final dynamic sku;
+  final int? mainCategoryId;
+  final String? mainCategoryName;
   final List<dynamic> specification;
   final List<Component> components;
   final int? componentCount;
@@ -44,6 +46,8 @@ class SetProductDetailsData {
     this.minimumCustomPrice,
     this.thumbnailImage,
     this.sku,
+    this.mainCategoryId,
+    this.mainCategoryName,
     this.specification = const [],
     this.components = const [],
     this.componentCount,

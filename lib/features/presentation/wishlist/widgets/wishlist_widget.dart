@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:animate_do/animate_do.dart';
 import 'package:melamine_elsherif/core/utils/extension/text_style_extension.dart';
 import 'package:melamine_elsherif/core/utils/helpers.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_button.dart';
@@ -8,10 +7,10 @@ import 'package:melamine_elsherif/features/presentation/wishlist/widgets/shimmer
 import 'package:melamine_elsherif/features/presentation/wishlist/widgets/snappable_wishlist_item.dart';
 import '../../../../core/config/routes.dart/routes.dart';
 import '../../../../core/config/themes.dart/theme.dart';
-import '../../../../core/utils/constants/app_assets.dart';
 import '../../../../core/utils/enums/loading_state.dart';
 import '../../../../core/utils/extension/translate_extension.dart';
 import '../../../../core/utils/widgets/custom_cached_image.dart';
+import '../../../../core/utils/widgets/custom_back_button.dart';
 import '../../../../core/widgets/custom_confirmation_dialog.dart';
 import '../../../domain/wishlist/entities/wishlist_details.dart';
 import '../controller/wishlist_provider.dart';
@@ -64,6 +63,7 @@ class _WishlistWidgetState extends State<WishlistWidget> {
         backgroundColor: Colors.white,
         elevation: 0,
         scrolledUnderElevation: 0,
+        leading: const CustomBackButton(),
         title: Text(
           'my_wishlist'.tr(context),
           style: context.displaySmall.copyWith(fontWeight: FontWeight.w500),

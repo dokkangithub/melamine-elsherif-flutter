@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:melamine_elsherif/core/config/themes.dart/theme.dart';
 import 'package:melamine_elsherif/core/utils/enums/loading_state.dart';
 import 'package:melamine_elsherif/core/utils/extension/text_theme_extension.dart';
@@ -40,7 +39,7 @@ class _AllCategoryProductsScreenState extends State<AllCategoryProductsScreen> {
   late String _selectedCategoryName;
   late int _selectedCategoryId;
   int? _selectedSubCategoryId;
-  String? _selectedSubCategoryName;
+  // Removed unused field: _selectedSubCategoryName
   bool _isLoading = false;
   final ScrollController _scrollController = ScrollController();
   int _currentCategoryIndex = 0;
@@ -148,7 +147,6 @@ class _AllCategoryProductsScreenState extends State<AllCategoryProductsScreen> {
       _selectedCategoryName = name;
       _selectedCategoryId = id;
       _selectedSubCategoryId = null;
-      _selectedSubCategoryName = null;
       final provider = Provider.of<HomeProvider>(context, listen: false);
       final categoryProvider = Provider.of<CategoryProvider>(
         context,
@@ -161,7 +159,6 @@ class _AllCategoryProductsScreenState extends State<AllCategoryProductsScreen> {
 
   void _selectSubCategory(String name, int id) {
     setState(() {
-      _selectedSubCategoryName = name;
       _selectedSubCategoryId = id;
       final provider = Provider.of<HomeProvider>(context, listen: false);
       provider.fetchSubCategoryProducts(id, refresh: true, name: _searchQuery);
@@ -207,7 +204,6 @@ class _AllCategoryProductsScreenState extends State<AllCategoryProductsScreen> {
               CustomScrollView(
                 controller: _scrollController,
                 slivers: [
-                  // 1. App Bar as SliverAppBar
                   SliverAppBar(
                     backgroundColor: Colors.white,
                     elevation: 0,
@@ -225,7 +221,12 @@ class _AllCategoryProductsScreenState extends State<AllCategoryProductsScreen> {
                     centerTitle: true,
                     actions: [
                       IconButton(
-                        icon: const Icon(Icons.search, color: Colors.black),
+                        icon: Image.asset(
+                          AppImages.search,
+                          color: AppTheme.primaryColor,
+                          width: 25,
+                          height: 26,
+                        ),
                         onPressed: () {
                           AppRoutes.navigateTo(context, AppRoutes.searchScreen);
                         },
@@ -464,7 +465,7 @@ class _AllCategoryProductsScreenState extends State<AllCategoryProductsScreen> {
     }
 
     // Check if the current locale is RTL
-    final bool isRTL = Directionality.of(context) == TextDirection.rtl;
+    // final bool isRTL = Directionality.of(context) == TextDirection.rtl; // unused
 
     // Create a list with "All" as the first tab, then all subcategories
     final List<Map<String, dynamic>> tabs = [
@@ -529,7 +530,6 @@ class _AllCategoryProductsScreenState extends State<AllCategoryProductsScreen> {
               // "All" tab
               setState(() {
                 _selectedSubCategoryId = null;
-                _selectedSubCategoryName = null;
                 final provider = Provider.of<HomeProvider>(
                   context,
                   listen: false,

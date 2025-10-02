@@ -8,13 +8,11 @@ import 'package:melamine_elsherif/core/utils/extension/translate_extension.dart'
 import 'package:melamine_elsherif/core/utils/widgets/custom_button.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_cached_image.dart';
 import 'package:melamine_elsherif/core/utils/widgets/language_switcher.dart';
-import 'package:melamine_elsherif/features/presentation/main%20layout/controller/layout_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../../core/config/routes.dart/routes.dart';
 import '../../../../core/config/themes.dart/theme.dart';
 import '../../../../core/utils/constants/app_strings.dart';
-import '../../../../core/utils/enums/loading_state.dart';
 import '../../../../core/utils/extension/text_style_extension.dart';
 import '../../../../core/widgets/custom_confirmation_dialog.dart';
 import '../../auth/controller/auth_provider.dart';
@@ -113,7 +111,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       )
                     : _buildFooterText(context),
 
-                const SizedBox(height: 80),
+                const SizedBox(height: 20),
               ],
             ),
           ),
@@ -121,11 +119,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
       );
     }
 
-    // Layout for logged-in users to match the design
     return Scaffold(
       backgroundColor: Colors.grey[50],
-      body: SafeArea(
-        child: SingleChildScrollView(
+      body: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -181,7 +177,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ],
           ),
         ),
-      ),
+
     );
   }
 
@@ -715,8 +711,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ? '${profileCounters!.wishlistItemCount} ${'items'.tr(context)}'
                 : 'items'.tr(context),
             onTap: () {
-              Provider.of<LayoutProvider>(context, listen: false).currentIndex =
-                  2;
+              AppRoutes.navigateTo(context, AppRoutes.wishListScreen);
             },
           ),
         ],

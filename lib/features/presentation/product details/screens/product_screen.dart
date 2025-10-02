@@ -10,15 +10,15 @@ import 'package:melamine_elsherif/core/utils/widgets/custom_button.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_loading.dart';
 import 'package:melamine_elsherif/features/presentation/product%20details/controller/product_provider.dart';
 import 'package:melamine_elsherif/features/presentation/product%20details/widgets/choice_options_widget.dart';
-import 'package:melamine_elsherif/features/presentation/product%20details/widgets/product_specifications_summary.dart';
 import 'package:melamine_elsherif/features/presentation/product%20details/widgets/reviews_section.dart';
 import 'package:melamine_elsherif/features/presentation/product%20details/widgets/specifications_widget.dart';
 import 'package:melamine_elsherif/features/presentation/home/controller/home_provider.dart';
 import 'package:melamine_elsherif/features/presentation/review/controller/reviews_provider.dart';
 import 'package:provider/provider.dart';
-import '../../../../core/config/routes.dart/routes.dart';
-import '../../main layout/controller/layout_provider.dart';
 import '../../wishlist/controller/wishlist_provider.dart';
+import '../../cart/controller/cart_provider.dart';
+import '../../cart/screens/cart_screen.dart';
+import 'package:flutter_svg/svg.dart';
 import '../widgets/color_variants_widget.dart';
 import '../widgets/description_widget.dart';
 import '../widgets/product_image_widget.dart';
@@ -40,12 +40,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   bool isFavorite = false;
   final ScrollController _scrollController = ScrollController();
   bool _showAppBar = false;
-  String? _currentSlug; // Track current slug
 
   @override
   void initState() {
     super.initState();
-    _currentSlug = widget.slug;
     _initializeProductData();
     _scrollController.addListener(_onScroll);
   }
@@ -55,7 +53,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     super.didUpdateWidget(oldWidget);
     // Check if slug has changed
     if (oldWidget.slug != widget.slug) {
-      _currentSlug = widget.slug;
       _initializeProductData();
     }
   }
@@ -221,7 +218,89 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                           TextDirection.rtl
                                       ? 16
                                       : null,
-                                  child: const CustomBackButton(),
+                                  child: Container(
+                                    width: 35,
+                                    height: 35,
+                                    decoration: BoxDecoration(
+                                      color: AppTheme.primaryColor.withValues(alpha: 0.8),
+                                    ),
+                                    child: IconButton(
+                                      onPressed: () => Navigator.of(context).pop(),
+                                      icon: Center(
+                                        child: const Icon(
+                                          Icons.arrow_back_ios_new_outlined,
+                                          color: Colors.white,
+                                          size: 20,
+                                        ),
+                                      ),
+
+                                    ),
+                                  ),
+                                )
+                              : const SizedBox.shrink(),
+                          // Cart button with counter
+                          !_showAppBar
+                              ? Positioned(
+                                  top: statusBarHeight + 8,
+                                  right:
+                                      Directionality.of(context) ==
+                                          TextDirection.rtl
+                                      ? null
+                                      : 16,
+                                  left:
+                                      Directionality.of(context) ==
+                                          TextDirection.rtl
+                                      ? 16
+                                      : null,
+                                  child: Consumer<CartProvider>(
+                                    builder: (context, cartProvider, child) {
+                                      return Stack(
+                                        children: [
+                                          Container(
+                                            width: 35,
+                                            height: 35,
+                                            decoration: BoxDecoration(
+                                              color: AppTheme.primaryColor.withValues(alpha: 0.8),
+                                            ),
+                                            child: IconButton(
+                                              onPressed: () {
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) => CartScreen.fromProductDetails(context),
+                                                  ),
+                                                );
+                                              },
+                                              icon: Center(
+                                                child: SvgPicture.asset(
+                                                  'assets/icons/cart.svg',
+                                                  color: AppTheme.white,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          // Cart counter badge
+                                          if (cartProvider.cartCount > 0)
+                                            Positioned(
+                                              top: 0,
+                                              left: 25,
+                                              bottom: 20,
+                                              child: Center(
+                                                child: Text(
+                                                  '${cartProvider.cartCount}',
+                                                  style: const TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 12,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                  textAlign: TextAlign.center,
+                                                ),
+                                              ),
+                                            ),
+                                        ],
+                                      );
+                                    },
+                                  ),
                                 )
                               : const SizedBox.shrink(),
                         ],

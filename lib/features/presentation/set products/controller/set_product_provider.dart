@@ -7,6 +7,7 @@ import '../../../domain/set products/entities/set_product_details.dart';
 import '../../../../core/utils/enums/loading_state.dart';
 import '../../../domain/set products/usecases/get_set_products_use_case.dart';
 import '../../../domain/set products/usecases/get_set_product_details_use_case.dart';
+import '../../../domain/set products/usecases/get_related_set_products_use_case.dart';
 import '../../../domain/set products/usecases/calculate_price_use_case.dart';
 import '../../../domain/set products/usecases/add_full_set_to_cart_use_case.dart';
 import '../../../domain/set products/usecases/add_custom_set_to_cart_use_case.dart';
@@ -14,6 +15,7 @@ import '../../../domain/set products/usecases/add_custom_set_to_cart_use_case.da
 class SetProductsProvider extends ChangeNotifier {
   final GetSetProductsUseCase getSetProductsUseCase;
   final GetSetProductDetailsUseCase getSetProductDetailsUseCase;
+  final GetRelatedSetProductsUseCase getRelatedSetProductsUseCase;
   final CalculatePriceUseCase calculatePriceUseCase;
   final AddFullSetToCartUseCase addFullSetToCartUseCase;
   final AddCustomSetToCartUseCase addCustomSetToCartUseCase;
@@ -21,6 +23,7 @@ class SetProductsProvider extends ChangeNotifier {
   SetProductsProvider({
     required this.getSetProductsUseCase,
     required this.getSetProductDetailsUseCase,
+    required this.getRelatedSetProductsUseCase,
     required this.calculatePriceUseCase,
     required this.addFullSetToCartUseCase,
     required this.addCustomSetToCartUseCase,
@@ -42,6 +45,12 @@ class SetProductsProvider extends ChangeNotifier {
   LoadingState setProductDetailsState = LoadingState.initial;
   SetProductDetailsData? setProductDetails;
   String setProductDetailsError = '';
+
+  // Related Products State
+  LoadingState relatedProductsState = LoadingState.initial;
+  List<SetProduct> relatedProducts = [];
+  String relatedProductsError = '';
+  int? currentRelatedProductId;
 
   // Calculate Price State
   LoadingState calculatePriceState = LoadingState.initial;
@@ -136,6 +145,92 @@ class SetProductsProvider extends ChangeNotifier {
     }
   }
 
+  Future<void> getRelatedSetProducts({required int productId}) async {
+    // Avoid loading the same product multiple times
+    if (currentRelatedProductId == productId && 
+        (relatedProductsState == LoadingState.loading || 
+         relatedProductsState == LoadingState.loaded)) {
+      print('Related products already loaded or loading for productId: $productId');
+      return;
+    }
+
+    try {
+      currentRelatedProductId = productId;
+      relatedProductsState = LoadingState.loading;
+      relatedProductsError = '';
+      notifyListeners();
+
+      print('Fetching related products for productId: $productId');
+      final SetProductsResponse response =
+          await getRelatedSetProductsUseCase(productId: productId);
+
+      print('Related products response: ${response.products.length} products');
+      relatedProducts = response.products;
+      relatedProductsState = LoadingState.loaded;
+    } catch (e) {
+      print('Error fetching related products: $e');
+      relatedProductsState = LoadingState.error;
+      relatedProductsError = e.toString();
+      relatedProducts = [];
+      // Reset current product ID on error so it can be retried
+      currentRelatedProductId = null;
+    } finally {
+      notifyListeners();
+    }
+  }
+
+  Future<void> refreshRelatedProducts({required int productId}) async {
+    // Clear current related products and reload
+    relatedProducts.clear();
+    relatedProductsState = LoadingState.initial;
+    relatedProductsError = '';
+    currentRelatedProductId = null;
+    notifyListeners();
+    
+    // Add delay to avoid rate limiting
+    await Future.delayed(const Duration(seconds: 1));
+    
+    // Load new related products
+    await getRelatedSetProducts(productId: productId);
+  }
+
+  Future<void> retryRelatedProducts({required int productId}) async {
+    // Reset state and retry with delay
+    relatedProductsState = LoadingState.initial;
+    relatedProductsError = '';
+    currentRelatedProductId = null;
+    notifyListeners();
+    
+    // Add delay to avoid rate limiting
+    await Future.delayed(const Duration(seconds: 2));
+    
+    // Retry loading related products
+    await getRelatedSetProducts(productId: productId);
+  }
+
+  Future<void> loadFallbackProducts() async {
+    try {
+      relatedProductsState = LoadingState.loading;
+      relatedProductsError = '';
+      notifyListeners();
+
+      print('Loading fallback set products...');
+      final SetProductsResponse response = await getSetProductsUseCase(page: 1);
+      
+      // Take only first 6 products as fallback
+      relatedProducts = response.products.take(6).toList();
+      relatedProductsState = LoadingState.loaded;
+      print('Fallback products loaded: ${relatedProducts.length} products');
+    } catch (e) {
+      print('Error loading fallback products: $e');
+      relatedProductsState = LoadingState.error;
+      relatedProductsError = e.toString();
+      relatedProducts = [];
+    } finally {
+      notifyListeners();
+    }
+  }
+
   Future<void> calculatePrice({required CalculatePriceRequest request}) async {
     try {
       calculatePriceState = LoadingState.loading;
@@ -219,6 +314,15 @@ class SetProductsProvider extends ChangeNotifier {
     setProductDetails = null;
     setProductDetailsState = LoadingState.initial;
     setProductDetailsError = '';
+    notifyListeners();
+  }
+
+  // Clear related products
+  void clearRelatedProducts() {
+    relatedProducts = [];
+    relatedProductsState = LoadingState.initial;
+    relatedProductsError = '';
+    currentRelatedProductId = null;
     notifyListeners();
   }
 

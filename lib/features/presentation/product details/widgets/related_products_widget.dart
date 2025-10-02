@@ -6,16 +6,26 @@ import 'package:melamine_elsherif/features/presentation/home/controller/home_pro
 import 'package:melamine_elsherif/features/presentation/product details/widgets/product_theme.dart';
 import 'package:melamine_elsherif/features/presentation/product details/widgets/shimmers/shimmer_widget.dart';
 
-import '../../../../core/utils/product cards/custom_gridview_prodcut.dart';
 import '../../../../core/utils/product cards/custom_product_card_for_all_products.dart';
 
 class RelatedProductsWidget extends StatelessWidget {
   final HomeProvider provider;
+  final bool useCategoryProducts;
 
-  const RelatedProductsWidget({super.key, required this.provider});
+  const RelatedProductsWidget({super.key, required this.provider, this.useCategoryProducts = false});
 
   @override
   Widget build(BuildContext context) {
+    final loadingState = useCategoryProducts
+        ? provider.categoryProductsState
+        : provider.relatedProductsState;
+    final errorText = useCategoryProducts
+        ? provider.categoryProductsError
+        : provider.relatedProductsError;
+    final products = useCategoryProducts
+        ? provider.categoryProducts
+        : provider.relatedProducts;
+
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
@@ -23,16 +33,16 @@ class RelatedProductsWidget extends StatelessWidget {
         children: [
           Text('related_products'.tr(context), style: context.headlineSmall),
           const SizedBox(height: 8),
-          if (provider.relatedProductsState == LoadingState.loading)
+          if (loadingState == LoadingState.loading)
             const ShimmerWidget(height: 200)
-          else if (provider.relatedProductsState == LoadingState.error)
+          else if (loadingState == LoadingState.error)
             Center(
               child: Text(
-                'Error: ${provider.relatedProductsError}',
+                'Error: $errorText',
                 style: const TextStyle(color: ProductTheme.errorColor),
               ),
             )
-          else if (provider.relatedProducts.isEmpty)
+          else if (products.isEmpty)
             Center(child: Text('no_related_products_available'.tr(context)))
           else
             Column(
@@ -47,10 +57,9 @@ class RelatedProductsWidget extends StatelessWidget {
                     crossAxisSpacing: 10,
                     mainAxisSpacing: 10,
                   ),
-                  itemCount: provider.relatedProducts.length,
+                  itemCount: products.length,
                   itemBuilder: (context, index) {
-                    final product = provider.relatedProducts[index];
-                    print('rrrr${product.setProduct}');
+                    final product = products[index];
                     return CustomProductCardForAllProducts(product: product);
                   },
                 ),

@@ -1,24 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic_plus/flutter_neumorphic.dart';
-import 'package:melamine_elsherif/core/config/routes.dart/routes.dart';
 import 'package:melamine_elsherif/core/config/themes.dart/theme.dart';
 import 'package:melamine_elsherif/core/utils/constants/app_assets.dart';
-import 'package:melamine_elsherif/core/utils/constants/app_strings.dart';
 import 'package:melamine_elsherif/core/utils/extension/text_theme_extension.dart';
 import 'package:melamine_elsherif/core/utils/extension/translate_extension.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_cached_image.dart';
 import 'package:provider/provider.dart';
 import '../controller/layout_provider.dart';
 import '../../cart/controller/cart_provider.dart';
-import '../../wishlist/controller/wishlist_provider.dart';
 
 class BottomNavBarWidget extends StatelessWidget {
   const BottomNavBarWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Consumer3<LayoutProvider, CartProvider, WishlistProvider>(
-      builder: (context, layoutProvider, cartProvider, wishlistProvider, _) {
+    return Consumer2<LayoutProvider, CartProvider>(
+      builder: (context, layoutProvider, cartProvider, _) {
         return Theme(
           data: Theme.of(context).copyWith(
             splashColor: Colors.transparent,
@@ -61,21 +58,6 @@ class BottomNavBarWidget extends StatelessWidget {
               ),
               BottomNavigationBarItem(
                 icon: _buildIconWithBadge(
-                  icon: const CustomImage(assetPath: AppSvgs.wishlist_icon),
-                  count: wishlistProvider.wishlistItems.length,
-                  isActive: false,
-                ),
-                activeIcon: _buildIconWithBadge(
-                  icon: const CustomImage(
-                    assetPath: AppSvgs.active_wishlist_icon,
-                  ),
-                  count: wishlistProvider.wishlistItems.length,
-                  isActive: true,
-                ),
-                label: 'wishlist'.tr(context).toUpperCase(),
-              ),
-              BottomNavigationBarItem(
-                icon: _buildIconWithBadge(
                   icon: const CustomImage(assetPath: AppSvgs.cart_icon),
                   count: cartProvider.cartCount,
                   isActive: false,
@@ -106,14 +88,6 @@ class BottomNavBarWidget extends StatelessWidget {
     LayoutProvider layoutProvider,
     int index,
   ) {
-    // Handle wishlist navigation for unauthenticated users
-    if (index == 2 && AppStrings.token == null) {
-      // Navigate to login and reset to home
-      AppRoutes.navigateTo(context, AppRoutes.login);
-      // Don't change the current index to avoid navigation conflicts
-      return;
-    }
-
     // Handle normal navigation
     layoutProvider.setCurrentIndex(index);
   }

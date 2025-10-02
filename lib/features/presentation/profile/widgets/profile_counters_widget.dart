@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:melamine_elsherif/features/presentation/main%20layout/controller/layout_provider.dart';
-import 'package:provider/provider.dart';
 import '../../../../core/config/routes.dart/routes.dart';
 import '../../../../core/config/themes.dart/theme.dart';
 import '../../../../core/utils/extension/translate_extension.dart';
@@ -33,8 +31,7 @@ class ProfileCountersWidget extends StatelessWidget {
             'wishlist'.tr(context),
             Icons.favorite,
             () {
-              Provider.of<LayoutProvider>(context, listen: false).currentIndex =
-                  2;
+              AppRoutes.navigateTo(context, AppRoutes.wishListScreen);
             },
           ),
           _buildCounterItem(

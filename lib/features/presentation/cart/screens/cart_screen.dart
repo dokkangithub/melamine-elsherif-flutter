@@ -213,7 +213,6 @@ class _CartScreenState extends State<CartScreen> {
                     const Expanded(child: CartScreenShimmer()),
                   ],
                 ),
-                // Back Button
                 if (widget.showBackButton)
                   Positioned(
                     top: MediaQuery.of(context).padding.top + 8,
@@ -228,7 +227,7 @@ class _CartScreenState extends State<CartScreen> {
                         onPressed: () => Navigator.of(context).pop(),
                         icon: const Center(
                           child: Icon(
-                            Icons.arrow_back_ios_new,
+                            Icons.arrow_back_ios,
                             color: Colors.white,
                             size: 20,
                           ),
@@ -268,7 +267,7 @@ class _CartScreenState extends State<CartScreen> {
                         onPressed: () => Navigator.of(context).pop(),
                         icon: const Center(
                           child: Icon(
-                            Icons.arrow_back_ios_new,
+                            Icons.arrow_back_ios_new_outlined,
                             color: Colors.white,
                             size: 20,
                           ),
@@ -281,7 +280,6 @@ class _CartScreenState extends State<CartScreen> {
           );
         }
 
-        // Display cart with items
         return Scaffold(
           backgroundColor: Colors.white,
           body: Stack(

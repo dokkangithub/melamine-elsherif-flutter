@@ -12,12 +12,13 @@ import '../../cart/controller/cart_provider.dart';
 import '../../cart/screens/cart_screen.dart';
 import '../../../../../core/utils/enums/loading_state.dart';
 import '../../../../../features/domain/set products/entities/set_product_details.dart';
-import '../../../../../features/domain/set products/entities/set_products.dart';
 import '../../../../core/utils/constants/app_assets.dart';
 import '../../../../core/utils/helpers.dart';
 import '../controller/set_product_provider.dart';
 import '../widgets/set_product_details_shimmer.dart';
 import '../../home/widgets/set_product_card.dart';
+import 'package:melamine_elsherif/features/presentation/home/controller/home_provider.dart';
+import 'package:melamine_elsherif/features/presentation/product details/widgets/related_products_widget.dart' as pd;
 
 class SetProductDetailsScreen extends StatefulWidget {
   final String slug;
@@ -83,6 +84,7 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
     provider.clearSetProductDetails();
     provider.clearCalculatedPrice();
     provider.clearAddToCartState();
+    provider.clearRelatedProducts();
     super.dispose();
   }
 
@@ -216,7 +218,7 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
                   onPressed: () => Navigator.of(context).pop(),
                   icon: Center(
                     child: const Icon(
-                      Icons.arrow_forward_ios,
+                      Icons.arrow_back_ios_new_outlined,
                       color: Colors.white,
                       size: 20,
                     ),
@@ -422,6 +424,8 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
                   _buildSetTypeSelector(provider),
                   const SizedBox(height: 24),
                   _buildComponentsList(provider.setProductDetails!, provider),
+                  const SizedBox(height: 24),
+                  _buildCategoryProductsSection(provider.setProductDetails!),
                   const SizedBox(height: 24),
                   _buildRelatedProductsSection(provider.setProductDetails!),
                   const SizedBox(height: 24),
@@ -1153,84 +1157,240 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
     }
   }
 
-  /// Simulates discount by adding 10% to original price for testing purposes
   int _simulateOriginalPrice(int currentPrice) {
     return (currentPrice * 1.1).round();
   }
 
   Widget _buildRelatedProductsSection(SetProductDetailsData product) {
-    // TODO: Replace with actual related products data from API based on category
-    // Creating diverse related products with different images and unique slugs
-    final List<SetProduct> relatedProducts = [
-      SetProduct(
-        id: 1,
-        name: 'مجموعة أطباق ميلامين فاخرة',
-        discountedPrice: '450 ',
-        thumbnailImage: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=300&h=300&fit=crop&crop=center',
-        slug: 'luxury-melamine-plates-set',
-      ),
-      SetProduct(
-        id: 2,
-        name: 'طقم أكواب ميلامين متعدد الألوان',
-        discountedPrice: '320 ',
-        thumbnailImage: 'https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=300&h=300&fit=crop&crop=center',
-        slug: 'colorful-melamine-cups-set',
-      ),
-      SetProduct(
-        id: 3,
-        name: 'مجموعة صحون ميلامين للعائلة',
-        discountedPrice: '680 ',
-        thumbnailImage: 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=300&h=300&fit=crop&crop=center',
-        slug: 'family-melamine-dishes-set',
-      ),
-      SetProduct(
-        id: 4,
-        name: 'طقم كؤوس ميلامين عصري',
-        discountedPrice: '280 ',
-        thumbnailImage: 'https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=300&h=300&fit=crop&crop=center',
-        slug: 'modern-melamine-cups-set',
-      ),
-      SetProduct(
-        id: 5,
-        name: 'مجموعة أطباق ميلامين كلاسيكية',
-        discountedPrice: '520 ',
-        thumbnailImage: 'https://images.unsplash.com/photo-1583394838336-acd977736f90?w=300&h=300&fit=crop&crop=center',
-        slug: 'classic-melamine-plates-set',
-      ),
-      SetProduct(
-        id: 6,
-        name: 'طقم كؤوس ميلامين أنيقة',
-        discountedPrice: '380 ',
-        thumbnailImage: 'https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=300&h=300&fit=crop&crop=center',
-        slug: 'elegant-melamine-cups-set',
-      ),
-    ];
+    return Consumer<SetProductsProvider>(
+      builder: (context, provider, child) {
+        // Load related products only once when the section is first built
+        if (product.id != null && 
+            provider.relatedProductsState == LoadingState.initial) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            provider.getRelatedSetProducts(productId: product.id!);
+          });
+        }
+        
+        // If no product ID, load fallback products
+        if (product.id == null && 
+            provider.relatedProductsState == LoadingState.initial &&
+            provider.relatedProducts.isEmpty) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            provider.loadFallbackProducts();
+          });
+        }
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'related_products'.tr(context),
-          style: Theme.of(context).textTheme.titleLarge!.copyWith(
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        const SizedBox(height: 16),
-        SizedBox(
-          height: 300,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: relatedProducts.length,
-            itemBuilder: (context, index) {
-              final relatedProduct = relatedProducts[index];
-              return SetProductCard(
-                setProduct: relatedProduct,
-                width: 200,
-              );
-            },
-          ),
-        ),
-      ],
+        if (provider.relatedProductsState == LoadingState.loading) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'related_products'.tr(context),
+                style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 16),
+              SizedBox(
+                height: 300,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: 3,
+                  itemBuilder: (context, index) {
+                    return Container(
+                      width: 200,
+                      margin: const EdgeInsets.only(right: 16),
+                      child: Card(
+                        child: Column(
+                          children: [
+                            Expanded(
+                              child: Container(
+                                color: Colors.grey.shade200,
+                                child: const Center(
+                                  child: CircularProgressIndicator(),
+                                ),
+                              ),
+                            ),
+                            const Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Text('Loading...'),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
+          );
+        }
+
+        if (provider.relatedProductsState == LoadingState.error) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'related_products'.tr(context),
+                style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 16),
+              Container(
+                height: 120,
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.red.shade50,
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: Colors.red.shade200),
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      provider.relatedProductsError.contains('429') 
+                          ? 'too_many_requests_error'.tr(context)
+                          : provider.relatedProductsError,
+                      style: TextStyle(color: Colors.red.shade700),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 12),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        ElevatedButton(
+                          onPressed: product.id != null ? () {
+                            provider.retryRelatedProducts(productId: product.id!);
+                          } : null,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.red.shade100,
+                            foregroundColor: Colors.red.shade700,
+                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                          ),
+                          child: Text('retry'.tr(context)),
+                        ),
+                        const SizedBox(width: 12),
+                        ElevatedButton(
+                          onPressed: () {
+                            provider.loadFallbackProducts();
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blue.shade100,
+                            foregroundColor: Colors.blue.shade700,
+                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                          ),
+                          child: Text('show_other_products'.tr(context)),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          );
+        }
+
+        // Only hide if we're not in initial state and have no products
+        if (provider.relatedProducts.isEmpty && 
+            provider.relatedProductsState != LoadingState.initial) {
+          return const SizedBox.shrink();
+        }
+        
+        // If still in initial state and no product ID, show a message
+        if (product.id == null) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'related_products'.tr(context),
+                style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 16),
+              Container(
+                height: 100,
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade50,
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: Colors.grey.shade200),
+                ),
+                child: Center(
+                  child: Text(
+                    'no_related_products_available'.tr(context),
+                    style: TextStyle(color: Colors.grey.shade600),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+            ],
+          );
+        }
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'related_products'.tr(context),
+              style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 16),
+            SizedBox(
+              height: 300,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: provider.relatedProducts.length,
+                itemBuilder: (context, index) {
+                  final relatedProduct = provider.relatedProducts[index];
+                  return SetProductCard(
+                    setProduct: relatedProduct,
+                    width: 200,
+                  );
+                },
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _buildCategoryProductsSection(SetProductDetailsData product) {
+    return Consumer<HomeProvider>(
+      builder: (context, home, child) {
+        final categoryId = product.mainCategoryId;
+        if (categoryId != null && home.categoryProductsState == LoadingState.initial) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            home.fetchCategoryProducts(categoryId, refresh: true);
+          });
+        }
+
+        if (categoryId == null) {
+          return const SizedBox.shrink();
+        }
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'related_products'.tr(context),
+              style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 12),
+            pd.RelatedProductsWidget(
+              provider: home,
+              useCategoryProducts: true,
+            ),
+          ],
+        );
+      },
     );
   }
 

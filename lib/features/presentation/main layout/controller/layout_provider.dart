@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:melamine_elsherif/core/config/routes.dart/routes.dart';
 import 'package:melamine_elsherif/features/presentation/cart/screens/cart_screen.dart';
 import 'package:melamine_elsherif/features/presentation/category/screens/category_screen.dart';
 import 'package:melamine_elsherif/features/presentation/home/screens/home.dart';
 import 'package:melamine_elsherif/features/presentation/profile/screens/profile_screen.dart';
-import 'package:melamine_elsherif/features/presentation/wishlist/screens/wishlist_screen.dart';
+// Removed wishlist import as wishlist tab no longer exists
 
 class LayoutProvider extends ChangeNotifier {
   int _currentIndex = 0;
@@ -28,9 +27,8 @@ class LayoutProvider extends ChangeNotifier {
     _mainScreens = [
       const HomeScreen(),
       CategoryScreen(isActive: _currentIndex == 1),
-      WishlistScreen(isActive: _currentIndex == 2),
-      CartScreen(isActive: _currentIndex == 3),
-      ProfileScreen(isActive: _currentIndex == 4),
+      CartScreen(isActive: _currentIndex == 2),
+      ProfileScreen(isActive: _currentIndex == 3),
     ];
   }
 
@@ -48,11 +46,10 @@ class LayoutProvider extends ChangeNotifier {
   void setCurrentIndex(int index) {
     if (_currentIndex == index) return; // Prevent unnecessary updates
 
-    final oldIndex = _currentIndex;
     _currentIndex = index;
 
     // Reset the flag when changing to any tab other than cart
-    if (index != 3) {
+    if (index != 2) {
       _skipCartDataReload = false;
     }
 
@@ -77,7 +74,7 @@ class LayoutProvider extends ChangeNotifier {
   /// This will skip unnecessary data reloading
   void navigateToCartFromBuyNow() {
     _skipCartDataReload = true;
-    _currentIndex = 3; // Cart tab index
+    _currentIndex = 2; // Cart tab index after removing wishlist
     _updateMainScreens(); // Update screens with new active state
 
     // Notify listeners first
@@ -97,7 +94,6 @@ class LayoutProvider extends ChangeNotifier {
   List<String> screenTitles = [
     'explore',
     'category',
-    'wishlist',
     'cart',
     'profile',
   ];

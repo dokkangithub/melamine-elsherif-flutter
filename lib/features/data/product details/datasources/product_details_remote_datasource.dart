@@ -60,4 +60,6 @@ class ProductDetailsRemoteDataSourceImpl
       throw Exception('Variant price not found or invalid response format');
     }
   }
+
+
 }

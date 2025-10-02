@@ -37,6 +37,8 @@ class SetProductDetailsDataModel {
   final int? minimumCustomPrice;
   final String? thumbnailImage;
   final dynamic sku;
+  final int? mainCategoryId;
+  final String? mainCategoryName;
   final List<dynamic> specification;
   final List<ComponentModel> components;
   final int? componentCount;
@@ -59,6 +61,8 @@ class SetProductDetailsDataModel {
     this.minimumCustomPrice,
     this.thumbnailImage,
     this.sku,
+    this.mainCategoryId,
+    this.mainCategoryName,
     this.specification = const [],
     this.components = const [],
     this.componentCount,
@@ -83,6 +87,8 @@ class SetProductDetailsDataModel {
       minimumCustomPrice: json["minimum_custom_price"],
       thumbnailImage: json["thumbnail_image"],
       sku: json["sku"],
+      mainCategoryId: json["main_category_id"],
+      mainCategoryName: json["main_category_name"],
       specification: json["specification"] == null
           ? []
           : List<dynamic>.from(json["specification"]!.map((x) => x)),
@@ -118,6 +124,8 @@ class SetProductDetailsDataModel {
       minimumCustomPrice: minimumCustomPrice,
       thumbnailImage: thumbnailImage,
       sku: sku,
+      mainCategoryId: mainCategoryId,
+      mainCategoryName: mainCategoryName,
       specification: specification,
       components: components.map((c) => c.toEntity()).toList(),
       componentCount: componentCount,

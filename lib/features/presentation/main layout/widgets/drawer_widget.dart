@@ -119,8 +119,7 @@ class DrawerWidget extends StatelessWidget {
                       Icons.favorite_border,
                       'my_wishlist',
                       onTap: () {
-                        layoutProvider.setCurrentIndex(2);
-                        toggleDrawer();
+                        AppRoutes.navigateTo(context, AppRoutes.wishListScreen);
                       },
                     )
                   : SizedBox.shrink(),

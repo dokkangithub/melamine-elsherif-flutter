@@ -31,6 +31,7 @@ class AppImages {
   static const String melamineLogoWhite = '$imagesPath/melamine_logo_white.png';
   static const String loginBackground = 'assets/images/login_background.png';
   static const String signupBackground = 'assets/images/signup_background.png';
+  static const String search = 'assets/icons/search.png';
 }
 
 class AppAnimations {
@@ -59,8 +60,7 @@ class AppSvgs {
   static const String category_2 = '$svgPath/category_2.svg';
   static const String category_3 = '$svgPath/category_3.svg';
   static const String category_4 = '$svgPath/category_4.svg';
-  static const String category_search_icon =
-      '$svgPath/category_search_icon.svg';
+  static const String category_search_icon = '$svgPath/category_search_icon.svg';
   static const String category_card_1 = '$svgPath/category_card_1.svg';
   static const String category_card_2 = '$svgPath/category_card_2.svg';
   static const String category_card_3 = '$svgPath/category_card_3.svg';

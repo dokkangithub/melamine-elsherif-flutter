@@ -54,6 +54,7 @@ import '../../features/domain/set products/repositories/set_products_repository.
 import '../../features/domain/set products/usecases/calculate_price_use_case.dart';
 import '../../features/domain/set products/usecases/get_set_product_details_use_case.dart';
 import '../../features/domain/set products/usecases/get_set_products_use_case.dart';
+import '../../features/domain/set products/usecases/get_related_set_products_use_case.dart';
 import '../../features/presentation/club_point/controller/club_point_provider.dart';
 import '../../features/domain/address/repositories/address_repository.dart';
 import '../../features/domain/address/usecases/add_address_usecases.dart';
@@ -155,7 +156,6 @@ import '../../features/presentation/search/controller/search_provider.dart';
 import '../../features/presentation/set products/controller/set_product_provider.dart';
 import '../../features/presentation/slider/controller/provider.dart';
 import '../../features/presentation/wishlist/controller/wishlist_provider.dart';
-import '../../main.dart';
 import '../api/api_provider.dart';
 import '../config/app_config.dart/app_config.dart';
 import '../database/objectbox_store.dart';
@@ -455,18 +455,21 @@ Future<void> setupDependencies() async {
 
   // Use Cases - set products
   sl.registerLazySingleton(() => GetSetProductsUseCase(sl()));
-  GetIt.instance.registerLazySingleton<GetSetProductDetailsUseCase>(
-    () => GetSetProductDetailsUseCase(GetIt.instance<SetProductsRepository>()),
+  sl.registerLazySingleton<GetSetProductDetailsUseCase>(
+    () => GetSetProductDetailsUseCase(sl<SetProductsRepository>()),
+  );
+  sl.registerLazySingleton<GetRelatedSetProductsUseCase>(
+    () => GetRelatedSetProductsUseCase(sl<SetProductsRepository>()),
   );
 
-  GetIt.instance.registerLazySingleton<CalculatePriceUseCase>(
-    () => CalculatePriceUseCase(GetIt.instance<SetProductsRepository>()),
+  sl.registerLazySingleton<CalculatePriceUseCase>(
+    () => CalculatePriceUseCase(sl<SetProductsRepository>()),
   );
-  GetIt.instance.registerLazySingleton<AddFullSetToCartUseCase>(
-    () => AddFullSetToCartUseCase(GetIt.instance<SetProductsRepository>()),
+  sl.registerLazySingleton<AddFullSetToCartUseCase>(
+    () => AddFullSetToCartUseCase(sl<SetProductsRepository>()),
   );
-  GetIt.instance.registerLazySingleton<AddCustomSetToCartUseCase>(
-    () => AddCustomSetToCartUseCase(GetIt.instance<SetProductsRepository>()),
+  sl.registerLazySingleton<AddCustomSetToCartUseCase>(
+    () => AddCustomSetToCartUseCase(sl<SetProductsRepository>()),
   );
 
   // Providers
@@ -485,14 +488,13 @@ Future<void> setupDependencies() async {
 
   sl.registerFactory(() => SliderProvider(getSlidersUseCase: sl()));
 
-  GetIt.instance.registerFactory<SetProductsProvider>(
+  sl.registerFactory<SetProductsProvider>(
     () => SetProductsProvider(
-      getSetProductsUseCase: GetIt.instance<GetSetProductsUseCase>(),
-      getSetProductDetailsUseCase:
-          GetIt.instance<GetSetProductDetailsUseCase>(),
-      calculatePriceUseCase: GetIt.instance<CalculatePriceUseCase>(),
+      getSetProductsUseCase: sl<GetSetProductsUseCase>(),
+      getSetProductDetailsUseCase: sl<GetSetProductDetailsUseCase>(),
+      getRelatedSetProductsUseCase: sl<GetRelatedSetProductsUseCase>(),
+      calculatePriceUseCase: sl<CalculatePriceUseCase>(),
       addFullSetToCartUseCase: sl<AddFullSetToCartUseCase>(),
-
       addCustomSetToCartUseCase: sl<AddCustomSetToCartUseCase>(),
     ),
   );

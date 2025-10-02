@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:animate_do/animate_do.dart';
-import 'package:melamine_elsherif/core/config/app_config.dart/app_config.dart';
 import 'package:melamine_elsherif/core/config/routes.dart/routes.dart';
 import 'package:melamine_elsherif/core/config/themes.dart/theme.dart';
 import 'package:melamine_elsherif/core/utils/constants/app_assets.dart';
@@ -83,14 +82,24 @@ class _CategoryWidgetState extends State<CategoryWidget>
               ? FadeInRight(
                   duration: const Duration(milliseconds: 500),
                   child: IconButton(
-                    icon: const Icon(Icons.search, color: Colors.black),
+                    icon: Image.asset(
+                      AppImages.search,
+                      color: AppTheme.primaryColor,
+                      width: 22,
+                      height: 22,
+                    ),
                     onPressed: () {
                       AppRoutes.navigateTo(context, AppRoutes.searchScreen);
                     },
                   ),
                 )
               : IconButton(
-                  icon: const Icon(Icons.search, color: Colors.black),
+                  icon: Image.asset(
+                    AppImages.search,
+                    color: AppTheme.primaryColor,
+                    width: 22,
+                    height: 22,
+                  ),
                   onPressed: () {
                     AppRoutes.navigateTo(context, AppRoutes.searchScreen);
                   },
