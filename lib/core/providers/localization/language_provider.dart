@@ -6,7 +6,7 @@ import '../../di/injection_container.dart';
 import '../../api/api_provider.dart';
 import '../../../features/presentation/home/controller/home_provider.dart';
 import '../../../features/presentation/category/controller/provider.dart';
-import 'package:provider/provider.dart';
+import '../../../features/presentation/set products/controller/set_product_provider.dart';
 
 class LanguageProvider extends ChangeNotifier {
   // Changed from final to late to allow updating
@@ -114,6 +114,10 @@ class LanguageProvider extends ChangeNotifier {
       final categoryProvider = sl<CategoryProvider>();
       categoryProvider
           .refreshAfterLanguageChange(); // Use the new method for complete refresh
+
+      final setProductsProvider = sl<SetProductsProvider>();
+      setProductsProvider
+          .refreshAfterLanguageChange(); // Refresh set products data
     } catch (e) {
       debugPrint('Error refreshing data providers: $e');
     }

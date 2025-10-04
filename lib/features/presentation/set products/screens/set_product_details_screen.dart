@@ -34,9 +34,11 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
     with TickerProviderStateMixin {
   Map<int, int> selectedQuantities = {};
   bool isSummaryExpanded = false;
+  bool isWarrantyExpanded = false;
   bool isFullSet = true;
   late AnimationController _descriptionController;
   late AnimationController _summaryController;
+  late AnimationController _warrantyController;
   late AnimationController _priceAnimationController;
   // Removed unused animations to clean up lints
   late Animation<double> _priceAnimation;
@@ -49,6 +51,10 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
       vsync: this,
     );
     _summaryController = AnimationController(
+      duration: const Duration(milliseconds: 300),
+      vsync: this,
+    );
+    _warrantyController = AnimationController(
       duration: const Duration(milliseconds: 300),
       vsync: this,
     );
@@ -72,6 +78,7 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
   void _resetScreenState() {
     selectedQuantities.clear();
     isSummaryExpanded = false;
+    isWarrantyExpanded = false;
     isFullSet = true;
   }
 
@@ -79,6 +86,7 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
   void dispose() {
     _descriptionController.dispose();
     _summaryController.dispose();
+    _warrantyController.dispose();
     _priceAnimationController.dispose();
     final provider = Provider.of<SetProductsProvider>(context, listen: false);
     provider.clearSetProductDetails();
@@ -96,6 +104,17 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
         _summaryController.forward();
       } else {
         _summaryController.reverse();
+      }
+    });
+  }
+
+  void _toggleWarranty() {
+    setState(() {
+      isWarrantyExpanded = !isWarrantyExpanded;
+      if (isWarrantyExpanded) {
+        _warrantyController.forward();
+      } else {
+        _warrantyController.reverse();
       }
     });
   }
@@ -357,7 +376,7 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
                         const SizedBox(width: 12),
                         if (!isLoading && originalPrice != null)
                           Text(
-                            originalPrice,
+                            '$originalPrice L.E',
                             style: Theme.of(context).textTheme.titleLarge!
                                 .copyWith(
                                   color: AppTheme.darkDividerColor,
@@ -428,12 +447,13 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
                   _buildCategoryProductsSection(provider.setProductDetails!),
                   const SizedBox(height: 24),
                   _buildRelatedProductsSection(provider.setProductDetails!),
-                  const SizedBox(height: 24),
                   _buildCareInstructionsSection(
                     provider.setProductDetails!,
                   ), // Add this line
                   const SizedBox(height: 24),
                   _buildSelectedComponentsSummary(provider.setProductDetails!),
+                  const SizedBox(height: 5),
+                  _buildWarrantySection(provider.setProductDetails!),
                   const SizedBox(height: 24),
                   _buildReviewsSection(provider.setProductDetails!),
                   const SizedBox(height: 100),
@@ -570,6 +590,9 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
         ),
         const SizedBox(height: 16),
         ListView.builder(
+          padding: const EdgeInsets.symmetric(
+            vertical: 10,
+          ),
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           itemCount: product.components.length,
@@ -917,6 +940,73 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
                         ),
                       );
                     }).toList(),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildWarrantySection(SetProductDetailsData product) {
+    if (product.warrantyText == null || product.warrantyText!.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        InkWell(
+          onTap: _toggleWarranty,
+          child: Container(
+            padding: const EdgeInsets.symmetric(vertical: 12),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'warranty'.tr(context),
+                  style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                AnimatedRotation(
+                  turns: isWarrantyExpanded ? 0.5 : 0,
+                  duration: const Duration(milliseconds: 300),
+                  child: const Icon(Icons.keyboard_arrow_down),
+                ),
+              ],
+            ),
+          ),
+        ),
+        AnimatedContainer(
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+          height: isWarrantyExpanded ? null : 0,
+          child: AnimatedOpacity(
+            duration: const Duration(milliseconds: 300),
+            opacity: isWarrantyExpanded ? 1.0 : 0.0,
+            child: Container(
+              padding: const EdgeInsets.only(top: 8),
+              child: Card(
+                elevation: 2,
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.zero,
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Html(
+                    data: product.warrantyText!,
+                    style: {
+                      "body": Style(
+                        margin: Margins.zero,
+                        padding: HtmlPaddings.zero,
+                        fontSize: FontSize(16.0),
+                        lineHeight: const LineHeight(1.5),
+                        color: Colors.black87,
+                      ),
+                    },
                   ),
                 ),
               ),
@@ -1475,8 +1565,11 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
           ),
 
           Padding(
-            padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
+            padding: const EdgeInsets.all(0),
             child: GridView.builder(
+              padding: const EdgeInsets.symmetric(
+                vertical: 10,
+              ),
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(

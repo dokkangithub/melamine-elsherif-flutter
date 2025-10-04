@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:melamine_elsherif/core/utils/product%20cards/custom_product_card.dart';
+import 'package:melamine_elsherif/features/presentation/home/widgets/set_product_card.dart';
 import 'package:provider/provider.dart';
 import 'package:melamine_elsherif/core/utils/widgets/see_all_widget.dart';
 import 'package:melamine_elsherif/core/utils/extension/translate_extension.dart';
 import 'package:melamine_elsherif/core/config/routes.dart/routes.dart';
 import 'package:melamine_elsherif/core/utils/enums/loading_state.dart';
-import 'package:melamine_elsherif/core/utils/enums/products_type.dart';
 import 'package:melamine_elsherif/features/presentation/home/controller/home_provider.dart';
 import 'package:melamine_elsherif/features/presentation/home/widgets/shimmer/all_products_shimmer.dart';
-
-import '../../../../core/config/themes.dart/theme.dart';
-import '../../../../core/utils/product cards/custom_gridview_prodcut.dart';
 
 class AllProductsWidget extends StatelessWidget {
   const AllProductsWidget({super.key});
@@ -20,41 +16,35 @@ class AllProductsWidget extends StatelessWidget {
     return Consumer<HomeProvider>(
       builder: (context, homeProvider, child) {
         // Show shimmer while loading
-        if (homeProvider.allProductsState == LoadingState.loading) {
+        if (homeProvider.allSetProductsState == LoadingState.loading) {
           return const AllProductsShimmer();
         }
 
         // Show error state
-        if (homeProvider.allProductsState == LoadingState.error) {
+        if (homeProvider.allSetProductsState == LoadingState.error) {
           return _buildEmptyState(
             context,
-            "Couldn't load products: ${homeProvider.allProductsError}".tr(
+            "Couldn't load products: ${homeProvider.allSetProductsError}".tr(
               context,
             ),
           );
         }
 
-        // Get products data
-        final allProducts = homeProvider.allProducts;
+        // Get set products data
+        final allSetProducts = homeProvider.allSetProducts;
 
         // Show empty state if no products
-        if (allProducts.isEmpty) {
+        if (allSetProducts.isEmpty) {
           return _buildEmptyState(context, "no_products_available".tr(context));
         }
 
         // Filter only published products
-        final filteredProducts = allProducts
-            .where((product) => product.published == 1)
+        final filteredProducts = allSetProducts
+            .where((product) => product.published == true)
             .toList();
 
         // Show empty state if no published products
         if (filteredProducts.isEmpty) {
-          // If we have more pages, trigger fetching more data
-          if (homeProvider.hasMoreAllProducts) {
-            // Use a future to avoid build during build error
-            Future.microtask(() => homeProvider.fetchAllProducts());
-            return const AllProductsShimmer();
-          }
           return _buildEmptyState(context, "no_products_available".tr(context));
         }
 
@@ -67,42 +57,29 @@ class AllProductsWidget extends StatelessWidget {
               onTap: () {
                 AppRoutes.navigateTo(
                   context,
-                  AppRoutes.allProductsByTypeScreen,
-                  arguments: {
-                    'productType': ProductType.all,
-                    'title': 'all_products'.tr(context),
-                  },
+                  AppRoutes.setProductsScreen,
                 );
               },
             ),
             GridView.builder(
+              padding:const EdgeInsets.symmetric(vertical: 15),
+
               physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
-                childAspectRatio: 0.55,
-                crossAxisSpacing: 0,
-                mainAxisSpacing: 0,
+                childAspectRatio: 0.7,
+                crossAxisSpacing:0,
+                mainAxisSpacing: 5,
               ),
               itemCount: filteredProducts.length > 8
                   ? 8
                   : filteredProducts.length,
               itemBuilder: (context, index) {
                 final product = filteredProducts[index];
-                return ProductCard(product: product, isOutlinedAddToCart: true);
+                return SetProductCard(setProduct: product, width: 200);
               },
             ),
-            // If we have less than 8 published products and more data available, load more
-            if (filteredProducts.length < 8 && homeProvider.hasMoreAllProducts)
-              Padding(
-                padding: const EdgeInsets.only(top: 16.0),
-                child: Center(
-                  child: ElevatedButton(
-                    onPressed: () => homeProvider.fetchAllProducts(),
-                    child: Text('load_more'.tr(context)),
-                  ),
-                ),
-              ),
           ],
         );
       },

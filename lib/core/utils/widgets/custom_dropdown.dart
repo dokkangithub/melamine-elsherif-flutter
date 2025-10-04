@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:melamine_elsherif/core/utils/extension/translate_extension.dart';
+import '../constants/app_assets.dart';
+import '../../config/themes.dart/theme.dart';
 
 class CustomDropdown<T> extends StatefulWidget {
   final String? label;
@@ -162,7 +164,12 @@ class _CustomDropdownState<T> extends State<CustomDropdown<T>> {
                       controller: _searchController,
                       decoration: InputDecoration(
                         hintText: widget.searchHint,
-                        prefixIcon: const Icon(Icons.search),
+                        prefixIcon: Image.asset(
+                          AppImages.search,
+                          color: AppTheme.primaryColor,
+                          width: 20,
+                          height: 20,
+                        ),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(
                             widget.borderRadius,

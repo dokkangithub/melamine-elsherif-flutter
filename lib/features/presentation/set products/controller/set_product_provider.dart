@@ -75,6 +75,7 @@ class SetProductsProvider extends ChangeNotifier {
 
       final SetProductsResponse response = await getSetProductsUseCase(
         page: currentPage,
+        needUpdate: isRefresh,
       );
 
       if (isRefresh) {
@@ -339,6 +340,46 @@ class SetProductsProvider extends ChangeNotifier {
     addToCartState = LoadingState.initial;
     addToCartError = '';
     addToCartResponse = null;
+    notifyListeners();
+  }
+
+  // Special method for language change - refresh all set products data
+  Future<void> refreshAfterLanguageChange() async {
+    debugPrint('Refreshing set products data after language change');
+
+    // Reset all states to loading
+    setProductsState = LoadingState.loading;
+    setProductDetailsState = LoadingState.loading;
+    relatedProductsState = LoadingState.loading;
+    
+    // Clear all data
+    setProducts.clear();
+    setProductDetails = null;
+    relatedProducts.clear();
+    calculatedPrice = null;
+    
+    // Reset pagination
+    currentPage = 1;
+    hasMorePages = true;
+    isLoadingMore = false;
+    currentRelatedProductId = null;
+    
+    // Clear error messages
+    setProductsError = '';
+    setProductDetailsError = '';
+    relatedProductsError = '';
+    calculatePriceError = '';
+    addToCartError = '';
+    
+    notifyListeners();
+
+    // Force refresh set products data
+    try {
+      await getSetProducts(isRefresh: true);
+    } catch (e) {
+      debugPrint('Error refreshing set products after language change: $e');
+    }
+
     notifyListeners();
   }
 }

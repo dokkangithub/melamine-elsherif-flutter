@@ -45,6 +45,7 @@ class SetProductDetailsDataModel {
   final int? requiredComponents;
   final List<ReviewModel> reviews;
   final int? reviewCount;
+  final String? warrantyText;
 
   SetProductDetailsDataModel({
     this.id,
@@ -69,6 +70,7 @@ class SetProductDetailsDataModel {
     this.requiredComponents,
     this.reviews = const [],
     this.reviewCount,
+    this.warrantyText,
   });
 
   factory SetProductDetailsDataModel.fromJson(Map<String, dynamic> json) {
@@ -105,6 +107,7 @@ class SetProductDetailsDataModel {
               json["reviews"].map((x) => ReviewModel.fromJson(x)),
             ),
       reviewCount: json["review_count"],
+      warrantyText: json["warranty_text"],
     );
   }
 
@@ -132,6 +135,7 @@ class SetProductDetailsDataModel {
       requiredComponents: requiredComponents,
       reviews: reviews.map((r) => r.toEntity()).toList(),
       reviewCount: reviewCount,
+      warrantyText: warrantyText,
     );
   }
 }

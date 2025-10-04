@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:melamine_elsherif/core/config/themes.dart/theme.dart';
-import 'package:melamine_elsherif/core/utils/constants/app_assets.dart';
 import 'package:melamine_elsherif/core/utils/enums/products_type.dart';
 import 'package:melamine_elsherif/core/utils/extension/text_theme_extension.dart';
 import 'package:melamine_elsherif/core/utils/extension/translate_extension.dart';
@@ -12,6 +10,7 @@ import 'package:melamine_elsherif/core/utils/widgets/custom_button.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_cached_image.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_empty_widgets.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_loading.dart';
+import '../../../../core/utils/constants/app_assets.dart';
 import 'package:melamine_elsherif/features/domain/product/entities/product.dart';
 import 'package:provider/provider.dart';
 import '../../../../core/config/routes.dart/routes.dart';
@@ -141,10 +140,10 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
     try {
       switch (_selectedProductType) {
         case ProductType.all:
-          await provider.fetchAllProducts(refresh: refresh);
+          // Don't fetch, we're redirecting to set products screen
           break;
         case ProductType.bestSelling:
-          await provider.fetchBestSellingProducts(refresh: refresh);
+          // Don't fetch, we're redirecting to set products screen
           break;
         case ProductType.featured:
           await provider.fetchFeaturedProducts(refresh: refresh);
@@ -193,10 +192,12 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
 
     switch (_selectedProductType) {
       case ProductType.all:
-        hasMore = provider.hasMoreAllProducts;
+        // For set products, we don't have pagination yet, so return false
+        hasMore = false;
         break;
       case ProductType.bestSelling:
-        hasMore = provider.hasMoreBestSellingProducts;
+        // For set products, we don't have pagination yet, so return false
+        hasMore = false;
         break;
       case ProductType.featured:
         hasMore = provider.hasMoreFeaturedProducts;
@@ -218,9 +219,21 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
   List<Product> _getProducts(HomeProvider provider) {
     switch (_selectedProductType) {
       case ProductType.all:
-        return provider.allProducts;
+        // For All Products, redirect to set products screen instead
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          Navigator.of(context).pushReplacementNamed(
+            AppRoutes.setProductsScreen,
+          );
+        });
+        return [];
       case ProductType.bestSelling:
-        return provider.bestSellingProducts;
+        // For Best Selling, redirect to set products screen instead
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          Navigator.of(context).pushReplacementNamed(
+            AppRoutes.setProductsScreen,
+          );
+        });
+        return [];
       case ProductType.featured:
         return provider.featuredProducts;
       case ProductType.newArrival:
@@ -233,9 +246,9 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
   LoadingState _getLoadingState(HomeProvider provider) {
     switch (_selectedProductType) {
       case ProductType.all:
-        return provider.allProductsState;
+        return LoadingState.loaded; // Return loaded since we're redirecting
       case ProductType.bestSelling:
-        return provider.bestSellingProductsState;
+        return LoadingState.loaded; // Return loaded since we're redirecting
       case ProductType.featured:
         return provider.featuredProductsState;
       case ProductType.newArrival:
@@ -248,9 +261,9 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
   String _getErrorMessage(HomeProvider provider) {
     switch (_selectedProductType) {
       case ProductType.all:
-        return provider.allProductsError;
+        return ''; // No error since we're redirecting
       case ProductType.bestSelling:
-        return provider.bestSellingProductsError;
+        return ''; // No error since we're redirecting
       case ProductType.featured:
         return provider.featuredProductsError;
       case ProductType.newArrival:
@@ -311,7 +324,12 @@ class _AllProductsByTypeScreenState extends State<AllProductsByTypeScreen> {
       leading: CustomBackButton(respectDirection: isRTL),
       actions: [
         IconButton(
-          icon: const Icon(Icons.search, color: Colors.black),
+          icon: Image.asset(
+            AppImages.search,
+            color: AppTheme.primaryColor,
+            width: 22,
+            height: 22,
+          ),
           onPressed: () {
             AppRoutes.navigateTo(context, AppRoutes.searchScreen);
           },

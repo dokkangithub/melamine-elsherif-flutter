@@ -4,11 +4,9 @@ import 'package:melamine_elsherif/core/utils/widgets/see_all_widget.dart';
 import 'package:melamine_elsherif/core/utils/extension/translate_extension.dart';
 import 'package:melamine_elsherif/core/config/routes.dart/routes.dart';
 import 'package:melamine_elsherif/core/utils/enums/loading_state.dart';
-import 'package:melamine_elsherif/core/utils/enums/products_type.dart';
 import 'package:melamine_elsherif/features/presentation/home/controller/home_provider.dart';
 import 'package:melamine_elsherif/features/presentation/home/widgets/shimmer/best_selling_products_shimmer.dart';
-
-import '../../../../core/utils/product cards/custom_product_card.dart';
+import 'package:melamine_elsherif/features/presentation/home/widgets/set_product_card.dart';
 
 class BestSellingProductsWidget extends StatelessWidget {
   const BestSellingProductsWidget({super.key});
@@ -18,20 +16,20 @@ class BestSellingProductsWidget extends StatelessWidget {
     return Consumer<HomeProvider>(
       builder: (context, homeProvider, child) {
         // Show shimmer while loading
-        if (homeProvider.bestSellingProductsState == LoadingState.loading) {
+        if (homeProvider.bestSellingSetProductsState == LoadingState.loading) {
           return const BestSellingProductsShimmer();
         }
 
         // Show error state
-        if (homeProvider.bestSellingProductsState == LoadingState.error) {
+        if (homeProvider.bestSellingSetProductsState == LoadingState.error) {
           return _buildEmptyState(
             context,
             "couldnt_load_best_selling_products".tr(context),
           );
         }
 
-        // Get products data
-        final products = homeProvider.bestSellingProducts;
+        // Get set products data
+        final products = homeProvider.bestSellingSetProducts;
 
         // Show empty state if no products
         if (products.isEmpty) {
@@ -42,10 +40,9 @@ class BestSellingProductsWidget extends StatelessWidget {
         }
 
         final filteredProducts = products
-            .where((product) => product.published == 1)
+            .where((product) => product.published == true)
             .toList();
-        // Show products list
-        print(filteredProducts[0].discountedPrice);
+        
         return Column(
           children: [
             SeeAllWidget(
@@ -53,11 +50,7 @@ class BestSellingProductsWidget extends StatelessWidget {
               onTap: () {
                 AppRoutes.navigateTo(
                   context,
-                  AppRoutes.allProductsByTypeScreen,
-                  arguments: {
-                    'productType': ProductType.bestSelling,
-                    'title': 'best_selling_products'.tr(context),
-                  },
+                  AppRoutes.setProductsScreen,
                 );
               },
             ),
@@ -66,9 +59,9 @@ class BestSellingProductsWidget extends StatelessWidget {
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
                 itemCount: filteredProducts.length,
-                itemBuilder: (context, index) => ProductCard(
-                  product: filteredProducts[index],
-                  isBuyNow: true,
+                itemBuilder: (context, index) => SetProductCard(
+                  setProduct: filteredProducts[index],
+                  width: 190,
                 ),
               ),
             ),

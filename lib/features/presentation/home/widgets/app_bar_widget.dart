@@ -31,7 +31,12 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
       ),
       actions: [
         InkWell(
-          child: const CustomImage(assetPath: AppSvgs.search_icon),
+          child: Image.asset(
+            AppImages.search,
+            color: AppTheme.primaryColor,
+            width: 22,
+            height: 22,
+          ),
           onTap: () {
             AppRoutes.navigateTo(context, AppRoutes.searchScreen);
           },

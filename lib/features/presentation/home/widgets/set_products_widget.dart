@@ -52,12 +52,11 @@ class SetProductsWidget extends StatelessWidget {
             SizedBox(
               height: 300,
               child: ListView.builder(
-                padding: const EdgeInsets.only(left: 16.0),
                 scrollDirection: Axis.horizontal,
                 itemCount: firstTenProducts.length,
                 itemBuilder: (context, index) => SetProductCard(
                   setProduct: firstTenProducts[index],
-                  width: 250,
+                  width: 190,
                 ),
               ),
             ),

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:melamine_elsherif/core/services/widget_service.dart';
-import 'package:melamine_elsherif/features/data/product/models/flash_deal_response_model.dart';
-import 'package:melamine_elsherif/features/data/product/models/product_model.dart';
 import 'package:melamine_elsherif/features/domain/product/entities/flash_deal.dart';
 import 'package:melamine_elsherif/features/domain/product/usecases/get_all_products_use_case.dart';
 import 'package:melamine_elsherif/features/domain/product/usecases/get_featured_products_use_case.dart';
@@ -16,20 +14,12 @@ import 'package:melamine_elsherif/features/domain/product/usecases/get_digital_p
 import 'package:melamine_elsherif/features/domain/product/usecases/get_related_products_use_case.dart';
 import 'package:melamine_elsherif/features/domain/product/usecases/get_shop_products_use_case.dart';
 import 'package:melamine_elsherif/features/domain/product/usecases/get_top_from_this_seller_products_use_case.dart';
+import 'package:melamine_elsherif/features/domain/set%20products/usecases/get_set_products_use_case.dart';
 import '../../../../core/utils/enums/loading_state.dart';
+import '../../../../core/di/injection_container.dart';
 import '../../../domain/product/entities/product.dart';
-import '../../../domain/product/usecases/get_best_selling_products_use_case.dart';
-import '../../../domain/product/usecases/get_featured_products_use_case.dart';
-import '../../../domain/product/usecases/get_flash_deal_products_use_case.dart';
-import '../../../domain/product/usecases/get_new_added_products_use_case.dart';
-import '../../../domain/product/usecases/get_sub_category_products_usecase.dart';
-import '../../../domain/product/usecases/get_todays_deal_products_use_case.dart';
-import '../../../domain/product/usecases/get_category_products_use_case.dart';
-import '../../../domain/product/usecases/get_brand_products_use_case.dart';
-import '../../../domain/product/usecases/get_digital_products_use_case.dart';
-import '../../../domain/product/usecases/get_related_products_use_case.dart';
-import '../../../domain/product/usecases/get_shop_products_use_case.dart';
-import '../../../domain/product/usecases/get_top_from_this_seller_products_use_case.dart';
+import '../../../domain/set%20products/entities/set_products.dart';
+import '../../set products/controller/set_product_provider.dart';
 
 class HomeProvider extends ChangeNotifier {
   final GetAllProductsUseCase getAllProductsUseCase;
@@ -45,6 +35,7 @@ class HomeProvider extends ChangeNotifier {
   final GetRelatedProductsUseCase getRelatedProductsUseCase;
   final GetShopProductsUseCase getShopProductsUseCase;
   final GetTopFromThisSellerProductsUseCase getTopFromThisSellerProductsUseCase;
+  final GetSetProductsUseCase getSetProductsUseCase;
 
   List<Product> allProducts = [];
   List<Product> featuredProducts = [];
@@ -62,6 +53,12 @@ class HomeProvider extends ChangeNotifier {
   List<Product> relatedProducts = [];
   List<Product> shopProducts = [];
   List<Product> topFromThisSellerProducts = [];
+  
+  // Set Products lists
+  List<SetProduct> allSetProducts = [];
+  List<SetProduct> featuredSetProducts = [];
+  List<SetProduct> bestSellingSetProducts = [];
+  List<SetProduct> newSetProducts = [];
   dynamic variantInfo;
 
   int allProductsPage = 1;
@@ -98,6 +95,12 @@ class HomeProvider extends ChangeNotifier {
   LoadingState filteredProductsState = LoadingState.loading;
   LoadingState relatedProductsState = LoadingState.loading;
   LoadingState shopProductsState = LoadingState.loading;
+  
+  // Set Products loading states
+  LoadingState allSetProductsState = LoadingState.loading;
+  LoadingState featuredSetProductsState = LoadingState.loading;
+  LoadingState bestSellingSetProductsState = LoadingState.loading;
+  LoadingState newSetProductsState = LoadingState.loading;
   LoadingState topFromThisSellerProductsState = LoadingState.loading;
   LoadingState variantInfoState = LoadingState.loading;
 
@@ -114,6 +117,12 @@ class HomeProvider extends ChangeNotifier {
   String filteredProductsError = '';
   String relatedProductsError = '';
   String shopProductsError = '';
+  
+  // Set Products error strings
+  String allSetProductsError = '';
+  String featuredSetProductsError = '';
+  String bestSellingSetProductsError = '';
+  String newSetProductsError = '';
   String topFromThisSellerProductsError = '';
   String variantInfoError = '';
 
@@ -131,15 +140,16 @@ class HomeProvider extends ChangeNotifier {
     required this.getShopProductsUseCase,
     required this.getSubCategoryProductsUseCase,
     required this.getTopFromThisSellerProductsUseCase,
+    required this.getSetProductsUseCase,
   });
 
   // Existing initialization method
   Future<void> initHomeData() async {
     await Future.wait([
-      fetchAllProducts(),
-      fetchFeaturedProducts(),
-      fetchBestSellingProducts(),
-      fetchNewProducts(),
+      fetchAllSetProducts(), // All Products - Set Products
+      fetchFeaturedProducts(), // Featured Products - Regular Products
+      fetchBestSellingSetProducts(), // Best Selling - Set Products
+      fetchNewProducts(), // New Products - Regular Products
       fetchTodaysDealProducts(),
       fetchFlashDealProducts(),
     ]);
@@ -504,7 +514,8 @@ class HomeProvider extends ChangeNotifier {
     int brandId, {
     bool refresh = false,
     String? name,
-  }) async {
+  })
+  async {
     try {
       if (refresh) {
         brandProductsPage = 1;
@@ -742,6 +753,13 @@ class HomeProvider extends ChangeNotifier {
     newProductsState = LoadingState.loading;
     todaysDealProductsState = LoadingState.loading;
     flashDealProductsState = LoadingState.loading;
+    
+    // Reset Set Products states
+    allSetProductsState = LoadingState.loading;
+    featuredSetProductsState = LoadingState.loading;
+    bestSellingSetProductsState = LoadingState.loading;
+    newSetProductsState = LoadingState.loading;
+    
     notifyListeners();
 
     // Reset all pages
@@ -765,8 +783,118 @@ class HomeProvider extends ChangeNotifier {
       fetchTodaysDealProducts(refresh: true),
       fetchDigitalProducts(refresh: true),
       fetchFlashDealProducts(refresh: true),
+      // Add Set Products refresh
+      fetchAllSetProducts(refresh: true),
+      fetchFeaturedSetProducts(refresh: true),
+      fetchBestSellingSetProducts(refresh: true),
+      fetchNewSetProducts(refresh: true),
     ]);
 
+    // Also refresh the SetProductsProvider that's used by some widgets
+    try {
+      final setProductsProvider = sl<SetProductsProvider>();
+      await setProductsProvider.refreshAfterLanguageChange();
+    } catch (e) {
+      debugPrint('Error refreshing SetProductsProvider after language change: $e');
+    }
+
     notifyListeners();
+  }
+
+  // Set Products methods
+  Future<void> fetchAllSetProducts({bool refresh = false}) async {
+    try {
+      if (refresh) {
+        allSetProducts = [];
+      }
+
+      allSetProductsState = LoadingState.loading;
+      notifyListeners();
+
+      final response = await getSetProductsUseCase(
+        page: 1,
+        needUpdate: refresh,
+      );
+
+      allSetProducts = response.products;
+      allSetProductsState = LoadingState.loaded;
+    } catch (e) {
+      allSetProductsState = LoadingState.error;
+      allSetProductsError = e.toString();
+    } finally {
+      notifyListeners();
+    }
+  }
+
+  Future<void> fetchFeaturedSetProducts({bool refresh = false}) async {
+    try {
+      if (refresh) {
+        featuredSetProducts = [];
+      }
+
+      featuredSetProductsState = LoadingState.loading;
+      notifyListeners();
+
+      final response = await getSetProductsUseCase(
+        page: 1,
+        needUpdate: refresh,
+      );
+
+      featuredSetProducts = response.products;
+      featuredSetProductsState = LoadingState.loaded;
+    } catch (e) {
+      featuredSetProductsState = LoadingState.error;
+      featuredSetProductsError = e.toString();
+    } finally {
+      notifyListeners();
+    }
+  }
+
+  Future<void> fetchBestSellingSetProducts({bool refresh = false}) async {
+    try {
+      if (refresh) {
+        bestSellingSetProducts = [];
+      }
+
+      bestSellingSetProductsState = LoadingState.loading;
+      notifyListeners();
+
+      final response = await getSetProductsUseCase(
+        page: 1,
+        needUpdate: refresh,
+      );
+
+      bestSellingSetProducts = response.products;
+      bestSellingSetProductsState = LoadingState.loaded;
+    } catch (e) {
+      bestSellingSetProductsState = LoadingState.error;
+      bestSellingSetProductsError = e.toString();
+    } finally {
+      notifyListeners();
+    }
+  }
+
+  Future<void> fetchNewSetProducts({bool refresh = false}) async {
+    try {
+      if (refresh) {
+        newSetProducts = [];
+      }
+
+      newSetProductsState = LoadingState.loading;
+      notifyListeners();
+
+      final response = await getSetProductsUseCase(
+        page: 1,
+        needUpdate: refresh,
+      );
+
+      newSetProducts = response.products;
+      newSetProductsState = LoadingState.loaded;
+    } catch (e) {
+      newSetProductsState = LoadingState.error;
+      newSetProductsError = e.toString();
+    } finally {
+      notifyListeners();
+    }
   }
 }

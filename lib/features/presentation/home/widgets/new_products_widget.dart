@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:melamine_elsherif/core/config/themes.dart/theme.dart';
 import 'package:provider/provider.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:melamine_elsherif/core/utils/widgets/see_all_widget.dart';
 import 'package:melamine_elsherif/core/utils/extension/translate_extension.dart';
 import 'package:melamine_elsherif/core/config/routes.dart/routes.dart';
@@ -9,10 +7,7 @@ import 'package:melamine_elsherif/core/utils/enums/loading_state.dart';
 import 'package:melamine_elsherif/core/utils/enums/products_type.dart';
 import 'package:melamine_elsherif/features/presentation/home/controller/home_provider.dart';
 import 'package:melamine_elsherif/features/presentation/home/widgets/shimmer/new_products_shimmer.dart';
-
-import '../../../../core/utils/product cards/custom_gridview_prodcut.dart';
 import '../../../../core/utils/product cards/custom_product_card.dart';
-import '../../../../core/utils/product cards/custom_product_row.dart';
 
 class NewProductsWidget extends StatelessWidget {
   const NewProductsWidget({super.key});
@@ -31,7 +26,7 @@ class NewProductsWidget extends StatelessWidget {
           return _buildEmptyState(context, "no_products_available".tr(context));
         }
 
-        // Get products data
+        // Get regular products data
         final products = homeProvider.newProducts;
 
         // Show empty state if no products

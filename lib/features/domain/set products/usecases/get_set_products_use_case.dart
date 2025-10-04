@@ -6,7 +6,13 @@ class GetSetProductsUseCase {
 
   GetSetProductsUseCase(this.repository);
 
-  Future<SetProductsResponse> call({int page = 1}) async {
-    return await repository.getSetProducts(page: page);
+  Future<SetProductsResponse> call({
+    int page = 1,
+    bool needUpdate = false,
+  }) async {
+    return await repository.getSetProducts(
+      page: page,
+      needUpdate: needUpdate,
+    );
   }
 }

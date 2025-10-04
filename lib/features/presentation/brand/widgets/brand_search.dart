@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import '../../../../core/utils/extension/translate_extension.dart';
 import '../../../../core/utils/widgets/custom_form_field.dart';
+import '../../../../core/utils/constants/app_assets.dart';
+import '../../../../core/config/themes.dart/theme.dart';
 
 class BrandSearch extends StatefulWidget {
   final Function(String) onSearch;
@@ -43,7 +45,12 @@ class _BrandSearchState extends State<BrandSearch> {
     return CustomTextFormField(
       controller: _searchController,
       hint: 'search_brands'.tr(context),
-      prefixIcon: const Icon(Icons.search),
+      prefixIcon: Image.asset(
+        AppImages.search,
+        color: AppTheme.primaryColor,
+        width: 20,
+        height: 20,
+      ),
       keyboardType: TextInputType.text,
       textInputAction: TextInputAction.search,
       onFieldSubmitted: (value) {

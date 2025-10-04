@@ -106,8 +106,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     SetProductsWidget(),
                     CategoriesWidget(),
-                    NewProductsWidget(),
-                    FeaturedProductsWidget(),
+                    // NewProductsWidget(),
+                    // FeaturedProductsWidget(),
                     SimpleBannerCarousel(),
                     SecondSetProductsWidget(),
                     BestSellingProductsWidget(),

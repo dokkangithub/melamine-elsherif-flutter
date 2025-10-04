@@ -11,6 +11,7 @@ import 'package:provider/provider.dart';
 import '../../../../../core/config/routes.dart/routes.dart';
 import '../../../../../core/utils/enums/loading_state.dart';
 import '../../../../../core/utils/widgets/custom_back_button.dart';
+import '../../../../../core/utils/constants/app_assets.dart';
 import '../../all products/widgets/shimmer/products_grid_shimmer.dart';
 import '../controller/set_product_provider.dart';
 import '../../../../../features/domain/set products/entities/set_products.dart';
@@ -95,7 +96,12 @@ class _SetProductsScreenState extends State<SetProductsScreen> {
       leading: CustomBackButton(respectDirection: isRTL),
       actions: [
         IconButton(
-          icon: const Icon(Icons.search, color: Colors.black),
+          icon: Image.asset(
+            AppImages.search,
+            color: AppTheme.primaryColor,
+            width: 22,
+            height: 22,
+          ),
           onPressed: () {
             AppRoutes.navigateTo(context, AppRoutes.searchScreen);
           },

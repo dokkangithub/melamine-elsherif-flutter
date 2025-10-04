@@ -10,12 +10,11 @@ import 'package:melamine_elsherif/core/utils/widgets/custom_button.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_empty_widgets.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_loading.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_back_button.dart';
-import 'package:melamine_elsherif/features/domain/product/entities/product.dart'
-    as product_import;
+import '../../../../core/utils/constants/app_assets.dart';
+import 'package:melamine_elsherif/features/domain/product/entities/product.dart' as product_import;
 import 'package:provider/provider.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import '../../../../core/config/routes.dart/routes.dart';
-import '../../../../core/utils/constants/app_assets.dart';
 import '../../../../core/utils/helpers.dart';
 import '../../../../core/utils/widgets/custom_cached_image.dart';
 import '../../../domain/category/entities/category.dart';
@@ -225,7 +224,12 @@ class _AllCategoryProductsScreenState extends State<AllCategoryProductsScreen> {
                     centerTitle: true,
                     actions: [
                       IconButton(
-                        icon: const Icon(Icons.search, color: Colors.black),
+                        icon: Image.asset(
+                          AppImages.search,
+                          color: AppTheme.primaryColor,
+                          width: 22,
+                          height: 22,
+                        ),
                         onPressed: () {
                           AppRoutes.navigateTo(context, AppRoutes.searchScreen);
                         },
@@ -236,7 +240,7 @@ class _AllCategoryProductsScreenState extends State<AllCategoryProductsScreen> {
 
                   // 2. Categories carousel as SliverToBoxAdapter
                   SliverToBoxAdapter(
-                    child: _buildCategoriesCarousel(categoryProvider),
+                    child: _buildModernParallaxCarousel(categoryProvider),
                   ),
 
                   // 3. Subcategories section as SliverToBoxAdapter (changed from SliverPersistentHeader)
@@ -287,7 +291,7 @@ class _AllCategoryProductsScreenState extends State<AllCategoryProductsScreen> {
     );
   }
 
-  Widget _buildCategoriesCarousel(CategoryProvider categoryProvider) {
+  Widget _buildModernParallaxCarousel(CategoryProvider categoryProvider) {
     if (categoryProvider.categoriesResponse == LoadingState.loading) {
       return Container(
         height: _carouselHeight,
@@ -314,17 +318,17 @@ class _AllCategoryProductsScreenState extends State<AllCategoryProductsScreen> {
         height: _carouselHeight,
         child: Stack(
           children: [
-            // Carousel
             CarouselSlider(
               options: CarouselOptions(
                 height: _carouselHeight,
-                viewportFraction: 1.0,
-                enlargeCenterPage: false,
+                viewportFraction: 1,
+                enlargeCenterPage: true,
+                enlargeFactor: 0.25,
                 autoPlay: true,
-                autoPlayInterval: const Duration(seconds: 4),
-                autoPlayAnimationDuration: const Duration(milliseconds: 800),
+                autoPlayInterval: const Duration(seconds: 5),
+                autoPlayAnimationDuration: const Duration(milliseconds: 1000),
+                autoPlayCurve: Curves.easeInOutCubic,
                 onPageChanged: (index, reason) {
-                  // Update the current category index for both auto-scroll and manual selection
                   setState(() {
                     _currentCategoryIndex = index;
                   });
@@ -335,98 +339,156 @@ class _AllCategoryProductsScreenState extends State<AllCategoryProductsScreen> {
                   builder: (BuildContext context) {
                     return Container(
                       width: MediaQuery.of(context).size.width,
-                      decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.zero,
-                      ),
-                      child: Stack(
-                        fit: StackFit.expand,
-                        children: [
-                          // Background Image
-                          CustomImage(
-                            imageUrl: category.banner,
-                            fit: BoxFit.cover,
-                          ),
-                          // Gradient Overlay
-                          Container(
-                            decoration: const BoxDecoration(
-                              gradient: LinearGradient(
-                                colors: [
-                                  Colors.black87,
-                                  Colors.black54,
-                                  Colors.transparent,
-                                ],
-                                begin: Alignment.bottomCenter,
-                                end: Alignment.topCenter,
-                              ),
-                            ),
-                          ),
-                          // Content - Centered
-                          Center(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const SizedBox(height: 20),
-                                Text(
-                                  category.name?.toUpperCase() ?? '',
-                                  style: context.displaySmall!.copyWith(
-                                    color: AppTheme.white,
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
-                                const SizedBox(height: 20),
-                                CustomButton(
-                                  onPressed: () {
-                                    if (category.id != null &&
-                                        category.name != null) {
-                                      _selectCategory(
-                                        category.name!,
-                                        category.id!,
-                                      );
-                                      // Note: _currentCategoryIndex is already updated by onPageChanged
-                                      // when user manually selects, so no need to update it here again
-                                    }
-                                  },
-                                  child: Text(
-                                    'discover_collection'.tr(context),
-                                    textAlign: TextAlign.center,
-                                    style: context.titleLarge!.copyWith(
-                                      color: AppTheme.white,
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(height: 40),
-                              ],
-                            ),
+                      margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(24),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.3),
+                            blurRadius: 20,
+                            offset: const Offset(0, 10),
                           ),
                         ],
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(5),
+                        child: Stack(
+                          fit: StackFit.expand,
+                          children: [
+                            // Background Image with Parallax
+                            CustomImage(
+                              imageUrl: category.banner,
+                              fit: BoxFit.cover,
+                            ),
+                            // Animated Gradient Overlay
+                            Container(
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  colors: [
+                                    Colors.black.withOpacity(0.8),
+                                    Colors.black.withOpacity(0.5),
+                                    Colors.transparent,
+                                    Colors.black.withOpacity(0.3),
+                                  ],
+                                  begin: Alignment.bottomLeft,
+                                  end: Alignment.topRight,
+                                ),
+                              ),
+                            ),
+                            // Shimmer Effect
+                            Positioned.fill(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    colors: [
+                                      Colors.white.withOpacity(0.0),
+                                      Colors.white.withOpacity(0.1),
+                                      Colors.white.withOpacity(0.0),
+                                    ],
+                                    stops: const [0.0, 0.5, 1.0],
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            // Content
+                            Padding(
+                              padding: const EdgeInsets.all(32),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 16,
+                                      vertical: 8,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white.withOpacity(0.2),
+                                      borderRadius: BorderRadius.circular(12),
+                                      border: Border.all(
+                                        color: Colors.white.withOpacity(0.3),
+                                        width: 1,
+                                      ),
+                                    ),
+                                    child: Text(
+                                      category.name?.toUpperCase() ?? '',
+                                      style: context.displaySmall!.copyWith(
+                                        color: AppTheme.white,
+                                        fontWeight: FontWeight.w900,
+                                        letterSpacing: 2,
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 20),
+                                  CustomButton(
+                                    onPressed: () {
+                                      if (category.id != null &&
+                                          category.name != null) {
+                                        _selectCategory(
+                                          category.name!,
+                                          category.id!,
+                                        );
+                                      }
+                                    },
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Text(
+                                          'discover_collection'.tr(context),
+                                          style: context.titleLarge!.copyWith(
+                                            color: AppTheme.white,
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                        ),
+                                        const SizedBox(width: 8),
+                                        const Icon(
+                                          Icons.arrow_forward_rounded,
+                                          color: AppTheme.white,
+                                          size: 20,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     );
                   },
                 );
               }).toList(),
             ),
-
-            // Dynamic Carousel Indicator at bottom
+            // Modern Indicator
             Positioned(
-              bottom: 20,
+              bottom: 32,
               left: 0,
               right: 0,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
                 children: categories.asMap().entries.map((entry) {
+                  bool isActive = _currentCategoryIndex == entry.key;
                   return AnimatedContainer(
-                    duration: const Duration(milliseconds: 300),
-                    width: _currentCategoryIndex == entry.key ? 12.0 : 8.0,
+                    duration: const Duration(milliseconds: 400),
+                    curve: Curves.easeInOut,
+                    width: isActive ? 32.0 : 8.0,
                     height: 8.0,
                     margin: const EdgeInsets.symmetric(horizontal: 4.0),
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(4.0),
-                      color: _currentCategoryIndex == entry.key
-                          ? Colors.white
-                          : Colors.white.withOpacity(0.5),
+                      borderRadius: BorderRadius.circular(8.0),
+                      color: isActive ? Colors.white : Colors.white.withOpacity(0.4),
+                      boxShadow: isActive
+                          ? [
+                        BoxShadow(
+                          color: Colors.white.withOpacity(0.5),
+                          blurRadius: 8,
+                          spreadRadius: 1,
+                        ),
+                      ]
+                          : null,
                     ),
                   );
                 }).toList(),
@@ -437,7 +499,6 @@ class _AllCategoryProductsScreenState extends State<AllCategoryProductsScreen> {
       ),
     );
   }
-
   Widget _buildSubcategoriesSection(CategoryProvider categoryProvider) {
     if (categoryProvider.subCategoriesState == LoadingState.loading) {
       return Container(

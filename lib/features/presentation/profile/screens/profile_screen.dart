@@ -120,64 +120,67 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
 
     return Scaffold(
-      backgroundColor: Colors.grey[50],
+      backgroundColor: const Color(0xFFF8F9FA),
       body: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Header with user info
-              _shouldAnimate
-                  ? FadeInDown(
-                      duration: const Duration(milliseconds: 500),
-                      child: _buildLoggedInUserHeader(context, profileProvider),
-                    )
-                  : _buildLoggedInUserHeader(context, profileProvider),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Header with user info
+            _shouldAnimate
+                ? FadeInDown(
+                    duration: const Duration(milliseconds: 500),
+                    child: _buildLoggedInUserHeader(context, profileProvider),
+                  )
+                : _buildLoggedInUserHeader(context, profileProvider),
 
-              // User dashboard (orders, wallet, address, saved items)
-              _shouldAnimate
-                  ? FadeInUp(
-                      delay: const Duration(milliseconds: 200),
-                      duration: const Duration(milliseconds: 500),
-                      child: _buildUserDashboard(context),
-                    )
-                  : _buildUserDashboard(context),
+            const SizedBox(height: 20),
 
-              // Section divider
-              const Divider(height: 16, thickness: 8, color: Color(0xFFF5F5F5)),
+            // User dashboard (orders, wallet, address, saved items)
+            _shouldAnimate
+                ? FadeInUp(
+                    delay: const Duration(milliseconds: 200),
+                    duration: const Duration(milliseconds: 500),
+                    child: _buildUserDashboard(context),
+                  )
+                : _buildUserDashboard(context),
 
-              // Account tools section
-              _shouldAnimate
-                  ? FadeInUp(
-                      delay: const Duration(milliseconds: 300),
-                      duration: const Duration(milliseconds: 500),
-                      child: _buildAccountToolsSection(context),
-                    )
-                  : _buildAccountToolsSection(context),
+            const SizedBox(height: 20),
 
-              // Section divider
-              const Divider(height: 16, thickness: 8, color: Color(0xFFF5F5F5)),
+            // Account tools section
+            _shouldAnimate
+                ? FadeInUp(
+                    delay: const Duration(milliseconds: 300),
+                    duration: const Duration(milliseconds: 500),
+                    child: _buildAccountToolsSection(context),
+                  )
+                : _buildAccountToolsSection(context),
 
-              // Contact & Social section
-              _shouldAnimate
-                  ? FadeInUp(
-                      delay: const Duration(milliseconds: 400),
-                      duration: const Duration(milliseconds: 500),
-                      child: _buildContactSocialSection(context),
-                    )
-                  : _buildContactSocialSection(context),
+            const SizedBox(height: 20),
 
-              // Logout button
-              _shouldAnimate
-                  ? FadeInUp(
-                      delay: const Duration(milliseconds: 500),
-                      duration: const Duration(milliseconds: 500),
-                      child: _buildSignOutButton(context),
-                    )
-                  : _buildSignOutButton(context),
-            ],
-          ),
+            // Contact & Social section
+            _shouldAnimate
+                ? FadeInUp(
+                    delay: const Duration(milliseconds: 400),
+                    duration: const Duration(milliseconds: 500),
+                    child: _buildContactSocialSection(context),
+                  )
+                : _buildContactSocialSection(context),
+
+            const SizedBox(height: 20),
+
+            // Logout button
+            _shouldAnimate
+                ? FadeInUp(
+                    delay: const Duration(milliseconds: 500),
+                    duration: const Duration(milliseconds: 500),
+                    child: _buildSignOutButton(context),
+                  )
+                : _buildSignOutButton(context),
+
+            const SizedBox(height: 40),
+          ],
         ),
-
+      ),
     );
   }
 
@@ -278,7 +281,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  // Logged in user header that matches the image
+  // Logged in user header with original background image
   Widget _buildLoggedInUserHeader(
     BuildContext context,
     ProfileProvider profileProvider,
@@ -313,7 +316,42 @@ class _ProfileScreenState extends State<ProfileScreen> {
               children: [
                 const SizedBox(height: 30),
 
-                // User image and info
+                // Header with edit button
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'profile'.tr(context),
+                      style: context.headlineLarge.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87,
+                      ),
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.2),
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: IconButton(
+                        onPressed: () {
+                          AppRoutes.navigateTo(
+                            context,
+                            AppRoutes.editProfileScreen,
+                          );
+                        },
+                        icon: const Icon(
+                          Icons.edit,
+                          color: Colors.black87,
+                          size: 24,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+
+                const SizedBox(height: 30),
+
+                // User image and info - horizontal layout
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
@@ -370,21 +408,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ),
                           ),
                         ],
-                      ),
-                    ),
-
-                    // Edit button
-                    InkWell(
-                      onTap: () {
-                        AppRoutes.navigateTo(
-                          context,
-                          AppRoutes.editProfileScreen,
-                        );
-                      },
-                      child: const CustomImage(
-                        assetPath: AppSvgs.edit_profile,
-                        width: 20,
-                        height: 20,
                       ),
                     ),
                   ],
@@ -502,7 +525,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  // Sign out button - extracted from original code
+  // Sign out button - original design
   Widget _buildSignOutButton(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
@@ -648,7 +671,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  // Build user dashboard items (orders, wallet, address, saved items)
+  // Modern user dashboard with card-based design
   Widget _buildUserDashboard(BuildContext context) {
     // Get profileProvider once to avoid multiple calls
     final profileProvider = Provider.of<ProfileProvider>(
@@ -657,70 +680,88 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
     final profileCounters = profileProvider.profileCounters;
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(5),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // My Orders
-          _buildDashboardItem(
-            context: context,
-            icon: AppSvgs.profile_bag,
-            title: 'my_orders'.tr(context),
-            subtitle: profileCounters?.orderCount != null
-                ? '${profileCounters!.orderCount} ${'active_orders'.tr(context)}'
-                : "active_orders".tr(context),
-            onTap: () {
-              AppRoutes.navigateTo(context, AppRoutes.allOrdersListScreen);
-            },
-          ),
+          // Dashboard grid
+          GridView.count(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            crossAxisCount: 2,
+            crossAxisSpacing: 16,
+            mainAxisSpacing: 16,
+            childAspectRatio: 1.2,
+            children: [
+              // My Orders
+              _buildSimpleDashboardCard(
+                context: context,
+                icon: AppSvgs.profile_bag,
+                title: 'my_orders'.tr(context),
+                subtitle: profileCounters?.orderCount != null
+                    ? '${profileCounters!.orderCount} ${'orders'.tr(context)}'
+                    : '0 ${'orders'.tr(context)}',
+                onTap: () {
+                  AppRoutes.navigateTo(context, AppRoutes.allOrdersListScreen);
+                },
+              ),
 
-          const SizedBox(height: 24),
+              // My Wallet
+              _buildSimpleDashboardCard(
+                context: context,
+                icon: AppSvgs.profile_wellat,
+                title: 'my_wallet'.tr(context),
+                subtitle: 'balance'.tr(context),
+                onTap: () {
+                  AppRoutes.navigateTo(context, AppRoutes.walletScreen);
+                },
+              ),
 
-          // My Wallet
-          _buildDashboardItem(
-            context: context,
-            icon: AppSvgs.profile_wellat,
-            title: 'my_wallet'.tr(context),
-            subtitle: '',
-            onTap: () {
-              AppRoutes.navigateTo(context, AppRoutes.walletScreen);
-            },
-          ),
+              // Shipping Address
+              _buildSimpleDashboardCard(
+                context: context,
+                icon: AppSvgs.profile_location,
+                title: 'shipping_address'.tr(context),
+                subtitle: 'manage_addresses'.tr(context),
+                onTap: () {
+                  AppRoutes.navigateTo(context, AppRoutes.addressListScreen);
+                },
+              ),
 
-          const SizedBox(height: 24),
-
-          // Shipping Address
-          _buildDashboardItem(
-            context: context,
-            icon: AppSvgs.profile_location,
-            title: 'shipping_address'.tr(context),
-            subtitle: ''.tr(context),
-            onTap: () {
-              AppRoutes.navigateTo(context, AppRoutes.addressListScreen);
-            },
-          ),
-
-          const SizedBox(height: 24),
-
-          // Saved Items
-          _buildDashboardItem(
-            context: context,
-            icon: AppSvgs.profile_fav,
-            title: 'saved_items'.tr(context),
-            subtitle: profileCounters?.wishlistItemCount != null
-                ? '${profileCounters!.wishlistItemCount} ${'items'.tr(context)}'
-                : 'items'.tr(context),
-            onTap: () {
-              AppRoutes.navigateTo(context, AppRoutes.wishListScreen);
-            },
+              // Saved Items
+              _buildSimpleDashboardCard(
+                context: context,
+                icon: AppSvgs.profile_fav,
+                title: 'saved_items'.tr(context),
+                subtitle: profileCounters?.wishlistItemCount != null
+                    ? '${profileCounters!.wishlistItemCount} ${'items'.tr(context)}'
+                    : '0 ${'items'.tr(context)}',
+                onTap: () {
+                  AppRoutes.navigateTo(context, AppRoutes.wishListScreen);
+                },
+              ),
+            ],
           ),
         ],
       ),
     );
   }
 
-  // Dashboard item widget
-  Widget _buildDashboardItem({
+  // Simple dashboard card widget
+  Widget _buildSimpleDashboardCard({
     required BuildContext context,
     required String icon,
     required String title,
@@ -729,265 +770,394 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }) {
     return InkWell(
       onTap: onTap,
-      child: Row(
-        children: [
-          // Icon
-          SvgPicture.asset(
-            icon,
-            width: 26,
-            height: 26,
-            color: const Color(0xFF223843),
+      borderRadius: BorderRadius.circular(5),
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(5),
+          border: Border.all(
+            color: Colors.grey.withValues(alpha: 0.2),
+            width: 1,
           ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.05),
+              blurRadius: 8,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // Icon
+            SvgPicture.asset(
+              icon,
+              width: 28,
+              height: 28,
+              color: AppTheme.primaryColor,
+            ),
+            
+            const SizedBox(height: 12),
+            
+            // Title
+            Text(
+              title,
+              style: context.titleMedium.copyWith(
+                fontWeight: FontWeight.w600,
+                color: Colors.black87,
+              ),
+              textAlign: TextAlign.center,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+            const SizedBox(height: 4),
+            
+            // Subtitle
+            Text(
+              subtitle,
+              style: context.bodySmall.copyWith(
+                color: Colors.black54,
+                fontWeight: FontWeight.w400,
+              ),
+              textAlign: TextAlign.center,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 
-          const SizedBox(width: 16),
 
-          // Text content
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+  // Modern account tools section
+  Widget _buildAccountToolsSection(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 20),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(5),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Section header
+          Padding(
+            padding: const EdgeInsets.all(20),
+            child: Row(
               children: [
+                Container(
+                  width: 4,
+                  height: 24,
+                  decoration: BoxDecoration(
+                    color: AppTheme.primaryColor,
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+                const SizedBox(width: 12),
                 Text(
-                  title,
-                  style: context.titleLarge.copyWith(
-                    fontWeight: FontWeight.w600,
+                  'account_tools'.tr(context),
+                  style: context.headlineSmall.copyWith(
+                    fontWeight: FontWeight.bold,
                     color: Colors.black87,
                   ),
                 ),
-                const SizedBox(height: 4),
-                Text(
-                  subtitle,
-                  style: context.bodyMedium.copyWith(color: Colors.black54),
-                ),
               ],
             ),
+          ),
+
+          // Tools list
+          Column(
+            children: [
+              // Change Language
+              _buildModernToolItem(
+                context: context,
+                icon: AppSvgs.profile_language,
+                title: 'change_language'.tr(context),
+                subtitle: '',
+                onTap: () {
+                  LanguageDialog.show(context);
+                },
+              ),
+
+              // Help & Support
+              _buildModernToolItem(
+                context: context,
+                icon: AppSvgs.profile_help,
+                title: 'help_support'.tr(context),
+                subtitle: '',
+                onTap: () async {
+                  final Uri url = Uri.parse(
+                    'https://melaminefront.dokkan.design/pages/contact-us',
+                  );
+                  if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('could_not_launch_website'.tr(context)),
+                        ),
+                      );
+                    }
+                  }
+                },
+              ),
+
+              // About Us
+              _buildModernToolItem(
+                context: context,
+                icon: AppSvgs.profile_about_us,
+                title: 'about_us'.tr(context),
+                subtitle: '',
+                onTap: () async {
+                  final Uri url = Uri.parse(
+                    'https://melaminefront.dokkan.design/pages/about-us',
+                  );
+                  if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('could_not_launch_website'.tr(context)),
+                        ),
+                      );
+                    }
+                  }
+                },
+              ),
+
+              // Visit Website
+              _buildModernToolItem(
+                context: context,
+                icon: AppSvgs.profile_privacy,
+                title: 'visit_website'.tr(context),
+                subtitle: '',
+                isLast: true,
+                onTap: () async {
+                  final Uri url = Uri.parse('https://melaminefront.dokkan.design/');
+                  if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('could_not_launch_website'.tr(context)),
+                        ),
+                      );
+                    }
+                  }
+                },
+              ),
+            ],
           ),
         ],
       ),
     );
   }
 
-  // Account tools section header
-  Widget _buildSectionHeader(BuildContext context, String title) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-      child: Text(
-        title,
-        style: context.headlineSmall.copyWith(
-          fontWeight: FontWeight.bold,
-          color: Colors.black87,
+  // Modern tool item widget
+  Widget _buildModernToolItem({
+    required BuildContext context,
+    required String icon,
+    required String title,
+    required String subtitle,
+    required VoidCallback onTap,
+    bool isLast = false,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(5),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+        margin: const EdgeInsets.symmetric(horizontal: 20),
+        decoration: BoxDecoration(
+          border: isLast ? null : Border(
+            bottom: BorderSide(
+              color: Colors.grey.withValues(alpha: 0.1),
+              width: 1,
+            ),
+          ),
+        ),
+        child: Row(
+          children: [
+            // Icon container
+            Container(
+              width: 48,
+              height: 48,
+              decoration: BoxDecoration(
+                color: AppTheme.primaryColor.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(5),
+              ),
+              child: Center(
+                child: SvgPicture.asset(
+                  icon,
+                  width: 22,
+                  height: 22,
+                  color: AppTheme.primaryColor,
+                ),
+              ),
+            ),
+
+            const SizedBox(width: 16),
+
+            // Text content
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: context.titleMedium.copyWith(
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black87,
+                    ),
+                  ),
+                  if (subtitle.isNotEmpty) ...[
+                    const SizedBox(height: 4),
+                    Text(
+                      subtitle,
+                      style: context.bodySmall.copyWith(
+                        color: Colors.black54,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+            ),
+
+            // Chevron
+            Container(
+              padding: const EdgeInsets.all(4),
+              decoration: BoxDecoration(
+                color: Colors.grey.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: const Icon(
+                Icons.chevron_right,
+                color: Colors.black45,
+                size: 20,
+              ),
+            ),
+          ],
         ),
       ),
     );
   }
 
-  // Account tools section
-  Widget _buildAccountToolsSection(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Section header
-        _buildSectionHeader(context, 'account_tools'.tr(context)),
-
-        // Divider
-        const Divider(height: 1),
-
-        // Change Language
-        _buildToolItem(
-          context: context,
-          icon: AppSvgs.profile_language,
-          title: 'change_language'.tr(context),
-          onTap: () {
-            LanguageDialog.show(context);
-          },
-        ),
-
-        // Help & Support
-        _buildToolItem(
-          context: context,
-          icon: AppSvgs.profile_help,
-          title: 'help_support'.tr(context),
-          onTap: () async {
-            final Uri url = Uri.parse(
-              'https://melaminefront.dokkan.design/pages/contact-us',
-            );
-            if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
-              if (context.mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('could_not_launch_website'.tr(context)),
-                  ),
-                );
-              }
-            }
-          },
-        ),
-
-        // About Us
-        _buildToolItem(
-          context: context,
-          icon: AppSvgs.profile_about_us,
-          title: 'about_us'.tr(context),
-          onTap: () async {
-            final Uri url = Uri.parse(
-              'https://melaminefront.dokkan.design/pages/about-us',
-            );
-            if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
-              if (context.mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('could_not_launch_website'.tr(context)),
-                  ),
-                );
-              }
-            }
-          },
-        ),
-
-        // Visit Website
-        _buildToolItem(
-          context: context,
-          icon: AppSvgs.profile_privacy,
-          title: 'visit_website'.tr(context),
-          onTap: () async {
-            final Uri url = Uri.parse('https://melaminefront.dokkan.design/');
-            if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
-              if (context.mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('could_not_launch_website'.tr(context)),
-                  ),
-                );
-              }
-            }
-          },
-        ),
-      ],
-    );
-  }
-
-  // Tool item widget
-  Widget _buildToolItem({
-    required BuildContext context,
-    required String icon,
-    required String title,
-    required VoidCallback onTap,
-  }) {
-    return InkWell(
-      onTap: onTap,
+  // Modern Contact & Social section
+  Widget _buildContactSocialSection(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 20),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(5),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Section header
+          Padding(
+            padding: const EdgeInsets.all(20),
+            child: Row(
+              children: [
+                Container(
+                  width: 4,
+                  height: 24,
+                  decoration: BoxDecoration(
+                    color: AppTheme.primaryColor,
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Text(
+                  'contact_social'.tr(context),
+                  style: context.headlineSmall.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black87,
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          // Social buttons in a grid
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
             child: Row(
               children: [
-                // Icon
-                SvgPicture.asset(
-                  icon,
-                  width: 22,
-                  height: 22,
-                  color: const Color(0xFF223843),
+                // WhatsApp
+                Expanded(
+                  child: _buildSimpleContactButton(
+                    context: context,
+                    icon: AppSvgs.whatsapp,
+                    title: 'whatsapp'.tr(context),
+                    onTap: _openWhatsApp,
+                  ),
                 ),
 
                 const SizedBox(width: 16),
 
-                // Title
+                // Call Us
                 Expanded(
-                  child: Text(
-                    title,
-                    style: context.titleMedium.copyWith(
-                      fontWeight: FontWeight.w500,
-                      color: Colors.black87,
-                    ),
+                  child: _buildSimpleContactButton(
+                    context: context,
+                    icon: AppSvgs.call,
+                    title: 'call_us'.tr(context),
+                    onTap: _makePhoneCall,
                   ),
-                ),
-
-                // Chevron
-                const Icon(
-                  Icons.chevron_right,
-                  color: Colors.black45,
-                  size: 22,
                 ),
               ],
             ),
           ),
-          const Divider(height: 1),
+
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+            child: Row(
+              children: [
+                // Facebook
+                Expanded(
+                  child: _buildSimpleContactButton(
+                    context: context,
+                    icon: AppSvgs.facebook,
+                    title: 'facebook'.tr(context),
+                    onTap: _openFacebook,
+                  ),
+                ),
+
+                const SizedBox(width: 16),
+
+                // YouTube
+                Expanded(
+                  child: _buildSimpleContactButton(
+                    context: context,
+                    icon: AppSvgs.youtube,
+                    title: 'youtube'.tr(context),
+                    onTap: _launchYouTube,
+                  ),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
   }
 
-  // Contact & Social section
-  Widget _buildContactSocialSection(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Section header
-        _buildSectionHeader(context, 'contact_social'.tr(context)),
-
-        // Social buttons in a grid
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-          child: Row(
-            children: [
-              // WhatsApp
-              Expanded(
-                child: _buildContactButton(
-                  context: context,
-                  icon: AppSvgs.whatsapp,
-                  title: 'whatsapp'.tr(context),
-                  onTap: _openWhatsApp,
-                ),
-              ),
-
-              const SizedBox(width: 16),
-
-              // Call Us
-              Expanded(
-                child: _buildContactButton(
-                  context: context,
-                  icon: AppSvgs.call,
-                  title: 'call_us'.tr(context),
-                  onTap: _makePhoneCall,
-                ),
-              ),
-            ],
-          ),
-        ),
-
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-          child: Row(
-            children: [
-              // Facebook
-              Expanded(
-                child: _buildContactButton(
-                  context: context,
-                  icon: AppSvgs.facebook,
-                  title: 'facebook'.tr(context),
-                  onTap: _openFacebook,
-                ),
-              ),
-
-              const SizedBox(width: 16),
-
-              // YouTube
-              Expanded(
-                child: _buildContactButton(
-                  context: context,
-                  icon: AppSvgs.youtube,
-                  title: 'youtube'.tr(context),
-                  onTap: _launchYouTube,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  // Contact button widget
-  Widget _buildContactButton({
+  // Simple contact button widget
+  Widget _buildSimpleContactButton({
     required BuildContext context,
     required String icon,
     required String title,
@@ -1007,7 +1177,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               icon,
               width: 24,
               height: 24,
-              color: const Color(0xFF223843),
+              color: AppTheme.primaryColor,
             ),
             const SizedBox(height: 8),
             Text(

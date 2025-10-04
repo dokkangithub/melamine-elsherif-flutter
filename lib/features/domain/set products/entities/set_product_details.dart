@@ -30,6 +30,7 @@ class SetProductDetailsData {
   final int? requiredComponents;
   final List<Review> reviews;
   final int? reviewCount;
+  final String? warrantyText;
 
   SetProductDetailsData({
     this.id,
@@ -54,6 +55,7 @@ class SetProductDetailsData {
     this.requiredComponents,
     this.reviews = const [],
     this.reviewCount,
+    this.warrantyText,
   });
 }
 

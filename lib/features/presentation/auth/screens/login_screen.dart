@@ -114,7 +114,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     );
                                   },
                                   child: const Icon(
-                                    Icons.arrow_back_ios_new_outlined,
+                                    Icons.arrow_forward_ios,
                                     color: AppTheme.primaryColor,
                                     size: 24,
                                   ),

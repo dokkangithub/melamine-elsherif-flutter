@@ -17,7 +17,7 @@ class SecondHomeImageWidget extends StatelessWidget {
           borderRadius: BorderRadius.circular(0),
           child: SizedBox(
             width: double.infinity,
-            height: 200,
+            height: 230,
             child: Stack(
               children: [
                 // Original image/video

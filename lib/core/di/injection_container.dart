@@ -488,7 +488,7 @@ Future<void> setupDependencies() async {
 
   sl.registerFactory(() => SliderProvider(getSlidersUseCase: sl()));
 
-  sl.registerFactory<SetProductsProvider>(
+  sl.registerLazySingleton<SetProductsProvider>(
     () => SetProductsProvider(
       getSetProductsUseCase: sl<GetSetProductsUseCase>(),
       getSetProductDetailsUseCase: sl<GetSetProductDetailsUseCase>(),
@@ -527,6 +527,7 @@ Future<void> setupDependencies() async {
       getRelatedProductsUseCase: sl(),
       getShopProductsUseCase: sl(),
       getTopFromThisSellerProductsUseCase: sl(),
+      getSetProductsUseCase: sl(),
       getSubCategoryProductsUseCase: sl(),
     ),
   );
