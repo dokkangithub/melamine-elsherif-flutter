@@ -26,6 +26,7 @@ class SetProductDetailsScreen extends StatefulWidget {
   const SetProductDetailsScreen({super.key, required this.slug});
 
   @override
+  
   _SetProductDetailsScreenState createState() =>
       _SetProductDetailsScreenState();
 }
