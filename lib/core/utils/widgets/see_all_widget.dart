@@ -24,14 +24,8 @@ class SeeAllWidget extends StatelessWidget {
           style: Theme.of(context).textTheme.headlineMedium!.copyWith(
             fontWeight: FontWeight.w700,
             foreground: Paint()..shader = UIHelper.linearGradient,
-            letterSpacing:
-                Provider.of<LanguageProvider>(
-                      context,
-                      listen: false,
-                    ).locale.languageCode ==
-                    'en'
-                ? 1.2
-                : 1,
+            // letterSpacing:
+            //     Provider.of<LanguageProvider>(context, listen: false,).locale.languageCode == 'en' ? 0.5 : 1,
           ),
         ),
         InkWell(

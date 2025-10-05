@@ -599,5 +599,11 @@
   "number_must_start_with_valid_prefix": "يجب أن يبدأ الرقم بـ +201 أو 201 أو 01",
   "mobile_number_must_contain_only_digits": "يجب أن يحتوي رقم الهاتف المحمول على أرقام فقط",
   "number_not_valid": "الرقم غير صالح",
-  "warranty": "الضمان"
+  "iso_certificates": "شهادات ISO",
+  "view_certificates": "عرض الشهادات",
+  "view_our_quality_certifications": "عرض شهادات الجودة والمعايير الخاصة بنا",
+  "certificate": "شهادة",
+  "tap_to_view_full_size": "اضغط لعرض الحجم الكامل",
+  "warranty" : "الضمان"
+
 }

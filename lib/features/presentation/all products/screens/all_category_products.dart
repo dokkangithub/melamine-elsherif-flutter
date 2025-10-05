@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:melamine_elsherif/core/config/themes.dart/theme.dart';
 import 'package:melamine_elsherif/core/utils/enums/loading_state.dart';
 import 'package:melamine_elsherif/core/utils/extension/text_theme_extension.dart';
@@ -39,7 +38,6 @@ class _AllCategoryProductsScreenState extends State<AllCategoryProductsScreen> {
   late String _selectedCategoryName;
   late int _selectedCategoryId;
   int? _selectedSubCategoryId;
-  String? _selectedSubCategoryName;
   bool _isLoading = false;
   final ScrollController _scrollController = ScrollController();
   int _currentCategoryIndex = 0;
@@ -147,7 +145,6 @@ class _AllCategoryProductsScreenState extends State<AllCategoryProductsScreen> {
       _selectedCategoryName = name;
       _selectedCategoryId = id;
       _selectedSubCategoryId = null;
-      _selectedSubCategoryName = null;
       final provider = Provider.of<HomeProvider>(context, listen: false);
       final categoryProvider = Provider.of<CategoryProvider>(
         context,
@@ -160,7 +157,6 @@ class _AllCategoryProductsScreenState extends State<AllCategoryProductsScreen> {
 
   void _selectSubCategory(String name, int id) {
     setState(() {
-      _selectedSubCategoryName = name;
       _selectedSubCategoryId = id;
       final provider = Provider.of<HomeProvider>(context, listen: false);
       provider.fetchSubCategoryProducts(id, refresh: true, name: _searchQuery);
@@ -524,9 +520,6 @@ class _AllCategoryProductsScreenState extends State<AllCategoryProductsScreen> {
       );
     }
 
-    // Check if the current locale is RTL
-    final bool isRTL = Directionality.of(context) == TextDirection.rtl;
-
     // Create a list with "All" as the first tab, then all subcategories
     final List<Map<String, dynamic>> tabs = [
       {'id': null, 'name': 'all'.tr(context)},
@@ -590,7 +583,6 @@ class _AllCategoryProductsScreenState extends State<AllCategoryProductsScreen> {
               // "All" tab
               setState(() {
                 _selectedSubCategoryId = null;
-                _selectedSubCategoryName = null;
                 final provider = Provider.of<HomeProvider>(
                   context,
                   listen: false,
@@ -721,7 +713,9 @@ class _AllCategoryProductsScreenState extends State<AllCategoryProductsScreen> {
     // Check if the current locale is RTL
     final bool isRTL = Directionality.of(context) == TextDirection.rtl;
 
-    return InkWell(
+    return Directionality(
+      textDirection: isRTL ? TextDirection.rtl : TextDirection.ltr,
+      child: InkWell(
       onTap: () {
         product.setProduct
             ? AppRoutes.navigateTo(
@@ -750,9 +744,7 @@ class _AllCategoryProductsScreenState extends State<AllCategoryProductsScreen> {
           ],
         ),
         child: Column(
-          crossAxisAlignment: isRTL
-              ? CrossAxisAlignment.end
-              : CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Product image with favorite button
             Stack(
@@ -765,7 +757,7 @@ class _AllCategoryProductsScreenState extends State<AllCategoryProductsScreen> {
                 ),
                 Positioned(
                   top: 8,
-                  // Adjust position based on text direction
+                  // Position based on text direction
                   right: isRTL ? null : 8,
                   left: isRTL ? 8 : null,
                   child: Consumer<WishlistProvider>(
@@ -805,9 +797,7 @@ class _AllCategoryProductsScreenState extends State<AllCategoryProductsScreen> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(
-                crossAxisAlignment: isRTL
-                    ? CrossAxisAlignment.end
-                    : CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     product.name,
@@ -819,17 +809,10 @@ class _AllCategoryProductsScreenState extends State<AllCategoryProductsScreen> {
                         const TextStyle(),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    textAlign: isRTL ? TextAlign.right : TextAlign.left,
                   ),
                   const SizedBox(height: 4),
                   Row(
-                    // Adjust row direction based on language
-                    mainAxisAlignment: isRTL
-                        ? MainAxisAlignment.end
-                        : MainAxisAlignment.start,
-                    textDirection: isRTL
-                        ? TextDirection.rtl
-                        : TextDirection.ltr,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Text(
                         product.discountedPrice,
@@ -860,6 +843,7 @@ class _AllCategoryProductsScreenState extends State<AllCategoryProductsScreen> {
             ),
           ],
         ),
+      ),
       ),
     );
   }

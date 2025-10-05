@@ -15,6 +15,7 @@ import '../../../../core/utils/extension/translate_extension.dart';
 import '../../../../core/utils/local_storage/local_storage_keys.dart';
 import '../../../../core/utils/local_storage/secure_storage.dart';
 import '../../../../core/utils/widgets/custom_button.dart';
+import '../../../../core/utils/widgets/custom_loading.dart';
 import '../../auth/controller/auth_provider.dart';
 import '../../auth/screens/login_screen.dart';
 import '../controller/profile_provider.dart';
@@ -87,18 +88,24 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         actions: [
           FadeIn(
             duration: const Duration(milliseconds: 500),
-            child: TextButton(
-              onPressed: isUpdating
-                  ? null
-                  : () => _updateProfile(context, profileProvider),
-              child: Text(
-                'save'.tr(context),
-                style: context.headlineSmall.copyWith(
-                  color: AppTheme.primaryColor,
-                  fontWeight: FontWeight.w800,
-                ),
-              ),
-            ),
+            child: isUpdating
+                ? const Padding(
+                    padding: EdgeInsets.all(16.0),
+                    child: CustomLoadingWidget(
+                      width: 20,
+                      height: 20,
+                    ),
+                  )
+                : TextButton(
+                    onPressed: () => _updateProfile(context, profileProvider),
+                    child: Text(
+                      'save'.tr(context),
+                      style: context.headlineSmall.copyWith(
+                        color: AppTheme.primaryColor,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                  ),
           ),
         ],
       ),

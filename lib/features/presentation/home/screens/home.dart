@@ -99,7 +99,7 @@ class _HomeScreenState extends State<HomeScreen> {
             SliverToBoxAdapter(child: TopHomeWidget()),
             SliverToBoxAdapter(
               child: Padding(
-                padding: EdgeInsets.fromLTRB(12,12,12,0),
+                padding: EdgeInsets.fromLTRB(10,10,10,0),
                 child: Column(
                   spacing: 20,
                   crossAxisAlignment: CrossAxisAlignment.start,

@@ -20,6 +20,7 @@ import '../../auth/screens/login_screen.dart';
 import '../../club_point/controller/club_point_provider.dart';
 import '../controller/profile_provider.dart';
 import '../../../../core/utils/widgets/premium_language_dialog.dart';
+import '../widgets/iso_certificates_widget.dart';
 
 class ProfileScreen extends StatefulWidget {
   final bool isActive;
@@ -143,6 +144,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     child: _buildUserDashboard(context),
                   )
                 : _buildUserDashboard(context),
+
+            const SizedBox(height: 20),
+
+            // ISO Certificates section
+            _shouldAnimate
+                ? FadeInUp(
+                    delay: const Duration(milliseconds: 250),
+                    duration: const Duration(milliseconds: 500),
+                    child: const ISOCertificatesWidget(),
+                  )
+                : const ISOCertificatesWidget(),
 
             const SizedBox(height: 20),
 
@@ -699,6 +711,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         children: [
           // Dashboard grid
           GridView.count(
+            padding: EdgeInsets.symmetric(vertical: 8.0),
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             crossAxisCount: 2,
@@ -724,7 +737,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 context: context,
                 icon: AppSvgs.profile_wellat,
                 title: 'my_wallet'.tr(context),
-                subtitle: 'balance'.tr(context),
+                subtitle: '',
                 onTap: () {
                   AppRoutes.navigateTo(context, AppRoutes.walletScreen);
                 },
@@ -755,6 +768,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
             ],
           ),
+
         ],
       ),
     );
@@ -772,7 +786,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       onTap: onTap,
       borderRadius: BorderRadius.circular(5),
       child: Container(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(5),
@@ -897,7 +911,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 subtitle: '',
                 onTap: () async {
                   final Uri url = Uri.parse(
-                    'https://melaminefront.dokkan.design/pages/contact-us',
+                    'https://shop.alsherifmelamine.com/pages/contact-us',
                   );
                   if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
                     if (context.mounted) {
@@ -919,7 +933,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 subtitle: '',
                 onTap: () async {
                   final Uri url = Uri.parse(
-                    'https://melaminefront.dokkan.design/pages/about-us',
+                    'https://shop.alsherifmelamine.com/aboutus',
                   );
                   if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
                     if (context.mounted) {
@@ -941,7 +955,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 subtitle: '',
                 isLast: true,
                 onTap: () async {
-                  final Uri url = Uri.parse('https://melaminefront.dokkan.design/');
+                  final Uri url = Uri.parse('https://shop.alsherifmelamine.com/');
                   if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
                     if (context.mounted) {
                       ScaffoldMessenger.of(context).showSnackBar(

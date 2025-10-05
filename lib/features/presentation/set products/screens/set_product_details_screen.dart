@@ -16,7 +16,6 @@ import '../../../../core/utils/constants/app_assets.dart';
 import '../../../../core/utils/helpers.dart';
 import '../controller/set_product_provider.dart';
 import '../widgets/set_product_details_shimmer.dart';
-import '../../home/widgets/set_product_card.dart';
 import 'package:melamine_elsherif/features/presentation/home/controller/home_provider.dart';
 import 'package:melamine_elsherif/features/presentation/product details/widgets/related_products_widget.dart' as pd;
 
@@ -236,17 +235,13 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
                 child: IconButton(
                   onPressed: () => Navigator.of(context).pop(),
                   icon: Center(
-                    child: const Icon(
+                    child: Icon(
                       Icons.arrow_back_ios_new_outlined,
                       color: Colors.white,
                       size: 20,
+                      textDirection: TextDirection.ltr, // Force LTR direction
                     ),
                   ),
-                 // padding: const EdgeInsets.all(4),
-                  // constraints: const BoxConstraints(
-                  //   minWidth: 15,
-                  //   minHeight: 20,
-                  // ),
                 ),
               ),
             ),
@@ -1251,205 +1246,6 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
     return (currentPrice * 1.1).round();
   }
 
-  Widget _buildRelatedProductsSection(SetProductDetailsData product) {
-    return Consumer<SetProductsProvider>(
-      builder: (context, provider, child) {
-        // Load related products only once when the section is first built
-        if (product.id != null && 
-            provider.relatedProductsState == LoadingState.initial) {
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            provider.getRelatedSetProducts(productId: product.id!);
-          });
-        }
-        
-        // If no product ID, load fallback products
-        if (product.id == null && 
-            provider.relatedProductsState == LoadingState.initial &&
-            provider.relatedProducts.isEmpty) {
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            provider.loadFallbackProducts();
-          });
-        }
-
-        if (provider.relatedProductsState == LoadingState.loading) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'related_products'.tr(context),
-                style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 16),
-              SizedBox(
-                height: 300,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: 3,
-                  itemBuilder: (context, index) {
-                    return Container(
-                      width: 200,
-                      margin: const EdgeInsets.only(right: 16),
-                      child: Card(
-                        child: Column(
-                          children: [
-                            Expanded(
-                              child: Container(
-                                color: Colors.grey.shade200,
-                                child: const Center(
-                                  child: CircularProgressIndicator(),
-                                ),
-                              ),
-                            ),
-                            const Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: Text('Loading...'),
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ],
-          );
-        }
-
-        if (provider.relatedProductsState == LoadingState.error) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'related_products'.tr(context),
-                style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 16),
-              Container(
-                height: 120,
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Colors.red.shade50,
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: Colors.red.shade200),
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      provider.relatedProductsError.contains('429') 
-                          ? 'too_many_requests_error'.tr(context)
-                          : provider.relatedProductsError,
-                      style: TextStyle(color: Colors.red.shade700),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 12),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        ElevatedButton(
-                          onPressed: product.id != null ? () {
-                            provider.retryRelatedProducts(productId: product.id!);
-                          } : null,
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.red.shade100,
-                            foregroundColor: Colors.red.shade700,
-                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                          ),
-                          child: Text('retry'.tr(context)),
-                        ),
-                        const SizedBox(width: 12),
-                        ElevatedButton(
-                          onPressed: () {
-                            provider.loadFallbackProducts();
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.blue.shade100,
-                            foregroundColor: Colors.blue.shade700,
-                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                          ),
-                          child: Text('show_other_products'.tr(context)),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          );
-        }
-
-        // Only hide if we're not in initial state and have no products
-        if (provider.relatedProducts.isEmpty && 
-            provider.relatedProductsState != LoadingState.initial) {
-          return const SizedBox.shrink();
-        }
-        
-        // If still in initial state and no product ID, show a message
-        if (product.id == null) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'related_products'.tr(context),
-                style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 16),
-              Container(
-                height: 100,
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Colors.grey.shade50,
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: Colors.grey.shade200),
-                ),
-                child: Center(
-                  child: Text(
-                    'no_related_products_available'.tr(context),
-                    style: TextStyle(color: Colors.grey.shade600),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ),
-            ],
-          );
-        }
-
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'related_products'.tr(context),
-              style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 16),
-            SizedBox(
-              height: 300,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: provider.relatedProducts.length,
-                itemBuilder: (context, index) {
-                  final relatedProduct = provider.relatedProducts[index];
-                  return SetProductCard(
-                    setProduct: relatedProduct,
-                    width: 200,
-                  );
-                },
-              ),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   Widget _buildCategoryProductsSection(SetProductDetailsData product) {
     return Consumer<HomeProvider>(
       builder: (context, home, child) {
@@ -1576,7 +1372,7 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
                 crossAxisCount: 3,
                 crossAxisSpacing: 12,
                 mainAxisSpacing: 18,
-                childAspectRatio: 1.2, // More height for larger content
+                childAspectRatio: 0.75, // More height for title and description
               ),
               itemCount: careInstructions.length,
               itemBuilder: (context, index) {
@@ -1600,12 +1396,12 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
     required String description,
   }) {
     return Container(
-      // padding: const EdgeInsets.all(8),
-      // decoration: BoxDecoration(
-      //   color: Colors.grey.withValues(alpha: 0.02),
-      //   borderRadius: BorderRadius.circular(0),
-      //   border: Border.all(color: Colors.grey.withValues(alpha: 0.1), width: 1),
-      // ),
+      padding: const EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        color: Colors.grey.withValues(alpha: 0.02),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: Colors.grey.withValues(alpha: 0.1), width: 1),
+      ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
@@ -1620,19 +1416,33 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
             ),
           ),
 
-          const SizedBox(height: 12),
+          const SizedBox(height: 8),
 
           // Title
+          Text(
+            title,
+            textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+              fontWeight: FontWeight.w600,
+              color: AppTheme.primaryColor,
+              fontSize: 13,
+            ),
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
+
+          const SizedBox(height: 4),
+
+          // Description
           Flexible(
             child: Text(
-              title,
+              description,
               textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                fontWeight: FontWeight.w600,
-                color: AppTheme.primaryColor,
-                fontSize: 14, // Increased from 12
+              style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                color: AppTheme.darkDividerColor,
+                fontSize: 11,
               ),
-              maxLines: 2,
+              maxLines: 3,
               overflow: TextOverflow.ellipsis,
             ),
           ),

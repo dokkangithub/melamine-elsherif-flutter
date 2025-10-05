@@ -159,6 +159,7 @@ flutter:
     - assets/animation/
     - assets/flags/
     - assets/cups/
+    - assets/iso/
     - shorebird.yaml
 
   # An image asset can refer to one or more resolution-specific "variants", see

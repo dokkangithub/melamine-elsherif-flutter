@@ -326,7 +326,7 @@ class _SearchScreenState extends State<SearchScreen> {
               : FadeIn(
                   duration: const Duration(milliseconds: 600),
                   child: PopularSearches(
-                    popularProducts: searchProvider.filteredProducts,
+                    // popularProducts: searchProvider.filteredProducts,
                   ),
                 ),
           if (!isLoadingPopular && searchProvider.filteredProducts.isEmpty)

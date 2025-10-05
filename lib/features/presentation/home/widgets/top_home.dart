@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'dart:math';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:melamine_elsherif/core/utils/helpers/ui_helper.dart';
+import 'package:melamine_elsherif/core/utils/constants/app_assets.dart';
 import 'package:melamine_elsherif/core/utils/extension/translate_extension.dart';
 import 'package:melamine_elsherif/core/utils/extension/text_theme_extension.dart';
+import 'package:melamine_elsherif/features/presentation/search/screens/search_screen.dart';
 
 import '../../../../core/config/themes.dart/theme.dart';
 
@@ -15,7 +15,6 @@ class TopHomeWidget extends StatefulWidget {
 }
 
 class _TopHomeWidgetState extends State<TopHomeWidget> with SingleTickerProviderStateMixin {
-  int _currentIndex = 0;
   late final AnimationController _borderController;
 
   @override
@@ -32,6 +31,7 @@ class _TopHomeWidgetState extends State<TopHomeWidget> with SingleTickerProvider
     _borderController.dispose();
     super.dispose();
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -57,11 +57,36 @@ class _TopHomeWidgetState extends State<TopHomeWidget> with SingleTickerProvider
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.only(left: 15.0,top: 10),
-          child: Image.asset(
-            isArabic ? 'assets/images/7.png' : 'assets/images/8.png',
-            height: 120,
-            fit: BoxFit.contain,
+          padding: const EdgeInsets.only(left: 10.0, top: 10, right: 10),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Image.asset(
+                isArabic ? 'assets/images/7.png' : 'assets/images/8.png',
+                height: 120,
+                fit: BoxFit.contain,
+              ),
+              IconButton(
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const SearchScreen(),
+                    ),
+                  );
+                },
+                icon:  Image.asset(
+                  AppImages.search,
+                  color: AppTheme.accentColor,
+                  height: 25,
+                  width: 25,
+                ),
+                padding: const EdgeInsets.all(8),
+                constraints: const BoxConstraints(
+                  minWidth: 48,
+                  minHeight: 48,
+                ),
+              ),
+            ],
           ),
         ),
         AnimatedBuilder(
@@ -71,21 +96,14 @@ class _TopHomeWidgetState extends State<TopHomeWidget> with SingleTickerProvider
               offset: const Offset(0, -20),
               child: CarouselSlider(
               options: CarouselOptions(
-
                 height: 40,
                 autoPlay: true,
-
                 autoPlayInterval: const Duration(seconds: 4),
                 autoPlayAnimationDuration: const Duration(milliseconds: 800),
                 autoPlayCurve: Curves.easeInOutCubic,
                 pauseAutoPlayOnTouch: true,
                 viewportFraction: 1.0,
                 enlargeCenterPage: false,
-                onPageChanged: (index, reason) {
-                  setState(() {
-                    _currentIndex = index;
-                  });
-                },
               ),
               items: messages.asMap().entries.map((entry) {
                 final int idx = entry.key;
@@ -125,7 +143,7 @@ class _TopHomeWidgetState extends State<TopHomeWidget> with SingleTickerProvider
                     );
                   },
                 );
-              }).toList(),
+              }              ).toList(),
               ),
             );
           },

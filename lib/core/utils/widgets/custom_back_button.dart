@@ -29,8 +29,8 @@ class CustomBackButton extends StatelessWidget {
               ), // Flip horizontally (pi radians)
               child: Icon(
                 !respectDirection
-                    ? Icons.arrow_back_ios
-                    : Icons.arrow_back_ios_new_outlined,
+                    ? Icons.   arrow_forward_ios
+                    : Icons.arrow_forward_ios,
                 color: AppTheme.primaryColor,
                 size: 22 ,
               ),

@@ -20,7 +20,7 @@ class LaravelApiEndPoint {
   static const String subCategoryProducts = '/products/sub-category/';
   static const String shopProducts = '/products/seller/';
   static const String brandProducts = '/products/brand/';
-  static const String filteredProducts = '/products/search';
+  static const String filteredProducts = '/set-products/search';
   static const String digitalProducts = '/products/digital';
   static const String productDetails = '/products';
   static const String relatedProducts = '/products/related/';

@@ -602,5 +602,10 @@
   "featured": "FEATURED",
   "deals": "DEALS",
   "all": "ALL",
-  "warranty": "Warranty"
+  "iso_certificates": "ISO Certificates",
+  "view_certificates": "View Certificates",
+  "view_our_quality_certifications": "View our quality certifications and standards",
+  "certificate": "Certificate",
+  "tap_to_view_full_size": "Tap to view full size",
+  "warranty" : "Warranty"
 }
