@@ -735,7 +735,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 context: context,
                 icon: AppSvgs.profile_location,
                 title: 'shipping_address'.tr(context),
-                subtitle: 'manage_addresses'.tr(context),
+                subtitle: '',
                 onTap: () {
                   AppRoutes.navigateTo(context, AppRoutes.addressListScreen);
                 },

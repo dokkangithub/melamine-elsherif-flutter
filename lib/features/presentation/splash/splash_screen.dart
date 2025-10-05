@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:melamine_elsherif/core/services/business_settings_service.dart';
 import '../../../core/config/routes.dart/routes.dart';
+import '../../../core/config/themes.dart/theme.dart';
 import '../../../core/di/injection_container.dart';
 import '../../../core/utils/local_storage/local_storage_keys.dart';
 import '../../../core/utils/local_storage/secure_storage.dart';
@@ -136,6 +137,21 @@ class _SplashScreenState extends State<SplashScreen>
                     'assets/cups/splash_alsherif_logo.png',
                     height: 150,
                   ),
+                ),
+              ),
+
+              // Dokkan logo at the bottom
+              Positioned(
+                bottom: 35,
+                left: 0,
+                right: 0,
+                child: Center(
+                    child: Image.asset(
+                      'assets/images/dokkan.png',
+                      height: 25,
+                      color: AppTheme.accentColor,
+                      fit: BoxFit.contain,
+                    ),
                 ),
               ),
             ],

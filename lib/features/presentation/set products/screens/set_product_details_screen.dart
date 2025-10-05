@@ -26,8 +26,6 @@ class SetProductDetailsScreen extends StatefulWidget {
   const SetProductDetailsScreen({super.key, required this.slug});
 
   @override
-
-  
   _SetProductDetailsScreenState createState() =>
       _SetProductDetailsScreenState();
 }
@@ -447,8 +445,8 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
                   _buildComponentsList(provider.setProductDetails!, provider),
                   const SizedBox(height: 24),
                   _buildCategoryProductsSection(provider.setProductDetails!),
-                  const SizedBox(height: 24),
-                  _buildRelatedProductsSection(provider.setProductDetails!),
+                  // const SizedBox(height: 24),
+                  // _buildRelatedProductsSection(provider.setProductDetails!),
                   _buildCareInstructionsSection(
                     provider.setProductDetails!,
                   ), // Add this line
