@@ -82,6 +82,10 @@ class _CartScreenState extends State<CartScreen> {
     }
   }
 
+  bool _isRTL(BuildContext context) {
+    return Localizations.localeOf(context).languageCode == 'ar';
+  }
+
   @override
   void didUpdateWidget(CartScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
@@ -216,7 +220,8 @@ class _CartScreenState extends State<CartScreen> {
                 if (widget.showBackButton)
                   Positioned(
                     top: MediaQuery.of(context).padding.top + 8,
-                    left: 16,
+                    left: _isRTL(context) ? null : 16,
+                    right: _isRTL(context) ? 16 : null,
                     child: Container(
                       width: 35,
                       height: 35,
@@ -256,7 +261,8 @@ class _CartScreenState extends State<CartScreen> {
                 if (widget.showBackButton)
                   Positioned(
                     top: MediaQuery.of(context).padding.top + 8,
-                    left: 16,
+                    left: _isRTL(context) ? null : 16,
+                    right: _isRTL(context) ? 16 : null,
                     child: Container(
                       width: 35,
                       height: 35,
@@ -378,7 +384,8 @@ class _CartScreenState extends State<CartScreen> {
               if (widget.showBackButton)
                 Positioned(
                   top: MediaQuery.of(context).padding.top + 8,
-                  left: 16,
+                  left: _isRTL(context) ? null : 16,
+                  right: _isRTL(context) ? 16 : null,
                   child: Container(
                     width: 35,
                     height: 35,

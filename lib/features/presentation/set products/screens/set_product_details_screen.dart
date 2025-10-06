@@ -1492,7 +1492,7 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
     required String description,
   }) {
     return Container(
-      padding: const EdgeInsets.all(8),
+      padding: const EdgeInsets.all(2),
       decoration: BoxDecoration(
         color: Colors.grey.withValues(alpha: 0.02),
         borderRadius: BorderRadius.circular(8),
@@ -1506,13 +1506,13 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
           Center(
             child: Image.asset(
               iconPath,
-              width: 50,
-              height: 50,
+              width: 45,
+              height: 45,
               fit: BoxFit.contain,
             ),
           ),
 
-          const SizedBox(height: 8),
+          const SizedBox(height: 4),
 
           // Title
           Text(
@@ -1521,7 +1521,7 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
             style: Theme.of(context).textTheme.bodyMedium!.copyWith(
               fontWeight: FontWeight.w600,
               color: AppTheme.primaryColor,
-              fontSize: 13,
+              fontSize: 12,
             ),
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
@@ -1538,7 +1538,7 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
                 color: AppTheme.darkDividerColor,
                 fontSize: 11,
               ),
-              maxLines: 3,
+              maxLines: 2,
               overflow: TextOverflow.ellipsis,
             ),
           ),

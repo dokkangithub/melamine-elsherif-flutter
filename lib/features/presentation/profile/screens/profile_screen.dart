@@ -447,7 +447,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             icon: Icons.chevron_right,
             onTap: () async {
               final Uri url = Uri.parse(
-                'https://melaminefront.dokkan.design/pages/contact-us',
+                'https://shop.alsherifmelamine.com/pages/contact-us',
               );
               if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
                 if (context.mounted) {
@@ -468,7 +468,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             icon: Icons.chevron_right,
             onTap: () async {
               final Uri url = Uri.parse(
-                'https://melaminefront.dokkan.design/pages/about-us',
+                'https://shop.alsherifmelamine.com/aboutus',
               );
               if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
                 if (context.mounted) {
