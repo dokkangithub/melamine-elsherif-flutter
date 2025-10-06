@@ -39,8 +39,9 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
   late AnimationController _summaryController;
   late AnimationController _warrantyController;
   late AnimationController _priceAnimationController;
-  // Removed unused animations to clean up lints
   late Animation<double> _priceAnimation;
+  late ScrollController _scrollController;
+  bool _showAppBar = false;
 
   @override
   void initState() {
@@ -65,6 +66,8 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
       parent: _priceAnimationController,
       curve: Curves.easeInOut,
     );
+    _scrollController = ScrollController();
+    _scrollController.addListener(_onScroll);
 
     _resetScreenState();
 
@@ -72,6 +75,17 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
       final provider = Provider.of<SetProductsProvider>(context, listen: false);
       provider.getSetProductDetails(slug: widget.slug);
     });
+  }
+
+  void _onScroll() {
+    if (_scrollController.hasClients) {
+      final showAppBar = _scrollController.offset > 100;
+      if (showAppBar != _showAppBar) {
+        setState(() {
+          _showAppBar = showAppBar;
+        });
+      }
+    }
   }
 
   void _resetScreenState() {
@@ -87,6 +101,7 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
     _summaryController.dispose();
     _warrantyController.dispose();
     _priceAnimationController.dispose();
+    _scrollController.dispose();
     final provider = Provider.of<SetProductsProvider>(context, listen: false);
     provider.clearSetProductDetails();
     provider.clearCalculatedPrice();
@@ -197,6 +212,7 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
       builder: (context, provider, _) {
         return Scaffold(
           backgroundColor: Colors.white,
+          appBar: _showAppBar ? _buildAppBar(context, provider) : null,
           body: _buildBody(provider),
           bottomNavigationBar:
               provider.setProductDetailsState == LoadingState.loaded &&
@@ -208,9 +224,89 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
     );
   }
 
+  PreferredSizeWidget _buildAppBar(BuildContext context, SetProductsProvider provider) {
+    return AppBar(
+      backgroundColor: AppTheme.primaryColor,
+      elevation: 0,
+      centerTitle: true,
+      leading: IconButton(
+        onPressed: () => Navigator.of(context).pop(),
+        icon: const Icon(
+          Icons.arrow_back_ios,
+          color: Colors.white,
+          size: 20,
+        ),
+      ),
+      title: Text(
+        provider.setProductDetails?.name ?? '',
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+      ),
+      actions: [
+        Consumer<CartProvider>(
+          builder: (context, cartProvider, child) {
+            return Container(
+              margin: const EdgeInsets.only(right: 16),
+              child: Stack(
+                children: [
+                  IconButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => CartScreen.fromProductDetails(context),
+                        ),
+                      );
+                    },
+                    icon: SvgPicture.asset(
+                      'assets/icons/cart.svg',
+                      color: Colors.white,
+                      width: 22,
+                      height: 22,
+                    ),
+                  ),
+                  if (cartProvider.cartCount > 0)
+                    Positioned(
+                      top: 5,
+                      right: 5,
+                      child: Container(
+                        padding: const EdgeInsets.all(4),
+                        decoration: BoxDecoration(
+                          color: AppTheme.accentColor,
+                          shape: BoxShape.circle,
+                        ),
+                        constraints: const BoxConstraints(
+                          minWidth: 16,
+                          minHeight: 16,
+                        ),
+                        child: Text(
+                          '${cartProvider.cartCount}',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 10,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+            );
+          },
+        ),
+      ],
+    );
+  }
+
+  bool _isRTL(BuildContext context) {
+    return Localizations.localeOf(context).languageCode == 'ar';
+  }
+
   Widget _buildProductHeader(SetProductDetailsData product) {
     final screenHeight = MediaQuery.of(context).size.height;
     final imageHeight = screenHeight / 2.3;
+    final isRTL = _isRTL(context);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -223,12 +319,14 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
               width: double.infinity,
               fit: BoxFit.cover,
             ),
+            // Back button
             Positioned(
               top: MediaQuery.of(context).padding.top + 8,
-              left: 16,
+              left: isRTL ? null : 16,
+              right: isRTL ? 16 : null,
               child: Container(
-               width: 35,
-               height: 35,
+                width: 35,
+                height: 35,
                 decoration: BoxDecoration(
                   color: AppTheme.primaryColor.withValues(alpha: 0.8),
                 ),
@@ -236,18 +334,19 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
                   onPressed: () => Navigator.of(context).pop(),
                   icon: Center(
                     child: Icon(
-                      Icons.arrow_back_ios_new_outlined,
+                      Icons.arrow_back_ios,
                       color: Colors.white,
                       size: 20,
-                      textDirection: TextDirection.ltr, // Force LTR direction
                     ),
                   ),
                 ),
               ),
             ),
+            // Cart button
             Positioned(
               top: MediaQuery.of(context).padding.top + 8,
-              right: 16,
+              left: isRTL ? 16 : null,
+              right: isRTL ? null : 16,
               child: Consumer<CartProvider>(
                 builder: (context, cartProvider, child) {
                   return Stack(
@@ -260,7 +359,6 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
                         ),
                         child: IconButton(
                           onPressed: () {
-                            // Navigate to cart screen with back button
                             Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -276,12 +374,12 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
                           ),
                         ),
                       ),
-
-
                       if (cartProvider.cartCount > 0)
                         Positioned(
                           top: 0,
-                          left: 25, bottom:20,
+                          left: isRTL ? null : 25,
+                          right: isRTL ? 25 : null,
+                          bottom: 20,
                           child: Center(
                             child: Text(
                               '${cartProvider.cartCount}',
@@ -299,9 +397,6 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
                 },
               ),
             ),
-
-
-
           ],
         ),
         const SizedBox(height: 16),
@@ -423,6 +518,7 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
     return FadeInUp(
       duration: const Duration(milliseconds: 600),
       child: SingleChildScrollView(
+        controller: _scrollController,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
