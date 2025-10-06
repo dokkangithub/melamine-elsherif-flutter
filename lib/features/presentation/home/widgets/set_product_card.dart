@@ -59,6 +59,12 @@ class _SetProductCardState extends State<SetProductCard> {
 
   @override
   Widget build(BuildContext context) {
+    // Get the current price (which is after discount)
+    final currentPrice = double.tryParse(widget.setProduct.discountedPrice?.replaceAll(RegExp(r'[^\d.]'), '') ?? '0') ?? 0;
+    // Calculate original price by adding 10% to current price
+    final originalPrice = currentPrice * 1.1;
+    final discountAmount = originalPrice - currentPrice;
+    
     return FadeInUp(
       delay: Duration(milliseconds: 100 + (widget.index * 50)),
       duration: const Duration(milliseconds: 400),
@@ -82,13 +88,62 @@ class _SetProductCardState extends State<SetProductCard> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Product image
+                    // Product image with discount badge
                     Expanded(
                       child: AspectRatio(
                         aspectRatio: 1.5,
-                        child: CustomImage(
-                          imageUrl: widget.setProduct.thumbnailImage,
-                          fit: BoxFit.contain,
+                        child: Stack(
+                          children: [
+                            CustomImage(
+                              imageUrl: widget.setProduct.thumbnailImage,
+                              fit: BoxFit.contain,
+                            ),
+                            // Discount badge
+                            Positioned(
+                              top: 8,
+                              right: 8,
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 8,
+                                  vertical: 4,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: AppTheme.primaryColor, // Primary color
+                                  borderRadius: BorderRadius.circular(4),
+                                  gradient: LinearGradient(
+                                    colors: [
+                                      AppTheme.primaryColor,
+                                      AppTheme.primaryColor.withOpacity(0.8),
+                                      AppTheme.primaryColor,
+                                    ],
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight,
+                                  ),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: AppTheme.primaryColor.withOpacity(0.3),
+                                      blurRadius: 8,
+                                      spreadRadius: 1,
+                                      offset: const Offset(0, 2),
+                                    ),
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.1),
+                                      blurRadius: 2,
+                                      offset: const Offset(0, 1),
+                                    ),
+                                  ],
+                                ),
+                                child: Text(
+                                  '- ${discountAmount.toInt()} L.E',
+                                  style: context.titleSmall.copyWith(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
@@ -138,6 +193,7 @@ class _SetProductCardState extends State<SetProductCard> {
                                 spacing: 4,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
+                                  // Show current price (after discount) - use the original API price format
                                   Text(
                                     widget.setProduct.discountedPrice!,
                                     style: context.titleLarge.copyWith(
@@ -150,23 +206,22 @@ class _SetProductCardState extends State<SetProductCard> {
                                         ? TextAlign.right
                                         : TextAlign.left,
                                   ),
-                                  widget.setProduct.hasDiscount == true
-                                      ? Text(
-                                          widget.setProduct.mainPrice!,
-                                          style: context.titleMedium.copyWith(
-                                            color: AppTheme
-                                                .lightSecondaryTextColor,
-                                            fontWeight: FontWeight.w400,
-                                            decoration:
-                                                TextDecoration.lineThrough,
-                                          ),
-                                          textAlign:
-                                              Directionality.of(context) ==
-                                                  TextDirection.rtl
-                                              ? TextAlign.right
-                                              : TextAlign.left,
-                                        )
-                                      : const SizedBox.shrink(),
+                                  // Show original price (current price + 10%) with strikethrough
+                                  Text(
+                                    '${originalPrice.toInt()} L.E',
+                                    style: context.titleMedium.copyWith(
+                                      color: AppTheme
+                                          .lightSecondaryTextColor,
+                                      fontWeight: FontWeight.w400,
+                                      decoration:
+                                          TextDecoration.lineThrough,
+                                    ),
+                                    textAlign:
+                                        Directionality.of(context) ==
+                                            TextDirection.rtl
+                                        ? TextAlign.right
+                                        : TextAlign.left,
+                                  ),
                                 ],
                               ),
                             ),

@@ -21,8 +21,13 @@ import 'package:melamine_elsherif/features/presentation/product details/widgets/
 
 class SetProductDetailsScreen extends StatefulWidget {
   final String slug;
+  final bool fromProductsTab; // New parameter to indicate if accessed from Products tab
 
-  const SetProductDetailsScreen({super.key, required this.slug});
+  const SetProductDetailsScreen({
+    super.key, 
+    required this.slug,
+    this.fromProductsTab = false,
+  });
 
   @override
   _SetProductDetailsScreenState createState() =>
@@ -92,7 +97,8 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
     selectedQuantities.clear();
     isSummaryExpanded = false;
     isWarrantyExpanded = false;
-    isFullSet = true;
+    // If accessed from Products tab, default to individual selection mode
+    isFullSet = !widget.fromProductsTab;
   }
 
   @override
@@ -134,6 +140,11 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
   }
 
   void _toggleSetType(bool fullSet, SetProductsProvider provider) {
+    // Prevent switching to full set if accessed from Products tab
+    if (widget.fromProductsTab && fullSet) {
+      return;
+    }
+    
     if (isFullSet != fullSet) {
       setState(() {
         isFullSet = fullSet;
@@ -434,10 +445,16 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
               } else {
                 isLoading =
                     priceProvider.calculatePriceState == LoadingState.loading;
-                displayPrice = priceProvider.calculatedPrice != null
-                    ? '${priceProvider.calculatedPrice!.totalPrice}'
-                    : (product.discountedPrice ??
-                          '${product.minimumCustomPrice ?? 0} ');
+                
+                // If accessed from Products tab, show L.E 0 initially
+                if (widget.fromProductsTab && priceProvider.calculatedPrice == null) {
+                  displayPrice = '0 L.E';
+                } else {
+                  displayPrice = priceProvider.calculatedPrice != null
+                      ? '${priceProvider.calculatedPrice!.totalPrice}'
+                      : (product.discountedPrice ??
+                            '${product.minimumCustomPrice ?? 0} ');
+                }
                 originalPrice = null;
               }
 
@@ -531,7 +548,8 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
                 children: [
                   _buildProductDescription(provider.setProductDetails!),
                   const SizedBox(height: 24),
-                  _buildSetTypeSelector(provider),
+                  // Only show set type selector if not accessed from Products tab
+                  if (!widget.fromProductsTab) _buildSetTypeSelector(provider),
                   const SizedBox(height: 24),
                   _buildComponentsList(provider.setProductDetails!, provider),
                   const SizedBox(height: 24),
@@ -598,6 +616,34 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
   }
 
   Widget _buildSetTypeSelector(SetProductsProvider provider) {
+    // If accessed from Products tab, show only custom set option
+    if (widget.fromProductsTab) {
+      return Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(0),
+          border: Border.all(
+            color: AppTheme.darkDividerColor.withValues(alpha: 0.3),
+          ),
+        ),
+        child: Container(
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(vertical: 16),
+          decoration: const BoxDecoration(
+            color: AppTheme.primaryColor,
+          ),
+          child: Text(
+            'custom_set'.tr(context),
+            textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.titleMedium!.copyWith(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      );
+    }
+
+    // Normal set type selector for other cases
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(0),
@@ -1248,9 +1294,15 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
               : '${provider.setProductDetails!.fullSetPrice} ';
         } else {
           isLoading = priceProvider.calculatePriceState == LoadingState.loading;
-          displayPrice = priceProvider.calculatedPrice != null
-              ? '${priceProvider.calculatedPrice!.totalPrice} EGP'
-              : '${provider.setProductDetails!.minimumCustomPrice ?? 0} EGP';
+          
+          // If accessed from Products tab, show L.E 0 initially
+          if (widget.fromProductsTab && priceProvider.calculatedPrice == null) {
+            displayPrice = '0 L.E';
+          } else {
+            displayPrice = priceProvider.calculatedPrice != null
+                ? '${priceProvider.calculatedPrice!.totalPrice} EGP'
+                : '${provider.setProductDetails!.minimumCustomPrice ?? 0} EGP';
+          }
         }
 
         return Container(
@@ -1440,7 +1492,7 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
                   ),
                   child: const Icon(
                     Icons.verified_user_outlined,
-                    color: AppTheme.accentColor,
+                    color: AppTheme.primaryColor,
                     size: 24,
                   ),
                 ),
@@ -1449,7 +1501,7 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
                   'care_guide'.tr(context),
                   style: Theme.of(context).textTheme.titleLarge!.copyWith(
                     fontWeight: FontWeight.bold,
-                    color: AppTheme.accentColor,
+                    color: AppTheme.primaryColor,
                   ),
                 ),
               ],

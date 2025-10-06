@@ -13,6 +13,7 @@ class CustomImage extends StatelessWidget {
   final BoxFit fit;
   final BorderRadius? borderRadius;
   final Widget? errorWidget;
+  final Color? color;
 
   const CustomImage({
     super.key,
@@ -24,6 +25,7 @@ class CustomImage extends StatelessWidget {
     this.fit = BoxFit.contain,
     this.borderRadius,
     this.errorWidget,
+    this.color,
   }) : assert(
          imageUrl != null || assetPath != null,
          "Provide either an imageUrl or assetPath",
@@ -54,6 +56,7 @@ class CustomImage extends StatelessWidget {
         width: width,
         height: height,
         fit: fit,
+        colorFilter: color != null ? ColorFilter.mode(color!, BlendMode.srcIn) : null,
         placeholderBuilder: (context) => _buildPlaceholder(),
       );
     } else {
@@ -83,6 +86,7 @@ class CustomImage extends StatelessWidget {
         width: width,
         height: height,
         fit: fit,
+        colorFilter: color != null ? ColorFilter.mode(color!, BlendMode.srcIn) : null,
       );
     } else {
       return Image.asset(assetPath!, width: width, height: height, fit: fit);
@@ -97,6 +101,7 @@ class CustomImage extends StatelessWidget {
         width: width,
         height: height,
         fit: BoxFit.contain,
+        colorFilter: color != null ? ColorFilter.mode(color!, BlendMode.srcIn) : null,
       );
     } else {
       return Image.asset(

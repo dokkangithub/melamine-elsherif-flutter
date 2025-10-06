@@ -92,6 +92,9 @@ class AppSvgs {
   static const String active_wishlist_icon =
       '$svgPath/active_wishlist_icon.svg';
   static const String active_profile_icon = '$svgPath/active_profile_icon.svg';
+  static const String products_icon = '$svgPath/shopping-basket.svg';
+  static const String un_products_icon = '$svgPath/unselect_shopping-basket.svg';
+  static const String active_products_icon = '$svgPath/shopping-basket.svg'; // Using same icon for now
   static const String profile_bag = '$svgPath/profile_bag.svg';
   static const String profile_star = '$svgPath/profile_star.svg';
   static const String profile_fav = '$svgPath/profile_fav.svg';

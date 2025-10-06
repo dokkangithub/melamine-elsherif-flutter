@@ -46,13 +46,29 @@ class BottomNavBarWidget extends StatelessWidget {
                 icon: const CustomImage(assetPath: AppSvgs.home_icon),
                 activeIcon: const CustomImage(
                   assetPath: AppSvgs.active_home_icon,
+                  color: AppTheme.primaryColor,
                 ),
                 label: 'home'.tr(context).toUpperCase(),
+              ),
+              BottomNavigationBarItem(
+                icon: const CustomImage(
+                  assetPath: AppSvgs.un_products_icon,
+                  width: 24,
+                  height: 24,
+                ),
+                activeIcon: const CustomImage(
+                  assetPath: AppSvgs.active_products_icon,
+                  color: AppTheme.primaryColor,
+                  width: 24,
+                  height: 24,
+                ),
+                label: 'choose_your_set'.tr(context).toUpperCase(),
               ),
               BottomNavigationBarItem(
                 icon: const CustomImage(assetPath: AppSvgs.category_icon),
                 activeIcon: const CustomImage(
                   assetPath: AppSvgs.active_category_icon,
+                  color: AppTheme.primaryColor,
                 ),
                 label: 'category'.tr(context).toUpperCase(),
               ),
@@ -63,7 +79,10 @@ class BottomNavBarWidget extends StatelessWidget {
                   isActive: false,
                 ),
                 activeIcon: _buildIconWithBadge(
-                  icon: const CustomImage(assetPath: AppSvgs.active_cart_icon),
+                  icon: const CustomImage(
+                    assetPath: AppSvgs.active_cart_icon,
+                    color: AppTheme.primaryColor,
+                  ),
                   count: cartProvider.cartCount,
                   isActive: true,
                 ),
@@ -73,6 +92,7 @@ class BottomNavBarWidget extends StatelessWidget {
                 icon: const CustomImage(assetPath: AppSvgs.profile_icon),
                 activeIcon: const CustomImage(
                   assetPath: AppSvgs.active_profile_icon,
+                  color: AppTheme.primaryColor,
                 ),
                 label: 'profile'.tr(context).toUpperCase(),
               ),

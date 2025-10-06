@@ -3,6 +3,7 @@ import 'package:melamine_elsherif/features/presentation/cart/screens/cart_screen
 import 'package:melamine_elsherif/features/presentation/category/screens/category_screen.dart';
 import 'package:melamine_elsherif/features/presentation/home/screens/home.dart';
 import 'package:melamine_elsherif/features/presentation/profile/screens/profile_screen.dart';
+import 'package:melamine_elsherif/features/presentation/products/screens/products_screen.dart';
 // Removed wishlist import as wishlist tab no longer exists
 
 class LayoutProvider extends ChangeNotifier {
@@ -26,9 +27,10 @@ class LayoutProvider extends ChangeNotifier {
   void _updateMainScreens() {
     _mainScreens = [
       const HomeScreen(),
-      CategoryScreen(isActive: _currentIndex == 1),
-      CartScreen(isActive: _currentIndex == 2),
-      ProfileScreen(isActive: _currentIndex == 3),
+      const ProductsScreen(),
+      CategoryScreen(isActive: _currentIndex == 2),
+      CartScreen(isActive: _currentIndex == 3),
+      ProfileScreen(isActive: _currentIndex == 4),
     ];
   }
 
@@ -49,7 +51,7 @@ class LayoutProvider extends ChangeNotifier {
     _currentIndex = index;
 
     // Reset the flag when changing to any tab other than cart
-    if (index != 2) {
+    if (index != 3) {
       _skipCartDataReload = false;
     }
 
@@ -74,7 +76,7 @@ class LayoutProvider extends ChangeNotifier {
   /// This will skip unnecessary data reloading
   void navigateToCartFromBuyNow() {
     _skipCartDataReload = true;
-    _currentIndex = 2; // Cart tab index after removing wishlist
+    _currentIndex = 3; // Cart tab index after adding Products tab
     _updateMainScreens(); // Update screens with new active state
 
     // Notify listeners first
@@ -93,6 +95,7 @@ class LayoutProvider extends ChangeNotifier {
 
   List<String> screenTitles = [
     'explore',
+    'products',
     'category',
     'cart',
     'profile',

@@ -85,7 +85,7 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final primary = colorScheme.primary;
+    final primary = colorScheme.secondary;
 
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -122,8 +122,8 @@ class _SplashScreenState extends State<SplashScreen>
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                     colors: [
-                      primary.withOpacity(0.95),
-                      primary.withOpacity(0.85),
+                      AppTheme.accentColor.withOpacity(0.95),
+                      AppTheme.accentColor.withOpacity(0.85),
                       Colors.white.withOpacity(0.95),
                     ],
                   ),
@@ -149,7 +149,7 @@ class _SplashScreenState extends State<SplashScreen>
                     child: Image.asset(
                       'assets/images/dokkan.png',
                       height: 25,
-                      color: AppTheme.accentColor,
+                      color: AppTheme.primaryColor,
                       fit: BoxFit.contain,
                     ),
                 ),
