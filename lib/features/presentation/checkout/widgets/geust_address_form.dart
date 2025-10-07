@@ -29,9 +29,9 @@ class _GuestAddressFormScreenState extends State<GuestAddressFormScreen> {
   final _addressController = TextEditingController();
   final _cityNameController = TextEditingController();
 
-  int _selectedCountryId = 0;
+  int _selectedCountryId = 64; // Fixed to Egypt
   int _selectedStateId = 0;
-  String _selectedCountryName = '';
+  String _selectedCountryName = 'Egypt'; // Fixed to Egypt
   String _selectedStateName = '';
 
   bool _isLoading = false;
@@ -44,9 +44,9 @@ class _GuestAddressFormScreenState extends State<GuestAddressFormScreen> {
       _phoneController.text = widget.initialAddress!.phone;
       _addressController.text = widget.initialAddress!.address;
       _cityNameController.text = widget.initialAddress!.cityName;
-      _selectedCountryId = widget.initialAddress!.countryId;
+      _selectedCountryId = 64; // Always Egypt
       _selectedStateId = widget.initialAddress!.stateId;
-      _selectedCountryName = widget.initialAddress!.countryName;
+      _selectedCountryName = 'Egypt'; // Always Egypt
       _selectedStateName = widget.initialAddress!.stateName;
       _nameController.text = AppStrings.userName!;
     }
@@ -64,11 +64,8 @@ class _GuestAddressFormScreenState extends State<GuestAddressFormScreen> {
     final addressProvider = context.read<AddressProvider>();
 
     try {
-      await addressProvider.fetchCountries();
-
-      if (_selectedCountryId > 0) {
-        await addressProvider.fetchStatesByCountry(_selectedCountryId);
-      }
+      // Load states for Egypt (ID: 64) directly
+      await addressProvider.fetchStatesByCountry(64);
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(
@@ -98,12 +95,8 @@ class _GuestAddressFormScreenState extends State<GuestAddressFormScreen> {
       return;
     }
 
-    if (_selectedCountryId == 0) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('please_select_country'.tr(context))),
-      );
-      return;
-    }
+    // Country is always Egypt, so no need to check
+    // _selectedCountryId is always 64 (Egypt)
 
     if (_selectedStateId == 0) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -173,33 +166,31 @@ class _GuestAddressFormScreenState extends State<GuestAddressFormScreen> {
             child: ListView(
               padding: const EdgeInsets.all(16),
               children: [
-                // Country Dropdown
-                DropdownButtonFormField<int>(
-                  decoration: InputDecoration(
-                    labelText: 'country'.tr(context),
-                    border: const OutlineInputBorder(),
+                // Country is fixed to Egypt - no dropdown needed
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: AppTheme.darkDividerColor),
+                    borderRadius: BorderRadius.circular(4),
                   ),
-                  value: _selectedCountryId > 0 ? _selectedCountryId : null,
-                  hint: Text('select_country'.tr(context)),
-                  items: addressProvider.countries.map((country) {
-                    return DropdownMenuItem<int>(
-                      value: country.id,
-                      child: Text(country.name),
-                    );
-                  }).toList(),
-                  onChanged: (value) async {
-                    if (value != null) {
-                      setState(() {
-                        _selectedCountryId = value;
-                        _selectedStateId = 0;
-                        _selectedCountryName = addressProvider.countries
-                            .firstWhere((country) => country.id == value)
-                            .name;
-                      });
-
-                      await addressProvider.fetchStatesByCountry(value);
-                    }
-                  },
+                  child: Row(
+                    children: [
+                      Text(
+                        'country'.tr(context),
+                        style: context.titleSmall!.copyWith(
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      const Spacer(),
+                      Text(
+                        'Egypt',
+                        style: context.titleMedium!.copyWith(
+                          color: AppTheme.primaryColor,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
                 const SizedBox(height: 16),
 

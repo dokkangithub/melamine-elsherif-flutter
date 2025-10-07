@@ -182,8 +182,8 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
               ? OutlineInputBorder(
                   borderRadius: BorderRadius.circular(widget.borderRadius),
                   borderSide: BorderSide(
-                    color: AppTheme.darkDividerColor.withValues(alpha: 0.3),
-                    width: 1,
+                    color: AppTheme.primaryColor,
+                    width: 0.1,
                   ),
                 )
               : OutlineInputBorder(
@@ -195,7 +195,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
                   borderRadius: BorderRadius.circular(widget.borderRadius),
                   borderSide: const BorderSide(
                     color: AppTheme.primaryColor,
-                    width: 1.5,
+                    width: 0.9,
                   ),
                 )
               : OutlineInputBorder(

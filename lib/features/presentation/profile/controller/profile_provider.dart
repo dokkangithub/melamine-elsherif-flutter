@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import '../../../../core/utils/constants/app_strings.dart';
 import '../../../../core/utils/enums/loading_state.dart';
 import '../../../data/profile/models/profile_counters_model.dart';
-import '../../../data/profile/models/profile_update_response.dart';
 import '../../../domain/profile/entities/user_profile.dart';
 import '../../../domain/profile/usecases/get_profile_counters_use_case.dart';
 import '../../../domain/profile/usecases/get_user_by_access_token_use_case.dart';
@@ -47,6 +46,14 @@ class ProfileProvider extends ChangeNotifier {
 
   // Profile image
   String? profileImageUrl;
+
+  // Method to update wishlist count from WishlistProvider
+  void updateWishlistCount(int count) {
+    if (profileCounters != null) {
+      profileCounters = profileCounters!.copyWith(wishlistItemCount: count);
+      notifyListeners();
+    }
+  }
 
   Future<void> getUserProfile() async {
     if (AppStrings.token == null) return;

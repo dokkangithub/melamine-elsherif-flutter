@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:math';
 
 import 'package:crypto/crypto.dart';
@@ -35,17 +36,18 @@ class SocialLoginWidget extends StatelessWidget {
           },
         ),
 
-        const SizedBox(width: 16),
-
-        // Apple login button
-        _buildSocialButton(
-          context,
-          icon: AppSvgs.apple,
-          label: 'continue_with_apple'.tr(context),
-          onTap: () {
-            onPressedAppleLogin(context);
-          },
-        ),
+        // Apple login button - only show on iOS devices
+        if (Platform.isIOS) ...[
+          const SizedBox(width: 16),
+          _buildSocialButton(
+            context,
+            icon: AppSvgs.apple,
+            label: 'continue_with_apple'.tr(context),
+            onTap: () {
+              onPressedAppleLogin(context);
+            },
+          ),
+        ],
       ],
     );
   }
@@ -63,7 +65,7 @@ class SocialLoginWidget extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 12),
           decoration: BoxDecoration(
-            border: Border.all(color: Colors.grey.shade300),
+            border: Border.all(color: Colors.grey),
             borderRadius: BorderRadius.circular(0),
           ),
           child: Row(

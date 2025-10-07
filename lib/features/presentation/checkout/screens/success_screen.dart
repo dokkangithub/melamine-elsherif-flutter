@@ -7,7 +7,6 @@ import 'package:melamine_elsherif/core/utils/constants/app_strings.dart';
 import 'package:melamine_elsherif/core/utils/extension/text_theme_extension.dart';
 import 'package:melamine_elsherif/core/utils/extension/translate_extension.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_button.dart';
-import 'package:melamine_elsherif/features/presentation/checkout/controller/payment_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../../../data/payment/models/payment_type_model.dart';
@@ -19,11 +18,6 @@ class SuccessScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    PaymentProvider paymentProvider = Provider.of<PaymentProvider>(
-      context,
-      listen: false,
-    );
-
     // Format the order number
     String orderNumber = "#ORD-${orderDetails.combinedOrder!.id}";
 
@@ -121,7 +115,7 @@ class SuccessScreen extends StatelessWidget {
 
               const Spacer(),
 
-              // Track Order button
+              // Track Order button - only show for logged in users
               AppStrings.token == null
                   ? const SizedBox.shrink()
                   : CustomButton(
@@ -150,30 +144,80 @@ class SuccessScreen extends StatelessWidget {
                     ),
               const SizedBox(height: 16),
 
-              // Continue Shopping button
-              CustomButton(
-                onPressed: () {
-                  Provider.of<LayoutProvider>(
-                    context,
-                    listen: false,
-                  ).currentIndex = 0;
-                  AppRoutes.navigateToAndRemoveUntil(
-                    context,
-                    AppRoutes.mainLayoutScreen,
-                  );
-                },
-                isOutlined: true,
-                backgroundColor: AppTheme.primaryColor,
-                child: Center(
-                  child: Text(
-                    "continue_shopping".tr(context),
-                    style: context.headlineSmall?.copyWith(
-                      color: AppTheme.primaryColor,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ),
-              ),
+              // Show login/signup option for guest users
+              AppStrings.token == null
+                  ? Column(
+                      children: [
+                        // Login button for guest users
+                        CustomButton(
+                          onPressed: () {
+                            AppRoutes.navigateToAndRemoveUntil(
+                              context,
+                              AppRoutes.login,
+                            );
+                          },
+                          backgroundColor: AppTheme.primaryColor,
+                          child: Center(
+                            child: Text(
+                              "login".tr(context),
+                              style: context.headlineSmall?.copyWith(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        // Continue Shopping button
+                        CustomButton(
+                          onPressed: () {
+                            Provider.of<LayoutProvider>(
+                              context,
+                              listen: false,
+                            ).currentIndex = 0;
+                            AppRoutes.navigateToAndRemoveUntil(
+                              context,
+                              AppRoutes.mainLayoutScreen,
+                            );
+                          },
+                          isOutlined: true,
+                          backgroundColor: AppTheme.primaryColor,
+                          child: Center(
+                            child: Text(
+                              "continue_shopping".tr(context),
+                              style: context.headlineSmall?.copyWith(
+                                color: AppTheme.primaryColor,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
+                  : // Continue Shopping button for logged in users
+                    CustomButton(
+                        onPressed: () {
+                          Provider.of<LayoutProvider>(
+                            context,
+                            listen: false,
+                          ).currentIndex = 0;
+                          AppRoutes.navigateToAndRemoveUntil(
+                            context,
+                            AppRoutes.mainLayoutScreen,
+                          );
+                        },
+                        isOutlined: true,
+                        backgroundColor: AppTheme.primaryColor,
+                        child: Center(
+                          child: Text(
+                            "continue_shopping".tr(context),
+                            style: context.headlineSmall?.copyWith(
+                              color: AppTheme.primaryColor,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                      ),
               const SizedBox(height: 80),
             ],
           ),

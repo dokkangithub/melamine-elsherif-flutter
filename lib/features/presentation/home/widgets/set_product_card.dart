@@ -75,7 +75,10 @@ class _SetProductCardState extends State<SetProductCard> {
           AppRoutes.navigateTo(
             context,
             AppRoutes.setProductDetailsScreen,
-            arguments: {'slug': widget.setProduct.slug},
+            arguments: {
+              'slug': widget.setProduct.slug,
+              'fromProductsTab': false,
+            },
           );
         },
         child: Stack(
@@ -100,11 +103,11 @@ class _SetProductCardState extends State<SetProductCard> {
                             ),
                             // Discount badge
                             Positioned(
-                              top: 8,
-                              right: 8,
+                              top: 0,
+                              right: 10,
                               child: Container(
                                 padding: const EdgeInsets.symmetric(
-                                  horizontal: 8,
+                                  horizontal: 4,
                                   vertical: 4,
                                 ),
                                 decoration: BoxDecoration(
@@ -112,16 +115,16 @@ class _SetProductCardState extends State<SetProductCard> {
                                   borderRadius: BorderRadius.circular(4),
                                   gradient: LinearGradient(
                                     colors: [
-                                      AppTheme.primaryColor,
-                                      AppTheme.primaryColor.withOpacity(0.8),
-                                      AppTheme.primaryColor,
+                                      AppTheme.accentColor,
+                                      AppTheme.accentColor.withOpacity(0.8),
+                                      AppTheme.accentColor,
                                     ],
                                     begin: Alignment.topLeft,
                                     end: Alignment.bottomRight,
                                   ),
                                   boxShadow: [
                                     BoxShadow(
-                                      color: AppTheme.primaryColor.withOpacity(0.3),
+                                      color: AppTheme.accentColor.withOpacity(0.3),
                                       blurRadius: 8,
                                       spreadRadius: 1,
                                       offset: const Offset(0, 2),

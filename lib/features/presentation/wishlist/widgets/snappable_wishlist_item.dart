@@ -60,10 +60,7 @@ class SnappableWishlistItemState extends State<SnappableWishlistItem>
         _isDeleting = true;
       });
       _animationController.forward();
-      CustomToast.showToast(
-        message: 'item_removed_from_wishlist'.tr(context),
-        type: ToastType.success,
-      );
+      // Message will be shown by AppFunctions.toggleWishlistStatus
     }
   }
 

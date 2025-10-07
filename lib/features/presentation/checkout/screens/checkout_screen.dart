@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:melamine_elsherif/core/config/themes.dart/theme.dart';
-import 'package:melamine_elsherif/core/utils/constants/app_assets.dart';
 import 'package:melamine_elsherif/core/utils/extension/text_theme_extension.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_back_button.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_button.dart';
-import 'package:melamine_elsherif/core/utils/widgets/custom_cached_image.dart';
-import 'package:melamine_elsherif/core/utils/widgets/custom_form_field.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_loading.dart';
 import 'package:provider/provider.dart';
 import '../../../../core/config/routes.dart/routes.dart';
@@ -265,7 +262,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         address: _selectedAddress!.address,
         city: _selectedAddress!.cityName,
         phone: _selectedAddress!.phone,
-        additionalInfo: _noteController.text ?? '',
+        additionalInfo: _noteController.text,
         context: context,
       );
 
@@ -273,10 +270,14 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         await context.read<CartProvider>().fetchCartItems();
         await context.read<CartProvider>().fetchCartCount();
 
+        // Navigate to success screen with order details and prevent going back to cart
         Navigator.pushNamedAndRemoveUntil(
           context,
           AppRoutes.successScreen,
-          (route) => route.settings.name == AppRoutes.homeScreen,
+          (route) => route.settings.name == AppRoutes.mainLayoutScreen,
+          arguments: {
+            'orderDetails': response,
+          },
         );
       } else if (!response.result && mounted) {
         ScaffoldMessenger.of(

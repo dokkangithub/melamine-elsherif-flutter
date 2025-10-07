@@ -166,10 +166,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                         itemBuilder: (context, index) {
                           final category = categories[index];
 
-                          return _buildCategoryCard(
-                            context,
-                            category,
-                            (category.productCount ?? 0),
+                          return _buildCategoryCard(context, category, (category.productCount ?? 0),
                           );
                         },
                       ),

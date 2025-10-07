@@ -27,6 +27,7 @@ import '../../../features/presentation/set products/screens/set_products_screen.
 import '../../../features/presentation/splash/splash_screen.dart';
 import '../../../features/presentation/search/screens/search_screen.dart';
 import '../../../features/presentation/wallet/screens/wallet_screen.dart';
+import '../../../features/presentation/checkout/screens/success_screen.dart';
 import 'package:page_transition/page_transition.dart';
 
 class AppRoutes {
@@ -161,9 +162,11 @@ class AppRoutes {
         break;
       case setProductDetailsScreen:
         final setSlug = routeArguments?['slug'] as String?;
+        final fromProductsTab = routeArguments?['fromProductsTab'] as bool? ?? false;
 
         debugPrint('=== SET PRODUCT DETAIL ROUTE DEBUG ===');
         debugPrint('Slug: $setSlug');
+        debugPrint('From Products Tab: $fromProductsTab');
         debugPrint('From notification: ${pendingNotificationAction != null}');
 
         if (setSlug == null || setSlug.isEmpty) {
@@ -173,7 +176,10 @@ class AppRoutes {
           debugPrint(
             '✅ Valid set slug found, creating SetProductDetailsScreen',
           );
-          page = SetProductDetailsScreen(slug: setSlug);
+          page = SetProductDetailsScreen(
+            slug: setSlug,
+            fromProductsTab: fromProductsTab,
+          );
         }
         break;
       case allCategoryProductsScreen:
@@ -244,6 +250,15 @@ class AppRoutes {
         break;
       case walletScreen:
         page = const WalletScreen();
+        break;
+      case successScreen:
+        final orderDetails = routeArguments?['orderDetails'];
+        if (orderDetails == null) {
+          debugPrint('⚠️ No order details provided for success screen, redirecting to main layout');
+          page = const MainLayoutScreen();
+        } else {
+          page = SuccessScreen(orderDetails: orderDetails);
+        }
         break;
       default:
         debugPrint(

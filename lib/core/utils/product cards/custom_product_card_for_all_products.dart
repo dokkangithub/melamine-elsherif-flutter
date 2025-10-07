@@ -54,7 +54,10 @@ class CustomProductCardForAllProducts extends StatelessWidget {
             ? AppRoutes.navigateTo(
                 context,
                 AppRoutes.setProductDetailsScreen,
-                arguments: {'slug': product.slug},
+                arguments: {
+                  'slug': product.slug,
+                  'fromProductsTab': false,
+                },
               )
             : AppRoutes.navigateTo(
                 context,

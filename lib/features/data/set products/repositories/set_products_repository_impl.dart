@@ -16,42 +16,30 @@ class SetProductsRepositoryImpl implements SetProductsRepository {
     int page = 1,
     bool needUpdate = false,
   }) async {
+    print('Repository getSetProducts called - page: $page, needUpdate: $needUpdate');
+    
+    // Temporarily bypass cache for debugging
     const collectionType = 'set_products';
-    if (!needUpdate) {
-      final isCacheValid = await localDataSource.isCollectionCacheValid(
-        collectionType,
-        page,
-      );
-      if (isCacheValid) {
-        final cached = await localDataSource.getCollectionFromCache(
-          collectionType,
-          page,
-        );
-        if (cached != null) {
-          return SetProductsResponse(
-            success: true,
-            products: cached.map((e) => e.toEntity()).toList(),
-            currentPage: page,
-            lastPage: page, // You may want to store this in cache as well
-            total: cached.length,
-            perPage: cached.length,
-            nextPageUrl: null,
-            prevPageUrl: null,
-          );
-        }
-      }
-    }
-    // Fetch from remote and update cache
+    
+    // Always fetch from remote for now to debug pagination
     final model = await remoteDataSource.getSetProducts(page: page);
     final products = model.data?.data ?? [];
     final totalPages = model.data?.lastPage ?? 1;
+    
+    print('Repository response - products count: ${products.length}, lastPage: $totalPages, total: ${model.data?.total}');
+    
+    // Update cache
     await localDataSource.saveCollection(
       collectionType,
       page,
       products,
       totalPages,
     );
-    return model.toEntity();
+    
+    final response = model.toEntity();
+    print('Repository returning - products count: ${response.products.length}, lastPage: ${response.lastPage}, total: ${response.total}');
+    
+    return response;
   }
 
   @override

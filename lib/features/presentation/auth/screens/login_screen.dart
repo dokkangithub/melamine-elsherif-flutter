@@ -78,7 +78,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       fit: BoxFit.cover,
                       alignment: Alignment.bottomCenter,
                       colorFilter: ColorFilter.mode(
-                        AppTheme.white.withValues(alpha: 0.8),
+                        AppTheme.white.withValues(alpha: 0.9),
                         BlendMode.lighten,
                       ),
                     ),
@@ -95,31 +95,34 @@ class _LoginScreenState extends State<LoginScreen> {
                         children: [
                           const SizedBox(height: 16),
 
-                          // Language switcher at the top right
+
+
+
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              const LanguageSwitcher(),
-                              FadeInLeft(
-                                duration: const Duration(milliseconds: 500),
-                                child: InkWell(
-                                  onTap: () {
-                                    Provider.of<LayoutProvider>(
-                                      context,
-                                      listen: false,
-                                    ).currentIndex = 0;
-                                    AppRoutes.navigateTo(
-                                      context,
-                                      AppRoutes.mainLayoutScreen,
-                                    );
-                                  },
-                                  child: const Icon(
-                                    Icons.arrow_forward_ios,
-                                    color: AppTheme.primaryColor,
-                                    size: 24,
-                                  ),
+                              // Back button
+                              IconButton(
+                                icon: const Icon(
+                                  Icons.arrow_back_ios,
+                                  color: AppTheme.primaryColor,
                                 ),
+                                onPressed: () {
+                                  Provider.of<LayoutProvider>(
+                                    context,
+                                    listen: false,
+                                  ).currentIndex = 0;
+                                  AppRoutes.navigateTo(
+                                    context,
+                                    AppRoutes.mainLayoutScreen,
+                                  );
+                                },
+                                padding: EdgeInsets.zero,
+                                constraints: const BoxConstraints(),
                               ),
+
+                              // Language switcher
+                              const LanguageSwitcher(),
                             ],
                           ),
 
@@ -166,7 +169,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             hint: 'email_address'.tr(context),
                             keyboardType: TextInputType.emailAddress,
                             prefixIcon: null,
-                            isBorderAvailable: false,
+                            isBorderAvailable: true,
                           ),
 
                           const SizedBox(height: 16),
@@ -177,7 +180,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             hint: 'password'.tr(context),
                             isPassword: true,
                             prefixIcon: null,
-                            isBorderAvailable: false,
+                            isBorderAvailable: true,
                           ),
 
                           const SizedBox(height: 35),

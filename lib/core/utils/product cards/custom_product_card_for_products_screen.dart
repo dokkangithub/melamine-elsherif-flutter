@@ -4,7 +4,7 @@ import 'package:melamine_elsherif/core/utils/extension/responsive_extension.dart
 import 'package:melamine_elsherif/core/utils/extension/text_theme_extension.dart';
 import '../../../../features/domain/set products/entities/set_products.dart';
 import '../widgets/custom_cached_image.dart';
-import '../../../features/presentation/set products/screens/set_product_details_screen.dart';
+import '../../../core/config/routes.dart/routes.dart';
 
 class CustomProductCardForProductsScreen extends StatelessWidget {
   final SetProduct product;
@@ -17,19 +17,23 @@ class CustomProductCardForProductsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double averageRating = 0.0;
     final currentTextDirection = Directionality.of(context);
+    
+    // Get the current price (which is after discount)
+    final currentPrice = product.fullSetPrice ?? 0;
+    // Calculate original price by adding 10% to current price
+    final originalPrice = currentPrice * 1.1;
+    final discountAmount = originalPrice - currentPrice;
 
     return InkWell(
       onTap: () {
-        Navigator.push(
+        AppRoutes.navigateTo(
           context,
-          MaterialPageRoute(
-            builder: (context) => SetProductDetailsScreen(
-              slug: product.slug ?? '',
-              fromProductsTab: true,
-            ),
-          ),
+          AppRoutes.setProductDetailsScreen,
+          arguments: {
+            'slug': product.slug ?? '',
+            'fromProductsTab': true,
+          },
         );
       },
       child: Container(
@@ -41,13 +45,62 @@ class CustomProductCardForProductsScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Product image
+            // Product image with discount badge
             AspectRatio(
               aspectRatio: 1.05,
-              child: CustomImage(
-                width: double.infinity,
-                imageUrl: product.thumbnailImage,
-                fit: BoxFit.contain,
+              child: Stack(
+                children: [
+                  CustomImage(
+                    width: double.infinity,
+                    imageUrl: product.thumbnailImage,
+                    fit: BoxFit.contain,
+                  ),
+                  // Discount badge
+                  Positioned(
+                    top: 2,
+                    right: 8,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 4,
+                        vertical: 4,
+                      ),
+                      decoration: BoxDecoration(
+                        color: AppTheme.primaryColor, // Primary color
+                        borderRadius: BorderRadius.circular(4),
+                        gradient: LinearGradient(
+                          colors: [
+                            AppTheme.accentColor,
+                            AppTheme.accentColor.withOpacity(0.8),
+                            AppTheme.accentColor,
+                          ],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: AppTheme.accentColor.withOpacity(0.3),
+                            blurRadius: 8,
+                            spreadRadius: 1,
+                            offset: const Offset(0, 2),
+                          ),
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.1),
+                            blurRadius: 2,
+                            offset: const Offset(0, 1),
+                          ),
+                        ],
+                      ),
+                      child: Text(
+                        '- ${discountAmount.toInt()} L.E',
+                        style: context.titleSmall?.copyWith(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
             const SizedBox(height: 4),
@@ -86,11 +139,14 @@ class CustomProductCardForProductsScreen extends StatelessWidget {
                     alignment: currentTextDirection == TextDirection.rtl
                         ? Alignment.centerRight
                         : Alignment.centerLeft,
-                    child: Row(
-                      spacing: 4,
+                    child: Column(
+                      crossAxisAlignment: currentTextDirection == TextDirection.rtl
+                          ? CrossAxisAlignment.end
+                          : CrossAxisAlignment.start,
                       children: [
+                        // Show current price (after discount)
                         Text(
-                          '${product.fullSetPrice ?? 0} L.E',
+                          '${currentPrice.toInt()} L.E',
                           style: context.titleLarge?.copyWith(
                             fontWeight: FontWeight.w900,
                             color: AppTheme.primaryColor,
@@ -100,7 +156,19 @@ class CustomProductCardForProductsScreen extends StatelessWidget {
                               : TextAlign.left,
                           textDirection: currentTextDirection,
                         ),
-                        // Note: Set products don't have discount price for now
+                        // Show original price (current price + 10%) with strikethrough
+                        Text(
+                          '${originalPrice.toInt()} L.E',
+                          style: context.titleMedium?.copyWith(
+                            fontWeight: FontWeight.w400,
+                            color: AppTheme.lightSecondaryTextColor,
+                            decoration: TextDecoration.lineThrough,
+                          ),
+                          textAlign: currentTextDirection == TextDirection.rtl
+                              ? TextAlign.right
+                              : TextAlign.left,
+                          textDirection: currentTextDirection,
+                        ),
                       ],
                     ),
                   ),

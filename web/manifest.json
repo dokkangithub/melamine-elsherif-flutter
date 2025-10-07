@@ -1,11 +1,11 @@
 {
-    "name": "laravel_ecommerce",
-    "short_name": "laravel_ecommerce",
+    "name": "Elsherif Melamine",
+    "short_name": "Elsherif Melamine",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#FFFFFF",
     "theme_color": "#B65B4F",
-    "description": "A new Flutter project.",
+    "description": "Elsherif Melamine - Premium Melamine Products",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

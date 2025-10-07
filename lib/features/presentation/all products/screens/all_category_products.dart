@@ -712,6 +712,11 @@ class _AllCategoryProductsScreenState extends State<AllCategoryProductsScreen> {
   ) {
     // Check if the current locale is RTL
     final bool isRTL = Directionality.of(context) == TextDirection.rtl;
+    
+    // Calculate discount (10% of current price)
+    final currentPrice = double.tryParse(product.discountedPrice.replaceAll(RegExp(r'[^\d.]'), '')) ?? 0;
+    final originalPrice = currentPrice * 1.1;
+    final discountAmount = originalPrice - currentPrice;
 
     return Directionality(
       textDirection: isRTL ? TextDirection.rtl : TextDirection.ltr,
@@ -721,7 +726,10 @@ class _AllCategoryProductsScreenState extends State<AllCategoryProductsScreen> {
             ? AppRoutes.navigateTo(
                 context,
                 AppRoutes.setProductDetailsScreen,
-                arguments: {'slug': product.slug},
+                arguments: {
+                  'slug': product.slug,
+                  'fromProductsTab': false,
+                },
               )
             : AppRoutes.navigateTo(
                 context,
@@ -746,7 +754,7 @@ class _AllCategoryProductsScreenState extends State<AllCategoryProductsScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Product image with favorite button
+            // Product image with discount badge and favorite button
             Stack(
               children: [
                 CustomImage(
@@ -756,10 +764,10 @@ class _AllCategoryProductsScreenState extends State<AllCategoryProductsScreen> {
                   fit: BoxFit.contain,
                 ),
                 Positioned(
-                  top: 8,
+                  top: 2,
                   // Position based on text direction
-                  right: isRTL ? null : 8,
-                  left: isRTL ? 8 : null,
+                  right: isRTL ? null : 4,
+                  left: isRTL ? 4: null,
                   child: Consumer<WishlistProvider>(
                     builder: (context, wishlistProvider, _) {
                       final isInWishlist = wishlistProvider.isProductInWishlist(
@@ -790,6 +798,52 @@ class _AllCategoryProductsScreenState extends State<AllCategoryProductsScreen> {
                     },
                   ),
                 ),
+                // Discount badge - positioned on opposite side of favorite button
+                Positioned(
+                  top: 2, // Same level as favorite button
+                  right: isRTL ? 0: null, // Opposite side of favorite button
+                  left: isRTL ? null : -2, // Opposite side of favorite button
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 4,
+                      vertical: 4,
+                    ),
+                    decoration: BoxDecoration(
+                      color: AppTheme.accentColor,
+                      borderRadius: BorderRadius.circular(0),
+                      gradient: LinearGradient(
+                        colors: [
+                          AppTheme.accentColor,
+                          AppTheme.accentColor.withOpacity(0.8),
+                          AppTheme.accentColor,
+                        ],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: AppTheme.accentColor.withOpacity(0.4),
+                          blurRadius: 8,
+                          spreadRadius: 4.5,
+                          offset: const Offset(0, 2),
+                        ),
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          blurRadius: 2,
+                          offset: const Offset(0, 1),
+                        ),
+                      ],
+                    ),
+                    child: Text(
+                      '- ${discountAmount.toInt()} L.E',
+                      style: context.titleSmall?.copyWith(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ),
+                ),
               ],
             ),
 
@@ -811,9 +865,10 @@ class _AllCategoryProductsScreenState extends State<AllCategoryProductsScreen> {
                     overflow: TextOverflow.ellipsis,
                   ),
                   const SizedBox(height: 4),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      // Show current price (after discount)
                       Text(
                         product.discountedPrice,
                         style:
@@ -823,19 +878,17 @@ class _AllCategoryProductsScreenState extends State<AllCategoryProductsScreen> {
                             ) ??
                             const TextStyle(),
                       ),
-                      const SizedBox(width: 6),
-                      product.hasDiscount
-                          ? Text(
-                              product.mainPrice,
-                              style:
-                                  context.titleMedium?.copyWith(
-                                    color: AppTheme.darkDividerColor,
-                                    fontWeight: FontWeight.w400,
-                                    decoration: TextDecoration.lineThrough,
-                                  ) ??
-                                  const TextStyle(),
-                            )
-                          : const SizedBox.shrink(),
+                      // Show original price (current price + 10%) with strikethrough
+                      Text(
+                        '${originalPrice.toInt()} L.E',
+                        style:
+                            context.titleMedium?.copyWith(
+                              color: AppTheme.lightSecondaryTextColor,
+                              fontWeight: FontWeight.w400,
+                              decoration: TextDecoration.lineThrough,
+                            ) ??
+                            const TextStyle(),
+                      ),
                     ],
                   ),
                 ],

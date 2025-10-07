@@ -24,4 +24,16 @@ class ProfileCountersModel {
       'order_count': orderCount,
     };
   }
+
+  ProfileCountersModel copyWith({
+    int? cartItemCount,
+    int? wishlistItemCount,
+    int? orderCount,
+  }) {
+    return ProfileCountersModel(
+      cartItemCount: cartItemCount ?? this.cartItemCount,
+      wishlistItemCount: wishlistItemCount ?? this.wishlistItemCount,
+      orderCount: orderCount ?? this.orderCount,
+    );
+  }
 }

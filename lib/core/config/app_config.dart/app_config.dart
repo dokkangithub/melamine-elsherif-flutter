@@ -4,7 +4,7 @@ class AppConfig {
   late String apiBaseUrl = 'https://admin.alsherifmelamine.com/api/v2';
   late Environment environment;
   bool enableLogging = true;
-  String appName = 'melamine elsherif';
+  String appName = 'Elsherif Melamine';
   String appVersion = '1.0.0';
   int connectTimeout = 30000;
   int receiveTimeout = 30000;

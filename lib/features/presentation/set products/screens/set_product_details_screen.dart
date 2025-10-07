@@ -35,7 +35,7 @@ class SetProductDetailsScreen extends StatefulWidget {
 }
 
 class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
-    with TickerProviderStateMixin {
+with TickerProviderStateMixin {
   Map<int, int> selectedQuantities = {};
   bool isSummaryExpanded = false;
   bool isWarrantyExpanded = false;
@@ -47,6 +47,9 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
   late Animation<double> _priceAnimation;
   late ScrollController _scrollController;
   bool _showAppBar = false;
+  // Animation controller for rotating border
+  late AnimationController _borderAnimationController;
+  late Animation<double> _borderAnimation;
 
   @override
   void initState() {
@@ -71,7 +74,18 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
       parent: _priceAnimationController,
       curve: Curves.easeInOut,
     );
-    _scrollController = ScrollController();
+    _borderAnimationController = AnimationController(
+      duration: const Duration(seconds: 2),
+      vsync: this,
+    );
+    _borderAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(
+      parent: _borderAnimationController,
+      curve: Curves.linear,
+    ));
+     _scrollController = ScrollController();
     _scrollController.addListener(_onScroll);
 
     _resetScreenState();
@@ -79,6 +93,16 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
     Future.microtask(() {
       final provider = Provider.of<SetProductsProvider>(context, listen: false);
       provider.getSetProductDetails(slug: widget.slug);
+      
+      // If accessed from Products tab, set quantities to 0 after data loads
+      if (widget.fromProductsTab) {
+        // Add a small delay to ensure data is loaded
+        Future.delayed(const Duration(milliseconds: 500), () {
+          if (mounted) {
+            _setQuantitiesToZero();
+          }
+        });
+      }
     });
   }
 
@@ -99,6 +123,11 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
     isWarrantyExpanded = false;
     // If accessed from Products tab, default to individual selection mode
     isFullSet = !widget.fromProductsTab;
+    
+    // If accessed from Products tab, set all quantities to 0 initially
+    if (widget.fromProductsTab) {
+      _setQuantitiesToZero();
+    }
   }
 
   @override
@@ -107,6 +136,7 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
     _summaryController.dispose();
     _warrantyController.dispose();
     _priceAnimationController.dispose();
+    _borderAnimationController.dispose();
     _scrollController.dispose();
     final provider = Provider.of<SetProductsProvider>(context, listen: false);
     provider.clearSetProductDetails();
@@ -753,23 +783,40 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
     final int minQty = component.minQuantity ?? 0;
     final int maxQty = component.maxQuantity ?? 99;
     final bool isEnabled = !isFullSet;
+    final bool shouldShowAnimatedBorder = !isFullSet && currentQuantity > 0;
+
+    // Start/stop border animation based on quantity
+    if (shouldShowAnimatedBorder) {
+      _borderAnimationController.repeat();
+    } else {
+      _borderAnimationController.stop();
+    }
 
     return AnimatedOpacity(
       duration: const Duration(milliseconds: 300),
       opacity: isEnabled ? 1.0 :  1,
-      child: SizedBox(
-        height: 160,
-        width: double.infinity,
-        child: Card(
-          margin: const EdgeInsets.only(bottom: 20),
-          shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
-          elevation: isEnabled ? 2 : 1,
-          child: Padding(
-            padding: const EdgeInsets.all(10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
+      child: AnimatedBuilder(
+        animation: _borderAnimation,
+        builder: (context, child) {
+          return Container(
+            margin: const EdgeInsets.only(bottom: 20),
+            decoration: shouldShowAnimatedBorder
+                ? BoxDecoration(
+                    border: Border.all(
+                      color: AppTheme.primaryColor.withValues(
+                        alpha: 0.8 + (0.2 * _borderAnimation.value),
+                      ),
+                      width: 2.0 + (1.0 * _borderAnimation.value),
+                    ),
+                  )
+                : null,
+            child: Card(
+              margin: EdgeInsets.zero,
+              shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+              elevation: isEnabled ? 2 : 1,
+              child: Padding(
+                padding: const EdgeInsets.all(10),
+                child: Row(
                   children: [
                     CustomImage(
                       imageUrl: component.thumbnailImage ?? '',
@@ -782,55 +829,70 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                component.name ?? '',
-                                style: Theme.of(context).textTheme.titleMedium!
-                                    .copyWith(
-                                      fontWeight: FontWeight.w600,
-                                      color: isEnabled ? null : Colors.grey,
-                                    ),
-                              ),
-                              const SizedBox(height: 4),
-                              if (component.isRequired == true)
-                                Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 8,
-                                    vertical: 2,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: AppTheme.primaryColor.withValues(
-                                      alpha: 0.8,
-                                    ),
-                                    borderRadius: BorderRadius.circular(0),
-                                  ),
-                                  child: Text(
-                                    'required'.tr(context),
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodySmall!
-                                        .copyWith(
-                                          color: AppTheme.primaryColor,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                  ),
+                          Text(
+                            component.name ?? '',
+                            style: Theme.of(context).textTheme.titleMedium!
+                                .copyWith(
+                                  fontWeight: FontWeight.w600,
+                                  color: isEnabled ? null : Colors.grey,
                                 ),
-                              const SizedBox(height: 8),
-                              Text(
-                                component.discountedPrice ?? '',
-                                style: Theme.of(context).textTheme.titleMedium!
+                          ),
+                          const SizedBox(height: 4),
+                          if (component.isRequired == true)
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8,
+                                vertical: 2,
+                              ),
+                              decoration: BoxDecoration(
+                                color: AppTheme.primaryColor.withValues(
+                                  alpha: 0.8,
+                                ),
+                                borderRadius: BorderRadius.circular(0),
+                              ),
+                              child: Text(
+                                'required'.tr(context),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodySmall!
                                     .copyWith(
-                                      color: isEnabled
-                                          ? AppTheme.primaryColor
-                                          : Colors.grey,
-                                      fontWeight: FontWeight.bold,
+                                      color: AppTheme.primaryColor,
+                                      fontWeight: FontWeight.w500,
                                     ),
                               ),
-                            ],
-                          ),
-                          const SizedBox(height: 16),
+                            ),
+                          if (component.description != null && component.description!.isNotEmpty)
+                            Html(
+                              data: component.description!,
+                              style: {
+                                "body": Style(
+                                  margin: Margins.zero,
+                                  padding: HtmlPaddings.zero,
+                                  fontSize: FontSize(14.0),
+                                  lineHeight: const LineHeight(1.3),
+                                  color: isEnabled
+                                      ? AppTheme.darkDividerColor
+                                      : Colors.grey,
+                                  fontFamily: Theme.of(
+                                    context,
+                                  ).textTheme.bodyMedium!.fontFamily,
+                                  maxLines: 3,
+                                  textOverflow: TextOverflow.ellipsis,
+                                ),
+                                "p": Style(
+                                  margin: Margins.zero,
+                                  padding: HtmlPaddings.zero,
+                                  fontSize: FontSize(14.0),
+                                  lineHeight: const LineHeight(1.3),
+                                  color: isEnabled
+                                      ? AppTheme.darkDividerColor
+                                      : Colors.grey,
+                                  maxLines: 3,
+                                  textOverflow: TextOverflow.ellipsis,
+                                ),
+                              },
+                            ),
+                          const SizedBox(height: 8),
                           isFullSet
                               ? _buildFullSetQuantityInfo(
                                   currentQuantity,
@@ -849,10 +911,10 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
                     ),
                   ],
                 ),
-              ],
+              ),
             ),
-          ),
-        ),
+          );
+        },
       ),
     );
   }
@@ -1431,12 +1493,12 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
   Widget _buildCareInstructionsSection(SetProductDetailsData product) {
     final List<Map<String, String>> careInstructions = [
       {
-        'icon': AppImages.setProductIcon1,
+        'icon': AppImages.setProductIcon6,
         'titleKey': 'extra_strong',
         'descriptionKey': 'extra_strong_desc',
       },
       {
-        'icon': AppImages.setProductIcon2,
+        'icon': AppImages.setProductIcon4,
         'titleKey': 'dishwasher_safe',
         'descriptionKey': 'dishwasher_safe_desc',
       },
@@ -1446,17 +1508,17 @@ class _SetProductDetailsScreenState extends State<SetProductDetailsScreen>
         'descriptionKey': 'microwave_safe_desc',
       },
       {
-        'icon': AppImages.setProductIcon4,
+        'icon': AppImages.setProductIcon2,
         'titleKey': 'no_direct_fire',
         'descriptionKey': 'no_direct_fire_desc',
       },
       {
-        'icon': AppImages.setProductIcon5,
+        'icon': AppImages.setProductIcon1,
         'titleKey': 'no_oven',
         'descriptionKey': 'no_oven_desc',
       },
       {
-        'icon': AppImages.setProductIcon6,
+        'icon': AppImages.setProductIcon5,
         'titleKey': 'bpa_free',
         'descriptionKey': 'bpa_free_desc',
       },

@@ -5,12 +5,16 @@ import '../../../domain/wishlist/usecases/add_wishlist_usecases.dart';
 import '../../../domain/wishlist/usecases/check_wishlist_usecases.dart';
 import '../../../domain/wishlist/usecases/get_wishlist_usecases.dart';
 import '../../../domain/wishlist/usecases/remove_wishlist_usecases.dart';
+import '../../profile/controller/profile_provider.dart';
 
 class WishlistProvider extends ChangeNotifier {
   final GetWishlistUseCase getWishlistUseCase;
   final CheckWishlistUseCase checkWishlistUseCase;
   final AddToWishlistUseCase addToWishlistUseCase;
   final RemoveFromWishlistUseCase removeFromWishlistUseCase;
+  
+  // Reference to ProfileProvider for updating counters
+  ProfileProvider? _profileProvider;
 
   WishlistProvider({
     required this.getWishlistUseCase,
@@ -18,6 +22,11 @@ class WishlistProvider extends ChangeNotifier {
     required this.addToWishlistUseCase,
     required this.removeFromWishlistUseCase,
   });
+
+  // Method to set ProfileProvider reference
+  void setProfileProvider(ProfileProvider profileProvider) {
+    _profileProvider = profileProvider;
+  }
 
   LoadingState wishlistState = LoadingState.loading;
   List<WishlistItem> wishlistItems = [];
@@ -39,6 +48,14 @@ class WishlistProvider extends ChangeNotifier {
     return _wishlistSlugs.contains(slug);
   }
 
+  // Get current wishlist count
+  int get wishlistCount => wishlistItems.length;
+
+  // Helper method to update ProfileProvider when wishlist changes
+  void _updateProfileProvider() {
+    _profileProvider?.updateWishlistCount(wishlistCount);
+  }
+
   Future<void> fetchWishlist({bool showLoading = true}) async {
     try {
       // Only show loading state if explicitly requested and initial load is not done
@@ -51,6 +68,7 @@ class WishlistProvider extends ChangeNotifier {
 
       wishlistItems = items;
       _updateWishlistTracking();
+      _updateProfileProvider(); // Update ProfileProvider with new count
 
       wishlistState = LoadingState.loaded;
       _initialLoadComplete = true;
@@ -125,6 +143,7 @@ class WishlistProvider extends ChangeNotifier {
     wishlistItems.add(tempItem);
     _wishlistSlugs.add(slug);
     wishlistStatus[slug] = true;
+    _updateProfileProvider(); // Update ProfileProvider with new count
     notifyListeners();
 
     try {
@@ -139,6 +158,7 @@ class WishlistProvider extends ChangeNotifier {
       wishlistItems.removeWhere((item) => item.slug == slug);
       _wishlistSlugs.remove(slug);
       wishlistStatus[slug] = false;
+      _updateProfileProvider(); // Update ProfileProvider with reverted count
 
       wishlistError = e.toString();
       notifyListeners();
@@ -150,6 +170,7 @@ class WishlistProvider extends ChangeNotifier {
     wishlistItems.removeWhere((item) => item.slug == slug);
     _wishlistSlugs.remove(slug);
     wishlistStatus[slug] = false;
+    _updateProfileProvider(); // Update ProfileProvider with new count
 
     // Notify immediately for responsive UI
     notifyListeners();
@@ -177,6 +198,7 @@ class WishlistProvider extends ChangeNotifier {
     wishlistItems.clear();
     wishlistStatus.clear();
     _wishlistSlugs.clear();
+    _updateProfileProvider(); // Update ProfileProvider with cleared count
     notifyListeners();
 
     try {

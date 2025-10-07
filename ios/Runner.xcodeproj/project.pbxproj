@@ -498,7 +498,7 @@
 				DEVELOPMENT_TEAM = B63YKA2DM4;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "Melamine Elsherif";
+				INFOPLIST_KEY_CFBundleDisplayName = "Elsherif Melamine";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.shopping";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -690,7 +690,7 @@
 				DEVELOPMENT_TEAM = B63YKA2DM4;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "Melamine Elsherif";
+				INFOPLIST_KEY_CFBundleDisplayName = "Elsherif Melamine";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.shopping";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -722,7 +722,7 @@
 				DEVELOPMENT_TEAM = B63YKA2DM4;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "Melamine Elsherif";
+				INFOPLIST_KEY_CFBundleDisplayName = "Elsherif Melamine";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.shopping";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

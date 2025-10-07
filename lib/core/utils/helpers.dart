@@ -132,8 +132,29 @@ abstract class AppFunctions {
       );
     } else {
       final provider = Provider.of<WishlistProvider>(context, listen: false);
+      
+      // Check current status before toggling
+      bool wasInWishlist = provider.isProductInWishlist(slug);
 
       await provider.toggleWishlistStatus(context, slug);
+      
+      // Show appropriate message based on action
+      if (context.mounted) {
+        if (wasInWishlist) {
+          // Item was removed
+          CustomToast.showToast(
+            message: 'item_removed_from_wishlist'.tr(context),
+            type: ToastType.success,
+          );
+        } else {
+          // Item was added
+          CustomToast.showToast(
+            message: 'item_added_to_wishlist'.tr(context),
+            type: ToastType.success,
+          );
+        }
+      }
+      
       await Provider.of<ProfileProvider>(
         context,
         listen: false,
@@ -338,8 +359,9 @@ abstract class AppFunctions {
     final components = <ComponentRequest>[];
 
     for (final component in allComponents) {
-      final quantity =
-          selectedQuantities[component.id] ?? (component.initialQuantity ?? 1);
+      // Only use selectedQuantities, don't fall back to initialQuantity
+      // This ensures only explicitly selected items are added to cart
+      final quantity = selectedQuantities[component.id] ?? 0;
       if (quantity > 0) {
         components.add(
           ComponentRequest(productId: component.id!, quantity: quantity),
@@ -359,9 +381,8 @@ abstract class AppFunctions {
     // Check if all required components are selected
     for (final component in allComponents) {
       if (component.isRequired == true) {
-        final quantity =
-            selectedQuantities[component.id] ??
-            (component.initialQuantity ?? 1);
+        // Only check selectedQuantities, don't fall back to initialQuantity
+        final quantity = selectedQuantities[component.id] ?? 0;
         if (quantity <= 0) {
           CustomToast.showToast(
             message:

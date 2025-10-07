@@ -7,7 +7,6 @@ import 'package:melamine_elsherif/core/utils/extension/text_style_extension.dart
 import 'package:melamine_elsherif/core/utils/helpers/ui_helper.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_button.dart';
 import 'package:melamine_elsherif/core/utils/widgets/custom_form_field.dart';
-import 'package:melamine_elsherif/core/utils/widgets/cutsom_toast.dart';
 import 'package:provider/provider.dart';
 import '../../../../core/utils/extension/translate_extension.dart';
 import '../../../../core/utils/widgets/custom_quick_alart_widget.dart';
@@ -68,7 +67,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     fit: BoxFit.cover,
                     alignment: Alignment.bottomCenter,
                     colorFilter: ColorFilter.mode(
-                      AppTheme.white.withValues(alpha: 0.8),
+                      AppTheme.white.withValues(alpha: 0.88),
                       BlendMode.lighten,
                     ),
                   ),
@@ -137,7 +136,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         CustomTextFormField(
                           controller: _nameController,
                           hint: 'name'.tr(context),
-                          isBorderAvailable: false,
+                          isBorderAvailable: true,
                         ),
 
                         const SizedBox(height: 16),
@@ -147,7 +146,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           controller: _emailController,
                           hint: 'email_address'.tr(context),
                           keyboardType: TextInputType.emailAddress,
-                          isBorderAvailable: false,
+                          isBorderAvailable: true,
                         ),
 
                         const SizedBox(height: 16),
@@ -157,7 +156,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           controller: _passwordController,
                           hint: 'password'.tr(context),
                           isPassword: true,
-                          isBorderAvailable: false,
+                          isBorderAvailable: true,
                         ),
 
                         const SizedBox(height: 24),
@@ -207,6 +206,37 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
                         // Social login options
                         const SocialLoginWidget(isLoginScreen: false),
+
+
+
+                        const SizedBox(height: 24),
+
+                        // Already have account link
+                        Center(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'already_have_account'.tr(context),
+                                style: context.titleLarge.copyWith(
+                                  color: Colors.black54,
+                                ),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  AppRoutes.navigateTo(context, AppRoutes.login);
+                                },
+                                child: Text(
+                                  'sign_in'.tr(context),
+                                  style: context.titleLarge.copyWith(
+                                    color: AppTheme.primaryColor,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ],
                     ),
                   ),

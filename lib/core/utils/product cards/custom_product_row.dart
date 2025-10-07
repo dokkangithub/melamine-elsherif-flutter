@@ -47,7 +47,10 @@ class _ProductItemInRow1State extends State<ProductItemInRow1> {
             ? AppRoutes.navigateTo(
                 context,
                 AppRoutes.setProductDetailsScreen,
-                arguments: {'slug': widget.product.slug},
+                arguments: {
+                  'slug': widget.product.slug,
+                  'fromProductsTab': false,
+                },
               )
             : AppRoutes.navigateTo(
                 context,

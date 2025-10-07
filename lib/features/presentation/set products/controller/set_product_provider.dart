@@ -63,11 +63,17 @@ class SetProductsProvider extends ChangeNotifier {
   Map<String, dynamic>? addToCartResponse;
 
   Future<void> getSetProducts({bool isRefresh = false}) async {
+    // If we already have data and it's not a refresh, don't reload
+    if (!isRefresh && setProducts.isNotEmpty && setProductsState == LoadingState.loaded) {
+      return;
+    }
+    
     try {
       if (isRefresh) {
         currentPage = 1;
         hasMorePages = true;
         setProducts.clear();
+        setProductsError = '';
       }
 
       setProductsState = LoadingState.loading;
@@ -78,15 +84,26 @@ class SetProductsProvider extends ChangeNotifier {
         needUpdate: isRefresh,
       );
 
+
       if (isRefresh) {
         setProducts = response.products;
       } else {
+        // This should not happen in normal flow, but if it does, add to existing products
         setProducts.addAll(response.products);
       }
+      
+      // Update currentPage from response
+      if (response.currentPage != null) {
+        currentPage = response.currentPage!;
+      } else if (isRefresh) {
+        currentPage = 1; // Fallback for refresh
+      }
 
+      // Update pagination info from response
       lastPage = response.lastPage;
       total = response.total;
       hasMorePages = currentPage < (lastPage ?? 1);
+      
 
       setProductsState = LoadingState.loaded;
     } catch (e) {
@@ -98,23 +115,40 @@ class SetProductsProvider extends ChangeNotifier {
   }
 
   Future<void> loadMoreProducts() async {
-    if (!hasMorePages || isLoadingMore) return;
+    if (!hasMorePages || isLoadingMore) {
+      return;
+    }
 
     try {
       isLoadingMore = true;
       notifyListeners();
 
-      currentPage++;
+      final nextPage = currentPage + 1;
+      
       final SetProductsResponse response = await getSetProductsUseCase(
-        page: currentPage,
+        page: nextPage,
+        needUpdate: true, // Force update for pagination
       );
 
+      
       setProducts.addAll(response.products);
+      
+      // Update currentPage from response
+      if (response.currentPage != null) {
+        currentPage = response.currentPage!;
+      } else {
+        currentPage = nextPage; // Fallback to nextPage if response doesn't have currentPage
+      }
+      
+      // Update pagination info from response
+      lastPage = response.lastPage;
+      total = response.total;
       hasMorePages = currentPage < (lastPage ?? 1);
+      
 
       isLoadingMore = false;
     } catch (e) {
-      currentPage--; // Revert page increment on error
+      // Don't revert currentPage since we didn't increment it before the API call
       setProductsError = e.toString();
       isLoadingMore = false;
     } finally {
@@ -151,7 +185,6 @@ class SetProductsProvider extends ChangeNotifier {
     if (currentRelatedProductId == productId && 
         (relatedProductsState == LoadingState.loading || 
          relatedProductsState == LoadingState.loaded)) {
-      print('Related products already loaded or loading for productId: $productId');
       return;
     }
 
@@ -161,15 +194,12 @@ class SetProductsProvider extends ChangeNotifier {
       relatedProductsError = '';
       notifyListeners();
 
-      print('Fetching related products for productId: $productId');
       final SetProductsResponse response =
           await getRelatedSetProductsUseCase(productId: productId);
 
-      print('Related products response: ${response.products.length} products');
       relatedProducts = response.products;
       relatedProductsState = LoadingState.loaded;
     } catch (e) {
-      print('Error fetching related products: $e');
       relatedProductsState = LoadingState.error;
       relatedProductsError = e.toString();
       relatedProducts = [];
@@ -215,15 +245,12 @@ class SetProductsProvider extends ChangeNotifier {
       relatedProductsError = '';
       notifyListeners();
 
-      print('Loading fallback set products...');
       final SetProductsResponse response = await getSetProductsUseCase(page: 1);
       
       // Take only first 6 products as fallback
       relatedProducts = response.products.take(6).toList();
       relatedProductsState = LoadingState.loaded;
-      print('Fallback products loaded: ${relatedProducts.length} products');
     } catch (e) {
-      print('Error loading fallback products: $e');
       relatedProductsState = LoadingState.error;
       relatedProductsError = e.toString();
       relatedProducts = [];
@@ -243,7 +270,6 @@ class SetProductsProvider extends ChangeNotifier {
       );
 
       calculatedPrice = response.data;
-      print('dddddd${calculatedPrice!.totalPrice}');
       calculatePriceState = LoadingState.loaded;
     } catch (e) {
       calculatePriceState = LoadingState.error;
@@ -342,6 +368,9 @@ class SetProductsProvider extends ChangeNotifier {
     addToCartResponse = null;
     notifyListeners();
   }
+
+  // Check if data is already loaded
+  bool get isDataLoaded => setProducts.isNotEmpty && setProductsState == LoadingState.loaded;
 
   // Special method for language change - refresh all set products data
   Future<void> refreshAfterLanguageChange() async {

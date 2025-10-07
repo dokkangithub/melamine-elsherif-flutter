@@ -189,12 +189,21 @@ class _SetProductsScreenState extends State<SetProductsScreen> {
     bool isEven,
   ) {
     final bool isRTL = Directionality.of(context) == TextDirection.rtl;
+    
+    // Calculate discount (10% of current price)
+    final currentPrice = double.tryParse(product.discountedPrice?.replaceAll(RegExp(r'[^\d.]'), '') ?? '0') ?? 0;
+    final originalPrice = currentPrice * 1.1;
+    final discountAmount = originalPrice - currentPrice;
+    
     return InkWell(
       onTap: () {
         AppRoutes.navigateTo(
           context,
           AppRoutes.setProductDetailsScreen,
-          arguments: {'slug': product.slug},
+          arguments: {
+            'slug': product.slug,
+            'fromProductsTab': false,
+          },
         );
       },
       child: Container(
@@ -214,12 +223,61 @@ class _SetProductsScreenState extends State<SetProductsScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Product image
-            CustomImage(
-              imageUrl: product.thumbnailImage ?? '',
-              height: isEven ? 180 : 200,
-              width: double.infinity,
-              fit: BoxFit.contain,
+            // Product image with discount badge
+            Stack(
+              children: [
+                CustomImage(
+                  imageUrl: product.thumbnailImage ?? '',
+                  height: isEven ? 180 : 200,
+                  width: double.infinity,
+                  fit: BoxFit.contain,
+                ),
+                // Discount badge
+                Positioned(
+                  top: 2,
+                  right: 8,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 4,
+                      vertical: 4,
+                    ),
+                    decoration: BoxDecoration(
+                      color: AppTheme.accentColor,
+                      borderRadius: BorderRadius.circular(4),
+                      gradient: LinearGradient(
+                        colors: [
+                          AppTheme.accentColor,
+                          AppTheme.accentColor.withOpacity(0.8),
+                          AppTheme.accentColor,
+                        ],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: AppTheme.accentColor.withOpacity(0.3),
+                          blurRadius: 8,
+                          spreadRadius: 1,
+                          offset: const Offset(0, 2),
+                        ),
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          blurRadius: 2,
+                          offset: const Offset(0, 1),
+                        ),
+                      ],
+                    ),
+                    child: Text(
+                      '- ${discountAmount.toInt()} L.E',
+                      style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
             // Product details
             Padding(
@@ -238,31 +296,28 @@ class _SetProductsScreenState extends State<SetProductsScreen> {
                     textAlign: isRTL ? TextAlign.right : TextAlign.left,
                   ),
                   const SizedBox(height: 4),
-                  Row(
-                    textDirection: isRTL
-                        ? TextDirection.rtl
-                        : TextDirection.ltr,
+                  Column(
+                    crossAxisAlignment: isRTL ? CrossAxisAlignment.end : CrossAxisAlignment.start,
                     children: [
+                      // Show current price (after discount)
                       Text(
                         product.discountedPrice ?? '',
                         style: Theme.of(context).textTheme.titleLarge!.copyWith(
                           color: AppTheme.primaryColor,
                           fontWeight: FontWeight.w900,
                         ),
+                        textAlign: isRTL ? TextAlign.right : TextAlign.left,
                       ),
-                      const SizedBox(width: 6),
-                      (product.hasDiscount ?? false) &&
-                              (product.mainPrice != null)
-                          ? Text(
-                              product.mainPrice!,
-                              style: Theme.of(context).textTheme.titleMedium!
-                                  .copyWith(
-                                    color: AppTheme.darkDividerColor,
-                                    fontWeight: FontWeight.w400,
-                                    decoration: TextDecoration.lineThrough,
-                                  ),
-                            )
-                          : const SizedBox.shrink(),
+                      // Show original price (current price + 10%) with strikethrough
+                      Text(
+                        '${originalPrice.toInt()} L.E',
+                        style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                          color: AppTheme.lightSecondaryTextColor,
+                          fontWeight: FontWeight.w400,
+                          decoration: TextDecoration.lineThrough,
+                        ),
+                        textAlign: isRTL ? TextAlign.right : TextAlign.left,
+                      ),
                     ],
                   ),
                 ],

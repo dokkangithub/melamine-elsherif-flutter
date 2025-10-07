@@ -19,6 +19,7 @@ import '../../auth/controller/auth_provider.dart';
 import '../../auth/screens/login_screen.dart';
 import '../../club_point/controller/club_point_provider.dart';
 import '../controller/profile_provider.dart';
+import '../../wishlist/controller/wishlist_provider.dart';
 import '../../../../core/utils/widgets/premium_language_dialog.dart';
 import '../widgets/iso_certificates_widget.dart';
 
@@ -40,6 +41,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final profileProvider = context.read<ProfileProvider>();
+      final wishlistProvider = context.read<WishlistProvider>();
+      
+      // Set up the connection between providers
+      wishlistProvider.setProfileProvider(profileProvider);
+      
       profileProvider.getUserProfile();
       profileProvider.getProfileCounters();
 
@@ -685,10 +691,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   // Modern user dashboard with card-based design
   Widget _buildUserDashboard(BuildContext context) {
-    // Get profileProvider once to avoid multiple calls
+    // Get providers once to avoid multiple calls
     final profileProvider = Provider.of<ProfileProvider>(
       context,
       listen: false,
+    );
+    final wishlistProvider = Provider.of<WishlistProvider>(
+      context,
+      listen: true, // Listen to changes in wishlist
     );
     final profileCounters = profileProvider.profileCounters;
 
@@ -759,9 +769,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 context: context,
                 icon: AppSvgs.profile_fav,
                 title: 'saved_items'.tr(context),
-                subtitle: profileCounters?.wishlistItemCount != null
-                    ? '${profileCounters!.wishlistItemCount} ${'items'.tr(context)}'
-                    : '0 ${'items'.tr(context)}',
+                subtitle: '${wishlistProvider.wishlistCount} ${'items'.tr(context)}',
                 onTap: () {
                   AppRoutes.navigateTo(context, AppRoutes.wishListScreen);
                 },

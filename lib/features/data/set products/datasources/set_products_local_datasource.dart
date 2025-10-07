@@ -10,6 +10,10 @@ abstract class SetProductsLocalDataSource {
     String collectionType,
     int page,
   );
+  Future<SetProductCollectionEntity?> getCollectionMetadata(
+    String collectionType,
+    int page,
+  );
   Future<void> saveCollection(
     String collectionType,
     int page,
@@ -57,6 +61,22 @@ class SetProductsLocalDataSourceImpl implements SetProductsLocalDataSource {
     query.close();
     if (collection == null) return null;
     return collection.setProducts.map((e) => e.toModel()).toList();
+  }
+
+  @override
+  Future<SetProductCollectionEntity?> getCollectionMetadata(
+    String collectionType,
+    int page,
+  ) async {
+    final query = objectBox.setProductCollectionBox
+        .query(
+          SetProductCollectionEntity_.collectionType.equals(collectionType) &
+              SetProductCollectionEntity_.page.equals(page),
+        )
+        .build();
+    final collection = query.findFirst();
+    query.close();
+    return collection;
   }
 
   @override

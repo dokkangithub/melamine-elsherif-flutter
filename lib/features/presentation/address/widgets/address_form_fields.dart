@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:melamine_elsherif/core/config/themes.dart/theme.dart';
-import 'package:melamine_elsherif/core/config/themes.dart/theme.dart';
-import 'package:melamine_elsherif/core/config/themes.dart/theme.dart';
-import 'package:melamine_elsherif/core/utils/constants/app_assets.dart';
 import 'package:melamine_elsherif/core/utils/extension/text_theme_extension.dart';
 import 'package:melamine_elsherif/core/utils/extension/translate_extension.dart';
 import '../../../../core/utils/widgets/custom_form_field.dart';
-import '../../../../core/utils/widgets/custom_dropdown.dart';
 
 class AddressFormFields extends StatelessWidget {
   final TextEditingController addressController;

@@ -53,7 +53,10 @@ class _ProductGridCardState extends State<ProductGridCard> {
             ? AppRoutes.navigateTo(
                 context,
                 AppRoutes.setProductDetailsScreen,
-                arguments: {'slug': widget.product.slug},
+                arguments: {
+                  'slug': widget.product.slug,
+                  'fromProductsTab': false,
+                },
               )
             : AppRoutes.navigateTo(
                 context,
