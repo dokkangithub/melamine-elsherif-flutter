@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:melamine_elsherif/core/config/routes.dart/routes.dart';
 import 'package:melamine_elsherif/core/utils/extension/text_style_extension.dart';
 import 'package:melamine_elsherif/core/utils/extension/translate_extension.dart';
@@ -266,12 +265,15 @@ class _OrdersListScreenState extends State<OrdersListScreen>
       order.deliveryStatusString,
     );
 
+    // Check if current locale is Arabic (RTL)
+    final isArabic = Localizations.localeOf(context).languageCode.toLowerCase().startsWith('ar');
+
     // Format the date to "May 25, 2025" style
     String formattedDate = order.date;
 
     // Get payment type icon based on payment_type
     IconData paymentIcon = Icons.credit_card;
-    String paymentType = order.paymentType ?? 'Cash Payment';
+    String paymentType = order.paymentType;
     String paymentTypeKey = 'credit_card_payment';
 
     if (paymentType.toLowerCase().contains('cash')) {
@@ -361,7 +363,7 @@ class _OrdersListScreenState extends State<OrdersListScreen>
                     ),
                     const SizedBox(width: 8),
                     Icon(
-                      Icons.arrow_back_ios_new_outlined,
+                      Icons. arrow_forward_ios_outlined ,
                       size: 14,
                       color: status.color,
                     ),

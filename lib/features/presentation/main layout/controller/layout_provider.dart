@@ -3,7 +3,8 @@ import 'package:melamine_elsherif/features/presentation/cart/screens/cart_screen
 import 'package:melamine_elsherif/features/presentation/category/screens/category_screen.dart';
 import 'package:melamine_elsherif/features/presentation/home/screens/home.dart';
 import 'package:melamine_elsherif/features/presentation/profile/screens/profile_screen.dart';
-import 'package:melamine_elsherif/features/presentation/products/screens/products_screen.dart';
+
+import '../../setyourset/screens/set_your_set_screen.dart';
 // Removed wishlist import as wishlist tab no longer exists
 
 class LayoutProvider extends ChangeNotifier {
